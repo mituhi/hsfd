@@ -1,0 +1,30 @@
+server:
+  display-name: hsfd
+  port: 8000
+  servlet.context-path: /hsfd
+
+
+logging:
+  file: server.log
+  level:
+    org.springframework: INFO
+    org.hibernate: INFO
+    com.qz: DEBUG
+
+spring:
+  name: hsfd
+  jmx.default-domain: hsfd
+  main.banner-mode: "off"
+  profiles:
+    active: dev
+
+jwt:
+  header: Authorization
+  secret: secretkey
+  expiration: 604800
+  route:
+    authentication:
+      path: login
+      refresh: refresh
+
+

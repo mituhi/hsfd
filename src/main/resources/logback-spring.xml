@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<springProfile name="dev">
+		<logger name="com.qz.energy" level="DEBUG">
+			<appender-ref ref="CONSOLE" />
+		</logger>
+	</springProfile>
+
+	<springProfile name="prod">
+		<logger name="com.qz.energy" level="INFO">
+			<appender-ref ref="FILE" />
+		</logger>
+	</springProfile>
+
+</configuration>

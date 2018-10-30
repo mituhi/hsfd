@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>energy Server</title>
+<link rel="stylesheet" href="../libs/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="../libs/bootstrap/css/bootstrap-theme.min.css" />
+</head>
+
+<body>
+<div class="container">
+
+	<div class="jumbotron">
+	  <h1>Export Excel Test</h1>
+	  <p>导出Excel测试</p>
+	</div>
+	
+	<div class="list-group">
+	  <input type="text" class="form-control" id="exportUrl" placeholder="请输入导出地址" value="/api/asset/exportAssetHisData?assetId=01001&queryCycle=01&dayTime=2017-10-30&checkValue=0">
+	  <a href="javascript:void()" class="list-group-item" onclick="exportExcel()">Export Excel Test</a>
+	</div>
+
+</div>
+<script type="text/javascript">
+	//获取域名
+	host = window.location.host;
+
+	function exportExcel() {
+		debugger
+		window.location = "http://" +  host + document.getElementById("exportUrl").value;
+	}
+</script>
+</body>
+</html>

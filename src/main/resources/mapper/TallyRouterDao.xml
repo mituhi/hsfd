@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.material.dao.TallyRouterDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.material.entity.TallyRoute" >
+        <id column="route_id" property="routeId" />
+        <result column="route_name" property="routeName" />
+        <result column="route_code" property="routeCode"/>
+        <result column="wind_id" property="windId" />
+        <result column="mandatory_order" property="mandatoryOrder"  />
+        <result column="remark" property="remark" />
+        <result column="maintenancer" property="maintenancer" />
+        <result column="maintenance_time" property="maintenanceTime" />
+        <result column="serial_num" property="serialNum" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        route_id,route_name, route_code, wind_id, mandatory_order,remark,maintenancer,maintenance_time,serial_num
+    </sql>
+    <select id="findAllTallyRouter" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from tally_route
+    </select>
+
+    <select id="sal" resultType="int" >
+        select
+        COUNT (*)
+        from tally_route
+    </select>
+
+    <select id="findCycleNameByRouteId" resultType="string" parameterType="string">
+        select
+        cycle_name
+        from cycle
+        WHERE route_id = #{routeId}
+    </select>
+
+    <select id="findUserIdsByRouteId" resultType="java.lang.String" parameterType="string">
+        select
+        user_id
+        from route_user
+        WHERE route_id = #{routeId}
+    </select>
+
+    <select id="findUserNameByUserId" resultType="string" parameterType="string">
+        select
+        user_name
+        from isc_user
+        WHERE user_id = #{userId}
+    </select>
+
+</mapper>

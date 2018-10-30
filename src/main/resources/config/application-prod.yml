@@ -1,0 +1,16 @@
+spring:
+  jpa.show-sql: false
+  datasource:
+    driverClassName: org.postgresql.Driver
+    jdbcUrl: jdbc:postgresql://localhost/sample
+    username: postgres
+    password: postgres
+    connectionTestQuery: 'SELECT 1'
+    max-active: 10
+    max-idle: 3
+    min-idle: 3
+    test-while-idle: true
+    test-on-borrow: true
+    validation-query: SELECT 1
+    time-between-eviction-runs-millis: 300000
+    min-evictable-idle-time-millis: 1800000

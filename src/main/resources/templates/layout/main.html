@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_header :: commonHeader(首页)"></head>
+<body>
+
+    <!--顶部导航-->
+    <div th:include="layout/north :: header">Header</div>
+    <!--左侧菜单-->
+    <div th:include="layout/west :: west">menu</div>
+    <div th:include="layout/center :: center">content</div>
+</body>
+</html>

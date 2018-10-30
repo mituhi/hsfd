@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_header :: commonHeader(警务保障管理平台)"></head>
+<body>
+<div>
+    <button onclick="show()">test</button>
+</div>
+
+<script type="text/javascript">
+    function show() {
+        core.initDialog("newDialog","test","showdialog");
+    }
+
+
+</script>
+</body>
+</html>
