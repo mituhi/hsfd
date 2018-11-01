@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyRouterDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.TallyRoute" >
+        <id column="route_id" property="routeId" />
+        <result column="route_name" property="routeName" />
+        <result column="route_code" property="routeCode"/>
+        <result column="wind_id" property="windId" />
+        <result column="mandatory_order" property="mandatoryOrder"  />
+        <result column="remark" property="remark" />
+        <result column="maintenancer" property="maintenancer" />
+        <result column="maintenance_time" property="maintenanceTime" />
+        <result column="serial_num" property="serialNum" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        route_id,route_name, route_code, wind_id, mandatory_order,remark,maintenancer,maintenance_time,serial_num
+    </sql>
+    <select id="findAllTallyRouter" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from tally_route
+        WHERE 1=1
+            <if test="windId !=null">
+                and wind_id=#{windId}
+            </if>
+        <if test="routeCode !=null">
+            and route_code=#{routeCode}
+        </if>
+        <if test="routeName !=null">
+            and route_name=#{routeName}
+        </if>
+    </select>
+
+    <select id="sal" resultType="int" >
+        select
+        COUNT (*)
+        from tally_route
+    </select>
+
+    <select id="findCycleNameByRouteId" resultType="string" parameterType="string">
+        select
+        cycle_name
+        from cycle
+        WHERE route_id = #{routeId}
+    </select>
+
+    <select id="findUserIdsByRouteId" resultType="java.lang.String" parameterType="string">
+        select
+        user_id
+        from route_user
+        WHERE route_id = #{routeId}
+    </select>
+
+    <select id="findUserNameByUserId" resultType="string" parameterType="string">
+        select
+        user_name
+        from isc_user
+        WHERE user_id = #{userId}
+    </select>
+
+    <delete id="deleteByRouteId">
+        DELETE FROM cycle WHERE route_id IN
+        <foreach collection="routeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteRouteUserByRouteId">
+        DELETE FROM route_user WHERE route_id IN
+        <foreach collection="routeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTallyRouteStandardByRouteId">
+        DELETE FROM tally_route_standard WHERE route_id IN
+        <foreach collection="routeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTallyRouteByRouteId">
+        DELETE FROM tally_route WHERE route_id IN
+        <foreach collection="routeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="findserialNum" resultType="int" >
+        select
+        max(serial_num)
+        from tally_route
+    </select>
+
+    <!-- 新增 -->
+    <insert id="addTallyRoute">
+        INSERT INTO tally_route
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="routeId!=null and routeId!=''">route_id,</if>
+            <if test="routeName!=null and routeName!=''">route_name,</if>
+            <if test="routeCode!=null and routeCode!=''">route_code,</if>
+            <if test="windId!=null and windId!=''">wind_id,</if>
+            <if test="mandatoryOrder!=null and mandatoryOrder!=''">mandatory_order,</if>
+            <if test="remark!=null and remark!=''">remark,</if>
+            <if test="maintenancer!=null and maintenancer!=''">maintenancer,</if>
+            <if test="maintenanceTime!=null">maintenance_time,</if>
+            <if test="serialNum!=null and serialNum!=''">serial_num,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="routeId!=null and routeId!=''">#{routeId},</if>
+            <if test="routeName!=null and routeName!=''">#{routeName},</if>
+            <if test="routeCode!=null and routeCode!=''">#{routeCode},</if>
+            <if test="windId!=null and windId!=''">#{windId},</if>
+            <if test="mandatoryOrder!=null and mandatoryOrder!=''">#{mandatoryOrder},</if>
+            <if test="remark!=null and remark!=''">#{remark},</if>
+            <if test="maintenancer!=null and maintenancer!=''">#{maintenancer},</if>
+            <if test="maintenanceTime!=null">#{maintenanceTime},</if>
+            <if test="serialNum!=null and serialNum!=''">#{serialNum},</if>
+        </trim>
+    </insert>
+
+    <!-- 新增 -->
+    <insert id="addCycle">
+        INSERT INTO cycle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cycleId!=null and cycleId!=''">cycle_id,</if>
+            <if test="routeId!=null and routeId!=''">route_id,</if>
+            <if test="cycleName!=null and cycleName!=''">cycle_name,</if>
+            <if test="cycleUnit!=null and cycleUnit!=''">cycle_unit,</if>
+            <if test="benchmarkDate!=null">benchmark_date,</if>
+            <if test="cycle!=null and cycle!=''">cycle,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cycleId!=null and cycleId!=''">#{cycleId},</if>
+            <if test="routeId!=null and routeId!=''">#{routeId},</if>
+            <if test="cycleName!=null and cycleName!=''">#{cycleName},</if>
+            <if test="cycleUnit!=null and cycleUnit!=''">#{cycleUnit},</if>
+            <if test="benchmarkDate!=null">#{benchmarkDate},</if>
+            <if test="cycle!=null and cycle!=''">#{cycle},</if>
+        </trim>
+    </insert>
+
+    <!-- 新增 -->
+    <insert id="addPeriodTime">
+        INSERT INTO period_time
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="periodTimeId!=null and periodTimeId!=''">period_time_id,</if>
+            <if test="startTime!=null">start_time,</if>
+            <if test="endTime!=null">end_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="periodTimeId!=null and periodTimeId!=''">#{periodTimeId},</if>
+            <if test="startTime!=null">#{startTime},</if>
+            <if test="endTime!=null">#{endTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 新增 -->
+    <insert id="addCyclePeriodTime">
+        INSERT INTO cycle_period_time
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">id,</if>
+            <if test="cycleId!=null and cycleId!=''">cycle_id,</if>
+            <if test="periodTimeId!=null and periodTimeId!=''">period_time_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">#{id},</if>
+            <if test="cycleId!=null and cycleId!=''">#{cycleId},</if>
+            <if test="periodTimeId!=null and periodTimeId!=''">#{periodTimeId},</if>
+        </trim>
+    </insert>
+
+    <select id="findUserIdByUserName" resultType="string" parameterType="string">
+        select
+        user_id
+        from isc_user
+        where user_name=#{userName}
+    </select>
+
+    <!-- 新增 -->
+    <insert id="addRouteUser">
+        INSERT INTO route_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">id,</if>
+            <if test="routeId!=null and routeId!=''">route_id,</if>
+            <if test="userId!=null and userId!=''">user_id,</if>
+            <if test="isPractitioners!=null and isPractitioners!=''">is_practitioners,</if>
+            <if test="isManagers!=null and isManagers!=''">is_managers,</if>
+            <if test="isHead!=null and isHead!=''">is_head,</if>
+            <if test="remark!=null and remark!=''">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">#{id},</if>
+            <if test="routeId!=null and routeId!=''">#{routeId},</if>
+            <if test="userId!=null and userId!=''">#{userId},</if>
+            <if test="isPractitioners!=null and isPractitioners!=''">#{isPractitioners},</if>
+            <if test="isManagers!=null and isManagers!=''">#{isManagers},</if>
+            <if test="isHead!=null and isHead!=''">#{isHead},</if>
+            <if test="remark!=null and remark!=''">#{remark},</if>
+        </trim>
+    </insert>
+
+    <select id="checkRouteId" resultType="int" parameterType="string">
+        select
+        COUNT(*)
+        FROM tally_route
+        WHERE route_id=#{routeId}
+    </select>
+
+    <select id="choicePeople" resultType="java.lang.String">
+        select
+        user_name
+        from isc_user
+    </select>
+
+
+
+</mapper>

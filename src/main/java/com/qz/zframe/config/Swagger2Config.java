@@ -19,7 +19,6 @@ public class Swagger2Config {
 	public Docket swaggerSpringMvcPlugin() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select()
 				.paths(regex("/api.*|/zframe.*")).build();
-		//.apis(RequestHandlerSelectors.basePackage("com.qz.zframe.material.controller")).paths(PathSelectors.any())
 	}
 
 	ApiInfo apiInfo() {

@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.material.dao.MaterialMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.material.entity.Material" >
+    <id column="material_id" property="materialId" jdbcType="VARCHAR" />
+    <result column="material_code" property="materialCode" jdbcType="VARCHAR" />
+    <result column="material_name" property="materialName" jdbcType="VARCHAR" />
+    <result column="material_describe" property="materialDescribe" jdbcType="VARCHAR" />
+    <result column="material_type" property="materialType" jdbcType="VARCHAR" />
+    <result column="measuring_unit" property="measuringUnit" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="material_num" property="materialNum" jdbcType="DECIMAL" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="graph_number" property="graphNumber" jdbcType="VARCHAR" />
+    <result column="material_property_id" property="materialPropertyId" jdbcType="VARCHAR" />
+    <result column="material_group_id" property="materialGroupId" jdbcType="VARCHAR" />
+    <result column="identification" property="identification" jdbcType="VARCHAR" />
+    <result column="is_fixed" property="isFixed" jdbcType="VARCHAR" />
+    <result column="production_address" property="productionAddress" jdbcType="VARCHAR" />
+    <result column="is_guarantee" property="isGuarantee" jdbcType="VARCHAR" />
+    <result column="quality_guarantee_period" property="qualityGuaranteePeriod" jdbcType="VARCHAR" />
+    <result column="material_parameter" property="materialParameter" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="VARCHAR" />
+    <result column="is_control_stock" property="isControlStock" jdbcType="VARCHAR" />
+    <result column="stock_max" property="stockMax" jdbcType="INTEGER" />
+    <result column="stock_min" property="stockMin" jdbcType="INTEGER" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    material_id, material_code, material_name, material_describe, material_type, measuring_unit, 
+    specifications, material_num, wind_id, graph_number, material_property_id, material_group_id, 
+    identification, is_fixed, production_address, is_guarantee, quality_guarantee_period, 
+    material_parameter, sort, is_control_stock, stock_max, stock_min, is_delete, creater, 
+    create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.MaterialExample" >
+    select a.material_id, a.material_code, a.material_name, a.material_describe, a.material_type, a.measuring_unit, 
+    a.specifications, a.material_num 
+    from material a
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from material a
+    where a.material_id = #{materialId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from material
+    where material_id = #{materialId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.material.entity.MaterialExample" >
+    delete from material
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.material.entity.Material" >
+    insert into material (material_id, material_code, material_name, 
+      material_describe, material_type, measuring_unit, 
+      specifications, material_num, wind_id, 
+      graph_number, material_property_id, material_group_id, 
+      identification, is_fixed, production_address, 
+      is_guarantee, quality_guarantee_period, material_parameter, 
+      sort, is_control_stock, stock_max, 
+      stock_min, is_delete, creater, 
+      create_time)
+    values (#{materialId,jdbcType=VARCHAR}, #{materialCode,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, 
+      #{materialDescribe,jdbcType=VARCHAR}, #{materialType,jdbcType=VARCHAR}, #{measuringUnit,jdbcType=VARCHAR}, 
+      #{specifications,jdbcType=VARCHAR}, #{materialNum,jdbcType=DECIMAL}, #{windId,jdbcType=VARCHAR}, 
+      #{graphNumber,jdbcType=VARCHAR}, #{materialPropertyId,jdbcType=VARCHAR}, #{materialGroupId,jdbcType=VARCHAR}, 
+      #{identification,jdbcType=VARCHAR}, #{isFixed,jdbcType=VARCHAR}, #{productionAddress,jdbcType=VARCHAR}, 
+      #{isGuarantee,jdbcType=VARCHAR}, #{qualityGuaranteePeriod,jdbcType=VARCHAR}, #{materialParameter,jdbcType=VARCHAR}, 
+      #{sort,jdbcType=VARCHAR}, #{isControlStock,jdbcType=VARCHAR}, #{stockMax,jdbcType=INTEGER}, 
+      #{stockMin,jdbcType=INTEGER}, #{isDelete,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR}, 
+      now())
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.material.entity.Material" >
+    insert into material
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="materialId != null" >
+        material_id,
+      </if>
+      <if test="materialCode != null" >
+        material_code,
+      </if>
+      <if test="materialName != null" >
+        material_name,
+      </if>
+      <if test="materialDescribe != null" >
+        material_describe,
+      </if>
+      <if test="materialType != null" >
+        material_type,
+      </if>
+      <if test="measuringUnit != null" >
+        measuring_unit,
+      </if>
+      <if test="specifications != null" >
+        specifications,
+      </if>
+      <if test="materialNum != null" >
+        material_num,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="graphNumber != null" >
+        graph_number,
+      </if>
+      <if test="materialPropertyId != null" >
+        material_property_id,
+      </if>
+      <if test="materialGroupId != null" >
+        material_group_id,
+      </if>
+      <if test="identification != null" >
+        identification,
+      </if>
+      <if test="isFixed != null" >
+        is_fixed,
+      </if>
+      <if test="productionAddress != null" >
+        production_address,
+      </if>
+      <if test="isGuarantee != null" >
+        is_guarantee,
+      </if>
+      <if test="qualityGuaranteePeriod != null" >
+        quality_guarantee_period,
+      </if>
+      <if test="materialParameter != null" >
+        material_parameter,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="isControlStock != null" >
+        is_control_stock,
+      </if>
+      <if test="stockMax != null" >
+        stock_max,
+      </if>
+      <if test="stockMin != null" >
+        stock_min,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="materialId != null" >
+        #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialCode != null" >
+        #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null" >
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialDescribe != null" >
+        #{materialDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="materialType != null" >
+        #{materialType,jdbcType=VARCHAR},
+      </if>
+      <if test="measuringUnit != null" >
+        #{measuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="materialNum != null" >
+        #{materialNum,jdbcType=DECIMAL},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="graphNumber != null" >
+        #{graphNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="materialPropertyId != null" >
+        #{materialPropertyId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGroupId != null" >
+        #{materialGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="identification != null" >
+        #{identification,jdbcType=VARCHAR},
+      </if>
+      <if test="isFixed != null" >
+        #{isFixed,jdbcType=VARCHAR},
+      </if>
+      <if test="productionAddress != null" >
+        #{productionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isGuarantee != null" >
+        #{isGuarantee,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityGuaranteePeriod != null" >
+        #{qualityGuaranteePeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="materialParameter != null" >
+        #{materialParameter,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="isControlStock != null" >
+        #{isControlStock,jdbcType=VARCHAR},
+      </if>
+      <if test="stockMax != null" >
+        #{stockMax,jdbcType=INTEGER},
+      </if>
+      <if test="stockMin != null" >
+        #{stockMin,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.material.entity.MaterialExample" resultType="java.lang.Integer" >
+    select count(*) from material a
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+   <select id="countMaterialName" parameterType="com.qz.zframe.material.entity.MaterialExample" resultType="java.lang.Integer" >
+    select count(*) from material a
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  
+  <update id="updateByExampleSelective" parameterType="map" >
+    update material
+    <set >
+      <if test="record.materialId != null" >
+        material_id = #{record.materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialCode != null" >
+        material_code = #{record.materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialName != null" >
+        material_name = #{record.materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialDescribe != null" >
+        material_describe = #{record.materialDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialType != null" >
+        material_type = #{record.materialType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.measuringUnit != null" >
+        measuring_unit = #{record.measuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specifications != null" >
+        specifications = #{record.specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialNum != null" >
+        material_num = #{record.materialNum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.graphNumber != null" >
+        graph_number = #{record.graphNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialPropertyId != null" >
+        material_property_id = #{record.materialPropertyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialGroupId != null" >
+        material_group_id = #{record.materialGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.identification != null" >
+        identification = #{record.identification,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isFixed != null" >
+        is_fixed = #{record.isFixed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productionAddress != null" >
+        production_address = #{record.productionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isGuarantee != null" >
+        is_guarantee = #{record.isGuarantee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qualityGuaranteePeriod != null" >
+        quality_guarantee_period = #{record.qualityGuaranteePeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialParameter != null" >
+        material_parameter = #{record.materialParameter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sort != null" >
+        sort = #{record.sort,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isControlStock != null" >
+        is_control_stock = #{record.isControlStock,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockMax != null" >
+        stock_max = #{record.stockMax,jdbcType=INTEGER},
+      </if>
+      <if test="record.stockMin != null" >
+        stock_min = #{record.stockMin,jdbcType=INTEGER},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creater != null" >
+        creater = #{record.creater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update material
+    set material_id = #{record.materialId,jdbcType=VARCHAR},
+      material_code = #{record.materialCode,jdbcType=VARCHAR},
+      material_name = #{record.materialName,jdbcType=VARCHAR},
+      material_describe = #{record.materialDescribe,jdbcType=VARCHAR},
+      material_type = #{record.materialType,jdbcType=VARCHAR},
+      measuring_unit = #{record.measuringUnit,jdbcType=VARCHAR},
+      specifications = #{record.specifications,jdbcType=VARCHAR},
+      material_num = #{record.materialNum,jdbcType=DECIMAL},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      graph_number = #{record.graphNumber,jdbcType=VARCHAR},
+      material_property_id = #{record.materialPropertyId,jdbcType=VARCHAR},
+      material_group_id = #{record.materialGroupId,jdbcType=VARCHAR},
+      identification = #{record.identification,jdbcType=VARCHAR},
+      is_fixed = #{record.isFixed,jdbcType=VARCHAR},
+      production_address = #{record.productionAddress,jdbcType=VARCHAR},
+      is_guarantee = #{record.isGuarantee,jdbcType=VARCHAR},
+      quality_guarantee_period = #{record.qualityGuaranteePeriod,jdbcType=VARCHAR},
+      material_parameter = #{record.materialParameter,jdbcType=VARCHAR},
+      sort = #{record.sort,jdbcType=VARCHAR},
+      is_control_stock = #{record.isControlStock,jdbcType=VARCHAR},
+      stock_max = #{record.stockMax,jdbcType=INTEGER},
+      stock_min = #{record.stockMin,jdbcType=INTEGER},
+      is_delete = #{record.isDelete,jdbcType=VARCHAR},
+      creater = #{record.creater,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.material.entity.Material" >
+    update material
+    <set >
+      <if test="materialCode != null" >
+        material_code = #{materialCode,jdbcType=VARCHAR},
+      </if>
+      <if test="materialName != null" >
+        material_name = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialDescribe != null" >
+        material_describe = #{materialDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="materialType != null" >
+        material_type = #{materialType,jdbcType=VARCHAR},
+      </if>
+      <if test="measuringUnit != null" >
+        measuring_unit = #{measuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="specifications != null" >
+        specifications = #{specifications,jdbcType=VARCHAR},
+      </if>
+      <if test="materialNum != null" >
+        material_num = #{materialNum,jdbcType=DECIMAL},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="graphNumber != null" >
+        graph_number = #{graphNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="materialPropertyId != null" >
+        material_property_id = #{materialPropertyId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialGroupId != null" >
+        material_group_id = #{materialGroupId,jdbcType=VARCHAR},
+      </if>
+      <if test="identification != null" >
+        identification = #{identification,jdbcType=VARCHAR},
+      </if>
+      <if test="isFixed != null" >
+        is_fixed = #{isFixed,jdbcType=VARCHAR},
+      </if>
+      <if test="productionAddress != null" >
+        production_address = #{productionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isGuarantee != null" >
+        is_guarantee = #{isGuarantee,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityGuaranteePeriod != null" >
+        quality_guarantee_period = #{qualityGuaranteePeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="materialParameter != null" >
+        material_parameter = #{materialParameter,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=VARCHAR},
+      </if>
+      <if test="isControlStock != null" >
+        is_control_stock = #{isControlStock,jdbcType=VARCHAR},
+      </if>
+      <if test="stockMax != null" >
+        stock_max = #{stockMax,jdbcType=INTEGER},
+      </if>
+      <if test="stockMin != null" >
+        stock_min = #{stockMin,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where material_id = #{materialId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.material.entity.Material" >
+    update material
+    set material_code = #{materialCode,jdbcType=VARCHAR},
+      material_name = #{materialName,jdbcType=VARCHAR},
+      material_describe = #{materialDescribe,jdbcType=VARCHAR},
+      material_type = #{materialType,jdbcType=VARCHAR},
+      measuring_unit = #{measuringUnit,jdbcType=VARCHAR},
+      specifications = #{specifications,jdbcType=VARCHAR},
+      material_num = #{materialNum,jdbcType=DECIMAL},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      graph_number = #{graphNumber,jdbcType=VARCHAR},
+      material_property_id = #{materialPropertyId,jdbcType=VARCHAR},
+      material_group_id = #{materialGroupId,jdbcType=VARCHAR},
+      identification = #{identification,jdbcType=VARCHAR},
+      is_fixed = #{isFixed,jdbcType=VARCHAR},
+      production_address = #{productionAddress,jdbcType=VARCHAR},
+      is_guarantee = #{isGuarantee,jdbcType=VARCHAR},
+      quality_guarantee_period = #{qualityGuaranteePeriod,jdbcType=VARCHAR},
+      material_parameter = #{materialParameter,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=VARCHAR},
+      is_control_stock = #{isControlStock,jdbcType=VARCHAR},
+      stock_max = #{stockMax,jdbcType=INTEGER},
+      stock_min = #{stockMin,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      creater = #{creater,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where material_id = #{materialId,jdbcType=VARCHAR}
+  </update>
+  
+   <update id="delMaterial" parameterType="java.util.List">
+        update material set is_delete="1"  where material_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+  
+</mapper>

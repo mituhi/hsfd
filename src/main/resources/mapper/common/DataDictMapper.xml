@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.DataDictDao">
+
+    <!-- 获取所有编码信息 -->
+    <select id="findAllCode" resultType="com.qz.zframe.common.entity.DataDict">
+        select c.id,c.code_type_id codeTypeId,c.name,c.title,c.state state,c.description,
+        c.disp_order dispOrder,t.name codeTypeName, t.title codeTypeTitle,t.description codeTypeDescription 
+        from sp_code c,sp_code_type t where c.code_type_id = t.id
+    </select>
+    
+    <!-- 根据编码类型获取编码信息 -->
+    <select id="findCodeByCodeType" resultType="com.qz.zframe.common.entity.DataDict">
+        select c.id,c.code_type_id codeTypeId,c.name,c.title,c.state state,c.description,
+        c.disp_order dispOrder,t.name codeTypeName, t.title codeTypeTitle,t.description codeTypeDescription 
+        from sp_code c,sp_code_type t where c.code_type_id = t.id and t.name = #{codeType}
+    </select>
+    
+    <!-- 根据分类编码获取编码类型信息 -->
+    <select id="findCodeTypeByType" resultType="com.qz.zframe.common.entity.DataDictType">
+        select * from sp_code_type where name = #{name}
+    </select>
+    
+    <!-- 获取编码类型最大id -->
+    <select id="findMaxCodeTypeId" resultType="string">
+        select max(id) from sp_code_type
+    </select>
+
+	<!-- 新增编码类型 -->
+    <insert id="addCodeType" parameterType="com.qz.zframe.common.entity.DataDictType">
+        insert into sp_code_type (id,name,title,parent_id,description,disp_order)
+        values(#{id},#{name},#{title},#{parentId},#{description},#{dispOrder})
+    </insert>
+    
+    <!-- 修改编码类型 -->
+    <update id="updateCodeType" parameterType="com.qz.zframe.common.entity.DataDictType">
+        update sp_code_type set title = #{title},name = #{name} where id = #{id}
+    </update>
+    
+    <!-- 删除编码类型 -->
+    <delete id="deleteCodeType" parameterType="java.util.List" >
+	    delete from sp_code_type
+	    where id in
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除编码 -->
+    <delete id="deleteCode" parameterType="java.util.List" >
+	    delete from sp_code
+	    where id in
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 获取所有编码分类信息 -->
+    <select id="findAllCodeType" resultType="com.qz.zframe.common.entity.DataDictType">
+        select * from sp_code_type
+    </select>
+    
+    <!-- 根据编码类型获取编码分类信息 -->
+    <select id="findCodeTypeByCodeType" resultType="com.qz.zframe.common.entity.DataDictType">
+        select * from sp_code_type where name = #{codeType}
+    </select>
+    
+    <!-- 根据编码类型获取编码分类信息 -->
+    <select id="findCodeByCodeTypeIdAndName" resultType="com.qz.zframe.common.entity.DataDict">
+        select * from sp_code where code_type_id = #{codeTypeId} and name = #{name}
+    </select>
+    
+    <!-- 获取编码最大id -->
+    <select id="findMaxCodeIdAndSort" resultType="map">
+        select id, disp_order from sp_code order by id desc limit 1
+    </select>
+    
+    <!-- 新增编码 -->
+    <insert id="addCode" parameterType="com.qz.zframe.common.entity.DataDict">
+        insert into sp_code (id,code_type_id,name,title,description,state,disp_order)
+        values(#{id},#{codeTypeId},#{name},#{title},#{description},#{state},#{dispOrder})
+    </insert>
+    
+    <!-- 修改编码 -->
+    <update id="updateCode" parameterType="com.qz.zframe.common.entity.DataDict">
+        update sp_code set title = #{title} where id = #{id}
+    </update>
+    
+    <!-- 根据id查询编码 -->
+    <select id="queryCodeById" resultType="com.qz.zframe.common.entity.DataDict">
+    	select * from sp_code where id = #{id}
+    </select>
+    
+    <!-- 根据id查询编码分类 -->
+    <select id="queryCodeTypeById" resultType="com.qz.zframe.common.entity.DataDictType">
+    	select * from sp_code_type where id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.device.dao.EquipmentClassificationMapper">
+  <resultMap id="BaseResultMap" type="com.qz.zframe.device.entity.EquipmentClassification">
+    <id column="equipment_id" jdbcType="VARCHAR" property="equipmentId" />
+    <result column="equipment_type" jdbcType="VARCHAR" property="equipmentType" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="superior_equipment" jdbcType="VARCHAR" property="superiorEquipment" />
+    <result column="superior_equipment_describe" jdbcType="VARCHAR" property="superiorEquipmentDescribe" />
+    <result column="superior_equipment_name" jdbcType="VARCHAR" property="superiorEquipmentName" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="is_toplevel" jdbcType="VARCHAR" property="isToplevel" />
+    <result column="equipment_type_describe" jdbcType="VARCHAR" property="equipmentTypeDescribe" />
+    <result column="output_id" jdbcType="VARCHAR" property="outputId" />
+    <result column="run_id" jdbcType="VARCHAR" property="runId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    equipment_id, equipment_type, type_name, superior_equipment, superior_equipment_describe, 
+    superior_equipment_name, status, is_toplevel, equipment_type_describe, output_id, 
+    run_id
+  </sql>
+  <select id="selectByExample" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment_classification  
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+     <select id="selectByExamples" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from equipment_classification  where  type_name like  '%' #{typeName,jdbcType=VARCHAR} '%'
+    <!-- <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>  -->
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from equipment_classification
+    where equipment_id = #{equipmentId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectStructure" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from equipment_classification
+     where is_toplevel=0
+  </select>
+  
+   <select id="selectStructureList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from equipment_classification
+     where  superior_equipment=#{superiorEquipment,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from equipment_classification
+    where equipment_id = #{equipmentId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByPrimaryKeyList" parameterType="java.util.List">
+    delete from equipment_classification
+    <where> 
+    equipment_id  in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach> 
+    </where>
+  </delete> 
+  <delete id="deleteByExample" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample">
+    delete from equipment_classification
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.device.entity.EquipmentClassification">
+    insert into equipment_classification (equipment_id, equipment_type, type_name, 
+      superior_equipment, superior_equipment_describe, 
+      superior_equipment_name, status, is_toplevel, 
+      equipment_type_describe, output_id, run_id
+      )
+    values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentType,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, 
+      #{superiorEquipment,jdbcType=VARCHAR}, #{superiorEquipmentDescribe,jdbcType=VARCHAR}, 
+      #{superiorEquipmentName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{isToplevel,jdbcType=VARCHAR}, 
+      #{equipmentTypeDescribe,jdbcType=VARCHAR}, #{outputId,jdbcType=VARCHAR}, #{runId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.EquipmentClassification">
+    insert into equipment_classification
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+       <if test="equipmentId != null">
+        equipment_id,
+      </if> 
+      <if test="equipmentType != null">
+        equipment_type,
+      </if>
+      <if test="typeName != null">
+        type_name,
+      </if>
+      <if test="superiorEquipment != null">
+        superior_equipment,
+      </if>
+      <if test="superiorEquipmentDescribe != null">
+        superior_equipment_describe,
+      </if>
+      <if test="superiorEquipmentName != null">
+        superior_equipment_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="isToplevel != null">
+        is_toplevel,
+      </if>
+      <if test="equipmentTypeDescribe != null">
+        equipment_type_describe,
+      </if>
+      <if test="outputId != null">
+        output_id,
+      </if>
+      <if test="runId != null">
+        run_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="equipmentId != null">
+        #{equipmentId,jdbcType=VARCHAR},
+      </if> 
+      <if test="equipmentType != null">
+        #{equipmentType,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null">
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorEquipment != null">
+        #{superiorEquipment,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorEquipmentDescribe != null">
+        #{superiorEquipmentDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorEquipmentName != null">
+        #{superiorEquipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isToplevel != null">
+        #{isToplevel,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentTypeDescribe != null">
+        #{equipmentTypeDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="outputId != null">
+        #{outputId,jdbcType=VARCHAR},
+      </if>
+      <if test="runId != null">
+        #{runId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultType="java.lang.Integer">
+    select count(*) from equipment_classification
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update equipment_classification
+    <set>
+      <if test="record.equipmentId != null">
+        equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentType != null">
+        equipment_type = #{record.equipmentType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.typeName != null">
+        type_name = #{record.typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.superiorEquipment != null">
+        superior_equipment = #{record.superiorEquipment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.superiorEquipmentDescribe != null">
+        superior_equipment_describe = #{record.superiorEquipmentDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.superiorEquipmentName != null">
+        superior_equipment_name = #{record.superiorEquipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isToplevel != null">
+        is_toplevel = #{record.isToplevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentTypeDescribe != null">
+        equipment_type_describe = #{record.equipmentTypeDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outputId != null">
+        output_id = #{record.outputId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runId != null">
+        run_id = #{record.runId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update equipment_classification
+    set equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      equipment_type = #{record.equipmentType,jdbcType=VARCHAR},
+      type_name = #{record.typeName,jdbcType=VARCHAR},
+      superior_equipment = #{record.superiorEquipment,jdbcType=VARCHAR},
+      superior_equipment_describe = #{record.superiorEquipmentDescribe,jdbcType=VARCHAR},
+      superior_equipment_name = #{record.superiorEquipmentName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      is_toplevel = #{record.isToplevel,jdbcType=VARCHAR},
+      equipment_type_describe = #{record.equipmentTypeDescribe,jdbcType=VARCHAR},
+      output_id = #{record.outputId,jdbcType=VARCHAR},
+      run_id = #{record.runId,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.device.entity.EquipmentClassification">
+    update equipment_classification
+    <set>
+      <if test="equipmentType != null">
+        equipment_type = #{equipmentType,jdbcType=VARCHAR},
+      </if>
+      <if test="typeName != null">
+        type_name = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorEquipment != null">
+        superior_equipment = #{superiorEquipment,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorEquipmentDescribe != null">
+        superior_equipment_describe = #{superiorEquipmentDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorEquipmentName != null">
+        superior_equipment_name = #{superiorEquipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isToplevel != null">
+        is_toplevel = #{isToplevel,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentTypeDescribe != null">
+        equipment_type_describe = #{equipmentTypeDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="outputId != null">
+        output_id = #{outputId,jdbcType=VARCHAR},
+      </if>
+      <if test="runId != null">
+        run_id = #{runId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where equipment_id = #{equipmentId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.device.entity.EquipmentClassification">
+    update equipment_classification
+    set equipment_type = #{equipmentType,jdbcType=VARCHAR},
+      type_name = #{typeName,jdbcType=VARCHAR},
+      superior_equipment = #{superiorEquipment,jdbcType=VARCHAR},
+      superior_equipment_describe = #{superiorEquipmentDescribe,jdbcType=VARCHAR},
+      superior_equipment_name = #{superiorEquipmentName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      is_toplevel = #{isToplevel,jdbcType=VARCHAR},
+      equipment_type_describe = #{equipmentTypeDescribe,jdbcType=VARCHAR},
+      output_id = #{outputId,jdbcType=VARCHAR},
+      run_id = #{runId,jdbcType=VARCHAR}
+    where equipment_id = #{equipmentId,jdbcType=VARCHAR}
+  </update>
+</mapper>
