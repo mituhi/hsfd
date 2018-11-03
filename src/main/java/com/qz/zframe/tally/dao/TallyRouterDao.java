@@ -117,6 +117,16 @@ public interface TallyRouterDao {
      */
     List<String> choicePeople();
 
+    //todo
+    /**
+     * 查询所有风场
+     * @return
+     */
+    List<String> findAllWind();
+
+
+
+
 
 
 

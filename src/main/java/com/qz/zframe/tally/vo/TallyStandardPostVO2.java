@@ -1,14 +1,15 @@
-package com.qz.zframe.tally.entity;
-/*
-点检标准表
- */
-public class TallyStandard {
-    //标准id
-    private String standardId;
-    //路线id
+package com.qz.zframe.tally.vo;
+
+public class TallyStandardPostVO2 {
+
     private String routeId;
-    //设备id
+
+    private String standardId;
+
     private String equipmentId;
+
+    //路线名称
+    private String routeName;
     //标准编码
     private String standardCoding;
     //所属设备
@@ -54,6 +55,14 @@ public class TallyStandard {
     //里程下限
     private String lowerlimitMileage;
 
+    public String getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId;
+    }
+
     public String getStandardId() {
         return standardId;
     }
@@ -70,12 +79,12 @@ public class TallyStandard {
         this.routeId = routeId;
     }
 
-    public String getEquipmentId() {
-        return equipmentId;
+    public String getRouteName() {
+        return routeName;
     }
 
-    public void setEquipmentId(String equipmentId) {
-        this.equipmentId = equipmentId;
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
     }
 
     public String getStandardCoding() {
@@ -84,6 +93,14 @@ public class TallyStandard {
 
     public void setStandardCoding(String standardCoding) {
         this.standardCoding = standardCoding;
+    }
+
+    public String getEquipmentBelonging() {
+        return equipmentBelonging;
+    }
+
+    public void setEquipmentBelonging(String equipmentBelonging) {
+        this.equipmentBelonging = equipmentBelonging;
     }
 
     public String getLocation() {
@@ -244,75 +261,5 @@ public class TallyStandard {
 
     public void setLowerlimitMileage(String lowerlimitMileage) {
         this.lowerlimitMileage = lowerlimitMileage;
-    }
-
-    public String getEquipmentBelonging() {
-        return equipmentBelonging;
-    }
-
-    public void setEquipmentBelonging(String equipmentBelonging) {
-        this.equipmentBelonging = equipmentBelonging;
-    }
-
-    public TallyStandard() {
-    }
-
-    public TallyStandard(String standardId, String routeId, String equipmentId, String standardCoding, String equipmentBelonging, String location, String checkContent, String standardType, String dataType, String signalType, String checkMethod, String standardJudgment, String resultOptions, String measurementUnit, String typicalValue, String equipmentState, String twodimensionalcodeLocation, String startandstopPoint, String maincontrolPoint, String alarmType, String alarmCeiling, String alarmLowerlimit, String emissivity, String upperlimitMileage, String lowerlimitMileage) {
-        this.standardId = standardId;
-        this.routeId = routeId;
-        this.equipmentId = equipmentId;
-        this.standardCoding = standardCoding;
-        this.equipmentBelonging = equipmentBelonging;
-        this.location = location;
-        this.checkContent = checkContent;
-        this.standardType = standardType;
-        this.dataType = dataType;
-        this.signalType = signalType;
-        this.checkMethod = checkMethod;
-        this.standardJudgment = standardJudgment;
-        this.resultOptions = resultOptions;
-        this.measurementUnit = measurementUnit;
-        this.typicalValue = typicalValue;
-        this.equipmentState = equipmentState;
-        this.twodimensionalcodeLocation = twodimensionalcodeLocation;
-        this.startandstopPoint = startandstopPoint;
-        this.maincontrolPoint = maincontrolPoint;
-        this.alarmType = alarmType;
-        this.alarmCeiling = alarmCeiling;
-        this.alarmLowerlimit = alarmLowerlimit;
-        this.emissivity = emissivity;
-        this.upperlimitMileage = upperlimitMileage;
-        this.lowerlimitMileage = lowerlimitMileage;
-    }
-
-    @Override
-    public String toString() {
-        return "TallyStandard{" +
-                "standardId='" + standardId + '\'' +
-                ", routeId='" + routeId + '\'' +
-                ", equipmentId='" + equipmentId + '\'' +
-                ", standardCoding='" + standardCoding + '\'' +
-                ", equipmentBelonging='" + equipmentBelonging + '\'' +
-                ", location='" + location + '\'' +
-                ", checkContent='" + checkContent + '\'' +
-                ", standardType='" + standardType + '\'' +
-                ", dataType='" + dataType + '\'' +
-                ", signalType='" + signalType + '\'' +
-                ", checkMethod='" + checkMethod + '\'' +
-                ", standardJudgment='" + standardJudgment + '\'' +
-                ", resultOptions='" + resultOptions + '\'' +
-                ", measurementUnit='" + measurementUnit + '\'' +
-                ", typicalValue='" + typicalValue + '\'' +
-                ", equipmentState='" + equipmentState + '\'' +
-                ", twodimensionalcodeLocation='" + twodimensionalcodeLocation + '\'' +
-                ", startandstopPoint='" + startandstopPoint + '\'' +
-                ", maincontrolPoint='" + maincontrolPoint + '\'' +
-                ", alarmType='" + alarmType + '\'' +
-                ", alarmCeiling='" + alarmCeiling + '\'' +
-                ", alarmLowerlimit='" + alarmLowerlimit + '\'' +
-                ", emissivity='" + emissivity + '\'' +
-                ", upperlimitMileage='" + upperlimitMileage + '\'' +
-                ", lowerlimitMileage='" + lowerlimitMileage + '\'' +
-                '}';
     }
 }

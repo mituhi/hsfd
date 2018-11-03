@@ -27,7 +27,7 @@
             and route_code=#{routeCode}
         </if>
         <if test="routeName !=null">
-            and route_name=#{routeName}
+            and route_name like "%"#{routeName}"%"
         </if>
     </select>
 
@@ -211,6 +211,12 @@
         select
         user_name
         from isc_user
+    </select>
+
+    <select id="findAllWind" resultType="java.lang.String">
+        select
+        org_name
+        from isc_org
     </select>
 
 

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyStandardDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.TallyStandard" >
+        <id column="standard_id" property="standardId" />
+        <result column="route_id" property="routeId" />
+        <result column="equipment_id" property="equipmentId"/>
+        <result column="standard_coding" property="standardCoding" />
+        <result column="equipment_belonging" property="equipmentBelonging"  />
+        <result column="location" property="location" />
+        <result column="check_content" property="checkContent" />
+        <result column="standard_type" property="standardType" />
+        <result column="data_type" property="dataType" />
+        <result column="signal_type" property="signalType" />
+        <result column="check_method" property="checkMethod"/>
+        <result column="standard_judgment" property="standardJudgment" />
+        <result column="result_options" property="resultOptions"  />
+        <result column="measurement_unit" property="measurementUnit" />
+        <result column="typical_value" property="typicalValue" />
+        <result column="equipment_state" property="equipmentState" />
+        <result column="twodimensionalcode_location" property="twodimensionalcodeLocation" />
+        <result column="startandstop_point" property="startandstopPoint" />
+        <result column="maincontrol_point" property="maincontrolPoint"/>
+        <result column="alarm_type" property="alarmType" />
+        <result column="alarm_ceiling" property="alarmCeiling"  />
+        <result column="alarm_lowerlimit" property="alarmLowerlimit" />
+        <result column="emissivity" property="emissivity" />
+        <result column="upperlimit_mileage" property="upperlimitMileage" />
+        <result column="lowerlimit_mileage" property="lowerlimitMileage" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        standard_id,route_id, equipment_id, standard_coding, equipment_belonging,location,check_content,standard_type,data_type,signal_type,check_method,standard_judgment,result_options,measurement_unit,typical_value,equipment_state,twodimensionalcode_location,startandstop_point,maincontrol_point,alarm_type,alarm_ceiling,alarm_lowerlimit,emissivity,upperlimit_mileage,lowerlimit_mileage
+    </sql>
+
+    <select id="findAllTallyStandard" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from tally_standard
+        WHERE 1=1
+        <if test="equipmentBelonging !=null">
+            and equipment_belonging=#{equipmentBelonging}
+        </if>
+        <if test="routeId !=null">
+            and route_id=#{routeId}
+        </if>
+        <if test="equipmentState !=null">
+            and equipment_state=#{equipmentState}
+        </if>
+        <if test="alarmType !=null">
+            and alarm_type=#{alarmType}
+        </if>
+        <if test="standardCoding !=null">
+            and standard_coding=#{standardCoding}
+        </if>
+        <if test="checkContent !=null">
+            and check_content like "%"#{checkContent}"%"
+        </if>
+    </select>
+
+    <select id="findRouteNameByRouteId" resultType="string" parameterType="string">
+          select
+          route_name
+          from tally_route
+          where route_id=#{routeId}
+    </select>
+
+    <select id="findWindIdByRouteId" resultType="string" parameterType="string">
+            select wind_id
+            from tally_route
+            where route_id=#{routeId}
+    </select>
+
+    <delete id="deletetallyRouteStandardByPeriodTimeIds">
+        DELETE FROM tally_route_standard WHERE standard_id IN
+        <foreach collection="periodTimeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTallyStandardByPeriodTimeIds">
+        DELETE FROM tally_standard WHERE standard_id IN
+        <foreach collection="periodTimeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="findRouteIdByRouteName" resultType="string" parameterType="string">
+        select
+        route_id
+        from tally_route
+        where route_name=#{routeName}
+    </select>
+
+    <!-- 新增 -->
+    <insert id="addTallyStandard">
+        INSERT INTO tally_standard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="standardId!=null and standardId!=''">standard_id,</if>
+            <if test="routeId!=null and routeId!=''">route_id,</if>
+            <if test="equipmentId!=null and equipmentId!=''">equipment_id,</if>
+            <if test="standardCoding!=null and standardCoding!=''">standard_coding,</if>
+            <if test="equipmentBelonging!=null and equipmentBelonging!=''">equipment_belonging,</if>
+            <if test="location!=null and location!=''">location,</if>
+            <if test="checkContent!=null and checkContent!=''">check_content,</if>
+            <if test="standardType!=null and standardType!=''">standard_type,</if>
+            <if test="dataType!=null and dataType!=''">data_type,</if>
+            <if test="signalType!=null and signalType!=''">signal_type,</if>
+            <if test="checkMethod!=null and checkMethod!=''">check_method,</if>
+            <if test="standardJudgment!=null and standardJudgment!=''">standard_judgment,</if>
+            <if test="resultOptions!=null and resultOptions!=''">result_options,</if>
+            <if test="measurementUnit!=null and measurementUnit!=''">measurement_unit,</if>
+            <if test="typicalValue!=null and typicalValue!=''">typical_value,</if>
+            <if test="equipmentState!=null and equipmentState!=''">equipment_state,</if>
+            <if test="twodimensionalcodeLocation!=null and twodimensionalcodeLocation!=''">twodimensionalcode_location,</if>
+            <if test="startandstopPoint!=null and startandstopPoint!=''">startandstop_point,</if>
+            <if test="maincontrolPoint!=null and maincontrolPoint!=''">maincontrol_point,</if>
+            <if test="alarmType!=null and alarmType!=''">alarm_type,</if>
+            <if test="alarmCeiling!=null and alarmCeiling!=''">alarm_ceiling,</if>
+            <if test="alarmLowerlimit!=null and alarmLowerlimit!=''">alarm_lowerlimit,</if>
+            <if test="emissivity!=null and emissivity!=''">emissivity,</if>
+            <if test="upperlimitMileage!=null and upperlimitMileage!=''">upperlimit_mileage,</if>
+            <if test="lowerlimitMileage!=null and lowerlimitMileage!=''">lowerlimit_mileage,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="standardId!=null and standardId!=''">#{standardId},</if>
+            <if test="routeId!=null and routeId!=''">#{routeId},</if>
+            <if test="equipmentId!=null and equipmentId!=''">#{equipmentId},</if>
+            <if test="standardCoding!=null and standardCoding!=''">#{standardCoding},</if>
+            <if test="equipmentBelonging!=null and equipmentBelonging!=''">#{equipmentBelonging},</if>
+            <if test="location!=null and location!=''">#{location},</if>
+            <if test="checkContent!=null and checkContent!=''">#{checkContent},</if>
+            <if test="standardType!=null and standardType!=''">#{standardType},</if>
+            <if test="dataType!=null and dataType!=''">#{dataType},</if>
+            <if test="signalType!=null and signalType!=''">#{signalType},</if>
+            <if test="checkMethod!=null and checkMethod!=''">#{checkMethod},</if>
+            <if test="standardJudgment!=null and standardJudgment!=''">#{standardJudgment},</if>
+            <if test="resultOptions!=null and resultOptions!=''">#{resultOptions},</if>
+            <if test="measurementUnit!=null and measurementUnit!=''">#{measurementUnit},</if>
+            <if test="typicalValue!=null and typicalValue!=''">#{typicalValue},</if>
+            <if test="equipmentState!=null and equipmentState!=''">#{equipmentState},</if>
+            <if test="twodimensionalcodeLocation!=null and twodimensionalcodeLocation!=''">#{twodimensionalcodeLocation},</if>
+            <if test="startandstopPoint!=null and startandstopPoint!=''">#{startandstopPoint},</if>
+            <if test="maincontrolPoint!=null and maincontrolPoint!=''">#{maincontrolPoint},</if>
+            <if test="alarmType!=null and alarmType!=''">#{alarmType},</if>
+            <if test="alarmCeiling!=null and alarmCeiling!=''">#{alarmCeiling},</if>
+            <if test="alarmLowerlimit!=null and alarmLowerlimit!=''">#{alarmLowerlimit},</if>
+            <if test="emissivity!=null and emissivity!=''">#{emissivity},</if>
+            <if test="upperlimitMileage!=null and upperlimitMileage!=''">#{upperlimitMileage},</if>
+            <if test="lowerlimitMileage!=null and lowerlimitMileage!=''">#{lowerlimitMileage},</if>
+        </trim>
+    </insert>
+
+    <!-- 新增 -->
+    <insert id="addTallyRouteStandard">
+        INSERT INTO tally_route_standard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">id,</if>
+            <if test="routeId!=null and routeId!=''">route_id,</if>
+            <if test="standardId!=null and standardId!=''">standard_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">#{id},</if>
+            <if test="routeId!=null and routeId!=''">#{routeId},</if>
+            <if test="standardId!=null and standardId!=''">#{standardId},</if>
+        </trim>
+    </insert>
+
+    <select id="findWindIdByRouteName" parameterType="string" resultType="string">
+        SELECT wind_id
+        FROM tally_route
+        WHERE route_name=#{routeName}
+    </select>
+
+    <select id="findCycleNameByRouteName" parameterType="string" resultType="string">
+        SELECT cycle_name
+        FROM cycle c,tally_route t
+        WHERE route_name=#{routeName} and c.route_id=t.route_id
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateTallyStandard">
+        UPDATE tally_standard
+        <set>
+            <if test="routeId!=null and routeId!=''">route_id=#{routeId},</if>
+            <if test="equipmentId!=null and equipmentId!=''">equipment_id=#{equipmentId},</if>
+            <if test="standardCoding!=null and standardCoding!=''">standard_coding=#{standardCoding},</if>
+            <if test="equipmentBelonging!=null and equipmentBelonging!=''">equipment_belonging=#{equipmentBelonging},</if>
+            <if test="location!=null and location!=''">location=#{location},</if>
+            <if test="checkContent!=null and checkContent!=''">check_content=#{checkContent},</if>
+            <if test="standardType!=null and standardType!=''">standard_type=#{standardType},</if>
+            <if test="dataType!=null and dataType!=''">data_type=#{dataType},</if>
+            <if test="signalType!=null and signalType!=''">signal_type=#{signalType},</if>
+            <if test="checkMethod!=null and checkMethod!=''">check_method=#{checkMethod},</if>
+            <if test="standardJudgment!=null and standardJudgment!=''">standard_judgment=#{standardJudgment},</if>
+            <if test="resultOptions!=null and resultOptions!=''">result_options=#{resultOptions},</if>
+            <if test="measurementUnit!=null and measurementUnit!=''">measurement_unit=#{measurementUnit},</if>
+            <if test="typicalValue!=null and typicalValue!=''">typical_value=#{typicalValue},</if>
+            <if test="equipmentState!=null and equipmentState!=''">equipment_state=#{equipmentState},</if>
+            <if test="twodimensionalcodeLocation!=null and twodimensionalcodeLocation!=''">twodimensionalcode_location=#{twodimensionalcodeLocation},</if>
+            <if test="startandstopPoint!=null and startandstopPoint!=''">startandstop_point=#{startandstopPoint},</if>
+            <if test="maincontrolPoint!=null and maincontrolPoint!=''">maincontrol_point=#{maincontrolPoint},</if>
+            <if test="alarmType!=null and alarmType!=''">alarm_type=#{alarmType},</if>
+            <if test="alarmCeiling!=null and alarmCeiling!=''">alarm_ceiling=#{alarmCeiling},</if>
+            <if test="alarmLowerlimit!=null and alarmLowerlimit!=''">alarm_lowerlimit=#{alarmLowerlimit},</if>
+            <if test="emissivity!=null and emissivity!=''">emissivity=#{emissivity},</if>
+            <if test="upperlimitMileage!=null and upperlimitMileage!=''">upperlimit_mileage=#{upperlimitMileage},</if>
+            <if test="lowerlimitMileage!=null and lowerlimitMileage!=''">lowerlimit_mileage=#{lowerlimitMileage},</if>
+        </set>
+        WHERE standard_id = #{standardId}
+    </update>
+
+    <select id="findStandardIdByRouteName" parameterType="string" resultType="string">
+        SELECT standard_id
+        FROM tally_standard s,tally_route t
+        WHERE route_name=#{routeName} and s.route_id=t.route_id
+    </select>
+
+    <select id="findEquipmentIdByRouteName" parameterType="string" resultType="string">
+        SELECT equipment_id
+        FROM tally_standard s,tally_route t
+        WHERE route_name=#{routeName} and s.route_id=t.route_id
+    </select>
+
+    <select id="findIdByRouteName" parameterType="string" resultType="string">
+        SELECT id
+        FROM tally_route_standard r,tally_route t
+        WHERE route_name=#{routeName} and r.route_id=t.route_id
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateTallyRouteStandard">
+        UPDATE tally_route_standard
+        <set>
+            <if test="routeId!=null and routeId!=''">route_id=#{routeId},</if>
+            <if test="standardId!=null and standardId!=''">standard_id=#{standardId},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>
