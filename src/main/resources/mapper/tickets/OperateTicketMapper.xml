@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tickets.mapper.OperateTicketMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.OperateTicket" >
+    <id column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="ticket_type_id" property="ticketTypeId" jdbcType="VARCHAR" />
+    <result column="ticket_code" property="ticketCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="flow_step" property="flowStep" jdbcType="VARCHAR" />
+    <result column="typical_ticket_id" property="typicalTicketId" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+    <result column="departments" property="departments" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="sender" property="sender" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="equipment" property="equipment" jdbcType="VARCHAR" />
+    <result column="machine_set" property="machineSet" jdbcType="VARCHAR" />
+    <result column="executer" property="executer" jdbcType="VARCHAR" />
+    <result column="supervisior" property="supervisior" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
+    <result column="operate_items_ids" property="operateItemsIds" jdbcType="VARCHAR" />
+    <result column="examine_approve_person" property="examineApprovePerson" jdbcType="VARCHAR" />
+    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ticket_id, serial_number, ticket_type_id, ticket_code, status, flow_step, typical_ticket_id, 
+    wind_id, company_id, departments, applicant, apply_time, sender, receiver, location, 
+    equipment, machine_set, executer, supervisior, start_time, end_time, operate_content, 
+    operate_items_ids, examine_approve_person, order_time, remark
+  </sql>
+
+  <resultMap id="OperateTicketStatisticsMap" type="com.qz.zframe.tickets.vo.TicketStatisticsRes">
+    <id column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="apply_count" property="applyCount" jdbcType="VARCHAR" />
+    <result column="in_process_count" property="inProcessCount" jdbcType="VARCHAR" />
+    <result column="complete_count" property="completeCount" jdbcType="VARCHAR" />
+    <result column="invalid_count" property="invalidCount" jdbcType="VARCHAR" />
+    <result column="complete_rate" property="completeRate" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="getOperateTicketStatisticsList" resultMap="OperateTicketStatisticsMap">
+    select a.*,(a.complete_count/a.apply_count) as 'complete_rate'
+    from (select wind_id,count(*) as 'apply_count',
+    sum(IF(status = '1', 1, 0)) as 'in_process_count',
+    sum(IF(status = '2', 1, 0)) as 'complete_count',
+    sum(IF(status = '0', 1, 0)) as 'invalid_count'
+    from operate_ticket
+    where 1=1
+    <if test="startTime != null">
+      and apply_time &gt;= #{startTime}
+    </if>
+    <if test="endTime != null">
+      and apply_time &lt;= #{endTime}
+    </if>
+    group by wind_id) as a;
+  </select>
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update operate_ticket set status = "0"
+    where ticket_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+
+  <select id="getOperateTicketListByPageAndCondition" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from operate_ticket
+    where 1=1
+    <if test="map.ticketTypeId != null">
+      and ticket_type_id = #{map.ticketTypeId}
+    </if>
+    <if test="map.machineSet != null">
+      and machine_set = #{map.machineSet}
+    </if>
+    <if test="map.status != null">
+      and status = #{map.status}
+    </if>
+    <if test="map.operateContent != null">
+      and operate_content like '%${map.operateContent}%'
+    </if>
+    <if test="map.applyStartTime != null">
+      and apply_time &gt;= #{map.applyStartTime}
+    </if>
+    <if test="map.applyEndTime != null">
+      and apply_time &lt;= #{map.applyEndTime}
+    </if>
+    order by serial_number desc
+    limit ${map.start},${map.pageSize};
+  </select>
+
+  <select id="getTotalCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from operate_ticket
+    where 1=1
+    <if test="map.ticketTypeId != null">
+      and ticket_type_id = #{map.ticketTypeId}
+    </if>
+    <if test="map.machineSet != null">
+      and machine_set = #{map.machineSet}
+    </if>
+    <if test="map.status != null">
+      and status = #{map.status}
+    </if>
+    <if test="map.operateContent != null">
+      and operate_content like '%${map.operateContent}%'
+    </if>
+    <if test="map.applyStartTime != null">
+      and apply_time &gt;= #{map.applyStartTime}
+    </if>
+    <if test="map.applyEndTime != null">
+      and apply_time &lt;= #{map.applyEndTime}
+    </if>
+  </select>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.OperateTicketExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from operate_ticket
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from operate_ticket
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from operate_ticket
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.tickets.entity.OperateTicketExample" >
+    delete from operate_ticket
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.tickets.entity.OperateTicket" >
+    insert into operate_ticket (ticket_id, serial_number, ticket_type_id, 
+      ticket_code, status, flow_step, 
+      typical_ticket_id, wind_id, company_id, 
+      departments, applicant, apply_time, 
+      sender, receiver, location, 
+      equipment, machine_set, executer, 
+      supervisior, start_time, end_time, 
+      operate_content, operate_items_ids, examine_approve_person, 
+      order_time, remark)
+    values (#{ticketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{ticketTypeId,jdbcType=VARCHAR}, 
+      #{ticketCode,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{flowStep,jdbcType=VARCHAR}, 
+      #{typicalTicketId,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
+      #{departments,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
+      #{sender,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
+      #{equipment,jdbcType=VARCHAR}, #{machineSet,jdbcType=VARCHAR}, #{executer,jdbcType=VARCHAR}, 
+      #{supervisior,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{operateContent,jdbcType=VARCHAR}, #{operateItemsIds,jdbcType=VARCHAR}, #{examineApprovePerson,jdbcType=VARCHAR}, 
+      #{orderTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.OperateTicket" >
+    insert into operate_ticket
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ticketId != null" >
+        ticket_id,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="ticketTypeId != null" >
+        ticket_type_id,
+      </if>
+      <if test="ticketCode != null" >
+        ticket_code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="flowStep != null" >
+        flow_step,
+      </if>
+      <if test="typicalTicketId != null" >
+        typical_ticket_id,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="departments != null" >
+        departments,
+      </if>
+      <if test="applicant != null" >
+        applicant,
+      </if>
+      <if test="applyTime != null" >
+        apply_time,
+      </if>
+      <if test="sender != null" >
+        sender,
+      </if>
+      <if test="receiver != null" >
+        receiver,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="equipment != null" >
+        equipment,
+      </if>
+      <if test="machineSet != null" >
+        machine_set,
+      </if>
+      <if test="executer != null" >
+        executer,
+      </if>
+      <if test="supervisior != null" >
+        supervisior,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="operateContent != null" >
+        operate_content,
+      </if>
+      <if test="operateItemsIds != null" >
+        operate_items_ids,
+      </if>
+      <if test="examineApprovePerson != null" >
+        examine_approve_person,
+      </if>
+      <if test="orderTime != null" >
+        order_time,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ticketId != null" >
+        #{ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeId != null" >
+        #{ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketCode != null" >
+        #{ticketCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStep != null" >
+        #{flowStep,jdbcType=VARCHAR},
+      </if>
+      <if test="typicalTicketId != null" >
+        #{typicalTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="departments != null" >
+        #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sender != null" >
+        #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="machineSet != null" >
+        #{machineSet,jdbcType=VARCHAR},
+      </if>
+      <if test="executer != null" >
+        #{executer,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisior != null" >
+        #{supervisior,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateContent != null" >
+        #{operateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="operateItemsIds != null" >
+        #{operateItemsIds,jdbcType=VARCHAR},
+      </if>
+      <if test="examineApprovePerson != null" >
+        #{examineApprovePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null" >
+        #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.tickets.entity.OperateTicketExample" resultType="java.lang.Integer" >
+    select count(*) from operate_ticket
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update operate_ticket
+    <set >
+      <if test="record.ticketId != null" >
+        ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketTypeId != null" >
+        ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketCode != null" >
+        ticket_code = #{record.ticketCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flowStep != null" >
+        flow_step = #{record.flowStep,jdbcType=VARCHAR},
+      </if>
+      <if test="record.typicalTicketId != null" >
+        typical_ticket_id = #{record.typicalTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null" >
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departments != null" >
+        departments = #{record.departments,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicant != null" >
+        applicant = #{record.applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applyTime != null" >
+        apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sender != null" >
+        sender = #{record.sender,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiver != null" >
+        receiver = #{record.receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.location != null" >
+        location = #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipment != null" >
+        equipment = #{record.equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.machineSet != null" >
+        machine_set = #{record.machineSet,jdbcType=VARCHAR},
+      </if>
+      <if test="record.executer != null" >
+        executer = #{record.executer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supervisior != null" >
+        supervisior = #{record.supervisior,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null" >
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operateContent != null" >
+        operate_content = #{record.operateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operateItemsIds != null" >
+        operate_items_ids = #{record.operateItemsIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.examineApprovePerson != null" >
+        examine_approve_person = #{record.examineApprovePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderTime != null" >
+        order_time = #{record.orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update operate_ticket
+    set ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      ticket_code = #{record.ticketCode,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      flow_step = #{record.flowStep,jdbcType=VARCHAR},
+      typical_ticket_id = #{record.typicalTicketId,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      departments = #{record.departments,jdbcType=VARCHAR},
+      applicant = #{record.applicant,jdbcType=VARCHAR},
+      apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+      sender = #{record.sender,jdbcType=VARCHAR},
+      receiver = #{record.receiver,jdbcType=VARCHAR},
+      location = #{record.location,jdbcType=VARCHAR},
+      equipment = #{record.equipment,jdbcType=VARCHAR},
+      machine_set = #{record.machineSet,jdbcType=VARCHAR},
+      executer = #{record.executer,jdbcType=VARCHAR},
+      supervisior = #{record.supervisior,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      operate_content = #{record.operateContent,jdbcType=VARCHAR},
+      operate_items_ids = #{record.operateItemsIds,jdbcType=VARCHAR},
+      examine_approve_person = #{record.examineApprovePerson,jdbcType=VARCHAR},
+      order_time = #{record.orderTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.tickets.entity.OperateTicket" >
+    update operate_ticket
+    <set >
+      <if test="serialNumber != null" >
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeId != null" >
+        ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketCode != null" >
+        ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStep != null" >
+        flow_step = #{flowStep,jdbcType=VARCHAR},
+      </if>
+      <if test="typicalTicketId != null" >
+        typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="departments != null" >
+        departments = #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        applicant = #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sender != null" >
+        sender = #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null" >
+        receiver = #{receiver,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        equipment = #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="machineSet != null" >
+        machine_set = #{machineSet,jdbcType=VARCHAR},
+      </if>
+      <if test="executer != null" >
+        executer = #{executer,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisior != null" >
+        supervisior = #{supervisior,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operateContent != null" >
+        operate_content = #{operateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="operateItemsIds != null" >
+        operate_items_ids = #{operateItemsIds,jdbcType=VARCHAR},
+      </if>
+      <if test="examineApprovePerson != null" >
+        examine_approve_person = #{examineApprovePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="orderTime != null" >
+        order_time = #{orderTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.OperateTicket" >
+    update operate_ticket
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      flow_step = #{flowStep,jdbcType=VARCHAR},
+      typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      departments = #{departments,jdbcType=VARCHAR},
+      applicant = #{applicant,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      sender = #{sender,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      equipment = #{equipment,jdbcType=VARCHAR},
+      machine_set = #{machineSet,jdbcType=VARCHAR},
+      executer = #{executer,jdbcType=VARCHAR},
+      supervisior = #{supervisior,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      operate_content = #{operateContent,jdbcType=VARCHAR},
+      operate_items_ids = #{operateItemsIds,jdbcType=VARCHAR},
+      examine_approve_person = #{examineApprovePerson,jdbcType=VARCHAR},
+      order_time = #{orderTime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,17 +1,29 @@
 package com.qz.zframe.common.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class DataDict {
+	@ApiModelProperty(value="ID",name="id",required=false)
 	private String id;
+	@ApiModelProperty(value="代码分类表主键id",name="codeTypeId",required=true)
 	private String codeTypeId;
+	@ApiModelProperty(value="代码编号",name="name",required=true)
 	private String name;
+	@ApiModelProperty(value="代码名称",name="title",required=true)
 	private String title;
+	@ApiModelProperty(value="代码描述",name="description",required=false)
 	private String description;
+	@ApiModelProperty(value="状态 01:有效;02:无效",name="state",required=true)
 	private String state;
+	@ApiModelProperty(value="状态翻译",name="statusText",required=false)
 	private String statusText;
+	@ApiModelProperty(value="显示顺序",name="dispOrder",required=false)
 	private int dispOrder;
-	
+	@ApiModelProperty(value="代码分类编码",name="codeTypeName",required=false)
 	private String codeTypeName;
+	@ApiModelProperty(value="代码分类名称",name="codeTypeTitle",required=false)
 	private String codeTypeTitle;
+	@ApiModelProperty(value="代码分类描述",name="codeTypeDescription",required=false)
 	private String codeTypeDescription;
 	public String getId() {
 		return id;

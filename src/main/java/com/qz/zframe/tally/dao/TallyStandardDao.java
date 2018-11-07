@@ -111,4 +111,35 @@ public interface TallyStandardDao {
      * @param tallyRouteStandard
      */
     void updateTallyRouteStandard(TallyRouteStandard tallyRouteStandard);
+
+    /**
+     * 根据路线名称查询路线标准
+     * @param routeName
+     * @return
+     */
+    TallyStandard findTallyStandardByRouteName(String routeName);
+
+    /**
+     * 根据路线名称数组进行删除路线标准关联表
+     * @param routeNames
+     */
+    void deletetallyRouteStandardByRouteNames(@Param("routeNames") String[] routeNames);
+
+    /**
+     * 根据标准id数组进行删除点检标准表
+     * @param routeNames
+     */
+    void deleteTallyStandardByRouteNames(@Param("routeNames") String[] routeNames);
+
+    /**
+     * 查询记录总数用于分页
+     * @param equipmentBelonging
+     * @param routeId
+     * @param equipmentState
+     * @param alarmType
+     * @param standardCoding
+     * @param checkContent
+     * @return
+     */
+    int countStandard(@Param("equipmentBelonging") String equipmentBelonging, @Param("routeId") String routeId, @Param("equipmentState") String equipmentState, @Param("alarmType") String alarmType, @Param("standardCoding") String standardCoding, @Param("checkContent") String checkContent);
 }

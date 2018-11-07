@@ -1,19 +1,27 @@
 package com.qz.zframe.common.util;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
 
 public class PageBean<T> {
     // 当前页
+    @ApiModelProperty(value="当前页",name="currentPage",required=false)
     private Integer currentPage = 1;
     // 每页显示的总条数
+    @ApiModelProperty(value="每页显示的总条数",name="pageSize",required=false)
     private Integer pageSize = 10;
     // 总条数
+    @ApiModelProperty(value="总条数",name="totalNum",required=false)
     private Integer totalNum;
     // 是否有下一页
+    @ApiModelProperty(value="是否有下一页(0,没有；1，有)",name="isMore",required=false)
     private Integer isMore;
     // 总页数
+    @ApiModelProperty(value="总页数",name="totalPage",required=false)
     private Integer totalPage;
     // 开始索引
+    @ApiModelProperty(value="开始索引,0即表示第一页",name="startIndex",required=false)
     private Integer startIndex;
     // 分页结果
     private List<T> items;

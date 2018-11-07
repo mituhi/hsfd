@@ -5,29 +5,44 @@
     <id column="material_id" property="materialId" jdbcType="VARCHAR" />
     <result column="material_code" property="materialCode" jdbcType="VARCHAR" />
     <result column="material_name" property="materialName" jdbcType="VARCHAR" />
-    <result column="material_describe" property="materialDescribe" jdbcType="VARCHAR" />
-    <result column="material_type" property="materialType" jdbcType="VARCHAR" />
-    <result column="measuring_unit" property="measuringUnit" jdbcType="VARCHAR" />
     <result column="specifications" property="specifications" jdbcType="VARCHAR" />
-    <result column="material_num" property="materialNum" jdbcType="DECIMAL" />
-    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
-    <result column="graph_number" property="graphNumber" jdbcType="VARCHAR" />
-    <result column="material_property_id" property="materialPropertyId" jdbcType="VARCHAR" />
+    <result column="material_describe" property="materialDescribe" jdbcType="VARCHAR" />
     <result column="material_group_id" property="materialGroupId" jdbcType="VARCHAR" />
-    <result column="identification" property="identification" jdbcType="VARCHAR" />
-    <result column="is_fixed" property="isFixed" jdbcType="VARCHAR" />
-    <result column="production_address" property="productionAddress" jdbcType="VARCHAR" />
+     <result column="group_name" property="materialGroupName" jdbcType="VARCHAR" />
+    <result column="material_classify_id" property="materialClassifyId" jdbcType="VARCHAR" />
+    <result column="classify_name" property="materialClassifyName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="ABC_logo" property="abcLogo" jdbcType="VARCHAR" />
+    <result column="material_num" property="materialNum" jdbcType="VARCHAR" />
+    <result column="material_texture" property="materialTexture" jdbcType="VARCHAR" />
+    <result column="measuring_unit" property="measuringUnit" jdbcType="VARCHAR" />
+    <result column="supplier_id" property="supplierId" jdbcType="VARCHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
     <result column="is_guarantee" property="isGuarantee" jdbcType="VARCHAR" />
-    <result column="quality_guarantee_period" property="qualityGuaranteePeriod" jdbcType="VARCHAR" />
-    <result column="material_parameter" property="materialParameter" jdbcType="VARCHAR" />
-    <result column="sort" property="sort" jdbcType="VARCHAR" />
-    <result column="is_control_stock" property="isControlStock" jdbcType="VARCHAR" />
-    <result column="stock_max" property="stockMax" jdbcType="INTEGER" />
-    <result column="stock_min" property="stockMin" jdbcType="INTEGER" />
+    <result column="guarantee_days" property="guaranteeDays" jdbcType="INTEGER" />
+    <result column="is_con_stock" property="isConStock" jdbcType="VARCHAR" />
+    <result column="max_stock" property="maxStock" jdbcType="INTEGER" />
+    <result column="min_stock" property="minStock" jdbcType="INTEGER" />
+    <result column="is_batch_con" property="isBatchCon" jdbcType="VARCHAR" />
+    <result column="safety_stock" property="safetyStock" jdbcType="INTEGER" />
+    <result column="current_stock" property="currentStock" jdbcType="INTEGER" />
+    <result column="average_price" property="averagePrice" jdbcType="DECIMAL" />
     <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
     <result column="creater" property="creater" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="extend1" property="extend1" jdbcType="VARCHAR" />
+    <result column="extend2" property="extend2" jdbcType="VARCHAR" />
+    <result column="extend3" property="extend3" jdbcType="VARCHAR" />
+    <result column="extend4" property="extend4" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</sql>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -87,28 +102,29 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    material_id, material_code, material_name, material_describe, material_type, measuring_unit, 
-    specifications, material_num, wind_id, graph_number, material_property_id, material_group_id, 
-    identification, is_fixed, production_address, is_guarantee, quality_guarantee_period, 
-    material_parameter, sort, is_control_stock, stock_max, stock_min, is_delete, creater, 
-    create_time
+    material_id, material_code, material_name, specifications, material_describe, material_group_id, 
+    material_classify_id, status, ABC_logo, material_num, material_texture, measuring_unit, 
+    supplier_id, wind_id, is_guarantee, guarantee_days, is_con_stock, max_stock, min_stock, 
+    is_batch_con, safety_stock, current_stock, average_price, is_delete, creater, create_time, 
+    extend1, extend2, extend3, extend4
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.MaterialExample" >
-    select a.material_id, a.material_code, a.material_name, a.material_describe, a.material_type, a.measuring_unit, 
-    a.specifications, a.material_num 
-    from material a
+    select a.material_id,a.material_code,a.material_name,a.specifications,a.material_describe,a.measuring_unit,c.classify_name
+    from material a left join material_group b on a.material_group_id=b.material_group_id left join material_classify c on a.material_classify_id = c.material_classify_id
+    left join supplier d on a.supplier_id = d.supplier_id left join wind_field e on a.wind_id = e.wind_id 
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <include refid="Pagination_Sql" />
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from material a
-    where a.material_id = #{materialId,jdbcType=VARCHAR}
+    select a.*,b.group_name,c.classify_name,d.supplier_name,e.wind_name
+    from material a left join material_group b on a.material_group_id=b.material_group_id left join material_classify c on a.material_classify_id = c.material_classify_id
+    left join supplier d on a.supplier_id = d.supplier_id left join wind_field e on a.wind_id = e.wind_id 
+    where  a.material_id = #{materialId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from material
@@ -122,23 +138,27 @@
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.material.entity.Material" >
     insert into material (material_id, material_code, material_name, 
-      material_describe, material_type, measuring_unit, 
-      specifications, material_num, wind_id, 
-      graph_number, material_property_id, material_group_id, 
-      identification, is_fixed, production_address, 
-      is_guarantee, quality_guarantee_period, material_parameter, 
-      sort, is_control_stock, stock_max, 
-      stock_min, is_delete, creater, 
-      create_time)
+      specifications, material_describe, material_group_id, 
+      material_classify_id, status, ABC_logo, 
+      material_num, material_texture, measuring_unit, 
+      supplier_id, wind_id, is_guarantee, 
+      guarantee_days, is_con_stock, max_stock, 
+      min_stock, is_batch_con, safety_stock, 
+      current_stock, average_price, is_delete, 
+      creater, create_time, extend1, 
+      extend2, extend3, extend4
+      )
     values (#{materialId,jdbcType=VARCHAR}, #{materialCode,jdbcType=VARCHAR}, #{materialName,jdbcType=VARCHAR}, 
-      #{materialDescribe,jdbcType=VARCHAR}, #{materialType,jdbcType=VARCHAR}, #{measuringUnit,jdbcType=VARCHAR}, 
-      #{specifications,jdbcType=VARCHAR}, #{materialNum,jdbcType=DECIMAL}, #{windId,jdbcType=VARCHAR}, 
-      #{graphNumber,jdbcType=VARCHAR}, #{materialPropertyId,jdbcType=VARCHAR}, #{materialGroupId,jdbcType=VARCHAR}, 
-      #{identification,jdbcType=VARCHAR}, #{isFixed,jdbcType=VARCHAR}, #{productionAddress,jdbcType=VARCHAR}, 
-      #{isGuarantee,jdbcType=VARCHAR}, #{qualityGuaranteePeriod,jdbcType=VARCHAR}, #{materialParameter,jdbcType=VARCHAR}, 
-      #{sort,jdbcType=VARCHAR}, #{isControlStock,jdbcType=VARCHAR}, #{stockMax,jdbcType=INTEGER}, 
-      #{stockMin,jdbcType=INTEGER}, #{isDelete,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR}, 
-      now())
+      #{specifications,jdbcType=VARCHAR}, #{materialDescribe,jdbcType=VARCHAR}, #{materialGroupId,jdbcType=VARCHAR}, 
+      #{materialClassifyId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{abcLogo,jdbcType=VARCHAR}, 
+      #{materialNum,jdbcType=VARCHAR}, #{materialTexture,jdbcType=VARCHAR}, #{measuringUnit,jdbcType=VARCHAR}, 
+      #{supplierId,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{isGuarantee,jdbcType=VARCHAR}, 
+      #{guaranteeDays,jdbcType=INTEGER}, #{isConStock,jdbcType=VARCHAR}, #{maxStock,jdbcType=INTEGER}, 
+      #{minStock,jdbcType=INTEGER}, #{isBatchCon,jdbcType=VARCHAR}, #{safetyStock,jdbcType=INTEGER}, 
+      #{currentStock,jdbcType=INTEGER}, #{averagePrice,jdbcType=DECIMAL}, #{isDelete,jdbcType=VARCHAR}, 
+      #{creater,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{extend1,jdbcType=VARCHAR}, 
+      #{extend2,jdbcType=VARCHAR}, #{extend3,jdbcType=VARCHAR}, #{extend4,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.material.entity.Material" >
     insert into material
@@ -152,71 +172,84 @@
       <if test="materialName != null" >
         material_name,
       </if>
-      <if test="materialDescribe != null" >
-        material_describe,
-      </if>
-      <if test="materialType != null" >
-        material_type,
-      </if>
-      <if test="measuringUnit != null" >
-        measuring_unit,
-      </if>
       <if test="specifications != null" >
         specifications,
       </if>
-      <if test="materialNum != null" >
-        material_num,
-      </if>
-      <if test="windId != null" >
-        wind_id,
-      </if>
-      <if test="graphNumber != null" >
-        graph_number,
-      </if>
-      <if test="materialPropertyId != null" >
-        material_property_id,
+      <if test="materialDescribe != null" >
+        material_describe,
       </if>
       <if test="materialGroupId != null" >
         material_group_id,
       </if>
-      <if test="identification != null" >
-        identification,
+      <if test="materialClassifyId != null" >
+        material_classify_id,
       </if>
-      <if test="isFixed != null" >
-        is_fixed,
+      <if test="status != null" >
+        status,
       </if>
-      <if test="productionAddress != null" >
-        production_address,
+      <if test="abcLogo != null" >
+        ABC_logo,
+      </if>
+      <if test="materialNum != null" >
+        material_num,
+      </if>
+      <if test="materialTexture != null" >
+        material_texture,
+      </if>
+      <if test="measuringUnit != null" >
+        measuring_unit,
+      </if>
+      <if test="supplierId != null" >
+        supplier_id,
+      </if>
+      <if test="windId != null" >
+        wind_id,
       </if>
       <if test="isGuarantee != null" >
         is_guarantee,
       </if>
-      <if test="qualityGuaranteePeriod != null" >
-        quality_guarantee_period,
+      <if test="guaranteeDays != null" >
+        guarantee_days,
       </if>
-      <if test="materialParameter != null" >
-        material_parameter,
+      <if test="isConStock != null" >
+        is_con_stock,
       </if>
-      <if test="sort != null" >
-        sort,
+      <if test="maxStock != null" >
+        max_stock,
       </if>
-      <if test="isControlStock != null" >
-        is_control_stock,
+      <if test="minStock != null" >
+        min_stock,
       </if>
-      <if test="stockMax != null" >
-        stock_max,
+      <if test="isBatchCon != null" >
+        is_batch_con,
       </if>
-      <if test="stockMin != null" >
-        stock_min,
+      <if test="safetyStock != null" >
+        safety_stock,
+      </if>
+      <if test="currentStock != null" >
+        current_stock,
+      </if>
+      <if test="averagePrice != null" >
+        average_price,
       </if>
       <if test="isDelete != null" >
         is_delete,
       </if>
       <if test="creater != null" >
         creater,
-      </if>
-      <if test="createTime != null" >
+      </if> 
         create_time,
+      <if test="extend1 != null" >
+        extend1,
+      </if>
+      <if test="extend2 != null" >
+        extend2,
+      </if>
+      <if test="extend3 != null" >
+        extend3,
+      </if>
+      <if test="extend4 != null" >
+        extend4,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -229,62 +262,65 @@
       <if test="materialName != null" >
         #{materialName,jdbcType=VARCHAR},
       </if>
-      <if test="materialDescribe != null" >
-        #{materialDescribe,jdbcType=VARCHAR},
-      </if>
-      <if test="materialType != null" >
-        #{materialType,jdbcType=VARCHAR},
-      </if>
-      <if test="measuringUnit != null" >
-        #{measuringUnit,jdbcType=VARCHAR},
-      </if>
       <if test="specifications != null" >
         #{specifications,jdbcType=VARCHAR},
       </if>
-      <if test="materialNum != null" >
-        #{materialNum,jdbcType=DECIMAL},
-      </if>
-      <if test="windId != null" >
-        #{windId,jdbcType=VARCHAR},
-      </if>
-      <if test="graphNumber != null" >
-        #{graphNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="materialPropertyId != null" >
-        #{materialPropertyId,jdbcType=VARCHAR},
+      <if test="materialDescribe != null" >
+        #{materialDescribe,jdbcType=VARCHAR},
       </if>
       <if test="materialGroupId != null" >
         #{materialGroupId,jdbcType=VARCHAR},
       </if>
-      <if test="identification != null" >
-        #{identification,jdbcType=VARCHAR},
+      <if test="materialClassifyId != null" >
+        #{materialClassifyId,jdbcType=VARCHAR},
       </if>
-      <if test="isFixed != null" >
-        #{isFixed,jdbcType=VARCHAR},
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
       </if>
-      <if test="productionAddress != null" >
-        #{productionAddress,jdbcType=VARCHAR},
+      <if test="abcLogo != null" >
+        #{abcLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialNum != null" >
+        #{materialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTexture != null" >
+        #{materialTexture,jdbcType=VARCHAR},
+      </if>
+      <if test="measuringUnit != null" >
+        #{measuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
       </if>
       <if test="isGuarantee != null" >
         #{isGuarantee,jdbcType=VARCHAR},
       </if>
-      <if test="qualityGuaranteePeriod != null" >
-        #{qualityGuaranteePeriod,jdbcType=VARCHAR},
+      <if test="guaranteeDays != null" >
+        #{guaranteeDays,jdbcType=INTEGER},
       </if>
-      <if test="materialParameter != null" >
-        #{materialParameter,jdbcType=VARCHAR},
+      <if test="isConStock != null" >
+        #{isConStock,jdbcType=VARCHAR},
       </if>
-      <if test="sort != null" >
-        #{sort,jdbcType=VARCHAR},
+      <if test="maxStock != null" >
+        #{maxStock,jdbcType=INTEGER},
       </if>
-      <if test="isControlStock != null" >
-        #{isControlStock,jdbcType=VARCHAR},
+      <if test="minStock != null" >
+        #{minStock,jdbcType=INTEGER},
       </if>
-      <if test="stockMax != null" >
-        #{stockMax,jdbcType=INTEGER},
+      <if test="isBatchCon != null" >
+        #{isBatchCon,jdbcType=VARCHAR},
       </if>
-      <if test="stockMin != null" >
-        #{stockMin,jdbcType=INTEGER},
+      <if test="safetyStock != null" >
+        #{safetyStock,jdbcType=INTEGER},
+      </if>
+      <if test="currentStock != null" >
+        #{currentStock,jdbcType=INTEGER},
+      </if>
+      <if test="averagePrice != null" >
+        #{averagePrice,jdbcType=DECIMAL},
       </if>
       <if test="isDelete != null" >
         #{isDelete,jdbcType=VARCHAR},
@@ -292,8 +328,19 @@
       <if test="creater != null" >
         #{creater,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
+      now(),
+      
+      <if test="extend1 != null" >
+        #{extend1,jdbcType=VARCHAR},
+      </if>
+      <if test="extend2 != null" >
+        #{extend2,jdbcType=VARCHAR},
+      </if>
+      <if test="extend3 != null" >
+        #{extend3,jdbcType=VARCHAR},
+      </if>
+      <if test="extend4 != null" >
+        #{extend4,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -303,15 +350,6 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  
-   <select id="countMaterialName" parameterType="com.qz.zframe.material.entity.MaterialExample" resultType="java.lang.Integer" >
-    select count(*) from material a
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  
-  
   <update id="updateByExampleSelective" parameterType="map" >
     update material
     <set >
@@ -324,62 +362,65 @@
       <if test="record.materialName != null" >
         material_name = #{record.materialName,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialDescribe != null" >
-        material_describe = #{record.materialDescribe,jdbcType=VARCHAR},
-      </if>
-      <if test="record.materialType != null" >
-        material_type = #{record.materialType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.measuringUnit != null" >
-        measuring_unit = #{record.measuringUnit,jdbcType=VARCHAR},
-      </if>
       <if test="record.specifications != null" >
         specifications = #{record.specifications,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialNum != null" >
-        material_num = #{record.materialNum,jdbcType=DECIMAL},
-      </if>
-      <if test="record.windId != null" >
-        wind_id = #{record.windId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.graphNumber != null" >
-        graph_number = #{record.graphNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="record.materialPropertyId != null" >
-        material_property_id = #{record.materialPropertyId,jdbcType=VARCHAR},
+      <if test="record.materialDescribe != null" >
+        material_describe = #{record.materialDescribe,jdbcType=VARCHAR},
       </if>
       <if test="record.materialGroupId != null" >
         material_group_id = #{record.materialGroupId,jdbcType=VARCHAR},
       </if>
-      <if test="record.identification != null" >
-        identification = #{record.identification,jdbcType=VARCHAR},
+      <if test="record.materialClassifyId != null" >
+        material_classify_id = #{record.materialClassifyId,jdbcType=VARCHAR},
       </if>
-      <if test="record.isFixed != null" >
-        is_fixed = #{record.isFixed,jdbcType=VARCHAR},
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
-      <if test="record.productionAddress != null" >
-        production_address = #{record.productionAddress,jdbcType=VARCHAR},
+      <if test="record.abcLogo != null" >
+        ABC_logo = #{record.abcLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialNum != null" >
+        material_num = #{record.materialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialTexture != null" >
+        material_texture = #{record.materialTexture,jdbcType=VARCHAR},
+      </if>
+      <if test="record.measuringUnit != null" >
+        measuring_unit = #{record.measuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplierId != null" >
+        supplier_id = #{record.supplierId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
       </if>
       <if test="record.isGuarantee != null" >
         is_guarantee = #{record.isGuarantee,jdbcType=VARCHAR},
       </if>
-      <if test="record.qualityGuaranteePeriod != null" >
-        quality_guarantee_period = #{record.qualityGuaranteePeriod,jdbcType=VARCHAR},
+      <if test="record.guaranteeDays != null" >
+        guarantee_days = #{record.guaranteeDays,jdbcType=INTEGER},
       </if>
-      <if test="record.materialParameter != null" >
-        material_parameter = #{record.materialParameter,jdbcType=VARCHAR},
+      <if test="record.isConStock != null" >
+        is_con_stock = #{record.isConStock,jdbcType=VARCHAR},
       </if>
-      <if test="record.sort != null" >
-        sort = #{record.sort,jdbcType=VARCHAR},
+      <if test="record.maxStock != null" >
+        max_stock = #{record.maxStock,jdbcType=INTEGER},
       </if>
-      <if test="record.isControlStock != null" >
-        is_control_stock = #{record.isControlStock,jdbcType=VARCHAR},
+      <if test="record.minStock != null" >
+        min_stock = #{record.minStock,jdbcType=INTEGER},
       </if>
-      <if test="record.stockMax != null" >
-        stock_max = #{record.stockMax,jdbcType=INTEGER},
+      <if test="record.isBatchCon != null" >
+        is_batch_con = #{record.isBatchCon,jdbcType=VARCHAR},
       </if>
-      <if test="record.stockMin != null" >
-        stock_min = #{record.stockMin,jdbcType=INTEGER},
+      <if test="record.safetyStock != null" >
+        safety_stock = #{record.safetyStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.currentStock != null" >
+        current_stock = #{record.currentStock,jdbcType=INTEGER},
+      </if>
+      <if test="record.averagePrice != null" >
+        average_price = #{record.averagePrice,jdbcType=DECIMAL},
       </if>
       <if test="record.isDelete != null" >
         is_delete = #{record.isDelete,jdbcType=VARCHAR},
@@ -389,6 +430,18 @@
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.extend1 != null" >
+        extend1 = #{record.extend1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extend2 != null" >
+        extend2 = #{record.extend2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extend3 != null" >
+        extend3 = #{record.extend3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extend4 != null" >
+        extend4 = #{record.extend4,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -400,28 +453,33 @@
     set material_id = #{record.materialId,jdbcType=VARCHAR},
       material_code = #{record.materialCode,jdbcType=VARCHAR},
       material_name = #{record.materialName,jdbcType=VARCHAR},
-      material_describe = #{record.materialDescribe,jdbcType=VARCHAR},
-      material_type = #{record.materialType,jdbcType=VARCHAR},
-      measuring_unit = #{record.measuringUnit,jdbcType=VARCHAR},
       specifications = #{record.specifications,jdbcType=VARCHAR},
-      material_num = #{record.materialNum,jdbcType=DECIMAL},
-      wind_id = #{record.windId,jdbcType=VARCHAR},
-      graph_number = #{record.graphNumber,jdbcType=VARCHAR},
-      material_property_id = #{record.materialPropertyId,jdbcType=VARCHAR},
+      material_describe = #{record.materialDescribe,jdbcType=VARCHAR},
       material_group_id = #{record.materialGroupId,jdbcType=VARCHAR},
-      identification = #{record.identification,jdbcType=VARCHAR},
-      is_fixed = #{record.isFixed,jdbcType=VARCHAR},
-      production_address = #{record.productionAddress,jdbcType=VARCHAR},
+      material_classify_id = #{record.materialClassifyId,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      ABC_logo = #{record.abcLogo,jdbcType=VARCHAR},
+      material_num = #{record.materialNum,jdbcType=VARCHAR},
+      material_texture = #{record.materialTexture,jdbcType=VARCHAR},
+      measuring_unit = #{record.measuringUnit,jdbcType=VARCHAR},
+      supplier_id = #{record.supplierId,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
       is_guarantee = #{record.isGuarantee,jdbcType=VARCHAR},
-      quality_guarantee_period = #{record.qualityGuaranteePeriod,jdbcType=VARCHAR},
-      material_parameter = #{record.materialParameter,jdbcType=VARCHAR},
-      sort = #{record.sort,jdbcType=VARCHAR},
-      is_control_stock = #{record.isControlStock,jdbcType=VARCHAR},
-      stock_max = #{record.stockMax,jdbcType=INTEGER},
-      stock_min = #{record.stockMin,jdbcType=INTEGER},
+      guarantee_days = #{record.guaranteeDays,jdbcType=INTEGER},
+      is_con_stock = #{record.isConStock,jdbcType=VARCHAR},
+      max_stock = #{record.maxStock,jdbcType=INTEGER},
+      min_stock = #{record.minStock,jdbcType=INTEGER},
+      is_batch_con = #{record.isBatchCon,jdbcType=VARCHAR},
+      safety_stock = #{record.safetyStock,jdbcType=INTEGER},
+      current_stock = #{record.currentStock,jdbcType=INTEGER},
+      average_price = #{record.averagePrice,jdbcType=DECIMAL},
       is_delete = #{record.isDelete,jdbcType=VARCHAR},
       creater = #{record.creater,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      extend1 = #{record.extend1,jdbcType=VARCHAR},
+      extend2 = #{record.extend2,jdbcType=VARCHAR},
+      extend3 = #{record.extend3,jdbcType=VARCHAR},
+      extend4 = #{record.extend4,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -435,62 +493,65 @@
       <if test="materialName != null" >
         material_name = #{materialName,jdbcType=VARCHAR},
       </if>
-      <if test="materialDescribe != null" >
-        material_describe = #{materialDescribe,jdbcType=VARCHAR},
-      </if>
-      <if test="materialType != null" >
-        material_type = #{materialType,jdbcType=VARCHAR},
-      </if>
-      <if test="measuringUnit != null" >
-        measuring_unit = #{measuringUnit,jdbcType=VARCHAR},
-      </if>
       <if test="specifications != null" >
         specifications = #{specifications,jdbcType=VARCHAR},
       </if>
-      <if test="materialNum != null" >
-        material_num = #{materialNum,jdbcType=DECIMAL},
-      </if>
-      <if test="windId != null" >
-        wind_id = #{windId,jdbcType=VARCHAR},
-      </if>
-      <if test="graphNumber != null" >
-        graph_number = #{graphNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="materialPropertyId != null" >
-        material_property_id = #{materialPropertyId,jdbcType=VARCHAR},
+      <if test="materialDescribe != null" >
+        material_describe = #{materialDescribe,jdbcType=VARCHAR},
       </if>
       <if test="materialGroupId != null" >
         material_group_id = #{materialGroupId,jdbcType=VARCHAR},
       </if>
-      <if test="identification != null" >
-        identification = #{identification,jdbcType=VARCHAR},
+      <if test="materialClassifyId != null" >
+        material_classify_id = #{materialClassifyId,jdbcType=VARCHAR},
       </if>
-      <if test="isFixed != null" >
-        is_fixed = #{isFixed,jdbcType=VARCHAR},
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
       </if>
-      <if test="productionAddress != null" >
-        production_address = #{productionAddress,jdbcType=VARCHAR},
+      <if test="abcLogo != null" >
+        ABC_logo = #{abcLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="materialNum != null" >
+        material_num = #{materialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="materialTexture != null" >
+        material_texture = #{materialTexture,jdbcType=VARCHAR},
+      </if>
+      <if test="measuringUnit != null" >
+        measuring_unit = #{measuringUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        supplier_id = #{supplierId,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
       </if>
       <if test="isGuarantee != null" >
         is_guarantee = #{isGuarantee,jdbcType=VARCHAR},
       </if>
-      <if test="qualityGuaranteePeriod != null" >
-        quality_guarantee_period = #{qualityGuaranteePeriod,jdbcType=VARCHAR},
+      <if test="guaranteeDays != null" >
+        guarantee_days = #{guaranteeDays,jdbcType=INTEGER},
       </if>
-      <if test="materialParameter != null" >
-        material_parameter = #{materialParameter,jdbcType=VARCHAR},
+      <if test="isConStock != null" >
+        is_con_stock = #{isConStock,jdbcType=VARCHAR},
       </if>
-      <if test="sort != null" >
-        sort = #{sort,jdbcType=VARCHAR},
+      <if test="maxStock != null" >
+        max_stock = #{maxStock,jdbcType=INTEGER},
       </if>
-      <if test="isControlStock != null" >
-        is_control_stock = #{isControlStock,jdbcType=VARCHAR},
+      <if test="minStock != null" >
+        min_stock = #{minStock,jdbcType=INTEGER},
       </if>
-      <if test="stockMax != null" >
-        stock_max = #{stockMax,jdbcType=INTEGER},
+      <if test="isBatchCon != null" >
+        is_batch_con = #{isBatchCon,jdbcType=VARCHAR},
       </if>
-      <if test="stockMin != null" >
-        stock_min = #{stockMin,jdbcType=INTEGER},
+      <if test="safetyStock != null" >
+        safety_stock = #{safetyStock,jdbcType=INTEGER},
+      </if>
+      <if test="currentStock != null" >
+        current_stock = #{currentStock,jdbcType=INTEGER},
+      </if>
+      <if test="averagePrice != null" >
+        average_price = #{averagePrice,jdbcType=DECIMAL},
       </if>
       <if test="isDelete != null" >
         is_delete = #{isDelete,jdbcType=VARCHAR},
@@ -501,6 +562,18 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="extend1 != null" >
+        extend1 = #{extend1,jdbcType=VARCHAR},
+      </if>
+      <if test="extend2 != null" >
+        extend2 = #{extend2,jdbcType=VARCHAR},
+      </if>
+      <if test="extend3 != null" >
+        extend3 = #{extend3,jdbcType=VARCHAR},
+      </if>
+      <if test="extend4 != null" >
+        extend4 = #{extend4,jdbcType=VARCHAR},
+      </if>
     </set>
     where material_id = #{materialId,jdbcType=VARCHAR}
   </update>
@@ -508,37 +581,41 @@
     update material
     set material_code = #{materialCode,jdbcType=VARCHAR},
       material_name = #{materialName,jdbcType=VARCHAR},
-      material_describe = #{materialDescribe,jdbcType=VARCHAR},
-      material_type = #{materialType,jdbcType=VARCHAR},
-      measuring_unit = #{measuringUnit,jdbcType=VARCHAR},
       specifications = #{specifications,jdbcType=VARCHAR},
-      material_num = #{materialNum,jdbcType=DECIMAL},
-      wind_id = #{windId,jdbcType=VARCHAR},
-      graph_number = #{graphNumber,jdbcType=VARCHAR},
-      material_property_id = #{materialPropertyId,jdbcType=VARCHAR},
+      material_describe = #{materialDescribe,jdbcType=VARCHAR},
       material_group_id = #{materialGroupId,jdbcType=VARCHAR},
-      identification = #{identification,jdbcType=VARCHAR},
-      is_fixed = #{isFixed,jdbcType=VARCHAR},
-      production_address = #{productionAddress,jdbcType=VARCHAR},
+      material_classify_id = #{materialClassifyId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      ABC_logo = #{abcLogo,jdbcType=VARCHAR},
+      material_num = #{materialNum,jdbcType=VARCHAR},
+      material_texture = #{materialTexture,jdbcType=VARCHAR},
+      measuring_unit = #{measuringUnit,jdbcType=VARCHAR},
+      supplier_id = #{supplierId,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
       is_guarantee = #{isGuarantee,jdbcType=VARCHAR},
-      quality_guarantee_period = #{qualityGuaranteePeriod,jdbcType=VARCHAR},
-      material_parameter = #{materialParameter,jdbcType=VARCHAR},
-      sort = #{sort,jdbcType=VARCHAR},
-      is_control_stock = #{isControlStock,jdbcType=VARCHAR},
-      stock_max = #{stockMax,jdbcType=INTEGER},
-      stock_min = #{stockMin,jdbcType=INTEGER},
+      guarantee_days = #{guaranteeDays,jdbcType=INTEGER},
+      is_con_stock = #{isConStock,jdbcType=VARCHAR},
+      max_stock = #{maxStock,jdbcType=INTEGER},
+      min_stock = #{minStock,jdbcType=INTEGER},
+      is_batch_con = #{isBatchCon,jdbcType=VARCHAR},
+      safety_stock = #{safetyStock,jdbcType=INTEGER},
+      current_stock = #{currentStock,jdbcType=INTEGER},
+      average_price = #{averagePrice,jdbcType=DECIMAL},
       is_delete = #{isDelete,jdbcType=VARCHAR},
       creater = #{creater,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      extend1 = #{extend1,jdbcType=VARCHAR},
+      extend2 = #{extend2,jdbcType=VARCHAR},
+      extend3 = #{extend3,jdbcType=VARCHAR},
+      extend4 = #{extend4,jdbcType=VARCHAR}
     where material_id = #{materialId,jdbcType=VARCHAR}
   </update>
   
-   <update id="delMaterial" parameterType="java.util.List">
-        update material set is_delete="1"  where material_id in
-        <foreach collection="list" item="item" open="(" separator="," close=")">
-            #{item}
+  <update id="updateIsdete" parameterType="java.util.Map">
+         update material set is_delete=#{isDelete}  where material_id in
+        <foreach collection="materialIds" item="materialIds" open="(" separator="," close=")">
+            #{materialIds}
         </foreach>
     </update>
-
   
 </mapper>

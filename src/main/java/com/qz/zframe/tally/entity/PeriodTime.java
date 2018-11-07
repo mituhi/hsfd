@@ -1,5 +1,7 @@
 package com.qz.zframe.tally.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /*
@@ -9,8 +11,10 @@ public class PeriodTime {
     //时间段id
     private String periodTimeId;
     //开始时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     //结束时间
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     public String getPeriodTimeId() {

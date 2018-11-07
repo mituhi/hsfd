@@ -250,4 +250,21 @@
 	</select>
   
   
+  <select id="selectMaxSort" resultMap="BaseResultMap">
+  	SELECT MAX(sort) as sort FROM `value_time` 
+  </select>
+  
+  
+  <!-- 根据排班id获取值次code集合 -->
+  <select id="getValueTimeBySchedulingRuleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select * 
+  	from value_time,rule_shift_value 
+  	where 
+  	rule_shift_value.value_id = value_time.value_id 
+  	and rule_shift_value.scheduling_rule_id = #{schedulingRuleId}
+  </select>
+  
+  
+  
+  
 </mapper>

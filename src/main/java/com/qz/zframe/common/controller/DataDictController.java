@@ -20,10 +20,11 @@ import com.qz.zframe.common.service.DataDictService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/api/common/dataDict")
-@Api(tags = { "api-common-dataDict" }, description = "编码管理")
+@Api(tags = { "api-common-dataDict" }, description = "系统管理-编码管理")
 public class DataDictController {
 	private static Logger logger = LoggerFactory.getLogger(DataDictController.class);
 	
@@ -32,7 +33,9 @@ public class DataDictController {
 	
 	@ApiOperation(value = "根据类型查询编码分类", notes = "根据类型查询编码分类")
 	@RequestMapping(value = "queryCodeType", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<List<DataDictType>> queryCodeType(@RequestParam(required = false) String codeType) {
+	public ResponseEntity<List<DataDictType>> queryCodeType(
+			@RequestParam(required = false)
+			@ApiParam(name="codeType",value="分类编码",required=false) String codeType) {
 		logger.info("===== 根据类型查询编码分类 DataDictController.queryCodeByCodeType ===== codeType:"+codeType);
 		List<DataDictType> pageorgan = dataDictService.queryCodeType(codeType);
 		return new ResponseEntity<List<DataDictType>>(pageorgan, HttpStatus.OK);
@@ -40,7 +43,9 @@ public class DataDictController {
 	
 	@ApiOperation(value = "根据id查询编码分类", notes = "根据id查询编码分类")
 	@RequestMapping(value = "queryCodeTypeyById", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<DataDictType> queryCodeTypeById(@RequestParam(required = false) String id) throws Exception {
+	public ResponseEntity<DataDictType> queryCodeTypeById(
+			@RequestParam(required = false)
+			@ApiParam(name="id",value="主键id",required=true)String id) throws Exception {
 		logger.info("===== 根据id查询编码分类 DataDictController.queryCodeTypeById ===== id:"+id);
 		DataDictType dataDictType = dataDictService.queryCodeTypeById(id);
 		return new ResponseEntity<DataDictType>(dataDictType, HttpStatus.OK);
@@ -80,7 +85,9 @@ public class DataDictController {
 	
 	@ApiOperation(value = "根据id查询编码", notes = "根据id查询编码")
 	@RequestMapping(value = "queryCodeById", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<DataDict> queryCodeById(@RequestParam(required = false) String id) throws Exception {
+	public ResponseEntity<DataDict> queryCodeById(
+			@RequestParam(required = false)
+			@ApiParam(name="id",value="主键id",required=true)String id) throws Exception {
 		logger.info("===== 根据id查询编码 DataDictController.queryCodeById ===== id:"+id);
 		DataDict dataDict = dataDictService.queryCodeById(id);
 		return new ResponseEntity<DataDict>(dataDict, HttpStatus.OK);

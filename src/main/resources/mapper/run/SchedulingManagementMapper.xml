@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.SchedulingManagementMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.SchedulingManagement" >
+    <id column="scheduling_management_id" property="schedulingManagementId" jdbcType="VARCHAR" />
+    <result column="scheduling_code" property="schedulingCode" jdbcType="VARCHAR" />
+    <result column="scheduling_name" property="schedulingName" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    scheduling_management_id, scheduling_code, scheduling_name, department
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.SchedulingManagementExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from scheduling_management
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from scheduling_management
+    where scheduling_management_id = #{schedulingManagementId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from scheduling_management
+    where scheduling_management_id = #{schedulingManagementId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.SchedulingManagementExample" >
+    delete from scheduling_management
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.SchedulingManagement" >
+    insert into scheduling_management (scheduling_management_id, scheduling_code, 
+      scheduling_name, department)
+    values (#{schedulingManagementId,jdbcType=VARCHAR}, #{schedulingCode,jdbcType=VARCHAR}, 
+      #{schedulingName,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.SchedulingManagement" >
+    insert into scheduling_management
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="schedulingManagementId != null" >
+        scheduling_management_id,
+      </if>
+      <if test="schedulingCode != null" >
+        scheduling_code,
+      </if>
+      <if test="schedulingName != null" >
+        scheduling_name,
+      </if>
+      <if test="department != null" >
+        department,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="schedulingManagementId != null" >
+        #{schedulingManagementId,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingCode != null" >
+        #{schedulingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingName != null" >
+        #{schedulingName,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.SchedulingManagementExample" resultType="java.lang.Integer" >
+    select count(*) from scheduling_management
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update scheduling_management
+    <set >
+      <if test="record.schedulingManagementId != null" >
+        scheduling_management_id = #{record.schedulingManagementId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schedulingCode != null" >
+        scheduling_code = #{record.schedulingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schedulingName != null" >
+        scheduling_name = #{record.schedulingName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.department != null" >
+        department = #{record.department,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update scheduling_management
+    set scheduling_management_id = #{record.schedulingManagementId,jdbcType=VARCHAR},
+      scheduling_code = #{record.schedulingCode,jdbcType=VARCHAR},
+      scheduling_name = #{record.schedulingName,jdbcType=VARCHAR},
+      department = #{record.department,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.SchedulingManagement" >
+    update scheduling_management
+    <set >
+      <if test="schedulingCode != null" >
+        scheduling_code = #{schedulingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingName != null" >
+        scheduling_name = #{schedulingName,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where scheduling_management_id = #{schedulingManagementId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.SchedulingManagement" >
+    update scheduling_management
+    set scheduling_code = #{schedulingCode,jdbcType=VARCHAR},
+      scheduling_name = #{schedulingName,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR}
+    where scheduling_management_id = #{schedulingManagementId,jdbcType=VARCHAR}
+  </update>
+</mapper>

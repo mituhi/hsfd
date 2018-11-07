@@ -6,6 +6,7 @@ import com.qz.zframe.authentication.domain.UserInfo;
 import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.common.util.UUIdUtil;
 import com.qz.zframe.material.entity.Material;
 import com.qz.zframe.material.entity.Material.ListView;
 import com.qz.zframe.material.entity.MaterialExample;
@@ -36,7 +37,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/support/material")
-@Api(tags = "api-support-material", description = "物资")
+@Api(tags = "api-support-material", description = "物资管理")
 public class MaterialController {
 
 	@Autowired
@@ -57,25 +58,32 @@ public class MaterialController {
 	 */
 	@JsonView({ ListView.class })
 	@RequestMapping(value = "/listMaterial", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "获取物资列表", notes = "materialCodo物资编码，materialType物资分类，materialDescribe物资描述")
+	@ApiOperation(value = "获取物资列表", notes = "materialCode物资编码，materialDescribe物资描述，windId风电场id")
 	public PageResultEntity getMaterialList(@RequestParam(required = false) Integer pageNum,
-			@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String materialType,
+			@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String windId,
 			@RequestParam(required = false) String materialCode,
-			@RequestParam(required = false) String materialDescribe) {
+			@RequestParam(required = false) String materialDescribe,
+			@RequestParam(required = false) String searchKey) {
 		PageResultEntity resultEntity = new PageResultEntity();
 		MaterialExample materialExample = new MaterialExample();
 		materialExample.setPageSize(pageSize);
 		materialExample.setPageNo(pageNum);
-		materialExample.setOrderByClause("a.sort,a.create_time desc");
-		Criteria criteria = materialExample.createCriteria().andIsDeleteEqualTo(IsDeleteEnum.deleteNo.getCode());
-		if (!StringUtils.isBlank(materialType)) {
-			criteria.andMaterialTypeEqualTo(materialType);
+		materialExample.setOrderByClause("a.create_time desc");
+		Criteria criteria = materialExample.createCriteria().andIsDeleteEqualTo(IsDeleteEnum.DELETE_NO.getCode());
+		if (!StringUtils.isBlank(materialDescribe)) {
+			criteria.andMaterialDescribeEqualTo(materialDescribe);
 		}
 		if (!StringUtils.isBlank(materialCode)) {
 			criteria.andMaterialCodeEqualTo(materialCode);
 		}
-		if (!StringUtils.isBlank(materialDescribe)) {
-			criteria.andMaterialDescribeLike(materialDescribe);
+		if (!StringUtils.isBlank(windId)) {
+			criteria.andWindIdEqualTo(windId);
+		}
+		if (!StringUtils.isBlank(searchKey)) {
+			criteria.andMaterialCodeLike(searchKey);
+			materialExample.or().andMaterialNameLike(searchKey);
+			materialExample.or().andMaterialDescribeLike(searchKey);
+			materialExample.or().andSpecificationsLike(searchKey);
 		}
 		resultEntity = materialService.getMaterialList(materialExample);
 		return resultEntity;
@@ -91,16 +99,19 @@ public class MaterialController {
 	@ApiOperation(value = "新增物资", notes = "新增物资信息")
 	public ResultEntity saveUser(@RequestBody Material material) {
 		ResultEntity resultEntity = new ResultEntity();
-		if (StringUtils.isBlank(material.getMaterialCode()) || StringUtils.isBlank(material.getMaterialType())
+		if (StringUtils.isBlank(material.getMaterialCode()) || StringUtils.isBlank(material.getMaterialClassifyId())
 				|| StringUtils.isBlank(material.getMaterialName())
-				|| StringUtils.isBlank(material.getMaterialGroupId())) {
+				|| StringUtils.isBlank(material.getMaterialGroupId())
+				|| StringUtils.isBlank(material.getStatus())
+				|| StringUtils.isBlank(material.getSpecifications())) {
 			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少必填字段");
+			resultEntity.setMsg("缺少参数");
 			return resultEntity;
 		}
 		UserInfo userInfo = currentUSerservice.getUserInfo();
 		material.setCreater(userInfo.getUserId());
-		material.setMaterialId(Uuid());
+		material.setMaterialId(UUIdUtil.getUUID());
+		material.setIsDelete(IsDeleteEnum.DELETE_NO.getCode());
 		resultEntity = materialService.saveMaterial(material);
 		return resultEntity;
 	}
@@ -112,12 +123,12 @@ public class MaterialController {
 	 * 返回类型 @throws
 	 */
 	@RequestMapping(value = "/updateMaterial", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value = "编辑物资信息", notes = "materialId 物资id必选,如果修改物资名称，则要传入物资组id")
+	@ApiOperation(value = "编辑物资信息", notes = "materialId物资id必传")
 	public ResultEntity updateMaterial(@RequestBody Material material) {
 		ResultEntity resultEntity = new ResultEntity();
 		if (StringUtils.isBlank(material.getMaterialId())) {
 			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少必填字段");
+			resultEntity.setMsg("缺少参数");
 			return resultEntity;
 		}
 		resultEntity = materialService.updateMaterial(material);
@@ -155,12 +166,4 @@ public class MaterialController {
 		return materialService.detailMaterial(materialId);
 	}
 	
-	
-	/**
-	 * 生成uuId
-	 */
-	public String Uuid() {
-		UUID uuid = UUID.randomUUID();
-		return uuid.toString().replace("-", "");
-	}
 }

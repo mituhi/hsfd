@@ -6,11 +6,14 @@ import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.PageBean;
 
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.tally.dto.TallyRouterDto;
 import com.qz.zframe.tally.entity.*;
 import com.qz.zframe.tally.service.TallyRouterService;
 import com.qz.zframe.tally.service.TallyStandardService;
 import com.qz.zframe.tally.vo.*;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +33,8 @@ import java.util.UUID;
 @Controller
 @RequestMapping("api/support/tallyRouter")
 @Api(
-        tags = {"api-support-tally"},
-        description = "巡检"
+        tags = {"api-support-tallyRouter"},
+        description = "巡检-巡检路线配置"
 )
 @Transactional(rollbackFor = Exception.class)
 public class InspectionController {
@@ -40,8 +43,7 @@ public class InspectionController {
     CurrentUserService currentUserService;
     @Autowired
     TallyRouterService tallyRouterService;
-    @Autowired
-    TallyStandardService tallyStandardService;
+
 
     /**
      * 点击巡检和页面相关查询
@@ -50,49 +52,75 @@ public class InspectionController {
      * @return
      */
     @ApiOperation(value="巡检线路查询（包括条件查询）", notes="可以根据无参，路线编码，路线名称，当前页，每页显示条数查询" ,httpMethod="GET")
-    @RequestMapping("listRoute")
+    @RequestMapping("list")
     @ResponseBody
-    public ResultEntity listRoute(String windId,
+    public ResultEntity list(String windId,
                                    String routeCode,
                                    String routeName,
                                    @RequestParam(value = "currentPage",defaultValue = "1")int currentPage,
                                    @RequestParam(value = "pageSize",defaultValue = "1")  int pageSize) {
 
 
-
+        //查询一下总条数
+        int n=tallyRouterService.countTallyRoute(windId, routeCode, routeName);
         ResultEntity resultEntity=new ResultEntity();
         PageHelper.startPage(currentPage,pageSize);
 
         //1.先查询所有点检路线表需要的字段
-        List<TallyRoute> tallyRouteList=tallyRouterService.findAllTallyRouter(windId,routeCode,routeName);
+        //List<TallyRoute> tallyRouteList=tallyRouterService.findAllTallyRouter(windId,routeCode,routeName);
+        //List<TallyRouterVO> tallyRouterVOList=new ArrayList<TallyRouterVO>();
+        List<TallyRouterDto> tallyRouterDtoList=tallyRouterService.findAllTallyRouterDto(windId, routeCode, routeName);
         List<TallyRouterVO> tallyRouterVOList=new ArrayList<TallyRouterVO>();
-
-        //2.先添加点检路线表的数据，然后路线→周期 或者→关联人id→姓名
-        for (TallyRoute tallyRoute:tallyRouteList){
+        for (TallyRouterDto tallyRouterDto:tallyRouterDtoList){
             TallyRouterVO tallyRouterVO=new TallyRouterVO();
-            tallyRouterVO.setRouteName(tallyRoute.getRouteName());
-            tallyRouterVO.setRouteCode(tallyRoute.getRouteCode());
-            tallyRouterVO.setWindId(tallyRoute.getWindId());
-            tallyRouterVO.setRouteId(tallyRoute.getRouteId());
-
-            //2.1根据路线id查周期名称
-            tallyRouterVO.setCycleName(tallyRouterService.findCycleNameByRouteId(tallyRoute.getRouteId()));
+            tallyRouterVO.setCycleName(tallyRouterDto.getCycleName());
+            tallyRouterVO.setRouteCode(tallyRouterDto.getRouteCode());
+            tallyRouterVO.setRouteId(tallyRouterDto.getRouteId());
+            tallyRouterVO.setRouteName(tallyRouterDto.getRouteName());
+            tallyRouterVO.setWindId(tallyRouterDto.getWindId());
 
             List<String> userNames=new ArrayList<String>();
-            //2.2关联人id查出人员
-            /*2.2.1先根据路线id查出关联人id*/
-            List<String> userIds=tallyRouterService.findUserIdsByRouteId(tallyRoute.getRouteId());
+            //todo 看情况要不要判断职责 等职责标准出来
+            List<String> userIds=tallyRouterService.findUserIdsByRouteId(tallyRouterDto.getRouteId());
             for (String userId:userIds){
-                /*2.2.2根据id查名字*/
+                //*2.2.2根据id查名字*//*
                 userNames.add(tallyRouterService.findUserNameByUserId(userId));
             }
             tallyRouterVO.setUserNames(userNames);
-
             tallyRouterVOList.add(tallyRouterVO);
         }
 
+        //2.先添加点检路线表的数据，然后路线→周期 或者→关联人id→姓名
+        /*for (TallyRoute tallyRoute:tallyRouteList){
 
-        PageBean<TallyRouterVO> pageData=new PageBean<TallyRouterVO>(currentPage,pageSize,tallyRouterVOList.size());
+            //2.1根据路线id查周期名称
+            List<String> lists=tallyRouterService.findCycleNameByRouteId(tallyRoute.getRouteId());
+            for (String s:lists){
+                TallyRouterVO tallyRouterVO=new TallyRouterVO();
+                tallyRouterVO.setRouteName(tallyRoute.getRouteName());
+                tallyRouterVO.setRouteCode(tallyRoute.getRouteCode());
+                tallyRouterVO.setWindId(tallyRoute.getWindId());
+                tallyRouterVO.setRouteId(tallyRoute.getRouteId());
+                tallyRouterVO.setCycleName(s);
+               // System.out.println(tallyRoute.getRouteId()+"***********"+s);
+
+                List<String> userNames=new ArrayList<String>();
+                //2.2关联人id查出人员
+            *//*2.2.1先根据路线id查出关联人id*//*
+                List<String> userIds=tallyRouterService.findUserIdsByRouteId(tallyRoute.getRouteId());
+                for (String userId:userIds){
+                *//*2.2.2根据id查名字*//*
+                    userNames.add(tallyRouterService.findUserNameByUserId(userId));
+                }
+                tallyRouterVO.setUserNames(userNames);
+                tallyRouterVOList.add(tallyRouterVO);
+            }
+
+        }
+*/
+
+        PageBean<TallyRouterVO> pageData=new PageBean<TallyRouterVO>(currentPage,pageSize,n);
+        //System.out.println(currentPage+"***"+pageSize+"***"+tallyRouterVOList.size());
         pageData.setItems(tallyRouterVOList);
 
         resultEntity.setCode(ErrorCode.SUCCESS);
@@ -102,6 +130,9 @@ public class InspectionController {
     }
 
     @ApiOperation(value="巡检线路删除(包括批量)", notes="根据传入的路线id数组进行删除" ,httpMethod="DELETE")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "routeIds", value = "路线ID", required = false),
+    })
     @RequestMapping("delete")
     @ResponseBody
     public ResultEntity tallyDelete(String[] routeIds) {
@@ -115,10 +146,11 @@ public class InspectionController {
         }
         //1.删除周期表记录
         tallyRouterService.deleteByRouteId(routeIds);
+
         //2.删除路线人员关联表
         tallyRouterService.deleteRouteUserByRouteId(routeIds);
         //3.删除路线标准关联
-        tallyRouterService.deleteTallyRouteStandardByRouteId(routeIds);
+        //tallyRouterService.deleteTallyRouteStandardByRouteId(routeIds);
         //4.删除点检路线表
         tallyRouterService.deleteTallyRouteByRouteId(routeIds);
 
@@ -140,10 +172,13 @@ public class InspectionController {
         //查当前用户
         String userName=currentUserService.getUsername();
 
+
+
         TallyRouterUserVO tallyRouterUserVO=new TallyRouterUserVO();
         tallyRouterUserVO.setSerialNum(serialNum);
         tallyRouterUserVO.setCurrentDate(currentDate);
         tallyRouterUserVO.setUserName(userName);
+        tallyRouterUserVO.setRouteId(UUID.randomUUID()+"");
 
         resultEntity.setCode(ErrorCode.SUCCESS);
         resultEntity.setMsg("获取成功!");
@@ -164,27 +199,31 @@ public class InspectionController {
                 || StringUtils.isBlank(tallyPostVO.getRouteId())
                 ||StringUtils.isBlank(tallyPostVO.getCycleUnit())
                 ||StringUtils.isBlank(tallyPostVO.getCycle())
-                ||StringUtils.isBlank(tallyPostVO.getUserNames().get(0))) {
+                ||StringUtils.isBlank(tallyPostVO.getUserNames())
+                ||StringUtils.isBlank(tallyPostVO.getRouteCode())
+                ||StringUtils.isBlank(tallyPostVO.getRouteName())
+                ||StringUtils.isBlank(tallyPostVO.getStartTimes().get(0).toString())
+                ||StringUtils.isBlank(tallyPostVO.getEndTimes().get(0).toString())) {
             resultEntity.setCode(ErrorCode.ERROR);
             resultEntity.setMsg("缺少必填字段!");
             return resultEntity;
         }
 
         TallyRoute tallyRoute=new TallyRoute();
-        tallyRoute.setRouteCode(tallyPostVO.getRouteCode());//路线编码
+        tallyRoute.setRouteCode(tallyPostVO.getRouteCode());//路线编码 匹配和流水号一致 和前端商量一下
         tallyRoute.setWindId(tallyPostVO.getWindId());//所属风场
         tallyRoute.setRouteName(tallyPostVO.getRouteName());//路线的名称
         tallyRoute.setMandatoryOrder(tallyPostVO.getMandatoryOrder());//强制次序
         tallyRoute.setRemark(tallyPostVO.getTallyRouteRemark());//备注
-        tallyRoute.setSerialNum(tallyPostVO.getSerialNum());//流水号
-        tallyRoute.setMaintenancer(tallyPostVO.getMaintenancer());//维护人
-        tallyRoute.setMaintenanceTime(tallyPostVO.getMaintenanceTime());//维护日期
-        tallyRoute.setRouteId(tallyPostVO.getRouteId());//路线id  要自己生成 有检验接口，所以一定不同
+        tallyRoute.setSerialNum(tallyPostVO.getSerialNum());//流水号 查出来
+        tallyRoute.setMaintenancer(tallyPostVO.getMaintenancer());//维护人 查出来，最近修改的人
+        tallyRoute.setMaintenanceTime(tallyPostVO.getMaintenanceTime());//维护日期 查出来
+        tallyRoute.setRouteId(tallyPostVO.getRouteId());//路线id  自己写一个UUID接口 要自己生成 有检验接口，所以一定不同
 
         tallyRouterService.addTallyRoute(tallyRoute);//完成巡检路线表
 
         Cycle cycle=new Cycle();
-        cycle.setCycleId(UUID.randomUUID()+""); //还是看具体要求*************
+        cycle.setCycleId(UUID.randomUUID()+""); //还是看具体要求*************不过id基本能匹配名称，所以名称最好不同喽
         cycle.setRouteId(tallyPostVO.getRouteId());
         cycle.setCycleName(tallyPostVO.getCycleName());
         cycle.setCycleUnit(tallyPostVO.getCycleUnit());
@@ -196,13 +235,14 @@ public class InspectionController {
         int len=tallyPostVO.getStartTimes().size();
 
         for (int i=0;i<len;i++){
+            //时间段
             PeriodTime periodTime=new PeriodTime();
             periodTime.setPeriodTimeId(""+ UUID.randomUUID());
             periodTime.setStartTime(tallyPostVO.getStartTimes().get(i));
             periodTime.setEndTime(tallyPostVO.getEndTimes().get(i));
 
             tallyRouterService.addPeriodTime(periodTime);
-
+            //时间段周期关联
             CyclePeriodTime cyclePeriodTime=new CyclePeriodTime();
 
             cyclePeriodTime.setId(UUID.randomUUID()+"");
@@ -214,23 +254,40 @@ public class InspectionController {
         }
 
 
-       int len2=tallyPostVO.getUserNames().size();
-       for (int i=0;i<len2;i++){
+
            RouteUser routeUser=new RouteUser();
            routeUser.setId(UUID.randomUUID()+"");
            routeUser.setRouteId(tallyPostVO.getRouteId());
 
            //根据username获取userid
-            routeUser.setUserId(tallyRouterService.findUserIdByUserName(tallyPostVO.getUserNames().get(i)));
+            routeUser.setUserId(tallyRouterService.findUserIdByUserName(tallyPostVO.getUserNames()));
            //routeUser.setUserId();
-           routeUser.setIsPractitioners("0");//看情况
-           routeUser.setIsHead("0");//看情况
-           routeUser.setIsManagers("0");//看情况
+           //todo 根据身份的传值判断
+          // 0 点检执行者 1 路线管理者 2 漏检负责人
+           String identity=tallyPostVO.getIdentity();
+           if (identity.equals("0")){
+               routeUser.setIsPractitioners("0");//看情况
+               routeUser.setIsHead("1");//看情况
+               routeUser.setIsManagers("1");//看情况
+           }else if (identity.equals("1")){
+               routeUser.setIsPractitioners("1");//看情况
+               routeUser.setIsHead("1");//看情况
+               routeUser.setIsManagers("0");//看情况
+           }else if (identity.equals("2")){
+               routeUser.setIsPractitioners("1");//看情况
+               routeUser.setIsHead("0");//看情况
+               routeUser.setIsManagers("1");//看情况
+           }else {
+               routeUser.setIsPractitioners("1");//看情况
+               routeUser.setIsHead("1");//看情况
+               routeUser.setIsManagers("1");//看情况
+           }
+
 
            routeUser.setRemark(tallyPostVO.getIscUserRemark());
 
-            tallyRouterService.addRouteUser(routeUser);
-       }
+           tallyRouterService.addRouteUser(routeUser);
+
 
 
         resultEntity.setCode(ErrorCode.SUCCESS);
@@ -239,7 +296,10 @@ public class InspectionController {
         return resultEntity;
     }
 
-    @ApiOperation(value="校验路线id是否已经存在(添加路线时使用)", notes="前端传递路线id进行校验" ,httpMethod="GET")
+  /*  @ApiOperation(value="校验路线id是否已经存在(添加路线时使用)", notes="前端传递路线id进行校验" ,httpMethod="GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "routeId", value = "路线ID", required = false),
+    })
     @RequestMapping("checkRouteId")
     @ResponseBody
     public ResultEntity checkRouteId(String routeId) {
@@ -254,7 +314,7 @@ public class InspectionController {
         resultEntity.setCode(ErrorCode.ERROR);
         resultEntity.setMsg("路线id不可用!");
         return resultEntity;
-    }
+    }*/
 
     @ApiOperation(value="获取选择人员(只有全部的)", notes="点击选择后提供人员信息" ,httpMethod="GET")
     @RequestMapping("choice")
@@ -266,6 +326,23 @@ public class InspectionController {
         resultEntity.setData(tallyRouterService.choicePeople());
         return resultEntity;
     }
+
+/*
+    @ApiOperation(value="巡检路线新增时生成路线id（uuid）", notes="获取uuid" ,httpMethod="GET")
+    @RequestMapping("routeId")
+    @ResponseBody
+    public ResultEntity routeId() {
+        ResultEntity resultEntity=new ResultEntity();
+
+
+        resultEntity.setCode(ErrorCode.SUCCESS);
+        resultEntity.setMsg("生成巡检路线id成功!");
+        resultEntity.setData(UUID.randomUUID()+"");
+        return resultEntity;
+    }
+*/
+
+
 
     //todo
     @ApiOperation(value="获取风电场下拉项(没实现)", notes="点击下拉后获取风电场下拉信息" ,httpMethod="GET")
@@ -280,241 +357,127 @@ public class InspectionController {
     }
 
 
-    //todo 获取路线编码
-
-
-
-
-
-
-    @ApiOperation(value="点检标准查询(包括条件查询)", notes="根据所属设备，状态，所属路线，报警类型，标准编码，点检内容进行查询" ,httpMethod="GET")
-    @RequestMapping("listStandard")
+    //todo 专门已有的路线编码库查询
+    @ApiOperation(value="获取路线编码(没完成)", notes="点击下拉后获取路线编码信息" ,httpMethod="GET")
+    @RequestMapping("routeCode")
     @ResponseBody
-    public ResultEntity listStandard(String equipmentBelonging,
-                                     String routeId,
-                                     String equipmentState,
-                                     String alarmType,
-                                     String standardCoding,
-                                     String checkContent,
-                                     @RequestParam(value = "currentPage",defaultValue = "1")int currentPage,
-                                     @RequestParam(value = "pageSize",defaultValue = "1")  int pageSize) {
+    public ResultEntity routeCode() {
         ResultEntity resultEntity=new ResultEntity();
-
-        PageHelper.startPage(currentPage,pageSize);
-
-        //1.先查询所有点检标准表需要的字段
-        List<TallyStandard> tallyStandardList=tallyStandardService.findAllTallyStandard(equipmentBelonging,routeId,equipmentState,alarmType,standardCoding,checkContent);
-
-        List<TallyStandardVO> tallyStandardVOList=new ArrayList<TallyStandardVO>();
-
-        for (TallyStandard tallyStandard:tallyStandardList){
-            TallyStandardVO tallyStandardVO=new TallyStandardVO();
-            tallyStandardVO.setAlarmType(tallyStandard.getAlarmType());
-            tallyStandardVO.setCheckContent(tallyStandard.getCheckContent());
-            tallyStandardVO.setEquipmentBelonging(tallyStandard.getEquipmentBelonging());
-
-            //获取RouteName 根据routeid
-            tallyStandardVO.setRouteName(tallyStandardService.findRouteNameByRouteId(tallyStandard.getRouteId()));
-            tallyStandardVO.setWindId(tallyStandardService.findWindIdByRouteId(tallyStandard.getRouteId()));
-            tallyStandardVO.setStandardCoding(tallyStandard.getStandardCoding());
-            tallyStandardVOList.add(tallyStandardVO);
-
-            PageBean<TallyStandardVO> pageDate=new PageBean<TallyStandardVO>(currentPage,pageSize,tallyStandardVOList.size());
-            pageDate.setItems(tallyStandardVOList);
-
-
-        }
 
 
 
         resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("点检标准查询成功");
-        resultEntity.setData(tallyStandardVOList);
+        resultEntity.setMsg("获取路线编码下拉列表信息成功!");
+        resultEntity.setData(tallyRouterService.findAllRouteCode());
+        return resultEntity;
+    }
+
+    @ApiOperation(value="获取路线编码后匹配风电场(查询页下拉框相关)", notes="选定路线编码后根据路线编码匹配风电场" ,httpMethod="GET")
+    @RequestMapping("routeCodeWindId")
+    @ResponseBody
+    public ResultEntity routeCodeWindId(String routeCode) {
+        ResultEntity resultEntity=new ResultEntity();
+
+
+
+        resultEntity.setCode(ErrorCode.SUCCESS);
+        resultEntity.setMsg("匹配风电场信息成功!");
+        resultEntity.setData(tallyRouterService.findWindIdByRouteCode(routeCode));
         return resultEntity;
     }
 
 
-    @ApiOperation(value="点检标准删除(包括批量)", notes="根据传入的标准id数组进行删除" ,httpMethod="DELETE")
-    @RequestMapping("deleteStandard")
+
+    @ApiOperation(value="点检路线更新(还没实现)", notes="根据点检路线所需信息修改" ,httpMethod="PUT")
+    @RequestMapping("update")
     @ResponseBody
-    public ResultEntity deleteStandard(String[] periodTimeIds) {
+    public ResultEntity updateRouter(@RequestBody TallyPostVO tallyPostVO) {
         ResultEntity resultEntity=new ResultEntity();
 
-        if (periodTimeIds==null){
-            resultEntity.setCode(ErrorCode.ERROR);
-            resultEntity.setMsg("请选择要删除的标准!");
+        //更新路线人员关联表,默认修改路线不如新建
+        RouteUser routeUser=new RouteUser();
 
-            return resultEntity;
-        }
-        //1.删除关联
-        //tallyRouterService.deleteByRouteId(routeIds);
-        tallyStandardService.deletetallyRouteStandardByPeriodTimeIds(periodTimeIds);
-        //2.删除标准表
-        //tallyRouterService.deleteRouteUserByRouteId(routeIds);
-        tallyStandardService.deleteTallyStandardByPeriodTimeIds(periodTimeIds);
+        routeUser.setId(UUID.randomUUID()+"");
+        routeUser.setRemark(tallyPostVO.getIscUserRemark());
+        routeUser.setUserId(tallyRouterService.findUserIdByUserName(tallyPostVO.getUserNames()));
+        routeUser.setRouteId(tallyPostVO.getRouteId());
+        //todo 等他具体出来
+        routeUser.setIsHead("1");
+        routeUser.setIsManagers("1");
+        routeUser.setIsPractitioners("1");
+
+        tallyRouterService.addRouteUser(routeUser);
+
+        //更新时间段表
+        PeriodTime periodTime=new PeriodTime();
+        //periodTime.
+
+
+
 
 
 
         resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("删除成功!");
-
-        return resultEntity;
-    }
-
-    @ApiOperation(value="点检标准添加", notes="根据点检标准所需信息添加" ,httpMethod="POST")
-    @RequestMapping("postStandard")
-    @ResponseBody
-    public ResultEntity postStandard(@RequestBody TallyStandardPostVO tallyStandardPostVO) {
-        ResultEntity resultEntity=new ResultEntity();
-        //1.是否缺少必填的字段
-        if (StringUtils.isBlank(tallyStandardPostVO.getEquipmentBelonging()) || StringUtils.isBlank(tallyStandardPostVO.getLocation())
-                || StringUtils.isBlank(tallyStandardPostVO.getStandardCoding())
-                || StringUtils.isBlank(tallyStandardPostVO.getStandardType())
-                ||StringUtils.isBlank(tallyStandardPostVO.getDataType())
-                ||StringUtils.isBlank(tallyStandardPostVO.getSignalType())
-                ||StringUtils.isBlank(tallyStandardPostVO.getCheckContent())
-                ||StringUtils.isBlank(tallyStandardPostVO.getCheckMethod())
-                ||StringUtils.isBlank(tallyStandardPostVO.getStandardJudgment())
-                ||StringUtils.isBlank(tallyStandardPostVO.getResultOptions())
-                ||StringUtils.isBlank(tallyStandardPostVO.getMeasurementUnit())
-                ||StringUtils.isBlank(tallyStandardPostVO.getTypicalValue())
-                ||StringUtils.isBlank(tallyStandardPostVO.getTwodimensionalcodeLocation())
-                ||StringUtils.isBlank(tallyStandardPostVO.getEquipmentState())
-                ||StringUtils.isBlank(tallyStandardPostVO.getStartandstopPoint())
-                ||StringUtils.isBlank(tallyStandardPostVO.getMaincontrolPoint())
-                ||StringUtils.isBlank(tallyStandardPostVO.getAlarmType())
-                ||StringUtils.isBlank(tallyStandardPostVO.getAlarmCeiling())
-                ||StringUtils.isBlank(tallyStandardPostVO.getAlarmLowerlimit())
-                ||StringUtils.isBlank(tallyStandardPostVO.getEmissivity())
-                ||StringUtils.isBlank(tallyStandardPostVO.getUpperlimitMileage())
-                ||StringUtils.isBlank(tallyStandardPostVO.getLowerlimitMileage())
-                ) {
-            resultEntity.setCode(ErrorCode.ERROR);
-            resultEntity.setMsg("缺少必填字段!");
-            return resultEntity;
-        }
-
-        TallyStandard tallyStandard=new TallyStandard();
-        tallyStandard.setStandardId(UUID.randomUUID()+"");//还是看具体要求吧。。。。
-        //根据路线名称获取路线id
-        // 线路名称要不一致判断
-        //todo 前端校验
-        String s=tallyStandardService.findRouteIdByRouteName(tallyStandardPostVO.getRouteName());
-        tallyStandard.setRouteId(s);
-        tallyStandard.setEquipmentId(UUID.randomUUID()+"");
-        tallyStandard.setStandardCoding(tallyStandardPostVO.getStandardCoding());
-        tallyStandard.setEquipmentBelonging(tallyStandardPostVO.getEquipmentBelonging());
-        tallyStandard.setLocation(tallyStandardPostVO.getLocation());
-        tallyStandard.setCheckContent(tallyStandardPostVO.getCheckContent());
-        tallyStandard.setStandardType(tallyStandardPostVO.getStandardType());
-        tallyStandard.setDataType(tallyStandardPostVO.getDataType());
-        tallyStandard.setSignalType(tallyStandardPostVO.getSignalType());
-        tallyStandard.setCheckMethod(tallyStandardPostVO.getCheckMethod());
-        tallyStandard.setStandardJudgment(tallyStandardPostVO.getStandardJudgment());
-        tallyStandard.setResultOptions(tallyStandardPostVO.getResultOptions());
-        tallyStandard.setMeasurementUnit(tallyStandardPostVO.getMeasurementUnit());
-        tallyStandard.setTypicalValue(tallyStandardPostVO.getTypicalValue());
-        tallyStandard.setEquipmentState(tallyStandardPostVO.getEquipmentState());
-        tallyStandard.setTwodimensionalcodeLocation(tallyStandardPostVO.getTwodimensionalcodeLocation());
-        tallyStandard.setStartandstopPoint(tallyStandardPostVO.getStartandstopPoint());
-        tallyStandard.setMaincontrolPoint(tallyStandardPostVO.getMaincontrolPoint());
-        tallyStandard.setAlarmType(tallyStandardPostVO.getAlarmType());
-        tallyStandard.setAlarmCeiling(tallyStandardPostVO.getAlarmCeiling());
-        tallyStandard.setAlarmLowerlimit(tallyStandardPostVO.getAlarmLowerlimit());
-        tallyStandard.setEmissivity(tallyStandardPostVO.getEmissivity());
-        tallyStandard.setUpperlimitMileage(tallyStandardPostVO.getUpperlimitMileage());
-        tallyStandard.setLowerlimitMileage(tallyStandardPostVO.getLowerlimitMileage());
-
-        tallyStandardService.addTallyStandard(tallyStandard);
-
-        //完成关系表更新路线标准
-        TallyRouteStandard tallyRouteStandard=new TallyRouteStandard();
-        tallyRouteStandard.setId(""+UUID.randomUUID()); //以后看具体标准
-        tallyRouteStandard.setStandardId(tallyStandard.getStandardId());
-        tallyRouteStandard.setRouteId(tallyStandard.getRouteId());
-
-        tallyStandardService.addTallyRouteStandard(tallyRouteStandard);
-
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("添加点检标准相关信息成功!");
-
-        return resultEntity;
-    }
-
-    @ApiOperation(value="所属路线匹配所属风电场和执行周期(添加点检标准时使用)", notes="选择所属路线后自动加载风电场和执行周期" ,httpMethod="GET")
-    @RequestMapping("standardRouterUser")
-    @ResponseBody
-    public ResultEntity standardRouterUser(String routeName) {
-        ResultEntity resultEntity=new ResultEntity();
-
-        WindIdCycleNameVO windIdCycleNameVO=new WindIdCycleNameVO();
-        windIdCycleNameVO.setWindId(tallyStandardService.findWindIdByRouteName(routeName));
-        windIdCycleNameVO.setCycleName(tallyStandardService.findCycleNameByRouteName(routeName));
-
-
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("匹配风电场和执行周期信息成功!");
-        resultEntity.setData(windIdCycleNameVO);
-        return resultEntity;
-    }
-
-
-    @ApiOperation(value="点检标准更新", notes="根据点检标准所需信息修改" ,httpMethod="PUT")
-    @RequestMapping("updateStandard")
-    @ResponseBody
-    public ResultEntity updateStandard(@RequestBody TallyStandardPostVO tallyStandardPostVO) {
-        ResultEntity resultEntity=new ResultEntity();
-
-        TallyStandard tallyStandard=new TallyStandard();
-        tallyStandard.setStandardId(tallyStandardService.findStandardIdByRouteName(tallyStandardPostVO.getRouteName()));//还是看具体要求吧。。。。
-
-        tallyStandard.setRouteId(tallyStandardService.findRouteIdByRouteName(tallyStandardPostVO.getRouteName()));
-        tallyStandard.setEquipmentId(tallyStandardService.findEquipmentIdByRouteName(tallyStandardPostVO.getRouteName()));
-        tallyStandard.setStandardCoding(tallyStandardPostVO.getStandardCoding());
-        tallyStandard.setEquipmentBelonging(tallyStandardPostVO.getEquipmentBelonging());
-        tallyStandard.setLocation(tallyStandardPostVO.getLocation());
-        tallyStandard.setCheckContent(tallyStandardPostVO.getCheckContent());
-        tallyStandard.setStandardType(tallyStandardPostVO.getStandardType());
-        tallyStandard.setDataType(tallyStandardPostVO.getDataType());
-        tallyStandard.setSignalType(tallyStandardPostVO.getSignalType());
-        tallyStandard.setCheckMethod(tallyStandardPostVO.getCheckMethod());
-        tallyStandard.setStandardJudgment(tallyStandardPostVO.getStandardJudgment());
-        tallyStandard.setResultOptions(tallyStandardPostVO.getResultOptions());
-        tallyStandard.setMeasurementUnit(tallyStandardPostVO.getMeasurementUnit());
-        tallyStandard.setTypicalValue(tallyStandardPostVO.getTypicalValue());
-        tallyStandard.setEquipmentState(tallyStandardPostVO.getEquipmentState());
-        tallyStandard.setTwodimensionalcodeLocation(tallyStandardPostVO.getTwodimensionalcodeLocation());
-        tallyStandard.setStartandstopPoint(tallyStandardPostVO.getStartandstopPoint());
-        tallyStandard.setMaincontrolPoint(tallyStandardPostVO.getMaincontrolPoint());
-        tallyStandard.setAlarmType(tallyStandardPostVO.getAlarmType());
-        tallyStandard.setAlarmCeiling(tallyStandardPostVO.getAlarmCeiling());
-        tallyStandard.setAlarmLowerlimit(tallyStandardPostVO.getAlarmLowerlimit());
-        tallyStandard.setEmissivity(tallyStandardPostVO.getEmissivity());
-        tallyStandard.setUpperlimitMileage(tallyStandardPostVO.getUpperlimitMileage());
-        tallyStandard.setLowerlimitMileage(tallyStandardPostVO.getLowerlimitMileage());
-
-        tallyStandardService.updateTallyStandard(tallyStandard);//更新
-
-        //完成关系表更新路线标准
-        TallyRouteStandard tallyRouteStandard=new TallyRouteStandard();
-        tallyRouteStandard.setId(tallyStandardService.findIdByRouteName(tallyStandardPostVO.getRouteName())); //以后看具体标准
-        tallyRouteStandard.setStandardId(tallyStandard.getStandardId());
-        tallyRouteStandard.setRouteId(tallyStandard.getRouteId());
-
-       // tallyStandardService.addTallyRouteStandard(tallyRouteStandard);
-        tallyStandardService.updateTallyRouteStandard(tallyRouteStandard);
-
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("更新点检标准相关信息成功!");
+        resultEntity.setMsg("更新点检路线相关信息成功!");
 
         return resultEntity;
     }
 
 
-    //todo 一堆下拉
+    @ApiOperation(value="人员匹配职务(0 是；1 不是)", notes="选定人员后判断是否有职务" ,httpMethod="GET")
+    @RequestMapping("isGanHuo")
+    @ResponseBody
+    public ResultEntity isGanHuo(String userName) {
+        ResultEntity resultEntity=new ResultEntity();
+
+        //tallyRouterService.findPostByUserName(userName);
+
+        resultEntity.setCode(ErrorCode.SUCCESS);
+        resultEntity.setMsg("匹配人员职务成功!");
+        resultEntity.setData(tallyRouterService.findPostByUserName(userName));
+        return resultEntity;
+    }
 
 
+    @ApiOperation(value="获取路线编码后匹配风电场,路线id等信息（新增修改相关）", notes="选定路线编码后根据路线编码匹配风电场等" ,httpMethod="GET")
+    @RequestMapping("routeCodeRelevant")
+    @ResponseBody
+    public ResultEntity routeCodeRelevant(String routeCode) {
+        ResultEntity resultEntity=new ResultEntity();
 
 
+        resultEntity.setCode(ErrorCode.SUCCESS);
+        resultEntity.setMsg("匹配风电场信息成功!");
+        resultEntity.setData(tallyRouterService.findRouteCodeRelevant(routeCode));
+        return resultEntity;
+    }
 
+    @ApiOperation(value="获取路线id和周期名称后匹配周期相关信息（新增修改相关，因为一个路线有多个周期）", notes="根据路线id和周期名称获取周期相关信息" ,httpMethod="GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "routeId", value = "路线ID", required = false),
+            @ApiImplicitParam(name = "cycleName", value = "周期名称", required = false),
+    })
+    @RequestMapping("cycleRelevant")
+    @ResponseBody
+    public ResultEntity cycleRelevant(String routeId,String cycleName) {
+        ResultEntity resultEntity=new ResultEntity();
+        CycleVO cycleVO=new CycleVO();
+
+        Cycle cycle=tallyRouterService.findCycleByCycleNameAndRouteId(routeId, cycleName);
+
+        List<PeriodTime> periodTimeList=tallyRouterService.findPeriodTimeByCycleId(cycle.getCycleId());
+
+        cycleVO.setBenchmarkDate(cycle.getBenchmarkDate());
+        cycleVO.setCycle(cycle.getCycle());
+        cycleVO.setCycleId(cycle.getCycleId());
+        cycleVO.setCycleName(cycle.getCycleName());
+        cycleVO.setCycleUnit(cycle.getCycleUnit());
+        cycleVO.setPeriodTimeList(periodTimeList);
+        cycleVO.setRouteId(cycle.getRouteId());
+
+        resultEntity.setCode(ErrorCode.SUCCESS);
+        resultEntity.setMsg("匹配周期和时间段信息成功!");
+        resultEntity.setData(cycleVO);
+        return resultEntity;
+    }
 }

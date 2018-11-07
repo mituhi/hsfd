@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.device.dao.OutputParametersMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.device.entity.OutputParameters" >
+    <id column="output_id" property="outputId" jdbcType="VARCHAR" />
+    <result column="equipment_asset_id" property="equipmentAssetId" jdbcType="VARCHAR" />
+    <result column="technical_id" property="technicalId" jdbcType="VARCHAR" />
+    <result column="technical_type" property="technicalType" jdbcType="VARCHAR" />
+    <result column="parameter_code" property="parameterCode" jdbcType="VARCHAR" />
+    <result column="parameter_name" property="parameterName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="number_value" property="numberValue" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="alphabet_value" property="alphabetValue" jdbcType="VARCHAR" />
+    <result column="important_grade" property="importantGrade" jdbcType="VARCHAR" />
+    <result column="real_point" property="realPoint" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    output_id, equipment_asset_id, technical_id, technical_type, parameter_code, parameter_name, 
+    type, number_value, company, alphabet_value, important_grade, real_point
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.OutputParametersExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from output_parameters
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from output_parameters
+    where output_id = #{outputId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from output_parameters
+    where output_id = #{outputId,jdbcType=VARCHAR}
+  </delete>
+   <delete id="deleteByPrimaryKeyList" parameterType="java.lang.String" >
+    delete from output_parameters
+   <where>
+    output_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  
+  <delete id="deleteByExample" parameterType="com.qz.zframe.device.entity.OutputParametersExample" >
+    delete from output_parameters
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.device.entity.OutputParameters" >
+    insert into output_parameters (output_id, equipment_asset_id, technical_id, 
+      technical_type, parameter_code, parameter_name, 
+      type, number_value, company, 
+      alphabet_value, important_grade, real_point
+      )
+    values (#{outputId,jdbcType=VARCHAR}, #{equipmentAssetId,jdbcType=VARCHAR}, #{technicalId,jdbcType=VARCHAR}, 
+      #{technicalType,jdbcType=VARCHAR}, #{parameterCode,jdbcType=VARCHAR}, #{parameterName,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR}, #{numberValue,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, 
+      #{alphabetValue,jdbcType=VARCHAR}, #{importantGrade,jdbcType=VARCHAR}, #{realPoint,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.OutputParameters" >
+    insert into output_parameters
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="outputId != null" >
+        output_id,
+      </if>
+      <if test="equipmentAssetId != null" >
+        equipment_asset_id,
+      </if>
+      <if test="technicalId != null" >
+        technical_id,
+      </if>
+      <if test="technicalType != null" >
+        technical_type,
+      </if>
+      <if test="parameterCode != null" >
+        parameter_code,
+      </if>
+      <if test="parameterName != null" >
+        parameter_name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="numberValue != null" >
+        number_value,
+      </if>
+      <if test="company != null" >
+        company,
+      </if>
+      <if test="alphabetValue != null" >
+        alphabet_value,
+      </if>
+      <if test="importantGrade != null" >
+        important_grade,
+      </if>
+      <if test="realPoint != null" >
+        real_point,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="outputId != null" >
+        #{outputId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentAssetId != null" >
+        #{equipmentAssetId,jdbcType=VARCHAR},
+      </if>
+      <if test="technicalId != null" >
+        #{technicalId,jdbcType=VARCHAR},
+      </if>
+      <if test="technicalType != null" >
+        #{technicalType,jdbcType=VARCHAR},
+      </if>
+      <if test="parameterCode != null" >
+        #{parameterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parameterName != null" >
+        #{parameterName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="numberValue != null" >
+        #{numberValue,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="alphabetValue != null" >
+        #{alphabetValue,jdbcType=VARCHAR},
+      </if>
+      <if test="importantGrade != null" >
+        #{importantGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="realPoint != null" >
+        #{realPoint,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.device.entity.OutputParametersExample" resultType="java.lang.Integer" >
+    select count(*) from output_parameters
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update output_parameters
+    <set >
+      <if test="record.outputId != null" >
+        output_id = #{record.outputId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentAssetId != null" >
+        equipment_asset_id = #{record.equipmentAssetId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.technicalId != null" >
+        technical_id = #{record.technicalId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.technicalType != null" >
+        technical_type = #{record.technicalType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parameterCode != null" >
+        parameter_code = #{record.parameterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parameterName != null" >
+        parameter_name = #{record.parameterName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.numberValue != null" >
+        number_value = #{record.numberValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.company != null" >
+        company = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.alphabetValue != null" >
+        alphabet_value = #{record.alphabetValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.importantGrade != null" >
+        important_grade = #{record.importantGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="record.realPoint != null" >
+        real_point = #{record.realPoint,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update output_parameters
+    set output_id = #{record.outputId,jdbcType=VARCHAR},
+      equipment_asset_id = #{record.equipmentAssetId,jdbcType=VARCHAR},
+      technical_id = #{record.technicalId,jdbcType=VARCHAR},
+      technical_type = #{record.technicalType,jdbcType=VARCHAR},
+      parameter_code = #{record.parameterCode,jdbcType=VARCHAR},
+      parameter_name = #{record.parameterName,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      number_value = #{record.numberValue,jdbcType=VARCHAR},
+      company = #{record.company,jdbcType=VARCHAR},
+      alphabet_value = #{record.alphabetValue,jdbcType=VARCHAR},
+      important_grade = #{record.importantGrade,jdbcType=VARCHAR},
+      real_point = #{record.realPoint,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.device.entity.OutputParameters" >
+    update output_parameters
+    <set >
+      <if test="equipmentAssetId != null" >
+        equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR},
+      </if>
+      <if test="technicalId != null" >
+        technical_id = #{technicalId,jdbcType=VARCHAR},
+      </if>
+      <if test="technicalType != null" >
+        technical_type = #{technicalType,jdbcType=VARCHAR},
+      </if>
+      <if test="parameterCode != null" >
+        parameter_code = #{parameterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parameterName != null" >
+        parameter_name = #{parameterName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="numberValue != null" >
+        number_value = #{numberValue,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="alphabetValue != null" >
+        alphabet_value = #{alphabetValue,jdbcType=VARCHAR},
+      </if>
+      <if test="importantGrade != null" >
+        important_grade = #{importantGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="realPoint != null" >
+        real_point = #{realPoint,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where output_id = #{outputId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.device.entity.OutputParameters" >
+    update output_parameters
+    set equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR},
+      technical_id = #{technicalId,jdbcType=VARCHAR},
+      technical_type = #{technicalType,jdbcType=VARCHAR},
+      parameter_code = #{parameterCode,jdbcType=VARCHAR},
+      parameter_name = #{parameterName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      number_value = #{numberValue,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      alphabet_value = #{alphabetValue,jdbcType=VARCHAR},
+      important_grade = #{importantGrade,jdbcType=VARCHAR},
+      real_point = #{realPoint,jdbcType=VARCHAR}
+    where output_id = #{outputId,jdbcType=VARCHAR}
+  </update>
+</mapper>

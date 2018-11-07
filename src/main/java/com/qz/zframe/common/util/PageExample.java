@@ -3,7 +3,7 @@ package com.qz.zframe.common.util;
 public class PageExample {
 	private int pageNo = 1;
 	private int pageSize = 10;
-	private int isPage = 0;
+	private int isPage = 1;
 
 	public void setPageNo(Integer pageNo) {
 		if (pageNo != null) {

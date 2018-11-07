@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tickets.mapper.StandardWorkTicketMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.StandardWorkTicket" >
+    <id column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="standard_ticket_name" property="standardTicketName" jdbcType="VARCHAR" />
+    <result column="ticket_type_id" property="ticketTypeId" jdbcType="VARCHAR" />
+    <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="equipment" property="equipment" jdbcType="VARCHAR" />
+    <result column="work_place" property="workPlace" jdbcType="VARCHAR" />
+    <result column="work_content" property="workContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    standard_ticket_id, serial_number, standard_ticket_name, ticket_type_id, ticket_type_name, 
+    status, maintainer, maintain_date, location, equipment, work_place, work_content
+  </sql>
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update standard_work_ticket set status = "0"
+    where standard_ticket_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.StandardWorkTicketExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from standard_work_ticket
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from standard_work_ticket
+    where standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from standard_work_ticket
+    where standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.tickets.entity.StandardWorkTicketExample" >
+    delete from standard_work_ticket
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.tickets.entity.StandardWorkTicket" >
+    insert into standard_work_ticket (standard_ticket_id, serial_number, standard_ticket_name, 
+      ticket_type_id, ticket_type_name, status, 
+      maintainer, maintain_date, location, 
+      equipment, work_place, work_content
+      )
+    values (#{standardTicketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{standardTicketName,jdbcType=VARCHAR}, 
+      #{ticketTypeId,jdbcType=VARCHAR}, #{ticketTypeName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, #{location,jdbcType=VARCHAR}, 
+      #{equipment,jdbcType=VARCHAR}, #{workPlace,jdbcType=VARCHAR}, #{workContent,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.StandardWorkTicket" >
+    insert into standard_work_ticket
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="standardTicketId != null" >
+        standard_ticket_id,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="standardTicketName != null" >
+        standard_ticket_name,
+      </if>
+      <if test="ticketTypeId != null" >
+        ticket_type_id,
+      </if>
+      <if test="ticketTypeName != null" >
+        ticket_type_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="equipment != null" >
+        equipment,
+      </if>
+      <if test="workPlace != null" >
+        work_place,
+      </if>
+      <if test="workContent != null" >
+        work_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="standardTicketId != null" >
+        #{standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="standardTicketName != null" >
+        #{standardTicketName,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeId != null" >
+        #{ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeName != null" >
+        #{ticketTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="workPlace != null" >
+        #{workPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="workContent != null" >
+        #{workContent,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.tickets.entity.StandardWorkTicketExample" resultType="java.lang.Integer" >
+    select count(*) from standard_work_ticket
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update standard_work_ticket
+    <set >
+      <if test="record.standardTicketId != null" >
+        standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standardTicketName != null" >
+        standard_ticket_name = #{record.standardTicketName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketTypeId != null" >
+        ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketTypeName != null" >
+        ticket_type_name = #{record.ticketTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainDate != null" >
+        maintain_date = #{record.maintainDate,jdbcType=DATE},
+      </if>
+      <if test="record.location != null" >
+        location = #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipment != null" >
+        equipment = #{record.equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workPlace != null" >
+        work_place = #{record.workPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workContent != null" >
+        work_content = #{record.workContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update standard_work_ticket
+    set standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      standard_ticket_name = #{record.standardTicketName,jdbcType=VARCHAR},
+      ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      ticket_type_name = #{record.ticketTypeName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      location = #{record.location,jdbcType=VARCHAR},
+      equipment = #{record.equipment,jdbcType=VARCHAR},
+      work_place = #{record.workPlace,jdbcType=VARCHAR},
+      work_content = #{record.workContent,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.tickets.entity.StandardWorkTicket" >
+    update standard_work_ticket
+    <set >
+      <if test="serialNumber != null" >
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="standardTicketName != null" >
+        standard_ticket_name = #{standardTicketName,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeId != null" >
+        ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeName != null" >
+        ticket_type_name = #{ticketTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date = #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        equipment = #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="workPlace != null" >
+        work_place = #{workPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="workContent != null" >
+        work_content = #{workContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.StandardWorkTicket" >
+    update standard_work_ticket
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      standard_ticket_name = #{standardTicketName,jdbcType=VARCHAR},
+      ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      ticket_type_name = #{ticketTypeName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_date = #{maintainDate,jdbcType=DATE},
+      location = #{location,jdbcType=VARCHAR},
+      equipment = #{equipment,jdbcType=VARCHAR},
+      work_place = #{workPlace,jdbcType=VARCHAR},
+      work_content = #{workContent,jdbcType=VARCHAR}
+    where standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR}
+  </update>
+</mapper>

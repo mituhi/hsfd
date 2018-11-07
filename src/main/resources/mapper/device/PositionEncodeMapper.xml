@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.device.dao.PositionEncodeMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.device.entity.PositionEncode" >
+    <id column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_code" property="positionCode" jdbcType="VARCHAR" />
+    <result column="position_name" property="positionName" jdbcType="VARCHAR" />
+    <result column="superior_position" property="superiorPosition" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="hierarchy" property="hierarchy" jdbcType="VARCHAR" />
+    <result column="crew" property="crew" jdbcType="VARCHAR" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+    <result column="cost_center" property="costCenter" jdbcType="VARCHAR" />
+    <result column="maintenance_team" property="maintenanceTeam" jdbcType="VARCHAR" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="is_toplevel" jdbcType="VARCHAR" property="isToplevel" />
+   
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    position_id, position_code, position_name, superior_position, wind_id, department, 
+    hierarchy, crew, company_code, cost_center, maintenance_team,is_toplevel,status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.PositionEncodeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from position_encode
+    <!-- <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if> -->
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from position_encode
+    where position_id = #{positionId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectStructure" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from equipment_classification
+     where is_toplevel=0
+  </select>
+  
+   <select id="selectStructureList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from equipment_classification
+     where  superior_position=#{superiorPosition,jdbcType=VARCHAR}
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from position_encode
+    where position_id = #{positionId,jdbcType=VARCHAR}
+  </delete>
+  
+   <delete id="deleteByPrimaryKeyList" parameterType="java.lang.String" >
+    delete from position_encode
+   <where>
+    position_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  
+  <delete id="deleteByExample" parameterType="com.qz.zframe.device.entity.PositionEncodeExample" >
+    delete from position_encode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.device.entity.PositionEncode" >
+    insert into position_encode (position_id, position_code, position_name, 
+      superior_position, wind_id, department, 
+      hierarchy, crew, company_code, 
+      cost_center, maintenance_team)
+    values (#{positionId,jdbcType=VARCHAR}, #{positionCode,jdbcType=VARCHAR}, #{positionName,jdbcType=VARCHAR}, 
+      #{superiorPosition,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{hierarchy,jdbcType=VARCHAR}, #{crew,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, 
+      #{costCenter,jdbcType=VARCHAR}, #{maintenanceTeam,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.PositionEncode" >
+    insert into position_encode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="positionId != null" >
+        position_id,
+      </if>
+      <if test="positionCode != null" >
+        position_code,
+      </if>
+      <if test="positionName != null" >
+        position_name,
+      </if>
+      <if test="superiorPosition != null" >
+        superior_position,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="department != null" >
+        department,
+      </if>
+      <if test="hierarchy != null" >
+        hierarchy,
+      </if>
+      <if test="crew != null" >
+        crew,
+      </if>
+      <if test="companyCode != null" >
+        company_code,
+      </if>
+      <if test="costCenter != null" >
+        cost_center,
+      </if>
+      <if test="maintenanceTeam != null" >
+        maintenance_team,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="positionId != null" >
+        #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionCode != null" >
+        #{positionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="positionName != null" >
+        #{positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorPosition != null" >
+        #{superiorPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="hierarchy != null" >
+        #{hierarchy,jdbcType=VARCHAR},
+      </if>
+      <if test="crew != null" >
+        #{crew,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="costCenter != null" >
+        #{costCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="maintenanceTeam != null" >
+        #{maintenanceTeam,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.device.entity.PositionEncodeExample" resultType="java.lang.Integer" >
+    select count(*) from position_encode
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update position_encode
+    <set >
+      <if test="record.positionId != null" >
+        position_id = #{record.positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionCode != null" >
+        position_code = #{record.positionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionName != null" >
+        position_name = #{record.positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.superiorPosition != null" >
+        superior_position = #{record.superiorPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.department != null" >
+        department = #{record.department,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hierarchy != null" >
+        hierarchy = #{record.hierarchy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crew != null" >
+        crew = #{record.crew,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyCode != null" >
+        company_code = #{record.companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.costCenter != null" >
+        cost_center = #{record.costCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintenanceTeam != null" >
+        maintenance_team = #{record.maintenanceTeam,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update position_encode
+    set position_id = #{record.positionId,jdbcType=VARCHAR},
+      position_code = #{record.positionCode,jdbcType=VARCHAR},
+      position_name = #{record.positionName,jdbcType=VARCHAR},
+      superior_position = #{record.superiorPosition,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      department = #{record.department,jdbcType=VARCHAR},
+      hierarchy = #{record.hierarchy,jdbcType=VARCHAR},
+      crew = #{record.crew,jdbcType=VARCHAR},
+      company_code = #{record.companyCode,jdbcType=VARCHAR},
+      cost_center = #{record.costCenter,jdbcType=VARCHAR},
+      maintenance_team = #{record.maintenanceTeam,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.device.entity.PositionEncode" >
+    update position_encode
+    <set >
+      <if test="positionCode != null" >
+        position_code = #{positionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="positionName != null" >
+        position_name = #{positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorPosition != null" >
+        superior_position = #{superiorPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="hierarchy != null" >
+        hierarchy = #{hierarchy,jdbcType=VARCHAR},
+      </if>
+      <if test="crew != null" >
+        crew = #{crew,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="costCenter != null" >
+        cost_center = #{costCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="maintenanceTeam != null" >
+        maintenance_team = #{maintenanceTeam,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where position_id = #{positionId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.device.entity.PositionEncode" >
+    update position_encode
+    set position_code = #{positionCode,jdbcType=VARCHAR},
+      position_name = #{positionName,jdbcType=VARCHAR},
+      superior_position = #{superiorPosition,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      hierarchy = #{hierarchy,jdbcType=VARCHAR},
+      crew = #{crew,jdbcType=VARCHAR},
+      company_code = #{companyCode,jdbcType=VARCHAR},
+      cost_center = #{costCenter,jdbcType=VARCHAR},
+      maintenance_team = #{maintenanceTeam,jdbcType=VARCHAR}
+    where position_id = #{positionId,jdbcType=VARCHAR}
+  </update>
+</mapper>

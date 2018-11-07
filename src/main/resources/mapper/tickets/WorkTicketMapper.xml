@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tickets.mapper.WorkTicketMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.WorkTicket" >
+    <id column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="ticket_type_id" property="ticketTypeId" jdbcType="VARCHAR" />
+    <result column="ticket_code" property="ticketCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="flow_status" property="flowStatus" jdbcType="VARCHAR" />
+    <result column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+    <result column="departments" property="departments" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="work_team" property="workTeam" jdbcType="VARCHAR" />
+    <result column="work_head" property="workHead" jdbcType="VARCHAR" />
+    <result column="safety_officer" property="safetyOfficer" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="equipment" property="equipment" jdbcType="VARCHAR" />
+    <result column="machine_set" property="machineSet" jdbcType="VARCHAR" />
+    <result column="work_member" property="workMember" jdbcType="VARCHAR" />
+    <result column="member_num" property="memberNum" jdbcType="INTEGER" />
+    <result column="work_unit" property="workUnit" jdbcType="VARCHAR" />
+    <result column="other_unit_member" property="otherUnitMember" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="work_place" property="workPlace" jdbcType="VARCHAR" />
+    <result column="work_content" property="workContent" jdbcType="VARCHAR" />
+    <result column="work_condition" property="workCondition" jdbcType="VARCHAR" />
+    <result column="security_measure" property="securityMeasure" jdbcType="VARCHAR" />
+    <result column="sup_security_measure" property="supSecurityMeasure" jdbcType="VARCHAR" />
+    <result column="measure_ids" property="measureIds" jdbcType="VARCHAR" />
+    <result column="signer" property="signer" jdbcType="VARCHAR" />
+    <result column="sign_time" property="signTime" jdbcType="TIMESTAMP" />
+    <result column="license_start_time" property="licenseStartTime" jdbcType="TIMESTAMP" />
+    <result column="license_end_time" property="licenseEndTime" jdbcType="TIMESTAMP" />
+    <result column="licensor" property="licensor" jdbcType="VARCHAR" />
+    <result column="work_end_time" property="workEndTime" jdbcType="TIMESTAMP" />
+    <result column="opinion" property="opinion" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ticket_id, serial_number, ticket_type_id, ticket_code, status, flow_status, standard_ticket_id, 
+    wind_id, company_id, departments, applicant, apply_time, work_team, work_head, safety_officer, 
+    location, equipment, machine_set, work_member, member_num, work_unit, other_unit_member, 
+    start_time, end_time, work_place, work_content, work_condition, security_measure, 
+    sup_security_measure, measure_ids, signer, sign_time, license_start_time, license_end_time, 
+    licensor, work_end_time, opinion
+  </sql>
+
+  <resultMap id="WorkTicketStatisticsMap" type="com.qz.zframe.tickets.vo.TicketStatisticsRes">
+    <id column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="apply_count" property="applyCount" jdbcType="VARCHAR" />
+    <result column="in_process_count" property="inProcessCount" jdbcType="VARCHAR" />
+    <result column="complete_count" property="completeCount" jdbcType="VARCHAR" />
+    <result column="invalid_count" property="invalidCount" jdbcType="VARCHAR" />
+    <result column="complete_rate" property="completeRate" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="getWorkTicketStatisticsList" resultMap="WorkTicketStatisticsMap">
+    select a.*,(a.complete_count/a.apply_count) as 'complete_rate'
+    from (select wind_id,count(*) as 'apply_count',
+              sum(IF(status = '1', 1, 0)) as 'in_process_count',
+              sum(IF(status = '2', 1, 0)) as 'complete_count',
+              sum(IF(status = '0', 1, 0)) as 'invalid_count'
+              from work_ticket
+              where 1=1
+                <if test="startTime != null">
+                  and apply_time &gt;= #{startTime}
+                </if>
+                <if test="endTime != null">
+                  and apply_time &lt;= #{endTime}
+                </if>
+              group by wind_id) as a;
+  </select>
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update work_ticket set status = "0"
+    where ticket_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+
+  <select id="getWorkTicketListByPageAndCondition" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from work_ticket
+    where 1=1
+    <if test="map.windId != null">
+      and wind_id = #{map.windId}
+    </if>
+    <if test="map.ticketTypeId != null">
+      and ticket_type_id = #{map.ticketTypeId}
+    </if>
+    <if test="map.status != null">
+      and status = #{map.status}
+    </if>
+    <if test="map.machineSet != null">
+      and machine_set = #{map.machineSet}
+    </if>
+    <if test="map.workContent != null">
+      and work_content like '%${map.workContent}%'
+    </if>
+    <if test="map.startTime != null">
+      and apply_time &gt;= #{map.startTime}
+    </if>
+    <if test="map.endTime != null">
+      and apply_time &lt;= #{map.endTime}
+    </if>
+    order by ticket_code desc
+    limit ${map.start},${map.pageSize}
+  </select>
+
+  <select id="getTotalCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from work_ticket
+    where 1=1
+    <if test="map.windId != null">
+      and wind_id = #{map.windId}
+    </if>
+    <if test="map.ticketTypeId != null">
+      and ticket_type_id = #{map.ticketTypeId}
+    </if>
+    <if test="map.status != null">
+      and status = #{map.status}
+    </if>
+    <if test="map.machineSet != null">
+      and machine_set = #{map.machineSet}
+    </if>
+    <if test="map.workContent != null">
+      and work_content like '%${map.workContent}%'
+    </if>
+    <if test="map.applyStartTime != null">
+      and apply_time &gt;= #{map.applyStartTime}
+    </if>
+    <if test="map.applyEndTime != null">
+      and apply_time &lt;= #{map.applyEndTime}
+    </if>
+  </select>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.WorkTicketExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from work_ticket
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_ticket
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from work_ticket
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.tickets.entity.WorkTicketExample" >
+    delete from work_ticket
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.tickets.entity.WorkTicket" >
+    insert into work_ticket (ticket_id, serial_number, ticket_type_id, 
+      ticket_code, status, flow_status, 
+      standard_ticket_id, wind_id, company_id, 
+      departments, applicant, apply_time, 
+      work_team, work_head, safety_officer, 
+      location, equipment, machine_set, 
+      work_member, member_num, work_unit, 
+      other_unit_member, start_time, end_time, 
+      work_place, work_content, work_condition, 
+      security_measure, sup_security_measure, measure_ids, 
+      signer, sign_time, license_start_time, 
+      license_end_time, licensor, work_end_time, 
+      opinion)
+    values (#{ticketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{ticketTypeId,jdbcType=VARCHAR}, 
+      #{ticketCode,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{flowStatus,jdbcType=VARCHAR}, 
+      #{standardTicketId,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
+      #{departments,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
+      #{workTeam,jdbcType=VARCHAR}, #{workHead,jdbcType=VARCHAR}, #{safetyOfficer,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR}, #{equipment,jdbcType=VARCHAR}, #{machineSet,jdbcType=VARCHAR}, 
+      #{workMember,jdbcType=VARCHAR}, #{memberNum,jdbcType=INTEGER}, #{workUnit,jdbcType=VARCHAR}, 
+      #{otherUnitMember,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{workPlace,jdbcType=VARCHAR}, #{workContent,jdbcType=VARCHAR}, #{workCondition,jdbcType=VARCHAR}, 
+      #{securityMeasure,jdbcType=VARCHAR}, #{supSecurityMeasure,jdbcType=VARCHAR}, #{measureIds,jdbcType=VARCHAR}, 
+      #{signer,jdbcType=VARCHAR}, #{signTime,jdbcType=TIMESTAMP}, #{licenseStartTime,jdbcType=TIMESTAMP}, 
+      #{licenseEndTime,jdbcType=TIMESTAMP}, #{licensor,jdbcType=VARCHAR}, #{workEndTime,jdbcType=TIMESTAMP}, 
+      #{opinion,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.WorkTicket" >
+    insert into work_ticket
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ticketId != null" >
+        ticket_id,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="ticketTypeId != null" >
+        ticket_type_id,
+      </if>
+      <if test="ticketCode != null" >
+        ticket_code,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="flowStatus != null" >
+        flow_status,
+      </if>
+      <if test="standardTicketId != null" >
+        standard_ticket_id,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="departments != null" >
+        departments,
+      </if>
+      <if test="applicant != null" >
+        applicant,
+      </if>
+      <if test="applyTime != null" >
+        apply_time,
+      </if>
+      <if test="workTeam != null" >
+        work_team,
+      </if>
+      <if test="workHead != null" >
+        work_head,
+      </if>
+      <if test="safetyOfficer != null" >
+        safety_officer,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="equipment != null" >
+        equipment,
+      </if>
+      <if test="machineSet != null" >
+        machine_set,
+      </if>
+      <if test="workMember != null" >
+        work_member,
+      </if>
+      <if test="memberNum != null" >
+        member_num,
+      </if>
+      <if test="workUnit != null" >
+        work_unit,
+      </if>
+      <if test="otherUnitMember != null" >
+        other_unit_member,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="workPlace != null" >
+        work_place,
+      </if>
+      <if test="workContent != null" >
+        work_content,
+      </if>
+      <if test="workCondition != null" >
+        work_condition,
+      </if>
+      <if test="securityMeasure != null" >
+        security_measure,
+      </if>
+      <if test="supSecurityMeasure != null" >
+        sup_security_measure,
+      </if>
+      <if test="measureIds != null" >
+        measure_ids,
+      </if>
+      <if test="signer != null" >
+        signer,
+      </if>
+      <if test="signTime != null" >
+        sign_time,
+      </if>
+      <if test="licenseStartTime != null" >
+        license_start_time,
+      </if>
+      <if test="licenseEndTime != null" >
+        license_end_time,
+      </if>
+      <if test="licensor != null" >
+        licensor,
+      </if>
+      <if test="workEndTime != null" >
+        work_end_time,
+      </if>
+      <if test="opinion != null" >
+        opinion,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ticketId != null" >
+        #{ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeId != null" >
+        #{ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketCode != null" >
+        #{ticketCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStatus != null" >
+        #{flowStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standardTicketId != null" >
+        #{standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="departments != null" >
+        #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workTeam != null" >
+        #{workTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="workHead != null" >
+        #{workHead,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyOfficer != null" >
+        #{safetyOfficer,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="machineSet != null" >
+        #{machineSet,jdbcType=VARCHAR},
+      </if>
+      <if test="workMember != null" >
+        #{workMember,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNum != null" >
+        #{memberNum,jdbcType=INTEGER},
+      </if>
+      <if test="workUnit != null" >
+        #{workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="otherUnitMember != null" >
+        #{otherUnitMember,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workPlace != null" >
+        #{workPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="workContent != null" >
+        #{workContent,jdbcType=VARCHAR},
+      </if>
+      <if test="workCondition != null" >
+        #{workCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="securityMeasure != null" >
+        #{securityMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="supSecurityMeasure != null" >
+        #{supSecurityMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="measureIds != null" >
+        #{measureIds,jdbcType=VARCHAR},
+      </if>
+      <if test="signer != null" >
+        #{signer,jdbcType=VARCHAR},
+      </if>
+      <if test="signTime != null" >
+        #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licenseStartTime != null" >
+        #{licenseStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licenseEndTime != null" >
+        #{licenseEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licensor != null" >
+        #{licensor,jdbcType=VARCHAR},
+      </if>
+      <if test="workEndTime != null" >
+        #{workEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opinion != null" >
+        #{opinion,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.tickets.entity.WorkTicketExample" resultType="java.lang.Integer" >
+    select count(*) from work_ticket
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update work_ticket
+    <set >
+      <if test="record.ticketId != null" >
+        ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketTypeId != null" >
+        ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketCode != null" >
+        ticket_code = #{record.ticketCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flowStatus != null" >
+        flow_status = #{record.flowStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standardTicketId != null" >
+        standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null" >
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departments != null" >
+        departments = #{record.departments,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicant != null" >
+        applicant = #{record.applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applyTime != null" >
+        apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.workTeam != null" >
+        work_team = #{record.workTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workHead != null" >
+        work_head = #{record.workHead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safetyOfficer != null" >
+        safety_officer = #{record.safetyOfficer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.location != null" >
+        location = #{record.location,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipment != null" >
+        equipment = #{record.equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.machineSet != null" >
+        machine_set = #{record.machineSet,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workMember != null" >
+        work_member = #{record.workMember,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberNum != null" >
+        member_num = #{record.memberNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.workUnit != null" >
+        work_unit = #{record.workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.otherUnitMember != null" >
+        other_unit_member = #{record.otherUnitMember,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null" >
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.workPlace != null" >
+        work_place = #{record.workPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workContent != null" >
+        work_content = #{record.workContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workCondition != null" >
+        work_condition = #{record.workCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.securityMeasure != null" >
+        security_measure = #{record.securityMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supSecurityMeasure != null" >
+        sup_security_measure = #{record.supSecurityMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="record.measureIds != null" >
+        measure_ids = #{record.measureIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signer != null" >
+        signer = #{record.signer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signTime != null" >
+        sign_time = #{record.signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.licenseStartTime != null" >
+        license_start_time = #{record.licenseStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.licenseEndTime != null" >
+        license_end_time = #{record.licenseEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.licensor != null" >
+        licensor = #{record.licensor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workEndTime != null" >
+        work_end_time = #{record.workEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.opinion != null" >
+        opinion = #{record.opinion,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update work_ticket
+    set ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      ticket_code = #{record.ticketCode,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      flow_status = #{record.flowStatus,jdbcType=VARCHAR},
+      standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      company_id = #{record.companyId,jdbcType=VARCHAR},
+      departments = #{record.departments,jdbcType=VARCHAR},
+      applicant = #{record.applicant,jdbcType=VARCHAR},
+      apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+      work_team = #{record.workTeam,jdbcType=VARCHAR},
+      work_head = #{record.workHead,jdbcType=VARCHAR},
+      safety_officer = #{record.safetyOfficer,jdbcType=VARCHAR},
+      location = #{record.location,jdbcType=VARCHAR},
+      equipment = #{record.equipment,jdbcType=VARCHAR},
+      machine_set = #{record.machineSet,jdbcType=VARCHAR},
+      work_member = #{record.workMember,jdbcType=VARCHAR},
+      member_num = #{record.memberNum,jdbcType=INTEGER},
+      work_unit = #{record.workUnit,jdbcType=VARCHAR},
+      other_unit_member = #{record.otherUnitMember,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      work_place = #{record.workPlace,jdbcType=VARCHAR},
+      work_content = #{record.workContent,jdbcType=VARCHAR},
+      work_condition = #{record.workCondition,jdbcType=VARCHAR},
+      security_measure = #{record.securityMeasure,jdbcType=VARCHAR},
+      sup_security_measure = #{record.supSecurityMeasure,jdbcType=VARCHAR},
+      measure_ids = #{record.measureIds,jdbcType=VARCHAR},
+      signer = #{record.signer,jdbcType=VARCHAR},
+      sign_time = #{record.signTime,jdbcType=TIMESTAMP},
+      license_start_time = #{record.licenseStartTime,jdbcType=TIMESTAMP},
+      license_end_time = #{record.licenseEndTime,jdbcType=TIMESTAMP},
+      licensor = #{record.licensor,jdbcType=VARCHAR},
+      work_end_time = #{record.workEndTime,jdbcType=TIMESTAMP},
+      opinion = #{record.opinion,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.tickets.entity.WorkTicket" >
+    update work_ticket
+    <set >
+      <if test="serialNumber != null" >
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeId != null" >
+        ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketCode != null" >
+        ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStatus != null" >
+        flow_status = #{flowStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standardTicketId != null" >
+        standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="departments != null" >
+        departments = #{departments,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        applicant = #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workTeam != null" >
+        work_team = #{workTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="workHead != null" >
+        work_head = #{workHead,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyOfficer != null" >
+        safety_officer = #{safetyOfficer,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        equipment = #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="machineSet != null" >
+        machine_set = #{machineSet,jdbcType=VARCHAR},
+      </if>
+      <if test="workMember != null" >
+        work_member = #{workMember,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNum != null" >
+        member_num = #{memberNum,jdbcType=INTEGER},
+      </if>
+      <if test="workUnit != null" >
+        work_unit = #{workUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="otherUnitMember != null" >
+        other_unit_member = #{otherUnitMember,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workPlace != null" >
+        work_place = #{workPlace,jdbcType=VARCHAR},
+      </if>
+      <if test="workContent != null" >
+        work_content = #{workContent,jdbcType=VARCHAR},
+      </if>
+      <if test="workCondition != null" >
+        work_condition = #{workCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="securityMeasure != null" >
+        security_measure = #{securityMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="supSecurityMeasure != null" >
+        sup_security_measure = #{supSecurityMeasure,jdbcType=VARCHAR},
+      </if>
+      <if test="measureIds != null" >
+        measure_ids = #{measureIds,jdbcType=VARCHAR},
+      </if>
+      <if test="signer != null" >
+        signer = #{signer,jdbcType=VARCHAR},
+      </if>
+      <if test="signTime != null" >
+        sign_time = #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licenseStartTime != null" >
+        license_start_time = #{licenseStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licenseEndTime != null" >
+        license_end_time = #{licenseEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="licensor != null" >
+        licensor = #{licensor,jdbcType=VARCHAR},
+      </if>
+      <if test="workEndTime != null" >
+        work_end_time = #{workEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opinion != null" >
+        opinion = #{opinion,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.WorkTicket" >
+    update work_ticket
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      flow_status = #{flowStatus,jdbcType=VARCHAR},
+      standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=VARCHAR},
+      departments = #{departments,jdbcType=VARCHAR},
+      applicant = #{applicant,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      work_team = #{workTeam,jdbcType=VARCHAR},
+      work_head = #{workHead,jdbcType=VARCHAR},
+      safety_officer = #{safetyOfficer,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      equipment = #{equipment,jdbcType=VARCHAR},
+      machine_set = #{machineSet,jdbcType=VARCHAR},
+      work_member = #{workMember,jdbcType=VARCHAR},
+      member_num = #{memberNum,jdbcType=INTEGER},
+      work_unit = #{workUnit,jdbcType=VARCHAR},
+      other_unit_member = #{otherUnitMember,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      work_place = #{workPlace,jdbcType=VARCHAR},
+      work_content = #{workContent,jdbcType=VARCHAR},
+      work_condition = #{workCondition,jdbcType=VARCHAR},
+      security_measure = #{securityMeasure,jdbcType=VARCHAR},
+      sup_security_measure = #{supSecurityMeasure,jdbcType=VARCHAR},
+      measure_ids = #{measureIds,jdbcType=VARCHAR},
+      signer = #{signer,jdbcType=VARCHAR},
+      sign_time = #{signTime,jdbcType=TIMESTAMP},
+      license_start_time = #{licenseStartTime,jdbcType=TIMESTAMP},
+      license_end_time = #{licenseEndTime,jdbcType=TIMESTAMP},
+      licensor = #{licensor,jdbcType=VARCHAR},
+      work_end_time = #{workEndTime,jdbcType=TIMESTAMP},
+      opinion = #{opinion,jdbcType=VARCHAR}
+    where ticket_id = #{ticketId,jdbcType=VARCHAR}
+  </update>
+</mapper>

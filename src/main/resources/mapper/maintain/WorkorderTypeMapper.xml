@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.WorkorderTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.WorkorderType" >
+    <id column="workorder_type_id" property="workorderTypeId" jdbcType="VARCHAR" />
+    <result column="workorder_type_code" property="workorderTypeCode" jdbcType="VARCHAR" />
+    <result column="workorder_type_name" property="workorderTypeName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    workorder_type_id, workorder_type_code, workorder_type_name, status, maintainer, 
+    maintain_date, remark
+  </sql>
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update workorder_type set status = "0"
+    where workorder_type_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderTypeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from workorder_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from workorder_type
+    where workorder_type_id = #{workorderTypeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from workorder_type
+    where workorder_type_id = #{workorderTypeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderTypeExample" >
+    delete from workorder_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderType" >
+    insert into workorder_type (workorder_type_id, workorder_type_code, 
+      workorder_type_name, status, maintainer, 
+      maintain_date, remark)
+    values (#{workorderTypeId,jdbcType=VARCHAR}, #{workorderTypeCode,jdbcType=VARCHAR}, 
+      #{workorderTypeName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, 
+      #{maintainDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderType" >
+    insert into workorder_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="workorderTypeId != null" >
+        workorder_type_id,
+      </if>
+      <if test="workorderTypeCode != null" >
+        workorder_type_code,
+      </if>
+      <if test="workorderTypeName != null" >
+        workorder_type_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="workorderTypeId != null" >
+        #{workorderTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderTypeCode != null" >
+        #{workorderTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderTypeName != null" >
+        #{workorderTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderTypeExample" resultType="java.lang.Integer" >
+    select count(*) from workorder_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update workorder_type
+    <set >
+      <if test="record.workorderTypeId != null" >
+        workorder_type_id = #{record.workorderTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderTypeCode != null" >
+        workorder_type_code = #{record.workorderTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderTypeName != null" >
+        workorder_type_name = #{record.workorderTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainDate != null" >
+        maintain_date = #{record.maintainDate,jdbcType=DATE},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update workorder_type
+    set workorder_type_id = #{record.workorderTypeId,jdbcType=VARCHAR},
+      workorder_type_code = #{record.workorderTypeCode,jdbcType=VARCHAR},
+      workorder_type_name = #{record.workorderTypeName,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderType" >
+    update workorder_type
+    <set >
+      <if test="workorderTypeCode != null" >
+        workorder_type_code = #{workorderTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderTypeName != null" >
+        workorder_type_name = #{workorderTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date = #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where workorder_type_id = #{workorderTypeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.WorkorderType" >
+    update workorder_type
+    set workorder_type_code = #{workorderTypeCode,jdbcType=VARCHAR},
+      workorder_type_name = #{workorderTypeName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_date = #{maintainDate,jdbcType=DATE},
+      remark = #{remark,jdbcType=VARCHAR}
+    where workorder_type_id = #{workorderTypeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

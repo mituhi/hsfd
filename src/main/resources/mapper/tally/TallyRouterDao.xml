@@ -12,9 +12,47 @@
         <result column="maintenance_time" property="maintenanceTime" />
         <result column="serial_num" property="serialNum" />
     </resultMap>
+    <resultMap id="BaseResultMap2" type="com.qz.zframe.tally.dto.TallyRouterDto" >
+        <id column="route_id" property="routeId" />
+        <result column="route_name" property="routeName" />
+        <result column="route_code" property="routeCode"/>
+        <result column="wind_id" property="windId" />
+        <result column="cycle_name" property="cycleName"  />
+    </resultMap>
+    <resultMap id="BaseResultMap3" type="com.qz.zframe.tally.vo.TallyPlanVO" >
+        <result column="route_name" property="routeName" />
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime" />
+        <result column="maintenancer" property="maintenancer"  />
+    </resultMap>
+    <resultMap id="BaseResultMap4" type="com.qz.zframe.tally.dto.PostDto" >
+        <result column="is_practitioners" property="isPractitioners" />
+        <result column="is_managers" property="isManagers"/>
+        <result column="is_head" property="isHead" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap5" type="com.qz.zframe.tally.entity.Cycle" >
+        <result column="cycle_id" property="cycleId" />
+        <result column="route_id" property="routeId"/>
+        <result column="cycle_name" property="cycleName" />
+        <result column="cycle_unit" property="cycleUnit" />
+        <result column="benchmark_date" property="benchmarkDate"/>
+        <result column="cycle" property="cycle" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap6" type="com.qz.zframe.tally.entity.PeriodTime" >
+        <result column="period_time_id" property="periodTimeId" />
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime" />
+    </resultMap>
+
     <sql id="Base_Column_List" >
-        route_id,route_name, route_code, wind_id, mandatory_order,remark,maintenancer,maintenance_time,serial_num
+        tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id, tally_route.mandatory_order,tally_route.remark,tally_route.maintenancer,tally_route.maintenance_time,tally_route.serial_num
     </sql>
+    <sql id="Base_Column_List2" >
+        tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id,cycle.cycle_name
+    </sql>
+
     <select id="findAllTallyRouter" resultMap="BaseResultMap" >
         select
         <include refid="Base_Column_List" />
@@ -37,7 +75,7 @@
         from tally_route
     </select>
 
-    <select id="findCycleNameByRouteId" resultType="string" parameterType="string">
+    <select id="findCycleNameByRouteId" resultType="string" >
         select
         cycle_name
         from cycle
@@ -217,6 +255,124 @@
         select
         org_name
         from isc_org
+    </select>
+
+    <select id="findTallyRouteByPlan" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from tally_route,cycle,period_time,cycle_period_time
+        WHERE 1=1
+        <if test="windId !=null">
+            and tally_route.wind_id=#{windId}
+        </if>
+        <if test="maintenancer !=null">
+            and tally_route.maintenancer=#{maintenancer}
+        </if>
+        <if test="routeName !=null">
+            and tally_route.route_name like "%"#{routeName}"%"
+        </if>
+        <if test="startTime !=null">
+            and period_time.start_time like "%"#{startTime}"%" and period_time.period_time_id=cycle_period_time.period_time_id and cycle_period_time.cycle_id=cycle.cycle_id and cycle.route_id=tally_route.route_id
+        </if>
+        <if test="endTime !=null">
+            and period_time.end_time like "%"#{endTime}"%" and period_time.period_time_id=cycle_period_time.period_time_id and cycle_period_time.cycle_id=cycle.cycle_id and cycle.route_id=tally_route.route_id
+        </if>
+    </select>
+
+    <select id="findAllTallyRouterDto"  resultMap="BaseResultMap2">
+        select
+        tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id,cycle.cycle_name
+        from tally_route,cycle
+        WHERE 1=1
+        <if test="windId !=null">
+            and wind_id=#{windId}
+        </if>
+        <if test="routeCode !=null">
+            and route_code=#{routeCode}
+        </if>
+        <if test="routeName !=null">
+            and route_name like "%"#{routeName}"%"
+        </if>
+        and cycle.route_id=tally_route.route_id
+    </select>
+
+    <select id="findTallyPlanVOByPlan" resultMap="BaseResultMap3" >
+        select
+        tally_route.route_name,tally_route.maintenancer,period_time.start_time,period_time.end_time
+        from tally_route,cycle,period_time,cycle_period_time
+        WHERE 1=1
+        <if test="windId !=null">
+            and tally_route.wind_id=#{windId}
+        </if>
+        <if test="maintenancer !=null">
+            and tally_route.maintenancer=#{maintenancer}
+        </if>
+        <if test="routeName !=null">
+            and tally_route.route_name like "%"#{routeName}"%"
+        </if>
+        <if test="startTime !=null">
+            and period_time.start_time like "%"#{startTime}"%"
+        </if>
+        <if test="endTime !=null">
+            and period_time.end_time like "%"#{endTime}"%"
+        </if>
+        and period_time.period_time_id=cycle_period_time.period_time_id and cycle_period_time.cycle_id=cycle.cycle_id and cycle.route_id=tally_route.route_id
+    </select>
+
+    <select id="findAllRouteCode" resultType="string">
+            SELECT route_code
+            FROM tally_route
+    </select>
+
+    <select id="findWindIdByRouteCode" resultType="string" parameterType="string">
+        SELECT wind_id
+        FROM tally_route
+        WHERE route_code=#{routeCode}
+    </select>
+
+    <select id="countTallyRoute" resultType="int">
+        select
+        COUNT(*)
+        from tally_route,cycle
+        WHERE 1=1
+        <if test="windId !=null">
+            and wind_id=#{windId}
+        </if>
+        <if test="routeCode !=null">
+            and route_code=#{routeCode}
+        </if>
+        <if test="routeName !=null">
+            and route_name like "%"#{routeName}"%"
+        </if>
+        and cycle.route_id=tally_route.route_id
+    </select>
+
+    <select id="findPostByUserName" parameterType="string" resultMap="BaseResultMap4">
+        SELECT
+        is_practitioners,is_managers,is_head
+        FROM route_user,isc_user
+        WHERE user_name=#{userName} and isc_user.user_id=route_user.user_id
+    </select>
+
+    <select id="findRouteCodeRelevant" parameterType="string" resultMap="BaseResultMap">
+            SELECT
+            tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id, tally_route.mandatory_order,tally_route.remark,tally_route.maintenancer,tally_route.maintenance_time,tally_route.serial_num
+            FROM tally_route
+            WHERE route_code=#{routeCode}
+    </select>
+
+    <select id="findCycleByCycleNameAndRouteId" resultMap="BaseResultMap5">
+            SELECT
+            *
+            FROM cycle
+            WHERE cycle_name=#{cycleName} and route_id=#{routeId}
+    </select>
+
+    <select id="findPeriodTimeByCycleId" parameterType="string" resultMap="BaseResultMap6">
+        SELECT
+        period_time.*
+        FROM period_time,cycle_period_time
+        WHERE cycle_period_time.period_time_id=period_time.period_time_id and cycle_period_time.cycle_id=#{cycleId}
     </select>
 
 

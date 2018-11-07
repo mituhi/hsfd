@@ -1,12 +1,20 @@
 package com.qz.zframe.common.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class DataDictType {
 	
+	@ApiModelProperty(value="ID",name="id",required=false)
 	private String id;
+	@ApiModelProperty(value="分类编码",name="name",required=true)
 	private String name;
+	@ApiModelProperty(value="分类名称",name="title",required=true)
 	private String title;
+	@ApiModelProperty(value="分类描述",name="description",required=false)
 	private String description;
+	@ApiModelProperty(value="父id",name="parentId",required=false)
 	private String parentId;
+	@ApiModelProperty(value="显示顺序",name="dispOrder",required=false)
 	private String dispOrder;
 	public String getId() {
 		return id;

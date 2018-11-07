@@ -1,14 +1,22 @@
 package com.qz.zframe.run.entity;
 
-public class ValueTime {
-    private String valueId;
+import io.swagger.annotations.ApiModelProperty;
 
+public class ValueTime {
+	
+	@ApiModelProperty(value="值次id",name="valueId",required=true)
+    private String valueId;
+    
+    @ApiModelProperty(value="值次编码",name="valueCode",required=true)
     private String valueCode;
 
+    @ApiModelProperty(value="值次名称",name="valueName",required=true)
     private String valueName;
 
+    @ApiModelProperty(value="值次状态",name="status",required=true)
     private String status;
 
+    @ApiModelProperty(value="值次排序",name="sort",required=true)
     private Integer sort;
 
     public String getValueId() {

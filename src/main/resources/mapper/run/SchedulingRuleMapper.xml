@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.SchedulingRuleMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.SchedulingRule" >
+    <id column="scheduling_rule_id" property="schedulingRuleId" jdbcType="VARCHAR" />
+    <result column="scheduling_rule_code" property="schedulingRuleCode" jdbcType="VARCHAR" />
+    <result column="scheduling_rule" property="schedulingRule" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="scheduling_shift" property="schedulingShift" jdbcType="VARCHAR" />
+    <result column="rotation_cycle" property="rotationCycle" jdbcType="VARCHAR" />
+    <result column="is_across_day" property="isAcrossDay" jdbcType="VARCHAR" />
+    <result column="day_num" property="dayNum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    scheduling_rule_id, scheduling_rule_code, scheduling_rule, department, scheduling_shift, 
+    rotation_cycle, is_across_day, day_num, status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.SchedulingRuleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from scheduling_rule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from scheduling_rule
+    where scheduling_rule_id = #{schedulingRuleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from scheduling_rule
+    where scheduling_rule_id = #{schedulingRuleId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.SchedulingRuleExample" >
+    delete from scheduling_rule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.SchedulingRule" >
+    insert into scheduling_rule (scheduling_rule_id, scheduling_rule_code, 
+      scheduling_rule, department, scheduling_shift, 
+      rotation_cycle, is_across_day, day_num, 
+      status)
+    values (#{schedulingRuleId,jdbcType=VARCHAR}, #{schedulingRuleCode,jdbcType=VARCHAR}, 
+      #{schedulingRule,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{schedulingShift,jdbcType=VARCHAR}, 
+      #{rotationCycle,jdbcType=VARCHAR}, #{isAcrossDay,jdbcType=VARCHAR}, #{dayNum,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.SchedulingRule" >
+    insert into scheduling_rule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="schedulingRuleId != null" >
+        scheduling_rule_id,
+      </if>
+      <if test="schedulingRuleCode != null" >
+        scheduling_rule_code,
+      </if>
+      <if test="schedulingRule != null" >
+        scheduling_rule,
+      </if>
+      <if test="department != null" >
+        department,
+      </if>
+      <if test="schedulingShift != null" >
+        scheduling_shift,
+      </if>
+      <if test="rotationCycle != null" >
+        rotation_cycle,
+      </if>
+      <if test="isAcrossDay != null" >
+        is_across_day,
+      </if>
+      <if test="dayNum != null" >
+        day_num,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="schedulingRuleId != null" >
+        #{schedulingRuleId,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingRuleCode != null" >
+        #{schedulingRuleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingRule != null" >
+        #{schedulingRule,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingShift != null" >
+        #{schedulingShift,jdbcType=VARCHAR},
+      </if>
+      <if test="rotationCycle != null" >
+        #{rotationCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="isAcrossDay != null" >
+        #{isAcrossDay,jdbcType=VARCHAR},
+      </if>
+      <if test="dayNum != null" >
+        #{dayNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.SchedulingRuleExample" resultType="java.lang.Integer" >
+    select count(*) from scheduling_rule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update scheduling_rule
+    <set >
+      <if test="record.schedulingRuleId != null" >
+        scheduling_rule_id = #{record.schedulingRuleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schedulingRuleCode != null" >
+        scheduling_rule_code = #{record.schedulingRuleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schedulingRule != null" >
+        scheduling_rule = #{record.schedulingRule,jdbcType=VARCHAR},
+      </if>
+      <if test="record.department != null" >
+        department = #{record.department,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schedulingShift != null" >
+        scheduling_shift = #{record.schedulingShift,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rotationCycle != null" >
+        rotation_cycle = #{record.rotationCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isAcrossDay != null" >
+        is_across_day = #{record.isAcrossDay,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dayNum != null" >
+        day_num = #{record.dayNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update scheduling_rule
+    set scheduling_rule_id = #{record.schedulingRuleId,jdbcType=VARCHAR},
+      scheduling_rule_code = #{record.schedulingRuleCode,jdbcType=VARCHAR},
+      scheduling_rule = #{record.schedulingRule,jdbcType=VARCHAR},
+      department = #{record.department,jdbcType=VARCHAR},
+      scheduling_shift = #{record.schedulingShift,jdbcType=VARCHAR},
+      rotation_cycle = #{record.rotationCycle,jdbcType=VARCHAR},
+      is_across_day = #{record.isAcrossDay,jdbcType=VARCHAR},
+      day_num = #{record.dayNum,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.SchedulingRule" >
+    update scheduling_rule
+    <set >
+      <if test="schedulingRuleCode != null" >
+        scheduling_rule_code = #{schedulingRuleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingRule != null" >
+        scheduling_rule = #{schedulingRule,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingShift != null" >
+        scheduling_shift = #{schedulingShift,jdbcType=VARCHAR},
+      </if>
+      <if test="rotationCycle != null" >
+        rotation_cycle = #{rotationCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="isAcrossDay != null" >
+        is_across_day = #{isAcrossDay,jdbcType=VARCHAR},
+      </if>
+      <if test="dayNum != null" >
+        day_num = #{dayNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where scheduling_rule_id = #{schedulingRuleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.SchedulingRule" >
+    update scheduling_rule
+    set scheduling_rule_code = #{schedulingRuleCode,jdbcType=VARCHAR},
+      scheduling_rule = #{schedulingRule,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      scheduling_shift = #{schedulingShift,jdbcType=VARCHAR},
+      rotation_cycle = #{rotationCycle,jdbcType=VARCHAR},
+      is_across_day = #{isAcrossDay,jdbcType=VARCHAR},
+      day_num = #{dayNum,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where scheduling_rule_id = #{schedulingRuleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

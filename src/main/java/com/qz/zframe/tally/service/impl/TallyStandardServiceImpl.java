@@ -6,6 +6,7 @@ import com.qz.zframe.tally.entity.TallyRouteStandard;
 import com.qz.zframe.tally.entity.TallyStandard;
 import com.qz.zframe.tally.service.TallyStandardService;
 import com.qz.zframe.tally.vo.TallyStandardPostVO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,4 +94,26 @@ public class TallyStandardServiceImpl implements TallyStandardService{
     public void updateTallyRouteStandard(TallyRouteStandard tallyRouteStandard) {
         tallyStandardDao.updateTallyRouteStandard(tallyRouteStandard);
     }
+
+    @Override
+    public TallyStandard findTallyStandardByRouteName(String routeName) {
+        return tallyStandardDao.findTallyStandardByRouteName(routeName);
+    }
+
+    @Override
+    public void deletetallyRouteStandardByRouteNames(String[] routeNames) {
+        tallyStandardDao.deletetallyRouteStandardByRouteNames(routeNames);
+    }
+
+    @Override
+    public void deleteTallyStandardByRouteNames(String[] routeNames) {
+        tallyStandardDao.deleteTallyStandardByRouteNames(routeNames);
+    }
+
+    @Override
+    public int countStandard(String equipmentBelonging, String routeId, String equipmentState, String alarmType, String standardCoding, String checkContent) {
+        return tallyStandardDao.countStandard(equipmentBelonging, routeId, equipmentState, alarmType, standardCoding, checkContent);
+    }
+
+
 }

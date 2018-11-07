@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/api/support/ValueTime")
-@Api(tags = "api-support-api-support-ValueTime", description = "值次")
+@Api(tags = "api-support-api-support-ValueTime", description = "运行-排班管理-值次管理")
 public class ValueTimeController {
 
 	@Autowired

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyPlanDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.PeriodTime" >
+        <id column="period_time_id" property="periodTimeId" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        period_time.period_time_id,period_time.start_time,period_time.end_time
+    </sql>
+
+
+    <select id="findPeriodTimeByPlan" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from tally_route,cycle,period_time,cycle_period_time
+        WHERE period_time.period_time_id=cycle_period_time.period_time_id and cycle_period_time.cycle_id=cycle.cycle_id and cycle.route_id=tally_route.route_id
+    </select>
+
+    <delete id="deletePeriodTimeByRouteNames">
+        DELETE period_time.*,cycle_period_time.* FROM tally_route,cycle,period_time,cycle_period_time WHERE tally_route.route_name=#{routeName}
+        and period_time.period_time_id=cycle_period_time.period_time_id and cycle_period_time.cycle_id=cycle.cycle_id and cycle.route_id=tally_route.route_id
+        and period_time.start_time=#{startTime} and period_time.end_time=#{endTime}
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

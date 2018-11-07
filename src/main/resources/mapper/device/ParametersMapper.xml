@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.device.dao.ParametersMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.device.entity.Parameters" >
+    <id column="parameter_id" property="parameterId" jdbcType="VARCHAR" />
+    <result column="output" property="output" jdbcType="VARCHAR" />
+    <result column="run" property="run" jdbcType="VARCHAR" />
+    <result column="parameter_code" property="parameterCode" jdbcType="VARCHAR" />
+    <result column="parameter_name" property="parameterName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    parameter_id, output, run, parameter_code, parameter_name, type, company, status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.ParametersExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from parameters
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from parameters
+    where parameter_id = #{parameterId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from parameters
+    where parameter_id = #{parameterId,jdbcType=VARCHAR}
+  </delete>
+   <delete id="deleteByPrimaryKeyList" parameterType="java.lang.String" >
+    delete from parameters
+   <where>
+    parameter_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  
+  <delete id="deleteByExample" parameterType="com.qz.zframe.device.entity.ParametersExample" >
+    delete from parameters
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.device.entity.Parameters" >
+    insert into parameters (parameter_id, output, run, 
+      parameter_code, parameter_name, type, 
+      company, status)
+    values (#{parameterId,jdbcType=VARCHAR}, #{output,jdbcType=VARCHAR}, #{run,jdbcType=VARCHAR}, 
+      #{parameterCode,jdbcType=VARCHAR}, #{parameterName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.Parameters" >
+    insert into parameters
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="parameterId != null" >
+        parameter_id,
+      </if>
+      <if test="output != null" >
+        output,
+      </if>
+      <if test="run != null" >
+        run,
+      </if>
+      <if test="parameterCode != null" >
+        parameter_code,
+      </if>
+      <if test="parameterName != null" >
+        parameter_name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="company != null" >
+        company,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="parameterId != null" >
+        #{parameterId,jdbcType=VARCHAR},
+      </if>
+      <if test="output != null" >
+        #{output,jdbcType=VARCHAR},
+      </if>
+      <if test="run != null" >
+        #{run,jdbcType=VARCHAR},
+      </if>
+      <if test="parameterCode != null" >
+        #{parameterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parameterName != null" >
+        #{parameterName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.device.entity.ParametersExample" resultType="java.lang.Integer" >
+    select count(*) from parameters
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update parameters
+    <set >
+      <if test="record.parameterId != null" >
+        parameter_id = #{record.parameterId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.output != null" >
+        output = #{record.output,jdbcType=VARCHAR},
+      </if>
+      <if test="record.run != null" >
+        run = #{record.run,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parameterCode != null" >
+        parameter_code = #{record.parameterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parameterName != null" >
+        parameter_name = #{record.parameterName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.company != null" >
+        company = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update parameters
+    set parameter_id = #{record.parameterId,jdbcType=VARCHAR},
+      output = #{record.output,jdbcType=VARCHAR},
+      run = #{record.run,jdbcType=VARCHAR},
+      parameter_code = #{record.parameterCode,jdbcType=VARCHAR},
+      parameter_name = #{record.parameterName,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      company = #{record.company,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.device.entity.Parameters" >
+    update parameters
+    <set >
+      <if test="output != null" >
+        output = #{output,jdbcType=VARCHAR},
+      </if>
+      <if test="run != null" >
+        run = #{run,jdbcType=VARCHAR},
+      </if>
+      <if test="parameterCode != null" >
+        parameter_code = #{parameterCode,jdbcType=VARCHAR},
+      </if>
+      <if test="parameterName != null" >
+        parameter_name = #{parameterName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where parameter_id = #{parameterId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.device.entity.Parameters" >
+    update parameters
+    set output = #{output,jdbcType=VARCHAR},
+      run = #{run,jdbcType=VARCHAR},
+      parameter_code = #{parameterCode,jdbcType=VARCHAR},
+      parameter_name = #{parameterName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where parameter_id = #{parameterId,jdbcType=VARCHAR}
+  </update>
+</mapper>

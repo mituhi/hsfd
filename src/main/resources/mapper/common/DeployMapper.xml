@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.DeployDao">
+    
+    <!-- 获取所有流程主表信息 -->
+    <select id="findAllDeploy" resultType="com.qz.zframe.common.entity.DeployMain">
+    	select main_id mainId,main_code mainCode,MAIN_DEPLOY_NAME mainDeployName,MAIN_STATUS mainStatus,
+    	MAIN_CODING mainCoding,MAIN_NUM mainNum from deploy_main 
+    </select>
+    
+    <!-- 根据名称模糊查询流程主表信息 -->
+    <select id="findDeployMainByName" resultType="com.qz.zframe.common.entity.DeployMain">
+    	select main_id mainId,main_code mainCode,MAIN_DEPLOY_NAME mainDeployName,MAIN_STATUS mainStatus,
+    	MAIN_CODING mainCoding,MAIN_NUM mainNum from deploy_main where MAIN_DEPLOY_NAME like #{mainDeployName}
+    </select>
+    
+    <!-- 根据id查询流程主表 -->
+    <select id="queryDeployMainById" resultType="com.qz.zframe.common.entity.DeployMain">
+    	select main_id mainId,main_code mainCode,MAIN_DEPLOY_NAME mainDeployName,MAIN_STATUS mainStatus,
+    	MAIN_CODING mainCoding,MAIN_NUM mainNum from deploy_main where MAIN_ID = #{id}
+    </select>
+    
+    <!-- 根据流程编号或流程名称查询流程信息 -->
+    <select id="findDeployMainByCodeOrName" resultType="com.qz.zframe.common.entity.DeployMain">
+    	select main_id mainId,main_code mainCode,MAIN_DEPLOY_NAME mainDeployName,MAIN_STATUS mainStatus,
+    	MAIN_CODING mainCoding,MAIN_NUM mainNum from deploy_main where MAIN_CODE = #{mainCode}
+    	or MAIN_DEPLOY_NAME = #{mainDeployName}
+    </select>
+    
+    <!-- 新增流程 -->
+    <insert id="addDeployMain" parameterType="com.qz.zframe.common.entity.DeployMain">
+        insert into deploy_main (MAIN_ID,MAIN_CODE,MAIN_DEPLOY_NAME,MAIN_STATUS,MAIN_CODING)
+        values(#{mainId},#{mainCode},#{mainDeployName},#{mainStatus},#{mainCoding})
+    </insert>
+    
+    <!-- 修改流程 -->
+    <update id="updateDeployMain" parameterType="com.qz.zframe.common.entity.DeployMain">
+        update deploy_main set MAIN_CODE = #{mainCode},MAIN_DEPLOY_NAME = #{mainDeployName}
+        MAIN_STATUS = #{mainStatus} where MAIN_ID = #{mainId}
+    </update>
+    
+    <!-- 根据id查询流程步骤 -->
+    <select id="queryDeployById" resultType="com.qz.zframe.common.entity.Deploy">
+    	select DEPLOY_ID deployId,MAIN_ID mainId,DEPLOY_SORT deploySort,DEPLOY_NAME deployName
+    	 from deploy where DEPLOY_ID = #{deployId}
+    </select>
+</mapper>

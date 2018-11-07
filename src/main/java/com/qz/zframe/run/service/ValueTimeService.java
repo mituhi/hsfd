@@ -63,5 +63,34 @@ public interface ValueTimeService {
 	ValueTime getValueTimeById(String id);
 	
 	
+	/**
+	 * @Description:根据值次获取值次表信息
+	 * @param: @param valueName
+	 * @param: @return   
+	 * @return: ValueTime
+	 */
+	ValueTime getValueTimeByValueName(String valueName);
+
+	/**
+	 * @Description:根据值次code获取值次表id
+	 * @param: @param valueCode
+	 * @param: @return   值次表id
+	 * @return: String
+	 */
+	String getValueTimeIdByValueCode(String valueCode);
+	
+	
+	
+	/**
+	 * @Description:通过schedulingRuleId连表查询值次表信息返回
+	 * @param: @param schedulingRuleId
+	 * @param: @return   
+	 * @return: List<ValueTime>
+	 */
+	List<ValueTime> getValueTimes(String schedulingRuleId);
+	
+	
 }
+
+
 

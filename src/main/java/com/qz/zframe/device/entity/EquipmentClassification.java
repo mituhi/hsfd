@@ -1,114 +1,135 @@
 package com.qz.zframe.device.entity;
 
+import io.swagger.annotations.ApiParam;
+
 public class EquipmentClassification {
-    private String equipmentId;
+	@ApiParam(name = "equipmentId", value = "设备分类id", required = false)
 
-    private String equipmentType;
+	private String equipmentId;
 
-    private String typeName;
+	@ApiParam(name = "equipmentType", value = "设备分类", required = true)
 
-    private String superiorEquipment;
+	private String equipmentType;
 
-    private String superiorEquipmentDescribe;
+	@ApiParam(name = "typeName", value = "设备分类名称", required = false)
 
-    private String superiorEquipmentName;
+	private String typeName;
 
-    private String status;
+	@ApiParam(name = "superiorEquipment", value = "上级设备分类", required = true)
 
-    private String isToplevel;
+	private String superiorEquipment;
 
-    private String equipmentTypeDescribe;
+	@ApiParam(name = "superiorEquipmentDescribe", value = "上级设备描述", required = false)
 
-    private String outputId;
+	private String superiorEquipmentDescribe;
 
-    private String runId;
+	@ApiParam(name = "superiorEquipmentName", value = "上级设备名称", required = false)
 
-    public String getEquipmentId() {
-        return equipmentId;
-    }
+	private String superiorEquipmentName;
 
-    public void setEquipmentId(String equipmentId) {
-        this.equipmentId = equipmentId == null ? null : equipmentId.trim();
-    }
+	@ApiParam(name = "status", value = "状态", required = false)
+	private String status;
 
-    public String getEquipmentType() {
-        return equipmentType;
-    }
+	@ApiParam(name = "isToplevel", value = "是否顶级", required = false)
 
-    public void setEquipmentType(String equipmentType) {
-        this.equipmentType = equipmentType == null ? null : equipmentType.trim();
-    }
+	private String isToplevel;
 
-    public String getTypeName() {
-        return typeName;
-    }
+	@ApiParam(name = "equipmentTypeDescribe", value = "设备分类描述", required = false)
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName == null ? null : typeName.trim();
-    }
+	private String equipmentTypeDescribe;
 
-    public String getSuperiorEquipment() {
-        return superiorEquipment;
-    }
+	@ApiParam(name = "outputId", value = "出场技术参数id", required = false)
+	private String outputId;
 
-    public void setSuperiorEquipment(String superiorEquipment) {
-        this.superiorEquipment = superiorEquipment == null ? null : superiorEquipment.trim();
-    }
+	@ApiParam(name = "runId", value = "运行技术参数id", required = false)
+	private String runId;
 
-    public String getSuperiorEquipmentDescribe() {
-        return superiorEquipmentDescribe;
-    }
+	public String getEquipmentId() {
+		return equipmentId;
+	}
 
-    public void setSuperiorEquipmentDescribe(String superiorEquipmentDescribe) {
-        this.superiorEquipmentDescribe = superiorEquipmentDescribe == null ? null : superiorEquipmentDescribe.trim();
-    }
+	public void setEquipmentId(String equipmentId) {
+		this.equipmentId = equipmentId == null ? null : equipmentId.trim();
+	}
 
-    public String getSuperiorEquipmentName() {
-        return superiorEquipmentName;
-    }
+	public String getEquipmentType() {
+		return equipmentType;
+	}
 
-    public void setSuperiorEquipmentName(String superiorEquipmentName) {
-        this.superiorEquipmentName = superiorEquipmentName == null ? null : superiorEquipmentName.trim();
-    }
+	public void setEquipmentType(String equipmentType) {
+		this.equipmentType = equipmentType == null ? null : equipmentType.trim();
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public String getTypeName() {
+		return typeName;
+	}
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
+	public void setTypeName(String typeName) {
+		this.typeName = typeName == null ? null : typeName.trim();
+	}
 
-    public String getIsToplevel() {
-        return isToplevel;
-    }
+	public String getSuperiorEquipment() {
+		return superiorEquipment;
+	}
 
-    public void setIsToplevel(String isToplevel) {
-        this.isToplevel = isToplevel == null ? null : isToplevel.trim();
-    }
+	public void setSuperiorEquipment(String superiorEquipment) {
+		this.superiorEquipment = superiorEquipment == null ? null : superiorEquipment.trim();
+	}
 
-    public String getEquipmentTypeDescribe() {
-        return equipmentTypeDescribe;
-    }
+	public String getSuperiorEquipmentDescribe() {
+		return superiorEquipmentDescribe;
+	}
 
-    public void setEquipmentTypeDescribe(String equipmentTypeDescribe) {
-        this.equipmentTypeDescribe = equipmentTypeDescribe == null ? null : equipmentTypeDescribe.trim();
-    }
+	public void setSuperiorEquipmentDescribe(String superiorEquipmentDescribe) {
+		this.superiorEquipmentDescribe = superiorEquipmentDescribe == null ? null : superiorEquipmentDescribe.trim();
+	}
 
-    public String getOutputId() {
-        return outputId;
-    }
+	public String getSuperiorEquipmentName() {
+		return superiorEquipmentName;
+	}
 
-    public void setOutputId(String outputId) {
-        this.outputId = outputId == null ? null : outputId.trim();
-    }
+	public void setSuperiorEquipmentName(String superiorEquipmentName) {
+		this.superiorEquipmentName = superiorEquipmentName == null ? null : superiorEquipmentName.trim();
+	}
 
-    public String getRunId() {
-        return runId;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setRunId(String runId) {
-        this.runId = runId == null ? null : runId.trim();
-    }
+	public void setStatus(String status) {
+		this.status = status == null ? null : status.trim();
+	}
+
+	public String getIsToplevel() {
+		return isToplevel;
+	}
+
+	public void setIsToplevel(String isToplevel) {
+		this.isToplevel = isToplevel == null ? null : isToplevel.trim();
+	}
+
+	public String getEquipmentTypeDescribe() {
+		return equipmentTypeDescribe;
+	}
+
+	public void setEquipmentTypeDescribe(String equipmentTypeDescribe) {
+		this.equipmentTypeDescribe = equipmentTypeDescribe == null ? null : equipmentTypeDescribe.trim();
+	}
+
+	public String getOutputId() {
+		return outputId;
+	}
+
+	public void setOutputId(String outputId) {
+		this.outputId = outputId == null ? null : outputId.trim();
+	}
+
+	public String getRunId() {
+		return runId;
+	}
+
+	public void setRunId(String runId) {
+		this.runId = runId == null ? null : runId.trim();
+	}
 
 }

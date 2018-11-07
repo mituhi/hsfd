@@ -237,4 +237,52 @@
         WHERE id = #{id}
     </update>
 
+    <select id="findTallyStandardByRouteName" parameterType="string" resultMap="BaseResultMap">
+        SELECT *
+        FROM tally_standard s,tally_route t
+        WHERE route_name=#{routeName} and s.route_id=t.route_id
+    </select>
+
+    <delete id="deletetallyRouteStandardByRouteNames">
+        DELETE tally_route_standard.* FROM tally_route_standard,tally_route WHERE tally_route.route_name IN
+        <foreach collection="routeNames" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and tally_route_standard.route_id=tally_route.route_id
+    </delete>
+
+    <delete id="deleteTallyStandardByRouteNames">
+        DELETE tally_standard.* FROM tally_standard,tally_route WHERE tally_route.route_name IN
+        <foreach collection="routeNames" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and tally_standard.route_id=tally_route.route_id
+    </delete>
+
+    <select id="countStandard" resultType="int" >
+        select
+        COUNT(*)
+        from tally_standard
+        WHERE 1=1
+        <if test="equipmentBelonging !=null">
+            and equipment_belonging=#{equipmentBelonging}
+        </if>
+        <if test="routeId !=null">
+            and route_id=#{routeId}
+        </if>
+        <if test="equipmentState !=null">
+            and equipment_state=#{equipmentState}
+        </if>
+        <if test="alarmType !=null">
+            and alarm_type=#{alarmType}
+        </if>
+        <if test="standardCoding !=null">
+            and standard_coding=#{standardCoding}
+        </if>
+        <if test="checkContent !=null">
+            and check_content like "%"#{checkContent}"%"
+        </if>
+    </select>
+
+
 </mapper>

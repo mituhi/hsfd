@@ -4,30 +4,22 @@ import com.qz.zframe.common.util.BaseMapper;
 import com.qz.zframe.material.entity.Material;
 import com.qz.zframe.material.entity.MaterialExample;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface MaterialMapper extends BaseMapper<Material, MaterialExample, Long>{
-	
-	/**
-	 * 删除物资（将状态设为删除）
-	 * 
-	 * @param @param materialIds    参数
-	 * @return void    返回类型
-	 * @throws
-	 */
-	public void delMaterial(List<String> materialIds);
 
 	/**
-	 * 查询同一名称的物资条数
+	 * 批量删除
 	 * 
-	 * @param @param materialExample
+	 * @param @param params
 	 * @param @return    参数
 	 * @return int    返回类型
 	 * @throws
 	 */
-	public int countMaterialName(MaterialExample materialExample);
+	public int updateIsdete(Map<String, Object> params);
    
 }

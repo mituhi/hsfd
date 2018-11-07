@@ -108,5 +108,40 @@ public interface TallyStandardService {
      */
     void updateTallyRouteStandard(TallyRouteStandard tallyRouteStandard);
 
+    /**
+     * 根据路线名称查询路线标准
+     * @param routeName
+     * @return
+     */
+    TallyStandard findTallyStandardByRouteName(String routeName);
+
+    /**
+     * 根据路线名称数组进行删除路线标准关联表
+     * @param routeNames
+     */
+    void deletetallyRouteStandardByRouteNames(String[] routeNames);
+
+    /**
+     * 根据标准id数组进行删除点检标准表
+     * @param routeNames
+     */
+    void deleteTallyStandardByRouteNames(String[] routeNames);
+
+    /**
+     * 查询记录总数用于分页
+     * @param equipmentBelonging
+     * @param routeId
+     * @param equipmentState
+     * @param alarmType
+     * @param standardCoding
+     * @param checkContent
+     * @return
+     */
+    int countStandard(String equipmentBelonging,  String routeId, String equipmentState, String alarmType,  String standardCoding, String checkContent);
+
+
+    //**************************************************************************************
+
+
 
 }

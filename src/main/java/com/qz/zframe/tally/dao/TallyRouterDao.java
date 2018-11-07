@@ -1,9 +1,14 @@
 package com.qz.zframe.tally.dao;
 
+import com.qz.zframe.tally.dto.PostDto;
+import com.qz.zframe.tally.dto.TallyRouterDto;
 import com.qz.zframe.tally.entity.*;
+import com.qz.zframe.tally.vo.TallyPlanVO;
+import com.qz.zframe.tally.vo.TallyRouterVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -21,7 +26,7 @@ public interface TallyRouterDao {
      * @param routeId 路线id
      * @return
      */
-    String findCycleNameByRouteId(String routeId);
+    List<String> findCycleNameByRouteId(String routeId);
 
     /**
      * 通过路线id查出用户id
@@ -124,9 +129,90 @@ public interface TallyRouterDao {
      */
     List<String> findAllWind();
 
+    /**
+     * 查Dto
+     * @param windId
+     * @param routeCode
+     * @param routeName
+     * @return
+     */
+    List<TallyRouterDto> findAllTallyRouterDto(@Param("windId") String windId, @Param("routeCode") String routeCode, @Param("routeName") String routeName);
 
 
+    /**
+     * 查出所有路线编码
+     * @return
+     */
+    List<String> findAllRouteCode();
 
+    /**
+     * 根据路线编码查所属风场
+     * @param routeCode
+     * @return
+     */
+    String findWindIdByRouteCode(String routeCode);
+
+    /**
+     * 查分页用总数
+     * @param windId
+     * @param routeCode
+     * @param routeName
+     * @return
+     */
+    int countTallyRoute(@Param("windId") String windId, @Param("routeCode") String routeCode, @Param("routeName") String routeName);
+
+
+    /**
+     * 根据用户名查相关职务
+     * @param userName
+     * @return
+     */
+    PostDto findPostByUserName(String userName);
+
+    /**
+     * 查询路线编码相关
+     * @param routeCode
+     * @return
+     */
+    TallyRoute findRouteCodeRelevant(String routeCode);
+
+    /**
+     * 查询周期相关信息
+     * @param routeId
+     * @param cycleName
+     * @return
+     */
+    Cycle findCycleByCycleNameAndRouteId(@Param("routeId")String routeId,@Param("cycleName")String cycleName);
+    /**
+     * 查时间段相关
+     * @param cycleId
+     * @return
+     */
+    List<PeriodTime> findPeriodTimeByCycleId(String cycleId);
+    //**********************************************************
+
+    /**
+     * 点检计划的条件查询
+     * @param routeName
+     * @param maintenancer
+     * @param windId
+     * @return
+     */
+     List<TallyRoute> findTallyRouteByPlan(@Param("routeName")String routeName, @Param("maintenancer") String maintenancer,
+                                           @Param("windId") String windId, @Param("startTime")Date startTime, @Param("endTime")Date endTime);
+
+
+    /**
+     * 查显示的东西 巡检计划的
+     * @param routeName
+     * @param maintenancer
+     * @param windId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+     List<TallyPlanVO> findTallyPlanVOByPlan(@Param("routeName")String routeName, @Param("maintenancer") String maintenancer,
+                                             @Param("windId") String windId, @Param("startTime")Date startTime, @Param("endTime")Date endTime);
 
 
 

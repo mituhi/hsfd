@@ -34,4 +34,8 @@ public interface ValueTimeMapper {
     void deleteValueTime(List<String> ids);
 	
 	List<ValueTime> listValueTime(ValueTime valueTime);
+	
+	ValueTime selectMaxSort();
+	
+	List<ValueTime> getValueTimeBySchedulingRuleId(String schedulingRuleId);
 }

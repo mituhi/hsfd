@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.device.dao.CrewInformationMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.device.entity.CrewInformation" >
+    <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
+    <result column="crew_code" property="crewCode" jdbcType="VARCHAR" />
+    <result column="crew_name" property="crewName" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="installed_capacity" property="installedCapacity" jdbcType="VARCHAR" />
+    <result column="enable_date" property="enableDate" jdbcType="TIMESTAMP" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="creat_date" property="creatDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    crew_id, crew_code, crew_name, wind_id, installed_capacity, enable_date, creater, 
+    creat_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from crew_information
+    where crew_id = #{crewId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.CrewInformationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from crew_information
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.device.entity.CrewInformationExample" >
+    delete from crew_information
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+   <delete id="deleteByPrimaryKeyList" parameterType="java.lang.String" >
+    delete from crew_information
+   <where>
+    crew_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  
+  <insert id="insert" parameterType="com.qz.zframe.device.entity.CrewInformation" >
+    insert into crew_information (crew_id, crew_code, crew_name, 
+      wind_id, installed_capacity, enable_date, 
+      creater, creat_date)
+    values (#{crewId,jdbcType=VARCHAR}, #{crewCode,jdbcType=VARCHAR}, #{crewName,jdbcType=VARCHAR}, 
+      #{windId,jdbcType=VARCHAR}, #{installedCapacity,jdbcType=VARCHAR}, #{enableDate,jdbcType=TIMESTAMP}, 
+      #{creater,jdbcType=VARCHAR}, #{creatDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.CrewInformation" >
+    insert into crew_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="crewId != null" >
+        crew_id,
+      </if>
+      <if test="crewCode != null" >
+        crew_code,
+      </if>
+      <if test="crewName != null" >
+        crew_name,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="installedCapacity != null" >
+        installed_capacity,
+      </if>
+      <if test="enableDate != null" >
+        enable_date,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+      <if test="creatDate != null" >
+        creat_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="crewId != null" >
+        #{crewId,jdbcType=VARCHAR},
+      </if>
+      <if test="crewCode != null" >
+        #{crewCode,jdbcType=VARCHAR},
+      </if>
+      <if test="crewName != null" >
+        #{crewName,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="installedCapacity != null" >
+        #{installedCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="enableDate != null" >
+        #{enableDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="creatDate != null" >
+        #{creatDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.device.entity.CrewInformationExample" resultType="java.lang.Integer" >
+    select count(*) from crew_information
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update crew_information
+    <set >
+      <if test="record.crewId != null" >
+        crew_id = #{record.crewId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crewCode != null" >
+        crew_code = #{record.crewCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crewName != null" >
+        crew_name = #{record.crewName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.installedCapacity != null" >
+        installed_capacity = #{record.installedCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enableDate != null" >
+        enable_date = #{record.enableDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creater != null" >
+        creater = #{record.creater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatDate != null" >
+        creat_date = #{record.creatDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update crew_information
+    set crew_id = #{record.crewId,jdbcType=VARCHAR},
+      crew_code = #{record.crewCode,jdbcType=VARCHAR},
+      crew_name = #{record.crewName,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      installed_capacity = #{record.installedCapacity,jdbcType=VARCHAR},
+      enable_date = #{record.enableDate,jdbcType=TIMESTAMP},
+      creater = #{record.creater,jdbcType=VARCHAR},
+      creat_date = #{record.creatDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+   <update id="update" parameterType="com.qz.zframe.device.entity.CrewInformation" >
+    update crew_information
+    set crew_code = #{crewCode,jdbcType=VARCHAR},
+      crew_name = #{crewCode,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      installed_capacity = #{nstalledCapacity,jdbcType=VARCHAR},
+      enable_date = #{enableDate,jdbcType=TIMESTAMP},
+      creater = #{creater,jdbcType=VARCHAR},
+      creat_date=#{creatDate,jdbcType=TIMESTAMP}
+    where crew_id = #{crewId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,5 +1,7 @@
 package com.qz.zframe.tally.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 /*

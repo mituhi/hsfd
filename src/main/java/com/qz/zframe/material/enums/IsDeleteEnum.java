@@ -4,8 +4,8 @@ package com.qz.zframe.material.enums;
 
 public enum  IsDeleteEnum {
 	
-	deleteYes("1","已删除"),
-	deleteNo("0","正常");
+	DELETE_YES("02","已删除"),
+	DELETE_NO("01","正常");
 
 	
 	private String code;  

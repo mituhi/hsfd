@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.material.dao.StockAddressMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.material.entity.StockAddress" >
+    <id column="stock_add_id" property="stockAddId" jdbcType="VARCHAR" />
+    <result column="stock_add_code" property="stockAddCode" jdbcType="VARCHAR" />
+    <result column="stock_add_name" property="stockAddName" jdbcType="VARCHAR" />
+    <result column="stock_add_attr" property="stockAddAttr" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</sql>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    stock_add_id, stock_add_code, stock_add_name, stock_add_attr, wind_id, status, remark, 
+    creater, create_time,is_delete
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.StockAddressExample" >
+    select a.*,b.wind_name
+    from stock_address a left join wind_field b on a.wind_id = b.wind_id
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     <include refid="Pagination_Sql" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+     select a.*,b.wind_name
+    from stock_address a left join wind_field b on a.wind_id = b.wind_id
+    where a.stock_add_id = #{stockAddId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from stock_address
+    where stock_add_id = #{stockAddId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.material.entity.StockAddressExample" >
+    delete from stock_address
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.material.entity.StockAddress" >
+    insert into stock_address (stock_add_id, stock_add_code, stock_add_name, 
+      stock_add_attr, wind_id, status, 
+      remark, creater, create_time
+      )
+    values (#{stockAddId,jdbcType=VARCHAR}, #{stockAddCode,jdbcType=VARCHAR}, #{stockAddName,jdbcType=VARCHAR}, 
+      #{stockAddAttr,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.material.entity.StockAddress" >
+    insert into stock_address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="stockAddId != null" >
+        stock_add_id,
+      </if>
+      <if test="stockAddCode != null" >
+        stock_add_code,
+      </if>
+      <if test="stockAddName != null" >
+        stock_add_name,
+      </if>
+      <if test="stockAddAttr != null" >
+        stock_add_attr,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+        create_time,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="stockAddId != null" >
+        #{stockAddId,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddCode != null" >
+        #{stockAddCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddName != null" >
+        #{stockAddName,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddAttr != null" >
+        #{stockAddAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      now(),
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.material.entity.StockAddressExample" resultType="java.lang.Integer" >
+    select count(*) from stock_address a
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update stock_address
+    <set >
+      <if test="record.stockAddId != null" >
+        stock_add_id = #{record.stockAddId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockAddCode != null" >
+        stock_add_code = #{record.stockAddCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockAddName != null" >
+        stock_add_name = #{record.stockAddName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockAddAttr != null" >
+        stock_add_attr = #{record.stockAddAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creater != null" >
+        creater = #{record.creater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update stock_address
+    set stock_add_id = #{record.stockAddId,jdbcType=VARCHAR},
+      stock_add_code = #{record.stockAddCode,jdbcType=VARCHAR},
+      stock_add_name = #{record.stockAddName,jdbcType=VARCHAR},
+      stock_add_attr = #{record.stockAddAttr,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      creater = #{record.creater,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.material.entity.StockAddress" >
+    update stock_address
+    <set >
+      <if test="stockAddCode != null" >
+        stock_add_code = #{stockAddCode,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddName != null" >
+        stock_add_name = #{stockAddName,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddAttr != null" >
+        stock_add_attr = #{stockAddAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where stock_add_id = #{stockAddId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.material.entity.StockAddress" >
+    update stock_address
+    set stock_add_code = #{stockAddCode,jdbcType=VARCHAR},
+      stock_add_name = #{stockAddName,jdbcType=VARCHAR},
+      stock_add_attr = #{stockAddAttr,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      creater = #{creater,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where stock_add_id = #{stockAddId,jdbcType=VARCHAR}
+  </update>
+  
+   <update id="updateIsdete" parameterType="java.util.Map">
+         update stock_address set is_delete=#{isDelete}  where stock_add_id in
+        <foreach collection="stockAddIds" item="stockAddIds" open="(" separator="," close=")">
+            #{stockAddIds}
+        </foreach>
+    </update>
+  
+</mapper>

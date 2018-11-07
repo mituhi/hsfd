@@ -2,9 +2,7 @@ package com.qz.zframe.device.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,6 @@ import com.qz.zframe.device.dao.EquipmentClassificationMapper;
 import com.qz.zframe.device.entity.EquipmentClassification;
 import com.qz.zframe.device.entity.EquipmentClassificationExample;
 import com.qz.zframe.device.service.EquipmentClassificationService;
-
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class EquipmentClassificationServiceImpl implements EquipmentClassificationService {

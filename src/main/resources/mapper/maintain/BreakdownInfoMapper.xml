@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.BreakdownInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.BreakdownInfo" >
+    <id column="breakdown_id" property="breakdownId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="breakdown_code" property="breakdownCode" jdbcType="VARCHAR" />
+    <result column="breakdown_desc" property="breakdownDesc" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="mode_id" property="modeId" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="dealwith_team_id" property="dealwithTeamId" jdbcType="VARCHAR" />
+    <result column="dealwith_person" property="dealwithPerson" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+    <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
+    <result column="vane_speed" property="vaneSpeed" jdbcType="VARCHAR" />
+    <result column="blade_torque_1" property="bladeTorque1" jdbcType="VARCHAR" />
+    <result column="blade_torque_2" property="bladeTorque2" jdbcType="VARCHAR" />
+    <result column="blade_torque_3" property="bladeTorque3" jdbcType="VARCHAR" />
+    <result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+    <result column="recover_time" property="recoverTime" jdbcType="TIMESTAMP" />
+    <result column="downtime_windspeed" property="downtimeWindspeed" jdbcType="VARCHAR" />
+    <result column="recover_windspeed" property="recoverWindspeed" jdbcType="VARCHAR" />
+    <result column="interrupt_time" property="interruptTime" jdbcType="TIMESTAMP" />
+    <result column="electricity_loss" property="electricityLoss" jdbcType="VARCHAR" />
+    <result column="grid_connected_recover_time" property="gridConnectedRecoverTime" jdbcType="TIMESTAMP" />
+    <result column="location_id" property="locationId" jdbcType="VARCHAR" />
+    <result column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
+    <result column="maximum_load" property="maximumLoad" jdbcType="VARCHAR" />
+    <result column="system_busbar_110" property="systemBusbar110" jdbcType="VARCHAR" />
+    <result column="system_busbar_35" property="systemBusbar35" jdbcType="VARCHAR" />
+    <result column="system_busbar_400" property="systemBusbar400" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+    <foreach collection="criteria.criteria" item="criterion" >
+      <choose >
+        <when test="criterion.noValue" >
+          and ${criterion.condition}
+        </when>
+        <when test="criterion.singleValue" >
+          and ${criterion.condition} #{criterion.value}
+        </when>
+        <when test="criterion.betweenValue" >
+          and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+        </when>
+        <when test="criterion.listValue" >
+          and ${criterion.condition}
+          <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+            #{listItem}
+          </foreach>
+        </when>
+      </choose>
+    </foreach>
+  </trim>
+</if>
+        </foreach>
+        </where>
+        </sql>
+<sql id="Base_Column_List" >
+    breakdown_id, serial_number, breakdown_code, breakdown_desc, maintainer, maintain_date,
+    status, mode_id, wind_id, dealwith_team_id, dealwith_person, position_id, position_desc,
+    crew_id, equipment_id, equipment_desc, vane_speed, blade_torque_1, blade_torque_2,
+    blade_torque_3, active_time, recover_time, downtime_windspeed, recover_windspeed,
+    interrupt_time, electricity_loss, grid_connected_recover_time, location_id, attribute_id,
+    maximum_load, system_busbar_110, system_busbar_35, system_busbar_400, remark
+  </sql>
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update breakdown_info set status = "0"
+    where breakdown_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+
+<resultMap id="getResultMap" type="com.qz.zframe.maintain.vo.BreakdownVo" >
+  <id column="breakdown_id" property="breakdownId" jdbcType="VARCHAR" />
+  <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+  <result column="breakdown_code" property="breakdownCode" jdbcType="VARCHAR" />
+  <result column="breakdown_desc" property="breakdownDesc" jdbcType="VARCHAR" />
+  <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+  <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+  <result column="status" property="status" jdbcType="VARCHAR" />
+  <result column="mode_id" property="modeId" jdbcType="VARCHAR" />
+  <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+  <result column="dealwith_team_id" property="dealwithTeamId" jdbcType="VARCHAR" />
+  <result column="dealwith_person" property="dealwithPerson" jdbcType="VARCHAR" />
+  <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+  <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+  <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
+  <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+  <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
+  <result column="vane_speed" property="vaneSpeed" jdbcType="VARCHAR" />
+  <result column="blade_torque_1" property="bladeTorque1" jdbcType="VARCHAR" />
+  <result column="blade_torque_2" property="bladeTorque2" jdbcType="VARCHAR" />
+  <result column="blade_torque_3" property="bladeTorque3" jdbcType="VARCHAR" />
+  <result column="active_time" property="activeTime" jdbcType="TIMESTAMP" />
+  <result column="recover_time" property="recoverTime" jdbcType="TIMESTAMP" />
+  <result column="downtime_windspeed" property="downtimeWindspeed" jdbcType="VARCHAR" />
+  <result column="recover_windspeed" property="recoverWindspeed" jdbcType="VARCHAR" />
+  <result column="interrupt_time" property="interruptTime" jdbcType="TIMESTAMP" />
+  <result column="electricity_loss" property="electricityLoss" jdbcType="VARCHAR" />
+  <result column="grid_connected_recover_time" property="gridConnectedRecoverTime" jdbcType="TIMESTAMP" />
+  <result column="location_id" property="locationId" jdbcType="VARCHAR" />
+  <result column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
+  <result column="maximum_load" property="maximumLoad" jdbcType="VARCHAR" />
+  <result column="system_busbar_110" property="systemBusbar110" jdbcType="VARCHAR" />
+  <result column="system_busbar_35" property="systemBusbar35" jdbcType="VARCHAR" />
+  <result column="system_busbar_400" property="systemBusbar400" jdbcType="VARCHAR" />
+  <result column="mode_name" property="modeName" jdbcType="VARCHAR" />
+  <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+  <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+  <result column="position_name" property="positionName" jdbcType="VARCHAR" />
+  <result column="crew_name" property="crewName" jdbcType="VARCHAR" />
+  <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
+  <result column="location_name" property="locationName" jdbcType="VARCHAR" />
+  <result column="attribute_name" property="attributeName" jdbcType="VARCHAR" />
+</resultMap>
+  <sql id="get_Column_List" >
+    a.breakdown_id as breakdown_id,a.serial_number as serial_number,a.breakdown_code as breakdown_code,a.breakdown_desc as breakdown_desc,
+    a.maintainer as maintainer,a.maintain_date as maintain_date,a.status as status,a.mode_id as mode_id,a.wind_id as wind_id,
+    a.dealwith_team_id as dealwith_team_id,a.dealwith_person as dealwith_person,a.position_id as position_id,a.position_desc as position_desc,
+    a.crew_id as crew_id,a.equipment_id as equipment_id,a.equipment_desc as equipment_desc,a.vane_speed as vane_speed,a.blade_torque_1 as blade_torque_1,
+    a.blade_torque_2 as blade_torque_2,a.blade_torque_3 as blade_torque_3,a.active_time as active_time,a.recover_time as recover_time,
+    a.downtime_windspeed as downtime_windspeed,a.recover_windspeed as recover_windspeed,a.interrupt_time as interrupt_time,
+    a.electricity_loss as  electricity_loss,a.grid_connected_recover_time as grid_connected_recover_time,a.location_id as location_id,
+    a.attribute_id as attribute_id,a.maximum_load as maximum_load,a.system_busbar_110 as system_busbar_110,a.system_busbar_35 as system_busbar_35,
+    a.system_busbar_400 as system_busbar_400,a.remark as remark,b.mode_name as mode_name,c.wind_name as wind_name,
+    e.position_name as position_name,f.crew_name as crew_name,h.location_name as location_name,
+    i.attribute_name as attribute_name
+  </sql>
+  <select id="getBreakdownListByPageAndCondition" resultMap="getResultMap">
+    select
+    <include refid="get_Column_List" />
+    from breakdown_info a
+    left join breakdown_dealwith_mode b on a.mode_id=b.mode_id
+    left join wind_field c on a.wind_id = c.wind_id
+
+    left join position_encode e on a.position_id = e.position_id
+    left join crew_information f on a.crew_id = f.crew_id
+
+    left join breakdown_location h on a.location_id = h.location_id
+    left join breakdown_attribute i on a.attribute_id = i.attribute_id
+    where a.status <![CDATA[ <> ]]> '0'
+    <if test="map.windId != null" >
+      and a.wind_id = #{map.windId}
+    </if>
+    <if test="map.crewId != null" >
+      and a.crew_id = #{map.crewId}
+    </if>
+    <if test="map.breakdownDesc != null" >
+      and a.breakdownDesc like '%${map.breakdownDesc}%'
+    </if>
+    <if test="map.breakdownCode != null" >
+      and a.breakdownCode = #{map.breakdownCode}
+    </if>
+    <if test="map.modeId != null" >
+      and a.mode_id = #{map.modeId}
+    </if>
+    <if test="map.locationId != null" >
+      and a.location_id = #{map.locationId}
+    </if>
+    <if test="map.attributeId != null" >
+      and a.attribute_id = #{map.attributeId}
+    </if>
+    <if test="map.applyStartTime != null">
+      and a.active_time &gt;= #{map.startTime}
+    </if>
+    <if test="map.applyEndTime != null">
+      and a.active_time &lt;= #{map.endTime}
+    </if>
+    order by a.active_time asc
+    limit ${map.start},${map.pageSize}
+  </select>
+  <select id="getTotalCount" resultType="java.lang.Integer">
+    select
+    count(*)
+    from breakdown_info
+    where status <![CDATA[ <> ]]> '0'
+    <if test="map.windId != null" >
+      and wind_id = #{map.windId}
+    </if>
+    <if test="map.crewId != null" >
+      and crew_id = #{map.crewId}
+    </if>
+    <if test="map.breakdownDesc != null" >
+      and breakdownDesc like '%${map.breakdownDesc}%'
+    </if>
+    <if test="map.breakdownCode != null" >
+      and breakdownCode = #{map.breakdownCode}
+    </if>
+    <if test="map.modeId != null" >
+      and mode_id = #{map.modeId}
+    </if>
+    <if test="map.locationId != null" >
+      and location_id = #{map.locationId}
+    </if>
+    <if test="map.attributeId != null" >
+      and attribute_id = #{map.attributeId}
+    </if>
+    <if test="map.applyStartTime != null">
+      and active_time &gt;= #{map.startTime}
+    </if>
+    <if test="map.applyEndTime != null">
+      and active_time &lt;= #{map.endtime}
+    </if>
+  </select>
+
+  <select id="getBreakdownDetail" resultMap="getResultMap">
+    select
+    <include refid="get_Column_List" />
+    from breakdown_info a
+    left join breakdown_dealwith_mode b on a.mode_id=b.mode_id
+    left join wind_field c on a.wind_id = c.wind_id
+
+    left join position_encode e on a.position_id = e.position_id
+    left join crew_information f on a.crew_id = f.crew_id
+
+    left join breakdown_location h on a.location_id = h.location_id
+    left join breakdown_attribute i on a.attribute_id = i.attribute_id
+    where a.status <![CDATA[ <> ]]> '0'
+  </select>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.BreakdownInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from breakdown_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from breakdown_info
+    where breakdown_id = #{breakdownId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from breakdown_info
+    where breakdown_id = #{breakdownId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.BreakdownInfoExample" >
+    delete from breakdown_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.BreakdownInfo" >
+    insert into breakdown_info (breakdown_id, serial_number, breakdown_code, 
+      breakdown_desc, maintainer, maintain_date, 
+      status, mode_id, wind_id, 
+      dealwith_team_id, dealwith_person, position_id, 
+      position_desc, crew_id, equipment_id, 
+      equipment_desc, vane_speed, blade_torque_1, 
+      blade_torque_2, blade_torque_3, active_time, 
+      recover_time, downtime_windspeed, recover_windspeed, 
+      interrupt_time, electricity_loss, grid_connected_recover_time, 
+      location_id, attribute_id, maximum_load, 
+      system_busbar_110, system_busbar_35, system_busbar_400, 
+      remark)
+    values (#{breakdownId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{breakdownCode,jdbcType=VARCHAR}, 
+      #{breakdownDesc,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, 
+      #{status,jdbcType=VARCHAR}, #{modeId,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, 
+      #{dealwithTeamId,jdbcType=VARCHAR}, #{dealwithPerson,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}, 
+      #{positionDesc,jdbcType=VARCHAR}, #{crewId,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR}, 
+      #{equipmentDesc,jdbcType=VARCHAR}, #{vaneSpeed,jdbcType=VARCHAR}, #{bladeTorque1,jdbcType=VARCHAR}, 
+      #{bladeTorque2,jdbcType=VARCHAR}, #{bladeTorque3,jdbcType=VARCHAR}, #{activeTime,jdbcType=TIMESTAMP}, 
+      #{recoverTime,jdbcType=TIMESTAMP}, #{downtimeWindspeed,jdbcType=VARCHAR}, #{recoverWindspeed,jdbcType=VARCHAR}, 
+      #{interruptTime,jdbcType=TIMESTAMP}, #{electricityLoss,jdbcType=VARCHAR}, #{gridConnectedRecoverTime,jdbcType=TIMESTAMP}, 
+      #{locationId,jdbcType=VARCHAR}, #{attributeId,jdbcType=VARCHAR}, #{maximumLoad,jdbcType=VARCHAR}, 
+      #{systemBusbar110,jdbcType=VARCHAR}, #{systemBusbar35,jdbcType=VARCHAR}, #{systemBusbar400,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.BreakdownInfo" >
+    insert into breakdown_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="breakdownId != null" >
+        breakdown_id,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="breakdownCode != null" >
+        breakdown_code,
+      </if>
+      <if test="breakdownDesc != null" >
+        breakdown_desc,
+      </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="modeId != null" >
+        mode_id,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="dealwithTeamId != null" >
+        dealwith_team_id,
+      </if>
+      <if test="dealwithPerson != null" >
+        dealwith_person,
+      </if>
+      <if test="positionId != null" >
+        position_id,
+      </if>
+      <if test="positionDesc != null" >
+        position_desc,
+      </if>
+      <if test="crewId != null" >
+        crew_id,
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id,
+      </if>
+      <if test="equipmentDesc != null" >
+        equipment_desc,
+      </if>
+      <if test="vaneSpeed != null" >
+        vane_speed,
+      </if>
+      <if test="bladeTorque1 != null" >
+        blade_torque_1,
+      </if>
+      <if test="bladeTorque2 != null" >
+        blade_torque_2,
+      </if>
+      <if test="bladeTorque3 != null" >
+        blade_torque_3,
+      </if>
+      <if test="activeTime != null" >
+        active_time,
+      </if>
+      <if test="recoverTime != null" >
+        recover_time,
+      </if>
+      <if test="downtimeWindspeed != null" >
+        downtime_windspeed,
+      </if>
+      <if test="recoverWindspeed != null" >
+        recover_windspeed,
+      </if>
+      <if test="interruptTime != null" >
+        interrupt_time,
+      </if>
+      <if test="electricityLoss != null" >
+        electricity_loss,
+      </if>
+      <if test="gridConnectedRecoverTime != null" >
+        grid_connected_recover_time,
+      </if>
+      <if test="locationId != null" >
+        location_id,
+      </if>
+      <if test="attributeId != null" >
+        attribute_id,
+      </if>
+      <if test="maximumLoad != null" >
+        maximum_load,
+      </if>
+      <if test="systemBusbar110 != null" >
+        system_busbar_110,
+      </if>
+      <if test="systemBusbar35 != null" >
+        system_busbar_35,
+      </if>
+      <if test="systemBusbar400 != null" >
+        system_busbar_400,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="breakdownId != null" >
+        #{breakdownId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownCode != null" >
+        #{breakdownCode,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownDesc != null" >
+        #{breakdownDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="modeId != null" >
+        #{modeId,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="dealwithTeamId != null" >
+        #{dealwithTeamId,jdbcType=VARCHAR},
+      </if>
+      <if test="dealwithPerson != null" >
+        #{dealwithPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null" >
+        #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionDesc != null" >
+        #{positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="crewId != null" >
+        #{crewId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentDesc != null" >
+        #{equipmentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="vaneSpeed != null" >
+        #{vaneSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="bladeTorque1 != null" >
+        #{bladeTorque1,jdbcType=VARCHAR},
+      </if>
+      <if test="bladeTorque2 != null" >
+        #{bladeTorque2,jdbcType=VARCHAR},
+      </if>
+      <if test="bladeTorque3 != null" >
+        #{bladeTorque3,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recoverTime != null" >
+        #{recoverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="downtimeWindspeed != null" >
+        #{downtimeWindspeed,jdbcType=VARCHAR},
+      </if>
+      <if test="recoverWindspeed != null" >
+        #{recoverWindspeed,jdbcType=VARCHAR},
+      </if>
+      <if test="interruptTime != null" >
+        #{interruptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electricityLoss != null" >
+        #{electricityLoss,jdbcType=VARCHAR},
+      </if>
+      <if test="gridConnectedRecoverTime != null" >
+        #{gridConnectedRecoverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="locationId != null" >
+        #{locationId,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeId != null" >
+        #{attributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="maximumLoad != null" >
+        #{maximumLoad,jdbcType=VARCHAR},
+      </if>
+      <if test="systemBusbar110 != null" >
+        #{systemBusbar110,jdbcType=VARCHAR},
+      </if>
+      <if test="systemBusbar35 != null" >
+        #{systemBusbar35,jdbcType=VARCHAR},
+      </if>
+      <if test="systemBusbar400 != null" >
+        #{systemBusbar400,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.BreakdownInfoExample" resultType="java.lang.Integer" >
+    select count(*) from breakdown_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update breakdown_info
+    <set >
+      <if test="record.breakdownId != null" >
+        breakdown_id = #{record.breakdownId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breakdownCode != null" >
+        breakdown_code = #{record.breakdownCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breakdownDesc != null" >
+        breakdown_desc = #{record.breakdownDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainDate != null" >
+        maintain_date = #{record.maintainDate,jdbcType=DATE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modeId != null" >
+        mode_id = #{record.modeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealwithTeamId != null" >
+        dealwith_team_id = #{record.dealwithTeamId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealwithPerson != null" >
+        dealwith_person = #{record.dealwithPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionId != null" >
+        position_id = #{record.positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionDesc != null" >
+        position_desc = #{record.positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crewId != null" >
+        crew_id = #{record.crewId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentId != null" >
+        equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentDesc != null" >
+        equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vaneSpeed != null" >
+        vane_speed = #{record.vaneSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bladeTorque1 != null" >
+        blade_torque_1 = #{record.bladeTorque1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bladeTorque2 != null" >
+        blade_torque_2 = #{record.bladeTorque2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bladeTorque3 != null" >
+        blade_torque_3 = #{record.bladeTorque3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activeTime != null" >
+        active_time = #{record.activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.recoverTime != null" >
+        recover_time = #{record.recoverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.downtimeWindspeed != null" >
+        downtime_windspeed = #{record.downtimeWindspeed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recoverWindspeed != null" >
+        recover_windspeed = #{record.recoverWindspeed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.interruptTime != null" >
+        interrupt_time = #{record.interruptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.electricityLoss != null" >
+        electricity_loss = #{record.electricityLoss,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gridConnectedRecoverTime != null" >
+        grid_connected_recover_time = #{record.gridConnectedRecoverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.locationId != null" >
+        location_id = #{record.locationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attributeId != null" >
+        attribute_id = #{record.attributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maximumLoad != null" >
+        maximum_load = #{record.maximumLoad,jdbcType=VARCHAR},
+      </if>
+      <if test="record.systemBusbar110 != null" >
+        system_busbar_110 = #{record.systemBusbar110,jdbcType=VARCHAR},
+      </if>
+      <if test="record.systemBusbar35 != null" >
+        system_busbar_35 = #{record.systemBusbar35,jdbcType=VARCHAR},
+      </if>
+      <if test="record.systemBusbar400 != null" >
+        system_busbar_400 = #{record.systemBusbar400,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update breakdown_info
+    set breakdown_id = #{record.breakdownId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      breakdown_code = #{record.breakdownCode,jdbcType=VARCHAR},
+      breakdown_desc = #{record.breakdownDesc,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      status = #{record.status,jdbcType=VARCHAR},
+      mode_id = #{record.modeId,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      dealwith_team_id = #{record.dealwithTeamId,jdbcType=VARCHAR},
+      dealwith_person = #{record.dealwithPerson,jdbcType=VARCHAR},
+      position_id = #{record.positionId,jdbcType=VARCHAR},
+      position_desc = #{record.positionDesc,jdbcType=VARCHAR},
+      crew_id = #{record.crewId,jdbcType=VARCHAR},
+      equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
+      vane_speed = #{record.vaneSpeed,jdbcType=VARCHAR},
+      blade_torque_1 = #{record.bladeTorque1,jdbcType=VARCHAR},
+      blade_torque_2 = #{record.bladeTorque2,jdbcType=VARCHAR},
+      blade_torque_3 = #{record.bladeTorque3,jdbcType=VARCHAR},
+      active_time = #{record.activeTime,jdbcType=TIMESTAMP},
+      recover_time = #{record.recoverTime,jdbcType=TIMESTAMP},
+      downtime_windspeed = #{record.downtimeWindspeed,jdbcType=VARCHAR},
+      recover_windspeed = #{record.recoverWindspeed,jdbcType=VARCHAR},
+      interrupt_time = #{record.interruptTime,jdbcType=TIMESTAMP},
+      electricity_loss = #{record.electricityLoss,jdbcType=VARCHAR},
+      grid_connected_recover_time = #{record.gridConnectedRecoverTime,jdbcType=TIMESTAMP},
+      location_id = #{record.locationId,jdbcType=VARCHAR},
+      attribute_id = #{record.attributeId,jdbcType=VARCHAR},
+      maximum_load = #{record.maximumLoad,jdbcType=VARCHAR},
+      system_busbar_110 = #{record.systemBusbar110,jdbcType=VARCHAR},
+      system_busbar_35 = #{record.systemBusbar35,jdbcType=VARCHAR},
+      system_busbar_400 = #{record.systemBusbar400,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.BreakdownInfo" >
+    update breakdown_info
+    <set >
+      <if test="serialNumber != null" >
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownCode != null" >
+        breakdown_code = #{breakdownCode,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownDesc != null" >
+        breakdown_desc = #{breakdownDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date = #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="modeId != null" >
+        mode_id = #{modeId,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="dealwithTeamId != null" >
+        dealwith_team_id = #{dealwithTeamId,jdbcType=VARCHAR},
+      </if>
+      <if test="dealwithPerson != null" >
+        dealwith_person = #{dealwithPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null" >
+        position_id = #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionDesc != null" >
+        position_desc = #{positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="crewId != null" >
+        crew_id = #{crewId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentDesc != null" >
+        equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="vaneSpeed != null" >
+        vane_speed = #{vaneSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="bladeTorque1 != null" >
+        blade_torque_1 = #{bladeTorque1,jdbcType=VARCHAR},
+      </if>
+      <if test="bladeTorque2 != null" >
+        blade_torque_2 = #{bladeTorque2,jdbcType=VARCHAR},
+      </if>
+      <if test="bladeTorque3 != null" >
+        blade_torque_3 = #{bladeTorque3,jdbcType=VARCHAR},
+      </if>
+      <if test="activeTime != null" >
+        active_time = #{activeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recoverTime != null" >
+        recover_time = #{recoverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="downtimeWindspeed != null" >
+        downtime_windspeed = #{downtimeWindspeed,jdbcType=VARCHAR},
+      </if>
+      <if test="recoverWindspeed != null" >
+        recover_windspeed = #{recoverWindspeed,jdbcType=VARCHAR},
+      </if>
+      <if test="interruptTime != null" >
+        interrupt_time = #{interruptTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electricityLoss != null" >
+        electricity_loss = #{electricityLoss,jdbcType=VARCHAR},
+      </if>
+      <if test="gridConnectedRecoverTime != null" >
+        grid_connected_recover_time = #{gridConnectedRecoverTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="locationId != null" >
+        location_id = #{locationId,jdbcType=VARCHAR},
+      </if>
+      <if test="attributeId != null" >
+        attribute_id = #{attributeId,jdbcType=VARCHAR},
+      </if>
+      <if test="maximumLoad != null" >
+        maximum_load = #{maximumLoad,jdbcType=VARCHAR},
+      </if>
+      <if test="systemBusbar110 != null" >
+        system_busbar_110 = #{systemBusbar110,jdbcType=VARCHAR},
+      </if>
+      <if test="systemBusbar35 != null" >
+        system_busbar_35 = #{systemBusbar35,jdbcType=VARCHAR},
+      </if>
+      <if test="systemBusbar400 != null" >
+        system_busbar_400 = #{systemBusbar400,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where breakdown_id = #{breakdownId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.BreakdownInfo" >
+    update breakdown_info
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      breakdown_code = #{breakdownCode,jdbcType=VARCHAR},
+      breakdown_desc = #{breakdownDesc,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_date = #{maintainDate,jdbcType=DATE},
+      status = #{status,jdbcType=VARCHAR},
+      mode_id = #{modeId,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      dealwith_team_id = #{dealwithTeamId,jdbcType=VARCHAR},
+      dealwith_person = #{dealwithPerson,jdbcType=VARCHAR},
+      position_id = #{positionId,jdbcType=VARCHAR},
+      position_desc = #{positionDesc,jdbcType=VARCHAR},
+      crew_id = #{crewId,jdbcType=VARCHAR},
+      equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
+      vane_speed = #{vaneSpeed,jdbcType=VARCHAR},
+      blade_torque_1 = #{bladeTorque1,jdbcType=VARCHAR},
+      blade_torque_2 = #{bladeTorque2,jdbcType=VARCHAR},
+      blade_torque_3 = #{bladeTorque3,jdbcType=VARCHAR},
+      active_time = #{activeTime,jdbcType=TIMESTAMP},
+      recover_time = #{recoverTime,jdbcType=TIMESTAMP},
+      downtime_windspeed = #{downtimeWindspeed,jdbcType=VARCHAR},
+      recover_windspeed = #{recoverWindspeed,jdbcType=VARCHAR},
+      interrupt_time = #{interruptTime,jdbcType=TIMESTAMP},
+      electricity_loss = #{electricityLoss,jdbcType=VARCHAR},
+      grid_connected_recover_time = #{gridConnectedRecoverTime,jdbcType=TIMESTAMP},
+      location_id = #{locationId,jdbcType=VARCHAR},
+      attribute_id = #{attributeId,jdbcType=VARCHAR},
+      maximum_load = #{maximumLoad,jdbcType=VARCHAR},
+      system_busbar_110 = #{systemBusbar110,jdbcType=VARCHAR},
+      system_busbar_35 = #{systemBusbar35,jdbcType=VARCHAR},
+      system_busbar_400 = #{systemBusbar400,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where breakdown_id = #{breakdownId,jdbcType=VARCHAR}
+  </update>
+</mapper>

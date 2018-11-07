@@ -116,4 +116,55 @@ public class ValueTimeServiceImpl implements ValueTimeService {
 		return valueTimeMapper.selectByPrimaryKey(id);
 	}
 
+
+	/**
+	 * 根据值次名称获取ValueTime
+	 */
+	@Override
+	public ValueTime getValueTimeByValueName(String valueName) {
+		
+		ValueTimeExample example = new ValueTimeExample();
+		example.createCriteria().andValueNameEqualTo(valueName);
+		List<ValueTime> list = valueTimeMapper.selectByExample(example);
+		
+		ValueTime valueTime = new ValueTime();
+		//查询出来的结果如果不为空 ， 取出第一个
+		if(CollectionUtils.isNotEmpty(list)){
+			valueTime = list.get(0);
+		}
+		return valueTime;
+	}
+
+
+	/**
+	 * 通过code获取id
+	 */
+	@Override
+	public String getValueTimeIdByValueCode(String valueCode) {
+		
+		ValueTimeExample example = new ValueTimeExample();
+		example.createCriteria().andValueCodeEqualTo(valueCode);
+		List<ValueTime> list = valueTimeMapper.selectByExample(example);
+		
+		if(CollectionUtils.isNotEmpty(list)){
+			ValueTime valueTime = list.get(0);
+			return valueTime.getValueId();
+		}
+		
+		return null;
+	}
+
+	
+	/**
+	 * 通过schedulingRuleId连表查询值次表信息返回
+	 */
+	@Override
+	public List<ValueTime> getValueTimes(String schedulingRuleId) {
+		List<ValueTime> list = valueTimeMapper.getValueTimeBySchedulingRuleId(schedulingRuleId);
+		return list;
+	}
+
+
+	
+
 }

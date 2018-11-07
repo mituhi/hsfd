@@ -3,11 +3,7 @@ package com.qz.zframe.device.dao;
 import com.qz.zframe.common.util.BaseMapper;
 import com.qz.zframe.device.entity.EquipmentClassification;
 import com.qz.zframe.device.entity.EquipmentClassificationExample;
-import com.qz.zframe.material.entity.Material;
-import com.qz.zframe.material.entity.MaterialExample;
-
 import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 @Mapper
