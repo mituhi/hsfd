@@ -6,16 +6,6 @@ import com.qz.zframe.maintain.entity.WorkorderType;
 public interface WorkorderTypeService {
 
     /**
-     * 工单分类列表查询
-     */
-    public ResultEntity getWorkorderTypeList();
-
-    /**
-     * 新建工单分类
-     */
-    public ResultEntity createWorkorderType();
-
-    /**
      * 添加工单类型
      */
     public ResultEntity addWorkorderType(WorkorderType workorderType);
@@ -33,5 +23,10 @@ public interface WorkorderTypeService {
     /**
      * 浏览工单类型
      */
-    public ResultEntity selectWorkorderType(String workorderTypeId);
+    public ResultEntity getWorkorderType(String workorderTypeId);
+
+    /**
+     * 工单分类列表查询
+     */
+    public ResultEntity getWorkorderTypeList();
 }

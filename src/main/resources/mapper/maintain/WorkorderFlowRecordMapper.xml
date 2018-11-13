@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.WorkorderFlowRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.WorkorderFlowRecord" >
+    <id column="record_id" property="recordId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="record_name" property="recordName" jdbcType="VARCHAR" />
+    <result column="deal_person" property="dealPerson" jdbcType="VARCHAR" />
+    <result column="deal_opinion" property="dealOpinion" jdbcType="VARCHAR" />
+    <result column="deal_result" property="dealResult" jdbcType="VARCHAR" />
+    <result column="deal_time" property="dealTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    record_id, workorder_id, record_name, deal_person, deal_opinion, deal_result, deal_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderFlowRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from workorder_flow_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from workorder_flow_record
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from workorder_flow_record
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderFlowRecordExample" >
+    delete from workorder_flow_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderFlowRecord" >
+    insert into workorder_flow_record (record_id, workorder_id, record_name, 
+      deal_person, deal_opinion, deal_result, 
+      deal_time)
+    values (#{recordId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{recordName,jdbcType=VARCHAR}, 
+      #{dealPerson,jdbcType=VARCHAR}, #{dealOpinion,jdbcType=VARCHAR}, #{dealResult,jdbcType=VARCHAR}, 
+      #{dealTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderFlowRecord" >
+    insert into workorder_flow_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        record_id,
+      </if>
+      <if test="workorderId != null" >
+        workorder_id,
+      </if>
+      <if test="recordName != null" >
+        record_name,
+      </if>
+      <if test="dealPerson != null" >
+        deal_person,
+      </if>
+      <if test="dealOpinion != null" >
+        deal_opinion,
+      </if>
+      <if test="dealResult != null" >
+        deal_result,
+      </if>
+      <if test="dealTime != null" >
+        deal_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recordId != null" >
+        #{recordId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordName != null" >
+        #{recordName,jdbcType=VARCHAR},
+      </if>
+      <if test="dealPerson != null" >
+        #{dealPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="dealOpinion != null" >
+        #{dealOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="dealResult != null" >
+        #{dealResult,jdbcType=VARCHAR},
+      </if>
+      <if test="dealTime != null" >
+        #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderFlowRecordExample" resultType="java.lang.Integer" >
+    select count(*) from workorder_flow_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update workorder_flow_record
+    <set >
+      <if test="record.recordId != null" >
+        record_id = #{record.recordId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderId != null" >
+        workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordName != null" >
+        record_name = #{record.recordName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealPerson != null" >
+        deal_person = #{record.dealPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealOpinion != null" >
+        deal_opinion = #{record.dealOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealResult != null" >
+        deal_result = #{record.dealResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealTime != null" >
+        deal_time = #{record.dealTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update workorder_flow_record
+    set record_id = #{record.recordId,jdbcType=VARCHAR},
+      workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      record_name = #{record.recordName,jdbcType=VARCHAR},
+      deal_person = #{record.dealPerson,jdbcType=VARCHAR},
+      deal_opinion = #{record.dealOpinion,jdbcType=VARCHAR},
+      deal_result = #{record.dealResult,jdbcType=VARCHAR},
+      deal_time = #{record.dealTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderFlowRecord" >
+    update workorder_flow_record
+    <set >
+      <if test="workorderId != null" >
+        workorder_id = #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordName != null" >
+        record_name = #{recordName,jdbcType=VARCHAR},
+      </if>
+      <if test="dealPerson != null" >
+        deal_person = #{dealPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="dealOpinion != null" >
+        deal_opinion = #{dealOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="dealResult != null" >
+        deal_result = #{dealResult,jdbcType=VARCHAR},
+      </if>
+      <if test="dealTime != null" >
+        deal_time = #{dealTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.WorkorderFlowRecord" >
+    update workorder_flow_record
+    set workorder_id = #{workorderId,jdbcType=VARCHAR},
+      record_name = #{recordName,jdbcType=VARCHAR},
+      deal_person = #{dealPerson,jdbcType=VARCHAR},
+      deal_opinion = #{dealOpinion,jdbcType=VARCHAR},
+      deal_result = #{dealResult,jdbcType=VARCHAR},
+      deal_time = #{dealTime,jdbcType=TIMESTAMP}
+    where record_id = #{recordId,jdbcType=VARCHAR}
+  </update>
+</mapper>

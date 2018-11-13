@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tickets.mapper.UserAssoInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.UserAssoInfo" >
+    <id column="asso_id" property="assoId" jdbcType="VARCHAR" />
+    <result column="work_ticket_type_id" property="workTicketTypeId" jdbcType="VARCHAR" />
+    <result column="oper_ticket_type_id" property="operTicketTypeId" jdbcType="VARCHAR" />
+    <result column="user_numbet" property="userNumbet" jdbcType="VARCHAR" />
+    <result column="user_work_number" property="userWorkNumber" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_unit" property="userUnit" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    asso_id, work_ticket_type_id, oper_ticket_type_id, user_numbet, user_work_number, 
+    user_name, user_unit, user_type
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.UserAssoInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user_asso_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_asso_info
+    where asso_id = #{assoId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from user_asso_info
+    where asso_id = #{assoId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.tickets.entity.UserAssoInfoExample" >
+    delete from user_asso_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.tickets.entity.UserAssoInfo" >
+    insert into user_asso_info (asso_id, work_ticket_type_id, oper_ticket_type_id, 
+      user_numbet, user_work_number, user_name, 
+      user_unit, user_type)
+    values (#{assoId,jdbcType=VARCHAR}, #{workTicketTypeId,jdbcType=VARCHAR}, #{operTicketTypeId,jdbcType=VARCHAR}, 
+      #{userNumbet,jdbcType=VARCHAR}, #{userWorkNumber,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{userUnit,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.UserAssoInfo" >
+    insert into user_asso_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="assoId != null" >
+        asso_id,
+      </if>
+      <if test="workTicketTypeId != null" >
+        work_ticket_type_id,
+      </if>
+      <if test="operTicketTypeId != null" >
+        oper_ticket_type_id,
+      </if>
+      <if test="userNumbet != null" >
+        user_numbet,
+      </if>
+      <if test="userWorkNumber != null" >
+        user_work_number,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userUnit != null" >
+        user_unit,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="assoId != null" >
+        #{assoId,jdbcType=VARCHAR},
+      </if>
+      <if test="workTicketTypeId != null" >
+        #{workTicketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="operTicketTypeId != null" >
+        #{operTicketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="userNumbet != null" >
+        #{userNumbet,jdbcType=VARCHAR},
+      </if>
+      <if test="userWorkNumber != null" >
+        #{userWorkNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userUnit != null" >
+        #{userUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.tickets.entity.UserAssoInfoExample" resultType="java.lang.Integer" >
+    select count(*) from user_asso_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user_asso_info
+    <set >
+      <if test="record.assoId != null" >
+        asso_id = #{record.assoId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workTicketTypeId != null" >
+        work_ticket_type_id = #{record.workTicketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operTicketTypeId != null" >
+        oper_ticket_type_id = #{record.operTicketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userNumbet != null" >
+        user_numbet = #{record.userNumbet,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userWorkNumber != null" >
+        user_work_number = #{record.userWorkNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userName != null" >
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userUnit != null" >
+        user_unit = #{record.userUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userType != null" >
+        user_type = #{record.userType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user_asso_info
+    set asso_id = #{record.assoId,jdbcType=VARCHAR},
+      work_ticket_type_id = #{record.workTicketTypeId,jdbcType=VARCHAR},
+      oper_ticket_type_id = #{record.operTicketTypeId,jdbcType=VARCHAR},
+      user_numbet = #{record.userNumbet,jdbcType=VARCHAR},
+      user_work_number = #{record.userWorkNumber,jdbcType=VARCHAR},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      user_unit = #{record.userUnit,jdbcType=VARCHAR},
+      user_type = #{record.userType,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.tickets.entity.UserAssoInfo" >
+    update user_asso_info
+    <set >
+      <if test="workTicketTypeId != null" >
+        work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="operTicketTypeId != null" >
+        oper_ticket_type_id = #{operTicketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="userNumbet != null" >
+        user_numbet = #{userNumbet,jdbcType=VARCHAR},
+      </if>
+      <if test="userWorkNumber != null" >
+        user_work_number = #{userWorkNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userUnit != null" >
+        user_unit = #{userUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where asso_id = #{assoId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.UserAssoInfo" >
+    update user_asso_info
+    set work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR},
+      oper_ticket_type_id = #{operTicketTypeId,jdbcType=VARCHAR},
+      user_numbet = #{userNumbet,jdbcType=VARCHAR},
+      user_work_number = #{userWorkNumber,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_unit = #{userUnit,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=VARCHAR}
+    where asso_id = #{assoId,jdbcType=VARCHAR}
+  </update>
+</mapper>

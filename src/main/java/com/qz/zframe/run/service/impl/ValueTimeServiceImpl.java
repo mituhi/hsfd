@@ -1,5 +1,6 @@
 package com.qz.zframe.run.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.ResultEntity;
-
 import com.qz.zframe.run.dao.ValueTimeMapper;
-
 import com.qz.zframe.run.entity.ValueTime;
 import com.qz.zframe.run.entity.ValueTimeExample;
 import com.qz.zframe.run.service.ValueTimeService;
@@ -37,8 +37,17 @@ public class ValueTimeServiceImpl implements ValueTimeService {
 	 * 批量获取
 	 */
 	@Override
-	public List<ValueTime> ListValueTime(ValueTime valueTime) {
-		return valueTimeMapper.listValueTime(valueTime);
+	public List<ValueTime> ListValueTime(ValueTimeExample example , int pageNo , int pageSize) {
+		
+		List<ValueTime> valueTimes = Collections.emptyList();
+		
+		if(pageNo != 0 && pageSize != 0){
+			PageHelper.startPage(pageNo, pageSize);
+			//查出记录
+			valueTimes =valueTimeMapper.selectByExample(example);
+		}
+		return valueTimes;
+		
 	}
 
 	
@@ -90,7 +99,12 @@ public class ValueTimeServiceImpl implements ValueTimeService {
 		ResultEntity resultEntity = new ResultEntity();
 		if (CollectionUtils.isNotEmpty(valueTimes)) {
 			for (ValueTime valueTime : valueTimes) {
+				
+				//执行更新前，确保排序没有改变:不允许修改排序字段
+				ValueTime valueTimeTemp = valueTimeMapper.selectByPrimaryKey(valueTime.getValueId());
+				valueTime.setSort(valueTimeTemp.getSort());
 				valueTimeMapper.updateByPrimaryKeySelective(valueTime);
+				
 			}
 			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("执行成功");
@@ -104,7 +118,18 @@ public class ValueTimeServiceImpl implements ValueTimeService {
 
 	@Override
 	public ResultEntity getMaxSort() {
-		return null;
+		ResultEntity resultEntity = new ResultEntity();
+		//设置初始值为0
+		int sort = 0 ;
+		try {
+			 ValueTime valueTime = valueTimeMapper.selectMaxSort();
+			 sort = valueTime.getSort();
+		} catch (Exception e) {
+			//捕获异常：则为系统第一次录入返回1
+		}
+		resultEntity.setMsg((sort+1)+"");
+		resultEntity.setCode(ErrorCode.SUCCESS);
+		return resultEntity;
 	}
 
 

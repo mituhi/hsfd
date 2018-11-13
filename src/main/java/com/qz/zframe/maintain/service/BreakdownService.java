@@ -29,11 +29,6 @@ public interface BreakdownService {
     public ResultEntity getBreakdownAttributeList();
 
     /**
-     * 新建故障信息
-     */
-    public ResultEntity createBreakdown();
-
-    /**
      * 添加故障信息
      */
     public ResultEntity addBreakdown(BreakdownInfo breakdownInfo);
@@ -51,5 +46,5 @@ public interface BreakdownService {
     /**
      * 故障信息浏览
      */
-    public ResultEntity selectBreakdownDetail(String breakdownId);
+    public ResultEntity getBreakdownDetail(String breakdownId);
 }

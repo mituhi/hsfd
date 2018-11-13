@@ -10,6 +10,7 @@
     <result column="value_name" property="valueName" jdbcType="VARCHAR" />
     <result column="shift_name" property="shiftName" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="scheduling_rule_id" property="schedulingRuleId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,7 +72,7 @@
   </sql>
   <sql id="Base_Column_List" >
     start_time, end_time, department, scheduling_code, scheduling_name, value_name, shift_name, 
-    user_id
+    user_id, scheduling_rule_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.SchedulingQueryExample" >
     select
@@ -96,10 +97,12 @@
   <insert id="insert" parameterType="com.qz.zframe.run.entity.SchedulingQuery" >
     insert into scheduling_query (start_time, end_time, department, 
       scheduling_code, scheduling_name, value_name, 
-      shift_name, user_id)
+      shift_name, user_id, scheduling_rule_id
+      )
     values (#{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, #{department,jdbcType=VARCHAR}, 
       #{schedulingCode,jdbcType=VARCHAR}, #{schedulingName,jdbcType=VARCHAR}, #{valueName,jdbcType=VARCHAR}, 
-      #{shiftName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR})
+      #{shiftName,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{schedulingRuleId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.SchedulingQuery" >
     insert into scheduling_query
@@ -128,6 +131,9 @@
       <if test="userId != null" >
         user_id,
       </if>
+      <if test="schedulingRuleId != null" >
+        scheduling_rule_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="startTime != null" >
@@ -153,6 +159,9 @@
       </if>
       <if test="userId != null" >
         #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingRuleId != null" >
+        #{schedulingRuleId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -189,6 +198,9 @@
       <if test="record.userId != null" >
         user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
+      <if test="record.schedulingRuleId != null" >
+        scheduling_rule_id = #{record.schedulingRuleId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -203,14 +215,14 @@
       scheduling_name = #{record.schedulingName,jdbcType=VARCHAR},
       value_name = #{record.valueName,jdbcType=VARCHAR},
       shift_name = #{record.shiftName,jdbcType=VARCHAR},
-      user_id = #{record.userId,jdbcType=VARCHAR}
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      scheduling_rule_id = #{record.schedulingRuleId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   
-  
-   <!-- 获取排班查询字段 -->
+  <!-- 获取排班查询字段 -->
  <select id="selectSchedulingQuery" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.SchedulingQuery">
   	SELECT 
 		scheduling_associated.start_time,scheduling_associated.end_time , shift_name , user_id 
@@ -233,12 +245,12 @@
 			and
 			rule_shift_value.scheduling_rule_id = scheduling_rule.scheduling_rule_id
 			
-			<if test="startTime != null and startTime != ''">
-                and scheduling_associated.start_time > #{startTime}
+			<if test="startTime != null">
+                and scheduling_associated.start_time >= #{startTime}
             </if>
             
-            <if test="endTime != null and endTime != ''">
-                and scheduling_associated.end_time  &lt;  #{endTime}
+            <if test="endTime != null">
+                and scheduling_associated.end_time  &lt;=  #{endTime}
             </if>
             
 			<if test="department != null and department != ''">
@@ -254,11 +266,12 @@
   
   
   
+  
   	<select id="queryOperator" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.SchedulingQuery">
   	
 	SELECT 
 		scheduling_associated.start_time , scheduling_associated.end_time , scheduling_management.department ,
-		scheduling_code ,scheduling_name , value_time.value_name , shift.shift_name ,user_value_time.user_id
+		scheduling_code ,scheduling_name , value_time.value_name , shift.shift_name ,user_value_time.user_id ,scheduling_rule.scheduling_rule_id
 		FROM 
 		value_time,shift,scheduling_rule,scheduling_management,
 		user_value_time,rule_shift_value,scheduling_associated
@@ -277,13 +290,24 @@
 		and
 		rule_shift_value.scheduling_rule_id = scheduling_rule.scheduling_rule_id
 	
-         <if test="startTime != null and startTime != ''">
-             and scheduling_associated.start_time =  #{startTime}
+         <if test="startTime != null">
+         	<!-- 在这里设置了查询的时间：有待商榷 -->
+             and scheduling_associated.start_time &lt;=  #{startTime}
+             and scheduling_associated.end_time >=  #{startTime}
          </if>
-         
+     
+        
 		<if test="shiftName != null and shiftName != ''">
             and shift.shift_name = #{shiftName}
          </if>
+         
+         <if test="schedulingRuleId != null and schedulingRuleId != ''">
+         	and scheduling_rule.scheduling_rule_id = #{schedulingRuleId}
+         </if>
+         
+         <if test="valueName != null and valueName != ''">
+					and value_name=#{valueName}         
+        </if>
 		
 		<if test="schedulingName != null and schedulingName != ''">
            and  scheduling_management.scheduling_name = #{schedulingName}
@@ -319,7 +343,6 @@
 			value_time.value_name = #{valueName}
   		
   	</update>
-  
   
   
   

@@ -2,6 +2,7 @@ package com.qz.zframe.tickets.mapper;
 
 import com.qz.zframe.tickets.entity.OperateTicket;
 import com.qz.zframe.tickets.entity.OperateTicketExample;
+import com.qz.zframe.tickets.vo.OperateTicketVo;
 import com.qz.zframe.tickets.vo.TicketStatisticsRes;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,14 +21,16 @@ public interface OperateTicketMapper {
     int insert(OperateTicket record);
 
     int insertSelective(OperateTicket record);
-    //操作票统计
-    List<TicketStatisticsRes> getOperateTicketStatisticsList(@Param("startTime")String startTime, @Param("endTime")String endTime);
     //批量删除`
     int batchDelete(@Param("array") String[] ids);
+    //详情查询
+    OperateTicketVo getOperateTicketDetail(@Param("ticketId") String ticketId);
     //列表查询
-    List<OperateTicket> getOperateTicketListByPageAndCondition(@Param("map") Map<String, String> pageAndCondition);
+    List<OperateTicketVo> getOperateTicketList(@Param("map") Map<String, String> pageAndCondition);
     //查询总记录数
-    int getTotalCount(@Param("map") Map<String, String> pageAndCondition);
+    int getTotal(@Param("map") Map<String, String> pageAndCondition);
+    //操作票统计
+    List<TicketStatisticsRes> getOperateTicketStatisticsList(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
     List<OperateTicket> selectByExample(OperateTicketExample example);
 

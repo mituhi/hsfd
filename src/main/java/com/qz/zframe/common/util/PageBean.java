@@ -12,7 +12,7 @@ public class PageBean<T> {
     @ApiModelProperty(value="每页显示的总条数",name="pageSize",required=false)
     private Integer pageSize = 10;
     // 总条数
-    @ApiModelProperty(value="总条数",name="totalNum",required=false)
+    @ApiModelProperty(value="当前页总条数",name="totalNum",required=false)
     private Integer totalNum;
     // 是否有下一页
     @ApiModelProperty(value="是否有下一页(0,没有；1，有)",name="isMore",required=false)

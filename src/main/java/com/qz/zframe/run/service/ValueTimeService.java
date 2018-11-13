@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.run.entity.ValueTime;
+import com.qz.zframe.run.entity.ValueTimeExample;
 
 /**
  * <p>Title: ValueTimeService</p>
@@ -20,7 +21,7 @@ public interface ValueTimeService {
 	 * @param: @return   
 	 * @return: List<ValueTime>
 	 */
-	List<ValueTime> ListValueTime(ValueTime valueTime);
+	List<ValueTime> ListValueTime(ValueTimeExample example , int pageNo , int pageSize);
 
 	/**
 	 * @Description:添加值次信息

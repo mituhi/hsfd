@@ -1,12 +1,13 @@
 package com.qz.zframe.maintain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiParam;
 
 import java.util.Date;
 
 public class WorkorderType {
 
-    @ApiParam(name="workorderTypeId",value="工单类型id",required=true)
+    @ApiParam(name="workorderTypeId",value="工单类型id",required=false)
     private String workorderTypeId;
 
     @ApiParam(name="workorderTypeCode",value="工单类型编码(自定义)",required=true)
@@ -15,13 +16,14 @@ public class WorkorderType {
     @ApiParam(name="workorderTypeName",value="工单类型名称",required=true)
     private String workorderTypeName;
 
-    @ApiParam(name="status",value="状态  1:启用  2:停用  0:删除",required=true)
+    @ApiParam(name="status",value="状态  1:启用  2:停用  0:删除",required=false)
     private String status;
 
     @ApiParam(name="maintainer",value="维护人",required=true)
     private String maintainer;
 
     @ApiParam(name="maintainDate",value="维护日期",required=true)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
     @ApiParam(name="remark",value="备注",required=false)

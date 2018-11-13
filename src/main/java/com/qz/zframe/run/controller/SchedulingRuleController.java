@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageInfo;
 import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.run.entity.RuleShiftValue;
 import com.qz.zframe.run.entity.SchedulingRule;
 import com.qz.zframe.run.entity.SchedulingRuleExample;
-import com.qz.zframe.run.entity.SchedulingRuleExample.Criteria;
+import com.qz.zframe.run.entity.Shift;
 import com.qz.zframe.run.entity.UserValueTime;
 import com.qz.zframe.run.entity.ValueTime;
 import com.qz.zframe.run.entity.result.SchedulingRuleResult;
@@ -66,83 +67,13 @@ public class SchedulingRuleController {
 	private ShiftService shiftService;
 	
 	
-	@RequestMapping(value="/schedulingRuleIndexPage" , method = RequestMethod.POST , produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(notes="排班规则首页",value="加载排班规则首页数据")
-	public PageResultEntity schedulingRuleIndexPage(@RequestParam(required = false, defaultValue = "1") Integer pageNo,
-			@RequestParam(required = false, defaultValue = "10") Integer pageSize,@RequestBody(required = false) SchedulingRule schedulingRule ){
-		
-		//声明返回对象
-		PageResultEntity pageResultEntity = new PageResultEntity();
-		
-		SchedulingRuleExample example = new SchedulingRuleExample();
-		//是否根据风电场查询
-		if(StringUtils.isNotBlank(schedulingRule.getDepartment())){
-			//根据风电场名称查询------这里直接使用名称（待维护）
-			example.createCriteria().andDepartmentEqualTo(schedulingRule.getDepartment());
-		}
-		if(StringUtils.isNotBlank(schedulingRule.getStatus())){
-			//根据状态查询
-			example.createCriteria().andStatusEqualTo(schedulingRule.getStatus());
-		}
-		
-		//执行查询:获得指定条数记录
-		List<SchedulingRule> schedulingRules = schedulingRuleService.listSchedulingRule(example, pageNo, pageSize);
-		
-		
-		//声明返回的集合对象
-		List<SchedulingRuleResult> results = new ArrayList<SchedulingRuleResult>();
-		
-		if(CollectionUtils.isNotEmpty(schedulingRules)){
-			//遍历获取值次名称
-			for (SchedulingRule schedulingRuleTemp : schedulingRules) {
-				
-				SchedulingRuleResult schedulingRuleResult = new SchedulingRuleResult();
-				//设置返回的schedulingRules属性值
-				schedulingRuleResult.setSchedulingRuleId(schedulingRuleTemp.getSchedulingRuleId());
-				schedulingRuleResult.setSchedulingRuleCode(schedulingRuleTemp.getSchedulingRuleCode());
-				schedulingRuleResult.setSchedulingRule(schedulingRuleTemp.getSchedulingRule());
-				schedulingRuleResult.setDepartment(schedulingRuleTemp.getDepartment());
-				schedulingRuleResult.setRotationCycle(schedulingRuleTemp.getRotationCycle());
-				schedulingRuleResult.setStatus(schedulingRuleTemp.getStatus());
-				
-				
-				List<ValueTime> valueTimes = valueTimeService.getValueTimes(schedulingRuleTemp.getSchedulingRuleId());
-				//创建存放valueCode集合
-				Set<String> valueCodes = new HashSet<String>();
-				//如果不为空
-				if (CollectionUtils.isNotEmpty(valueTimes)) {
-					for (ValueTime valueTime : valueTimes) {
-						valueCodes.add(valueTime.getValueCode());
-					}
-					schedulingRuleResult.setValueCodeList(valueCodes);
-				}
-				results.add(schedulingRuleResult);
-			}
-			pageResultEntity.setCode(ErrorCode.SUCCESS);
-			pageResultEntity.setMsg("查询成功");
-			pageResultEntity.setRows(results);
-			pageResultEntity.setTotal(schedulingRuleService.getCount(example));
-			return pageResultEntity;
-		}else{
-			return pageResultEntity;
-		}
-	}
-	
 	
 	/**
-	 * @Description:根据前台勾选的多个id，删除多个表相应记录
-	 * @param: @param ruleShiftValueIds
+	 * @Description:新增排班规则信息
+	 * @param: @param saveSchedulingRuleSubmit
 	 * @param: @return   
 	 * @return: ResultEntity
 	 */
-/*	@RequestMapping(value="/removeRuleShiftValue" , method = RequestMethod.DELETE , produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(notes="删除排班班次值次信息",value="ruleShiftValueIds为删除的依据")
-	public ResultEntity removeRuleShiftValue(List<String> ruleShiftValueIds){
-		return ruleShiftValueService.removeRuleShiftValue(ruleShiftValueIds);
-	}*/
-	
-	
-	
 	@RequestMapping(value="/saveSchedulingRule",method=RequestMethod.POST,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(notes="新增排班规则信息",value="新增排班规则信息")
 	public ResultEntity saveSchedulingRule(@RequestBody SaveSchedulingRuleSubmit saveSchedulingRuleSubmit){
@@ -231,52 +162,81 @@ public class SchedulingRuleController {
 	
 	
 	/**
-	 * @Description:批量排班规则批量查询
+	 * @Description:模糊查询排班规则表首页数据
 	 * @param: @param schedulingRule
 	 * @param: @return   
 	 * @return: PageResultEntity
 	 */
 	
-	@RequestMapping(value="/listSchedulingRule" , method = RequestMethod.POST , produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(notes="批量排班规则批量查询",value="批量排班规则批量查询")
-	public PageResultEntity listSchedulingRule(@RequestBody SchedulingRule schedulingRule,
+	@RequestMapping(value="/listSchedulingRule" , method = RequestMethod.GET , produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(notes="模糊查询排班规则表首页数据",value="模糊查询排班规则表首页数据")
+	public PageResultEntity listSchedulingRule(@RequestParam(required = false) List<String> departments,@RequestParam(required = false) String status,
 			@RequestParam(required = false, defaultValue = "1") Integer pageNo,
 			@RequestParam(required = false, defaultValue = "10") Integer pageSize){
 		
+		PageResultEntity pageResultEntity = new PageResultEntity();
+		
 		SchedulingRuleExample example = new SchedulingRuleExample();
 
-		// 封装查询信息
-		Criteria criteria = example.createCriteria();
+		//如果状态值一栏选中
+		if(StringUtils.isNotBlank(status)){
+			//设置模糊查询
+			example.createCriteria().andStatusEqualTo(status);
+		}
+
+		//如果部门选中（可以是多个）
+		if(CollectionUtils.isNotEmpty(departments)){
+			//设置模糊查询
+			for (String department : departments) {
+				example.or().andDepartmentEqualTo(department);
+			}
+		}
 		
-		if (StringUtils.isNotBlank(schedulingRule.getSchedulingRuleId())) {
-			criteria.andSchedulingRuleIdEqualTo(schedulingRule.getSchedulingRuleId());
-		} 
-
-		if (StringUtils.isNotBlank(schedulingRule.getStatus())) {
-			criteria.andStatusEqualTo(schedulingRule.getStatus());
-		}
-
-		if (StringUtils.isNotBlank(schedulingRule.getSchedulingRuleCode())) {
-			criteria.andSchedulingRuleCodeEqualTo(schedulingRule.getSchedulingRuleCode());
-		}
-
-		if (StringUtils.isNotBlank(schedulingRule.getIsAcrossDay())) {
-			criteria.andIsAcrossDayEqualTo(schedulingRule.getIsAcrossDay());
-		}
-
-		if (StringUtils.isNotBlank(schedulingRule.getDepartment())) {
-			criteria.andDepartmentEqualTo(schedulingRule.getDepartment());
-		}
-
 		// 执行查询操作
 		List<SchedulingRule> list = schedulingRuleService.listSchedulingRule(example, pageNo, pageSize);
-
-		PageResultEntity pageResultEntity = new PageResultEntity();
-		pageResultEntity.setRows(list);
-		pageResultEntity.setCode(ErrorCode.SUCCESS);
-		pageResultEntity.setMsg("查询成功");
-
-		return pageResultEntity;
+		
+		
+		//声明返回的集合对象
+		List<SchedulingRuleResult> results = new ArrayList<SchedulingRuleResult>();
+		
+		if(CollectionUtils.isNotEmpty(list)){
+			//遍历获取值次名称
+			for (SchedulingRule schedulingRuleTemp : list) {
+				
+				SchedulingRuleResult schedulingRuleResult = new SchedulingRuleResult();
+				//设置返回的schedulingRules属性值
+				schedulingRuleResult.setSchedulingRuleId(schedulingRuleTemp.getSchedulingRuleId());
+				schedulingRuleResult.setSchedulingRuleCode(schedulingRuleTemp.getSchedulingRuleCode());
+				schedulingRuleResult.setSchedulingRule(schedulingRuleTemp.getSchedulingRule());
+				schedulingRuleResult.setDepartment(schedulingRuleTemp.getDepartment());
+				schedulingRuleResult.setRotationCycle(schedulingRuleTemp.getRotationCycle());
+				schedulingRuleResult.setStatus(schedulingRuleTemp.getStatus());
+				
+				
+				List<ValueTime> valueTimes = valueTimeService.getValueTimes(schedulingRuleTemp.getSchedulingRuleId());
+				//创建存放valueCode集合
+				Set<String> valueCodes = new HashSet<String>();
+				//如果不为空
+				if (CollectionUtils.isNotEmpty(valueTimes)) {
+					for (ValueTime valueTime : valueTimes) {
+						valueCodes.add(valueTime.getValueCode());
+					}
+					schedulingRuleResult.setValueCodeList(valueCodes);
+				}
+				results.add(schedulingRuleResult);
+			}
+			
+			PageInfo<SchedulingRule> pageInfo = new PageInfo<SchedulingRule>(list);
+			pageResultEntity.setRows(results);
+			pageResultEntity.setTotal((int)pageInfo.getTotal());
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			pageResultEntity.setMsg("查询成功");
+			
+			return pageResultEntity;
+		}else{
+			return pageResultEntity;
+		}
+		
 	}
 	
 	
@@ -284,13 +244,13 @@ public class SchedulingRuleController {
 	
 	/**
 	 * @Description:根据排班规则表 id 批量删除排班规则表信息
-	 * @param: @param schedulingRuleId
+	 * @param: @param schedulingRuleId：勾选被删除的排班规则id
 	 * @param: @return   
 	 * @return: ResultEntity
 	 */
 	@RequestMapping(value="/removeSchedulingRule",method=RequestMethod.DELETE,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(notes="勾选复选框按钮进行删除", value="删除排班规则表信息")
-	public ResultEntity removeSchedulingRule(@RequestBody List<String> schedulingRuleIds){
+	public ResultEntity removeSchedulingRule(@RequestParam List<String> schedulingRuleIds){
 		return schedulingRuleService.removeSchedulingRule(schedulingRuleIds);
 	}
 	
@@ -415,6 +375,71 @@ public class SchedulingRuleController {
 			resultEntity.setMsg("执行成功");
 			return resultEntity;
 		}
+	}
+	
+	
+	 /*************************    点击编辑：获取对应信息               ***************************/
+	@RequestMapping(value="/getSchedulingRule" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value="点击编辑：获取对应信息 ", notes="点击编辑：获取对应信息")
+	public ResultEntity getSchedulingRule(@RequestParam String schedulingRuleId){
+		
+		ResultEntity resultEntity = new ResultEntity();
+
+		// 如果数据不为空
+		if (StringUtils.isNotBlank(schedulingRuleId)) {
+			
+			
+			SchedulingRuleExample example = new SchedulingRuleExample();
+			example.createCriteria().andSchedulingRuleIdEqualTo(schedulingRuleId);
+			
+			// 执行查询操作
+			List<SchedulingRule> list = schedulingRuleService.listSchedulingRule(example, 0, 0);
+			
+			
+			//声明返回的对象
+			List<SchedulingRuleResult> results = new ArrayList<SchedulingRuleResult>();
+			
+			if(CollectionUtils.isNotEmpty(list)){
+				//遍历获取值次名称
+				for (SchedulingRule schedulingRuleTemp : list) {
+					
+					SchedulingRuleResult schedulingRuleResult = new SchedulingRuleResult();
+					//设置返回的schedulingRules属性值
+					schedulingRuleResult.setSchedulingRuleId(schedulingRuleTemp.getSchedulingRuleId());
+					schedulingRuleResult.setSchedulingRuleCode(schedulingRuleTemp.getSchedulingRuleCode());
+					schedulingRuleResult.setSchedulingRule(schedulingRuleTemp.getSchedulingRule());
+					schedulingRuleResult.setDepartment(schedulingRuleTemp.getDepartment());
+					schedulingRuleResult.setRotationCycle(schedulingRuleTemp.getRotationCycle());
+					schedulingRuleResult.setStatus(schedulingRuleTemp.getStatus());
+					
+					
+					List<ValueTime> valueTimes = valueTimeService.getValueTimes(schedulingRuleTemp.getSchedulingRuleId());
+					//创建存放valueCode集合
+					Set<String> valueCodes = new HashSet<String>();
+					//如果不为空
+					if (CollectionUtils.isNotEmpty(valueTimes)) {
+						for (ValueTime valueTime : valueTimes) {
+							valueCodes.add(valueTime.getValueCode());
+						}
+						schedulingRuleResult.setValueCodeList(valueCodes);
+					}
+					results.add(schedulingRuleResult);
+				}
+				
+			}
+			
+			
+			resultEntity.setCode(ErrorCode.SUCCESS);
+			resultEntity.setMsg("执行成功");
+			resultEntity.setData(results);
+			return resultEntity;
+		}
+		
+		
+		resultEntity.setCode(ErrorCode.ERROR);
+		resultEntity.setMsg("缺少字段");
+		return resultEntity;
+
 	}
 	
 	

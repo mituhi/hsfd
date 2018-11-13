@@ -15,7 +15,6 @@ import com.qz.zframe.device.dao.OutputParametersMapper;
 import com.qz.zframe.device.dao.RunParametersMapper;
 import com.qz.zframe.device.entity.OutputParameters;
 import com.qz.zframe.device.entity.OutputParametersExample;
-import com.qz.zframe.device.entity.Parameters;
 import com.qz.zframe.device.entity.RunParameters;
 import com.qz.zframe.device.entity.RunParametersExample;
 import com.qz.zframe.device.service.OutputRunService;
@@ -38,7 +37,7 @@ public class OutputRunServiceImpl implements OutputRunService {
 		} else {
 			list = outputParametersMapper.selectByExample(output);
 		}
-		resultEntity.setCode(0);
+		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setRows(list);
 		return resultEntity;
 	}
@@ -54,7 +53,7 @@ public class OutputRunServiceImpl implements OutputRunService {
 		} else {
 			list = runParametersMapper.selectByExample(run);
 		}
-		resultEntity.setCode(0);
+		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setRows(list);
 		return resultEntity;
 	}
@@ -64,10 +63,10 @@ public class OutputRunServiceImpl implements OutputRunService {
 		ResultEntity resultEntity = new ResultEntity();
 		int delete = runParametersMapper.deleteByPrimaryKeyList(runIds);
 		if (delete < 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("删除失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("删除成功");
 		}
 		return resultEntity;
@@ -78,10 +77,10 @@ public class OutputRunServiceImpl implements OutputRunService {
 		ResultEntity resultEntity = new ResultEntity();
 		int delete = outputParametersMapper.deleteByPrimaryKeyList(outputIds);
 		if (delete < 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("删除失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("删除成功");
 		}
 		return resultEntity;
@@ -93,10 +92,10 @@ public class OutputRunServiceImpl implements OutputRunService {
 		output.setOutputId(UUIdUtil.getUUID());
 		int save = outputParametersMapper.insert(output);
 		if (save == 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("新增失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("新增成功");
 		}
 		return resultEntity;
@@ -108,10 +107,10 @@ public class OutputRunServiceImpl implements OutputRunService {
 		run.setRunId(UUIdUtil.getUUID());
 		int save = runParametersMapper.insert(run);
 		if (save == 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("新增失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("新增成功");
 		}
 		return resultEntity;
@@ -127,10 +126,10 @@ public class OutputRunServiceImpl implements OutputRunService {
 		} else {
 			int save = outputParametersMapper.updateByPrimaryKey(output);
 			if (save == 0) {
-				resultEntity.setCode(-1);
+				resultEntity.setCode(ErrorCode.ERROR);
 				resultEntity.setMsg("修改失败");
 			} else {
-				resultEntity.setCode(0);
+				resultEntity.setCode(ErrorCode.SUCCESS);
 				resultEntity.setMsg("修改成功");
 			}
 		}
@@ -147,10 +146,10 @@ public class OutputRunServiceImpl implements OutputRunService {
 		} else {
 			int save = runParametersMapper.updateByPrimaryKey(run);
 			if (save == 0) {
-				resultEntity.setCode(-1);
+				resultEntity.setCode(ErrorCode.ERROR);
 				resultEntity.setMsg("修改失败");
 			} else {
-				resultEntity.setCode(0);
+				resultEntity.setCode(ErrorCode.SUCCESS);
 				resultEntity.setMsg("修改成功");
 			}
 		}

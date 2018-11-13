@@ -7,28 +7,28 @@ public class SchedulingRule {
 	@ApiModelProperty(value="排班规则id",name="schedulingRuleId")
     private String schedulingRuleId;
 
-	@ApiModelProperty(value="排班规则编码",name="schedulingRuleCode")
+	@ApiModelProperty(value="排班规则编码",name="schedulingRuleCode",required = true)
     private String schedulingRuleCode;
 
-	@ApiModelProperty(value="排班规则名称",name="schedulingRule")
+	@ApiModelProperty(value="排班规则名称",name="schedulingRule",required = true)
     private String schedulingRule;
 
-	@ApiModelProperty(value="部门",name="department")
+	@ApiModelProperty(value="部门",name="department",required = true)
     private String department;
 
-	@ApiModelProperty(value="排班班次",name="schedulingShift")
+	@ApiModelProperty(value="排班班次",name="schedulingShift",required = true)
     private String schedulingShift;
 
-	@ApiModelProperty(value="轮换周期",name="rotationCycle")
+	@ApiModelProperty(value="轮换周期",name="rotationCycle",required = true)
     private String rotationCycle;
 
-	@ApiModelProperty(value="是否跨天",name="isAcrossDay")
+	@ApiModelProperty(value="是否跨天",name="isAcrossDay",required = true)
     private String isAcrossDay;
 
-	@ApiModelProperty(value="横跨天数",name="dayNum")
+	@ApiModelProperty(value="横跨天数",name="dayNum",required = true)
     private String dayNum;
 
-	@ApiModelProperty(value="状态",name="status")
+	@ApiModelProperty(value="状态",name="status",required = true)
     private String status;
 
     public String getSchedulingRuleId() {

@@ -4,30 +4,31 @@
   <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.OperateTicket" >
     <id column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
     <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
-    <result column="ticket_type_id" property="ticketTypeId" jdbcType="VARCHAR" />
-    <result column="ticket_code" property="ticketCode" jdbcType="VARCHAR" />
+    <result column="oper_ticket_type_id" property="operTicketTypeId" jdbcType="VARCHAR" />
+    <result column="typical_ticket_id" property="typicalTicketId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="flow_step" property="flowStep" jdbcType="VARCHAR" />
-    <result column="typical_ticket_id" property="typicalTicketId" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
-    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
-    <result column="departments" property="departments" jdbcType="VARCHAR" />
+    <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
     <result column="applicant" property="applicant" jdbcType="VARCHAR" />
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
     <result column="sender" property="sender" jdbcType="VARCHAR" />
     <result column="receiver" property="receiver" jdbcType="VARCHAR" />
-    <result column="location" property="location" jdbcType="VARCHAR" />
-    <result column="equipment" property="equipment" jdbcType="VARCHAR" />
-    <result column="machine_set" property="machineSet" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="work_team" property="workTeam" jdbcType="VARCHAR" />
     <result column="executer" property="executer" jdbcType="VARCHAR" />
     <result column="supervisior" property="supervisior" jdbcType="VARCHAR" />
-    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
-    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="oper_start_time" property="operStartTime" jdbcType="TIMESTAMP" />
+    <result column="oper_end_time" property="operEndTime" jdbcType="TIMESTAMP" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
     <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
-    <result column="operate_items_ids" property="operateItemsIds" jdbcType="VARCHAR" />
-    <result column="examine_approve_person" property="examineApprovePerson" jdbcType="VARCHAR" />
-    <result column="order_time" property="orderTime" jdbcType="TIMESTAMP" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -88,12 +89,140 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ticket_id, serial_number, ticket_type_id, ticket_code, status, flow_step, typical_ticket_id, 
-    wind_id, company_id, departments, applicant, apply_time, sender, receiver, location, 
-    equipment, machine_set, executer, supervisior, start_time, end_time, operate_content, 
-    operate_items_ids, examine_approve_person, order_time, remark
+    ticket_id, serial_number, oper_ticket_type_id, typical_ticket_id, workorder_id, order_id, 
+    maintainer, maintain_date, status, flow_step, wind_id, crew_id, applicant, apply_time, 
+    sender, receiver, send_time, work_team, executer, supervisior, oper_start_time, oper_end_time, 
+    position_id, position_desc, equipment_id, equipment_desc, operate_content
   </sql>
 
+
+
+
+
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update operate_ticket set status = "0"
+    where ticket_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+  <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.OperateTicketVo" >
+    <id column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="oper_ticket_type_id" property="operTicketTypeId" jdbcType="VARCHAR" />
+    <result column="typical_ticket_id" property="typicalTicketId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="flow_step" property="flowStep" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="sender" property="sender" jdbcType="VARCHAR" />
+    <result column="receiver" property="receiver" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="work_team" property="workTeam" jdbcType="VARCHAR" />
+    <result column="executer" property="executer" jdbcType="VARCHAR" />
+    <result column="supervisior" property="supervisior" jdbcType="VARCHAR" />
+    <result column="oper_start_time" property="operStartTime" jdbcType="TIMESTAMP" />
+    <result column="oper_end_time" property="operEndTime" jdbcType="TIMESTAMP" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
+    <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="crew_name" property="crewName" jdbcType="VARCHAR" />
+    <result column="position_name" property="positionName" jdbcType="VARCHAR" />
+    <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
+    <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
+    <result column="typical_ticket_name" property="typicalTicketName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.ticket_id as ticket_id, a.serial_number as serial_number, a.oper_ticket_type_id as oper_ticket_type_id,
+    a.typical_ticket_id as typical_ticket_id, a.workorder_id as workorder_id, a.order_id as order_id,
+    a.maintainer as maintainer, a.maintain_date as maintain_date, a.status as status, a.flow_step as flow_step,
+    a.wind_id as wind_id, a.crew_id as crew_id, a.applicant as applicant, a.apply_time as apply_time,
+    a.sender as sender, a.receiver as receiver, a.send_time as send_time, a.work_team as work_team, a.executer as executer,
+    a.supervisior as supervisior, a.oper_start_time as oper_start_time, a.oper_end_time as oper_end_time,
+    a.position_id as position_id, a.position_desc as position_desc, a.equipment_id as equipment_id, a.equipment_desc as equipment_desc,
+    a.operate_content as operate_content,
+    b.architecture_name as wind_name,d.crew_name as crew_name,e.position_name as position_name,f.equipment_name as equipment_name,
+    g.ticket_type_name as ticket_type_name,h.typical_ticket_name as typical_ticket_name
+  </sql>
+  <select id="getOperateTicketDetail" resultMap="GetResultMap">
+  select
+  <include refid="Get_Column_List" />
+  from operate_ticket a
+  left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+  left join crew_information d on a.crew_id = d.crew_id
+  left join position_encode e on a.position_id = e.position_id
+  left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+  left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+  left join typical_operate_ticket h on a.typical_ticket_id = h.typical_ticket_id
+  where a.status != '0' and a.ticket_id = #{ticketId}
+  </select>
+  <select id="getOperateTicketList" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from operate_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+    left join typical_operate_ticket h on a.typical_ticket_id = h.typical_ticket_id
+    where a.status != '0'
+    <if test="map.operTicketTypeId != null">
+      and a.oper_ticket_type_id = #{map.operTicketTypeId}
+    </if>
+    <if test="map.windId != null">
+      and a.wind_id = #{map.windId}
+    </if>
+    <if test="map.status != null">
+      and a.status = #{map.status}
+    </if>
+    <if test="map.operateContent != null">
+      and a.operate_content like '%${map.operateContent}%'
+    </if>
+    <if test="map.startTime != null">
+      and a.apply_time &gt;= #{map.startTime}
+    </if>
+    <if test="map.endTime != null">
+      and a.apply_time &lt;= #{map.endTime}
+    </if>
+    order by a.serial_number desc
+    limit ${map.start},${map.pageSize};
+  </select>
+  <select id="getTotal" resultType="java.lang.Integer">
+    select
+    count(*)
+    from operate_ticket
+    where status != '0'
+    <if test="map.operTicketTypeId != null">
+      and oper_ticket_type_id = #{map.operTicketTypeId}
+    </if>
+    <if test="map.windId != null">
+      and wind_id = #{map.windId}
+    </if>
+    <if test="map.status != null">
+      and status = #{map.status}
+    </if>
+    <if test="map.operateContent != null">
+      and operate_content like '%${map.operateContent}%'
+    </if>
+    <if test="map.startTime != null">
+      and apply_time &gt;= #{map.startTime}
+    </if>
+    <if test="map.endTime != null">
+      and apply_time &lt;= #{map.endTime}
+    </if>
+  </select>
   <resultMap id="OperateTicketStatisticsMap" type="com.qz.zframe.tickets.vo.TicketStatisticsRes">
     <id column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="apply_count" property="applyCount" jdbcType="VARCHAR" />
@@ -119,66 +248,14 @@
     group by wind_id) as a;
   </select>
 
-  <update id="batchDelete" parameterType="java.lang.String">
-    update operate_ticket set status = "0"
-    where ticket_id in
-    <foreach collection="array" index="index" item="item"
-             open="(" separator="," close=")">
-      #{item}
-    </foreach>
-  </update>
 
-  <select id="getOperateTicketListByPageAndCondition" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from operate_ticket
-    where 1=1
-    <if test="map.ticketTypeId != null">
-      and ticket_type_id = #{map.ticketTypeId}
-    </if>
-    <if test="map.machineSet != null">
-      and machine_set = #{map.machineSet}
-    </if>
-    <if test="map.status != null">
-      and status = #{map.status}
-    </if>
-    <if test="map.operateContent != null">
-      and operate_content like '%${map.operateContent}%'
-    </if>
-    <if test="map.applyStartTime != null">
-      and apply_time &gt;= #{map.applyStartTime}
-    </if>
-    <if test="map.applyEndTime != null">
-      and apply_time &lt;= #{map.applyEndTime}
-    </if>
-    order by serial_number desc
-    limit ${map.start},${map.pageSize};
-  </select>
 
-  <select id="getTotalCount" resultType="java.lang.Integer">
-    select
-    count(*)
-    from operate_ticket
-    where 1=1
-    <if test="map.ticketTypeId != null">
-      and ticket_type_id = #{map.ticketTypeId}
-    </if>
-    <if test="map.machineSet != null">
-      and machine_set = #{map.machineSet}
-    </if>
-    <if test="map.status != null">
-      and status = #{map.status}
-    </if>
-    <if test="map.operateContent != null">
-      and operate_content like '%${map.operateContent}%'
-    </if>
-    <if test="map.applyStartTime != null">
-      and apply_time &gt;= #{map.applyStartTime}
-    </if>
-    <if test="map.applyEndTime != null">
-      and apply_time &lt;= #{map.applyEndTime}
-    </if>
-  </select>
+
+
+
+
+
+
 
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.OperateTicketExample" >
     select
@@ -211,24 +288,26 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.tickets.entity.OperateTicket" >
-    insert into operate_ticket (ticket_id, serial_number, ticket_type_id, 
-      ticket_code, status, flow_step, 
-      typical_ticket_id, wind_id, company_id, 
-      departments, applicant, apply_time, 
-      sender, receiver, location, 
-      equipment, machine_set, executer, 
-      supervisior, start_time, end_time, 
-      operate_content, operate_items_ids, examine_approve_person, 
-      order_time, remark)
-    values (#{ticketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{ticketTypeId,jdbcType=VARCHAR}, 
-      #{ticketCode,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{flowStep,jdbcType=VARCHAR}, 
-      #{typicalTicketId,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
-      #{departments,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
-      #{sender,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, 
-      #{equipment,jdbcType=VARCHAR}, #{machineSet,jdbcType=VARCHAR}, #{executer,jdbcType=VARCHAR}, 
-      #{supervisior,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{operateContent,jdbcType=VARCHAR}, #{operateItemsIds,jdbcType=VARCHAR}, #{examineApprovePerson,jdbcType=VARCHAR}, 
-      #{orderTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
+    insert into operate_ticket (ticket_id, serial_number, oper_ticket_type_id, 
+      typical_ticket_id, workorder_id, order_id, 
+      maintainer, maintain_date, status, 
+      flow_step, wind_id, crew_id, 
+      applicant, apply_time, sender, 
+      receiver, send_time, work_team, 
+      executer, supervisior, oper_start_time, 
+      oper_end_time, position_id, position_desc, 
+      equipment_id, equipment_desc, operate_content
+      )
+    values (#{ticketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{operTicketTypeId,jdbcType=VARCHAR}, 
+      #{typicalTicketId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, 
+      #{flowStep,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{crewId,jdbcType=VARCHAR}, 
+      #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, #{sender,jdbcType=VARCHAR}, 
+      #{receiver,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, #{workTeam,jdbcType=VARCHAR}, 
+      #{executer,jdbcType=VARCHAR}, #{supervisior,jdbcType=VARCHAR}, #{operStartTime,jdbcType=TIMESTAMP}, 
+      #{operEndTime,jdbcType=TIMESTAMP}, #{positionId,jdbcType=VARCHAR}, #{positionDesc,jdbcType=VARCHAR}, 
+      #{equipmentId,jdbcType=VARCHAR}, #{equipmentDesc,jdbcType=VARCHAR}, #{operateContent,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.OperateTicket" >
     insert into operate_ticket
@@ -239,11 +318,23 @@
       <if test="serialNumber != null" >
         serial_number,
       </if>
-      <if test="ticketTypeId != null" >
-        ticket_type_id,
+      <if test="operTicketTypeId != null" >
+        oper_ticket_type_id,
       </if>
-      <if test="ticketCode != null" >
-        ticket_code,
+      <if test="typicalTicketId != null" >
+        typical_ticket_id,
+      </if>
+      <if test="workorderId != null" >
+        workorder_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date,
       </if>
       <if test="status != null" >
         status,
@@ -251,17 +342,11 @@
       <if test="flowStep != null" >
         flow_step,
       </if>
-      <if test="typicalTicketId != null" >
-        typical_ticket_id,
-      </if>
       <if test="windId != null" >
         wind_id,
       </if>
-      <if test="companyId != null" >
-        company_id,
-      </if>
-      <if test="departments != null" >
-        departments,
+      <if test="crewId != null" >
+        crew_id,
       </if>
       <if test="applicant != null" >
         applicant,
@@ -275,14 +360,11 @@
       <if test="receiver != null" >
         receiver,
       </if>
-      <if test="location != null" >
-        location,
+      <if test="sendTime != null" >
+        send_time,
       </if>
-      <if test="equipment != null" >
-        equipment,
-      </if>
-      <if test="machineSet != null" >
-        machine_set,
+      <if test="workTeam != null" >
+        work_team,
       </if>
       <if test="executer != null" >
         executer,
@@ -290,26 +372,26 @@
       <if test="supervisior != null" >
         supervisior,
       </if>
-      <if test="startTime != null" >
-        start_time,
+      <if test="operStartTime != null" >
+        oper_start_time,
       </if>
-      <if test="endTime != null" >
-        end_time,
+      <if test="operEndTime != null" >
+        oper_end_time,
+      </if>
+      <if test="positionId != null" >
+        position_id,
+      </if>
+      <if test="positionDesc != null" >
+        position_desc,
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id,
+      </if>
+      <if test="equipmentDesc != null" >
+        equipment_desc,
       </if>
       <if test="operateContent != null" >
         operate_content,
-      </if>
-      <if test="operateItemsIds != null" >
-        operate_items_ids,
-      </if>
-      <if test="examineApprovePerson != null" >
-        examine_approve_person,
-      </if>
-      <if test="orderTime != null" >
-        order_time,
-      </if>
-      <if test="remark != null" >
-        remark,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -319,11 +401,23 @@
       <if test="serialNumber != null" >
         #{serialNumber,jdbcType=VARCHAR},
       </if>
-      <if test="ticketTypeId != null" >
-        #{ticketTypeId,jdbcType=VARCHAR},
+      <if test="operTicketTypeId != null" >
+        #{operTicketTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="ticketCode != null" >
-        #{ticketCode,jdbcType=VARCHAR},
+      <if test="typicalTicketId != null" >
+        #{typicalTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        #{maintainDate,jdbcType=DATE},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
@@ -331,17 +425,11 @@
       <if test="flowStep != null" >
         #{flowStep,jdbcType=VARCHAR},
       </if>
-      <if test="typicalTicketId != null" >
-        #{typicalTicketId,jdbcType=VARCHAR},
-      </if>
       <if test="windId != null" >
         #{windId,jdbcType=VARCHAR},
       </if>
-      <if test="companyId != null" >
-        #{companyId,jdbcType=VARCHAR},
-      </if>
-      <if test="departments != null" >
-        #{departments,jdbcType=VARCHAR},
+      <if test="crewId != null" >
+        #{crewId,jdbcType=VARCHAR},
       </if>
       <if test="applicant != null" >
         #{applicant,jdbcType=VARCHAR},
@@ -355,14 +443,11 @@
       <if test="receiver != null" >
         #{receiver,jdbcType=VARCHAR},
       </if>
-      <if test="location != null" >
-        #{location,jdbcType=VARCHAR},
+      <if test="sendTime != null" >
+        #{sendTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="equipment != null" >
-        #{equipment,jdbcType=VARCHAR},
-      </if>
-      <if test="machineSet != null" >
-        #{machineSet,jdbcType=VARCHAR},
+      <if test="workTeam != null" >
+        #{workTeam,jdbcType=VARCHAR},
       </if>
       <if test="executer != null" >
         #{executer,jdbcType=VARCHAR},
@@ -370,26 +455,26 @@
       <if test="supervisior != null" >
         #{supervisior,jdbcType=VARCHAR},
       </if>
-      <if test="startTime != null" >
-        #{startTime,jdbcType=TIMESTAMP},
+      <if test="operStartTime != null" >
+        #{operStartTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
-        #{endTime,jdbcType=TIMESTAMP},
+      <if test="operEndTime != null" >
+        #{operEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="positionId != null" >
+        #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionDesc != null" >
+        #{positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentDesc != null" >
+        #{equipmentDesc,jdbcType=VARCHAR},
       </if>
       <if test="operateContent != null" >
         #{operateContent,jdbcType=VARCHAR},
-      </if>
-      <if test="operateItemsIds != null" >
-        #{operateItemsIds,jdbcType=VARCHAR},
-      </if>
-      <if test="examineApprovePerson != null" >
-        #{examineApprovePerson,jdbcType=VARCHAR},
-      </if>
-      <if test="orderTime != null" >
-        #{orderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -408,11 +493,23 @@
       <if test="record.serialNumber != null" >
         serial_number = #{record.serialNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.ticketTypeId != null" >
-        ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      <if test="record.operTicketTypeId != null" >
+        oper_ticket_type_id = #{record.operTicketTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="record.ticketCode != null" >
-        ticket_code = #{record.ticketCode,jdbcType=VARCHAR},
+      <if test="record.typicalTicketId != null" >
+        typical_ticket_id = #{record.typicalTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderId != null" >
+        workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainDate != null" >
+        maintain_date = #{record.maintainDate,jdbcType=DATE},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
@@ -420,17 +517,11 @@
       <if test="record.flowStep != null" >
         flow_step = #{record.flowStep,jdbcType=VARCHAR},
       </if>
-      <if test="record.typicalTicketId != null" >
-        typical_ticket_id = #{record.typicalTicketId,jdbcType=VARCHAR},
-      </if>
       <if test="record.windId != null" >
         wind_id = #{record.windId,jdbcType=VARCHAR},
       </if>
-      <if test="record.companyId != null" >
-        company_id = #{record.companyId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.departments != null" >
-        departments = #{record.departments,jdbcType=VARCHAR},
+      <if test="record.crewId != null" >
+        crew_id = #{record.crewId,jdbcType=VARCHAR},
       </if>
       <if test="record.applicant != null" >
         applicant = #{record.applicant,jdbcType=VARCHAR},
@@ -444,14 +535,11 @@
       <if test="record.receiver != null" >
         receiver = #{record.receiver,jdbcType=VARCHAR},
       </if>
-      <if test="record.location != null" >
-        location = #{record.location,jdbcType=VARCHAR},
+      <if test="record.sendTime != null" >
+        send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.equipment != null" >
-        equipment = #{record.equipment,jdbcType=VARCHAR},
-      </if>
-      <if test="record.machineSet != null" >
-        machine_set = #{record.machineSet,jdbcType=VARCHAR},
+      <if test="record.workTeam != null" >
+        work_team = #{record.workTeam,jdbcType=VARCHAR},
       </if>
       <if test="record.executer != null" >
         executer = #{record.executer,jdbcType=VARCHAR},
@@ -459,26 +547,26 @@
       <if test="record.supervisior != null" >
         supervisior = #{record.supervisior,jdbcType=VARCHAR},
       </if>
-      <if test="record.startTime != null" >
-        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      <if test="record.operStartTime != null" >
+        oper_start_time = #{record.operStartTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.endTime != null" >
-        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      <if test="record.operEndTime != null" >
+        oper_end_time = #{record.operEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.positionId != null" >
+        position_id = #{record.positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionDesc != null" >
+        position_desc = #{record.positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentId != null" >
+        equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentDesc != null" >
+        equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
       </if>
       <if test="record.operateContent != null" >
         operate_content = #{record.operateContent,jdbcType=VARCHAR},
-      </if>
-      <if test="record.operateItemsIds != null" >
-        operate_items_ids = #{record.operateItemsIds,jdbcType=VARCHAR},
-      </if>
-      <if test="record.examineApprovePerson != null" >
-        examine_approve_person = #{record.examineApprovePerson,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderTime != null" >
-        order_time = #{record.orderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.remark != null" >
-        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -489,30 +577,31 @@
     update operate_ticket
     set ticket_id = #{record.ticketId,jdbcType=VARCHAR},
       serial_number = #{record.serialNumber,jdbcType=VARCHAR},
-      ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
-      ticket_code = #{record.ticketCode,jdbcType=VARCHAR},
+      oper_ticket_type_id = #{record.operTicketTypeId,jdbcType=VARCHAR},
+      typical_ticket_id = #{record.typicalTicketId,jdbcType=VARCHAR},
+      workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_date = #{record.maintainDate,jdbcType=DATE},
       status = #{record.status,jdbcType=VARCHAR},
       flow_step = #{record.flowStep,jdbcType=VARCHAR},
-      typical_ticket_id = #{record.typicalTicketId,jdbcType=VARCHAR},
       wind_id = #{record.windId,jdbcType=VARCHAR},
-      company_id = #{record.companyId,jdbcType=VARCHAR},
-      departments = #{record.departments,jdbcType=VARCHAR},
+      crew_id = #{record.crewId,jdbcType=VARCHAR},
       applicant = #{record.applicant,jdbcType=VARCHAR},
       apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
       sender = #{record.sender,jdbcType=VARCHAR},
       receiver = #{record.receiver,jdbcType=VARCHAR},
-      location = #{record.location,jdbcType=VARCHAR},
-      equipment = #{record.equipment,jdbcType=VARCHAR},
-      machine_set = #{record.machineSet,jdbcType=VARCHAR},
+      send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      work_team = #{record.workTeam,jdbcType=VARCHAR},
       executer = #{record.executer,jdbcType=VARCHAR},
       supervisior = #{record.supervisior,jdbcType=VARCHAR},
-      start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      operate_content = #{record.operateContent,jdbcType=VARCHAR},
-      operate_items_ids = #{record.operateItemsIds,jdbcType=VARCHAR},
-      examine_approve_person = #{record.examineApprovePerson,jdbcType=VARCHAR},
-      order_time = #{record.orderTime,jdbcType=TIMESTAMP},
-      remark = #{record.remark,jdbcType=VARCHAR}
+      oper_start_time = #{record.operStartTime,jdbcType=TIMESTAMP},
+      oper_end_time = #{record.operEndTime,jdbcType=TIMESTAMP},
+      position_id = #{record.positionId,jdbcType=VARCHAR},
+      position_desc = #{record.positionDesc,jdbcType=VARCHAR},
+      equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
+      operate_content = #{record.operateContent,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -523,11 +612,23 @@
       <if test="serialNumber != null" >
         serial_number = #{serialNumber,jdbcType=VARCHAR},
       </if>
-      <if test="ticketTypeId != null" >
-        ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      <if test="operTicketTypeId != null" >
+        oper_ticket_type_id = #{operTicketTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="ticketCode != null" >
-        ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      <if test="typicalTicketId != null" >
+        typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        workorder_id = #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date = #{maintainDate,jdbcType=DATE},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -535,17 +636,11 @@
       <if test="flowStep != null" >
         flow_step = #{flowStep,jdbcType=VARCHAR},
       </if>
-      <if test="typicalTicketId != null" >
-        typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR},
-      </if>
       <if test="windId != null" >
         wind_id = #{windId,jdbcType=VARCHAR},
       </if>
-      <if test="companyId != null" >
-        company_id = #{companyId,jdbcType=VARCHAR},
-      </if>
-      <if test="departments != null" >
-        departments = #{departments,jdbcType=VARCHAR},
+      <if test="crewId != null" >
+        crew_id = #{crewId,jdbcType=VARCHAR},
       </if>
       <if test="applicant != null" >
         applicant = #{applicant,jdbcType=VARCHAR},
@@ -559,14 +654,11 @@
       <if test="receiver != null" >
         receiver = #{receiver,jdbcType=VARCHAR},
       </if>
-      <if test="location != null" >
-        location = #{location,jdbcType=VARCHAR},
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="equipment != null" >
-        equipment = #{equipment,jdbcType=VARCHAR},
-      </if>
-      <if test="machineSet != null" >
-        machine_set = #{machineSet,jdbcType=VARCHAR},
+      <if test="workTeam != null" >
+        work_team = #{workTeam,jdbcType=VARCHAR},
       </if>
       <if test="executer != null" >
         executer = #{executer,jdbcType=VARCHAR},
@@ -574,26 +666,26 @@
       <if test="supervisior != null" >
         supervisior = #{supervisior,jdbcType=VARCHAR},
       </if>
-      <if test="startTime != null" >
-        start_time = #{startTime,jdbcType=TIMESTAMP},
+      <if test="operStartTime != null" >
+        oper_start_time = #{operStartTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="endTime != null" >
-        end_time = #{endTime,jdbcType=TIMESTAMP},
+      <if test="operEndTime != null" >
+        oper_end_time = #{operEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="positionId != null" >
+        position_id = #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionDesc != null" >
+        position_desc = #{positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentDesc != null" >
+        equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
       </if>
       <if test="operateContent != null" >
         operate_content = #{operateContent,jdbcType=VARCHAR},
-      </if>
-      <if test="operateItemsIds != null" >
-        operate_items_ids = #{operateItemsIds,jdbcType=VARCHAR},
-      </if>
-      <if test="examineApprovePerson != null" >
-        examine_approve_person = #{examineApprovePerson,jdbcType=VARCHAR},
-      </if>
-      <if test="orderTime != null" >
-        order_time = #{orderTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
     where ticket_id = #{ticketId,jdbcType=VARCHAR}
@@ -601,30 +693,31 @@
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.OperateTicket" >
     update operate_ticket
     set serial_number = #{serialNumber,jdbcType=VARCHAR},
-      ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
-      ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      oper_ticket_type_id = #{operTicketTypeId,jdbcType=VARCHAR},
+      typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR},
+      workorder_id = #{workorderId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_date = #{maintainDate,jdbcType=DATE},
       status = #{status,jdbcType=VARCHAR},
       flow_step = #{flowStep,jdbcType=VARCHAR},
-      typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},
-      company_id = #{companyId,jdbcType=VARCHAR},
-      departments = #{departments,jdbcType=VARCHAR},
+      crew_id = #{crewId,jdbcType=VARCHAR},
       applicant = #{applicant,jdbcType=VARCHAR},
       apply_time = #{applyTime,jdbcType=TIMESTAMP},
       sender = #{sender,jdbcType=VARCHAR},
       receiver = #{receiver,jdbcType=VARCHAR},
-      location = #{location,jdbcType=VARCHAR},
-      equipment = #{equipment,jdbcType=VARCHAR},
-      machine_set = #{machineSet,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      work_team = #{workTeam,jdbcType=VARCHAR},
       executer = #{executer,jdbcType=VARCHAR},
       supervisior = #{supervisior,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      operate_content = #{operateContent,jdbcType=VARCHAR},
-      operate_items_ids = #{operateItemsIds,jdbcType=VARCHAR},
-      examine_approve_person = #{examineApprovePerson,jdbcType=VARCHAR},
-      order_time = #{orderTime,jdbcType=TIMESTAMP},
-      remark = #{remark,jdbcType=VARCHAR}
+      oper_start_time = #{operStartTime,jdbcType=TIMESTAMP},
+      oper_end_time = #{operEndTime,jdbcType=TIMESTAMP},
+      position_id = #{positionId,jdbcType=VARCHAR},
+      position_desc = #{positionDesc,jdbcType=VARCHAR},
+      equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
+      operate_content = #{operateContent,jdbcType=VARCHAR}
     where ticket_id = #{ticketId,jdbcType=VARCHAR}
   </update>
 </mapper>

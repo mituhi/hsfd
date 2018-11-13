@@ -44,4 +44,60 @@
     	select DEPLOY_ID deployId,MAIN_ID mainId,DEPLOY_SORT deploySort,DEPLOY_NAME deployName
     	 from deploy where DEPLOY_ID = #{deployId}
     </select>
+    
+    <!-- 根据流程步骤名称查询流程步骤 -->
+    <select id="findDeployByDeployName" resultType="com.qz.zframe.common.entity.Deploy">
+    	select DEPLOY_ID deployId,MAIN_ID mainId,DEPLOY_SORT deploySort,DEPLOY_NAME deployName
+    	 from deploy where DEPLOY_NAME = #{deployName}
+    </select>
+    
+    <!-- 新增流程步骤 -->
+    <insert id="addDeploy" parameterType="com.qz.zframe.common.entity.Deploy">
+        insert into deploy (DEPLOY_ID,MAIN_ID,DEPLOY_NAME,CREATER,CREATE_TIME)
+        values(#{deployId},#{mainId},#{deployName},#{creater},#{createTime})
+    </insert>
+    
+    <!-- 新增流程步骤角色关联关系 -->
+    <insert id="addDeployRole" parameterType="com.qz.zframe.common.entity.DeployRole">
+        insert into isc_role_deploy (rela_id,DEPLOY_ID,role_id)
+        values
+        <foreach collection ="list" item="deployRoles" separator =",">
+         (#{deployRoles.relaId}, #{deployRoles.deployId}, #{deployRoles.roleId})
+    	</foreach >
+    </insert>
+    
+    <!-- 修改流程步骤 -->
+    <update id="updateDeploy" parameterType="com.qz.zframe.common.entity.Deploy">
+        update deploy set DEPLOY_NAME = #{deployName} where DEPLOY_ID = #{deployId}
+    </update>
+    
+    <!-- 删除流程步骤角色关联关系 -->
+    <delete id="deleteDeployRole" parameterType="string" >
+	    delete from isc_role_deploy
+	    where DEPLOY_ID = #{deployId}
+	</delete>
+	
+	<!-- 删除流程步骤 -->
+    <delete id="deleteDeploy" parameterType="java.util.List" >
+	    delete from deploy
+	    where DEPLOY_ID in 
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量删除流程步骤角色关联关系 -->
+    <delete id="deleteDeployRoles" parameterType="java.util.List" >
+	    delete from isc_role_deploy
+	    where DEPLOY_ID in 
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据流程步骤id查询关联角色信息 -->
+    <select id="findRoleByDeployId" resultType="com.qz.zframe.isc.domain.IscRole">
+    	select r.role_id roleId, r.role_name roleName from isc_role r,isc_role_deploy d 
+    	where r.role_id = d.role_id and d.DEPLOY_ID = #{deployId}
+    </select>
 </mapper>

@@ -21,7 +21,7 @@ public interface ShiftService {
 	 * @param: @return   
 	 * @return: List<Shift>
 	 */
-	List<Shift> listShift(ShiftExample example);
+	List<Shift> listShift(ShiftExample example ,int pageNo , int pageSize);
 
 	/**
 	 * @Description:添加班次信息
@@ -63,4 +63,24 @@ public interface ShiftService {
 	 * @return: String
 	 */
 	String getShiftIdByCode(String shiftCode);
+	
+	
+	
+	/**
+	 * @Description:根据班次名称获取对象
+	 * @param: @param shiftName
+	 * @param: @return   
+	 * @return: Shift
+	 */
+	Shift getShiftByShiftName(String shiftName);
+
+	
+	/**
+	 * @Description:通过id查找
+	 * @param: @param shiftId
+	 * @param: @return   
+	 * @return: Shift
+	 */
+	Shift getShiftByShiftId(String shiftId);
+	
 }

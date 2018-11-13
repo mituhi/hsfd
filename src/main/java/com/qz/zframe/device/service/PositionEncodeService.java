@@ -9,7 +9,7 @@ import com.qz.zframe.device.entity.PositionEncodeExample;
 
 public interface PositionEncodeService {
 	//查询位置编码信息
-	 public	PageResultEntity findPosition(PositionEncodeExample position);
+	 public	PageResultEntity findPosition(PositionEncodeExample positionExample);
     //新增位置编码
 	 public ResultEntity  addPosition(PositionEncode positionEncode);
 	//修改位置编码

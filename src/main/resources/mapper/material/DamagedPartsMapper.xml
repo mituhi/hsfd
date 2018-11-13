@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.material.dao.DamagedPartsMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.material.entity.DamagedParts" >
+    <id column="damaged_parts_id" property="damagedPartsId" jdbcType="VARCHAR" />
+    <result column="damaged_parts_order" property="damagedPartsOrder" jdbcType="VARCHAR" />
+    <result column="damaged_parts_describe" property="damagedPartsDescribe" jdbcType="VARCHAR" />
+    <result column="stock_add_id" property="stockAddId" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="storage_time" property="storageTime" jdbcType="DATE" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    
+    <result column="stock_add_name" property="stockAddName" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="user_name" property="createName" jdbcType="VARCHAR" />
+ 
+  </resultMap>
+   <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit
+			#{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</sql>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    damaged_parts_id, damaged_parts_order, damaged_parts_describe, stock_add_id, remark, 
+    storage_time, wind_id, creater, create_time, status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.DamagedPartsExample" >
+    select a.*,b.stock_add_name,c.wind_name,d.user_name from damaged_parts a left join stock_address b on a.stock_add_id = b.stock_add_id
+    left join wind_field c on a.wind_id=c.wind_id left join isc_user d on a.creater=d.user_id 
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     <include refid="Pagination_Sql" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   select a.*,b.stock_add_name,c.wind_name,d.user_name from damaged_parts a left join stock_address b on a.stock_add_id = b.stock_add_id
+    left join wind_field c on a.wind_id=c.wind_id left join isc_user d on a.creater=d.user_id 
+    where a.damaged_parts_id = #{damagedPartsId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from damaged_parts
+    where damaged_parts_id = #{damagedPartsId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.material.entity.DamagedPartsExample" >
+    delete from damaged_parts
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.material.entity.DamagedParts" >
+    insert into damaged_parts (damaged_parts_id, damaged_parts_order, 
+      damaged_parts_describe, stock_add_id, remark, 
+      storage_time, wind_id, creater, 
+      create_time, status)
+    values (#{damagedPartsId,jdbcType=VARCHAR}, #{damagedPartsOrder,jdbcType=VARCHAR}, 
+      #{damagedPartsDescribe,jdbcType=VARCHAR}, #{stockAddId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{storageTime,jdbcType=DATE}, #{windId,jdbcType=VARCHAR}, #{creater,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.material.entity.DamagedParts" >
+    insert into damaged_parts
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="damagedPartsId != null" >
+        damaged_parts_id,
+      </if>
+      <if test="damagedPartsOrder != null" >
+        damaged_parts_order,
+      </if>
+      <if test="damagedPartsDescribe != null" >
+        damaged_parts_describe,
+      </if>
+      <if test="stockAddId != null" >
+        stock_add_id,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="storageTime != null" >
+        storage_time,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+        create_time,
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="damagedPartsId != null" >
+        #{damagedPartsId,jdbcType=VARCHAR},
+      </if>
+      <if test="damagedPartsOrder != null" >
+        #{damagedPartsOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="damagedPartsDescribe != null" >
+        #{damagedPartsDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddId != null" >
+        #{stockAddId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="storageTime != null" >
+        #{storageTime,jdbcType=DATE},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+       now(),
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.material.entity.DamagedPartsExample" resultType="java.lang.Integer" >
+    select count(*) from damaged_parts a
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update damaged_parts
+    <set >
+      <if test="record.damagedPartsId != null" >
+        damaged_parts_id = #{record.damagedPartsId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.damagedPartsOrder != null" >
+        damaged_parts_order = #{record.damagedPartsOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.damagedPartsDescribe != null" >
+        damaged_parts_describe = #{record.damagedPartsDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockAddId != null" >
+        stock_add_id = #{record.stockAddId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storageTime != null" >
+        storage_time = #{record.storageTime,jdbcType=DATE},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creater != null" >
+        creater = #{record.creater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update damaged_parts
+    set damaged_parts_id = #{record.damagedPartsId,jdbcType=VARCHAR},
+      damaged_parts_order = #{record.damagedPartsOrder,jdbcType=VARCHAR},
+      damaged_parts_describe = #{record.damagedPartsDescribe,jdbcType=VARCHAR},
+      stock_add_id = #{record.stockAddId,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      storage_time = #{record.storageTime,jdbcType=DATE},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      creater = #{record.creater,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.material.entity.DamagedParts" >
+    update damaged_parts
+    <set >
+      <if test="damagedPartsOrder != null" >
+        damaged_parts_order = #{damagedPartsOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="damagedPartsDescribe != null" >
+        damaged_parts_describe = #{damagedPartsDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddId != null" >
+        stock_add_id = #{stockAddId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="storageTime != null" >
+        storage_time = #{storageTime,jdbcType=DATE},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where damaged_parts_id = #{damagedPartsId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.material.entity.DamagedParts" >
+    update damaged_parts
+    set damaged_parts_order = #{damagedPartsOrder,jdbcType=VARCHAR},
+      damaged_parts_describe = #{damagedPartsDescribe,jdbcType=VARCHAR},
+      stock_add_id = #{stockAddId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      storage_time = #{storageTime,jdbcType=DATE},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      creater = #{creater,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
+    where damaged_parts_id = #{damagedPartsId,jdbcType=VARCHAR}
+  </update>
+  
+   <delete id="delByPartsIds" parameterType="java.util.List">
+         delete from damaged_parts where damaged_parts_id in
+         <foreach item="delByPartsIds" collection="list" open="(" close=")" separator=",">
+             #{delByPartsIds}
+         </foreach>
+ </delete>
+  
+</mapper>

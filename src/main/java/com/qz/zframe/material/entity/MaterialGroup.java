@@ -27,6 +27,7 @@ public class MaterialGroup implements Serializable {
 
 
 	@ApiModelProperty(name="groupCode",value="物资分组编码",required=true)
+	@JsonView({ ListView.class })
 	private String groupCode;
 
 

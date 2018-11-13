@@ -5,9 +5,11 @@ import com.qz.zframe.tally.dao.TallyPlanDao;
 import com.qz.zframe.tally.dao.TallyRouterDao;
 import com.qz.zframe.tally.dto.PostDto;
 import com.qz.zframe.tally.dto.TallyRouterDto;
+import com.qz.zframe.tally.dto.UserDto;
 import com.qz.zframe.tally.entity.*;
 import com.qz.zframe.tally.service.TallyRouterService;
 import com.qz.zframe.tally.vo.TallyPlanVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -163,6 +165,77 @@ public class TallyRouterServiceImpl implements TallyRouterService {
     @Override
     public List<PeriodTime> findPeriodTimeByCycleId(String cycleId) {
         return tallyRouterDao.findPeriodTimeByCycleId(cycleId);
+    }
+
+    @Override
+    public void updateTallyRoute(TallyRoute tallyRoute) {
+        tallyRouterDao.updateTallyRoute(tallyRoute);
+    }
+
+    @Override
+    public void updateCycle(Cycle cycle) {
+        tallyRouterDao.updateCycle(cycle);
+    }
+
+    @Override
+    public String findPeriodTimeIdByCycleIdStartTimeAndEndTime(String cycleId, Date startTime, Date endTime) {
+        return tallyRouterDao.findPeriodTimeIdByCycleIdStartTimeAndEndTime(cycleId, startTime, endTime);
+    }
+
+    @Override
+    public void updatePeriodTime(PeriodTime periodTime) {
+        tallyRouterDao.updatePeriodTime(periodTime);
+    }
+
+    @Override
+    public String findIdByRouteIdAndUserId(String routeId, String userId) {
+        return tallyRouterDao.findIdByRouteIdAndUserId(routeId, userId);
+    }
+
+    @Override
+    public void updateRouteUser(RouteUser routeUser) {
+        tallyRouterDao.updateRouteUser(routeUser);
+    }
+
+    @Override
+    public void deletePeriodTimeByCycleNameAndStartTimeAndEndTime(String cycleName, Date startTime, Date endTime) {
+        tallyRouterDao.deletePeriodTimeByCycleNameAndStartTimeAndEndTime(cycleName, startTime, endTime);
+    }
+
+    @Override
+    public int findPeriodTimeByCycleIdStartTimeAndEndTime(String cycleId, Date startTime, Date endTime) {
+        return tallyRouterDao.findPeriodTimeByCycleIdStartTimeAndEndTime(cycleId, startTime, endTime);
+    }
+
+    @Override
+    public List<TallyRoute> findTallyRouteByWindIdAndRouteName(String routeName, String windId) {
+        return tallyRouterDao.findTallyRouteByWindIdAndRouteName(routeName, windId);
+    }
+
+    @Override
+    public int countByWindIdAndRouteName(String routeName, String windId) {
+        return tallyRouterDao.countByWindIdAndRouteName(routeName, windId);
+    }
+
+    @Override
+    public String findRouteId() {
+        if (StringUtils.isBlank(tallyRouterDao.findRouteId())){
+            return "0";
+        }
+        return String.valueOf(new Integer(tallyRouterDao.findRouteId())+1);
+    }
+
+    @Override
+    public String findCycleId() {
+        if (StringUtils.isBlank(tallyRouterDao.findCycleId())){
+            return "0";
+        }
+        return String.valueOf(new Integer(tallyRouterDao.findCycleId())+1);
+    }
+
+    @Override
+    public List<UserDto> findAllUserDto() {
+        return tallyRouterDao.findAllUserDto();
     }
 
 

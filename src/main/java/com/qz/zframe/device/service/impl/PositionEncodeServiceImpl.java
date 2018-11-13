@@ -31,7 +31,7 @@ public class PositionEncodeServiceImpl implements PositionEncodeService {
 		} else {
 			list = positionMapper.selectByExample(position);
 		}
-		resultEntity.setCode(0);
+		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setRows(list);
 		return resultEntity;
 	}
@@ -42,10 +42,10 @@ public class PositionEncodeServiceImpl implements PositionEncodeService {
 		positionEncode.setPositionId(UUIdUtil.getUUID());
 		int save = positionMapper.insert(positionEncode);
 		if (save == 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("新增失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("新增成功");
 		}
 		return resultEntity;
@@ -61,10 +61,10 @@ public class PositionEncodeServiceImpl implements PositionEncodeService {
 		} else {
 			int save = positionMapper.updateByPrimaryKey(positionEncode);
 			if (save == 0) {
-				resultEntity.setCode(-1);
+				resultEntity.setCode(ErrorCode.ERROR);
 				resultEntity.setMsg("修改失败");
 			} else {
-				resultEntity.setCode(0);
+				resultEntity.setCode(ErrorCode.SUCCESS);
 				resultEntity.setMsg("修改成功");
 			}
 		}
@@ -77,11 +77,11 @@ public class PositionEncodeServiceImpl implements PositionEncodeService {
 		List<PositionEncode> list = new ArrayList<PositionEncode>();
 		PositionEncode position = positionMapper.selectByPrimaryKey(positionId);
 		if (position == null) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("查询结果有误");
 		} else {
 			list.add(position);
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setRows(list);
 		}
 		return resultEntity;
@@ -92,10 +92,10 @@ public class PositionEncodeServiceImpl implements PositionEncodeService {
 		ResultEntity resultEntity = new ResultEntity();
 		int delete = positionMapper.deleteByPrimaryKeyList(positionIds);
 		if (delete < 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("删除失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("删除成功");
 		}
 		return resultEntity;
@@ -107,10 +107,10 @@ public class PositionEncodeServiceImpl implements PositionEncodeService {
 
 		List<PositionEncode> top = positionMapper.selectStructure();
 		if (top == null) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("还未创建顶层设备分类");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setRows(top);
 		}
 		return resultEntity;
@@ -122,10 +122,10 @@ public class PositionEncodeServiceImpl implements PositionEncodeService {
 
 		List<PositionEncode> list = positionMapper.selectStructureList(superiorPosition);
 		if (list != null) {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setRows(list);
 		} else {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("还未创建设备分类");
 		}
 		return resultEntity;

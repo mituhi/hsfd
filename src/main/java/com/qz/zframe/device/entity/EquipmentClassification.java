@@ -1,48 +1,57 @@
 package com.qz.zframe.device.entity;
 
-import io.swagger.annotations.ApiParam;
+import javax.persistence.Transient;
 
+import io.swagger.annotations.ApiModelProperty;
 public class EquipmentClassification {
-	@ApiParam(name = "equipmentId", value = "设备分类id", required = false)
+	@ApiModelProperty(name = "equipmentId", value = "设备分类id", required = false)
 
 	private String equipmentId;
 
-	@ApiParam(name = "equipmentType", value = "设备分类", required = true)
+	@ApiModelProperty(name = "equipmentType", value = "设备分类", required = true)
 
 	private String equipmentType;
 
-	@ApiParam(name = "typeName", value = "设备分类名称", required = false)
+	@ApiModelProperty(name = "typeName", value = "设备分类名称", required = false)
 
 	private String typeName;
 
-	@ApiParam(name = "superiorEquipment", value = "上级设备分类", required = true)
+	@ApiModelProperty(name = "superiorEquipment", value = "上级设备分类", required = true)
 
 	private String superiorEquipment;
 
-	@ApiParam(name = "superiorEquipmentDescribe", value = "上级设备描述", required = false)
+	@ApiModelProperty(name = "superiorEquipmentDescribe", value = "上级设备描述", required = false)
 
 	private String superiorEquipmentDescribe;
 
-	@ApiParam(name = "superiorEquipmentName", value = "上级设备名称", required = false)
+	@ApiModelProperty(name = "superiorEquipmentName", value = "上级设备名称", required = false)
 
 	private String superiorEquipmentName;
 
-	@ApiParam(name = "status", value = "状态", required = false)
+	@ApiModelProperty(name = "status", value = "状态", required = false)
 	private String status;
 
-	@ApiParam(name = "isToplevel", value = "是否顶级", required = false)
+	@ApiModelProperty(name = "isToplevel", value = "是否顶级", required = false)
 
 	private String isToplevel;
 
-	@ApiParam(name = "equipmentTypeDescribe", value = "设备分类描述", required = false)
+	@ApiModelProperty(name = "equipmentTypeDescribe", value = "设备分类描述", required = false)
 
 	private String equipmentTypeDescribe;
 
-	@ApiParam(name = "outputId", value = "出场技术参数id", required = false)
+	@ApiModelProperty(name = "outputId", value = "出场技术参数id", required = false)
 	private String outputId;
 
-	@ApiParam(name = "runId", value = "运行技术参数id", required = false)
+	@ApiModelProperty(name = "runId", value = "运行技术参数id", required = false)
 	private String runId;
+	
+	@ApiModelProperty(name = "statusName", value = "状态名称", required = false)
+	@Transient
+	private String statusName;
+	
+	@ApiModelProperty(name = "isTopLevelName", value = "是否顶级名称", required = false)
+	@Transient
+	private String isToplevelName;
 
 	public String getEquipmentId() {
 		return equipmentId;
@@ -130,6 +139,22 @@ public class EquipmentClassification {
 
 	public void setRunId(String runId) {
 		this.runId = runId == null ? null : runId.trim();
+	}
+	@Transient
+	public String getStatusName() {
+		return statusName;
+	}
+	@Transient
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+	@Transient
+	public String getIsToplevelName() {
+		return isToplevelName;
+	}
+	@Transient
+	public void setIsTopLevelName(String isToplevelName) {
+		this.isToplevelName = isToplevelName;
 	}
 
 }

@@ -8,65 +8,68 @@ import java.util.List;
 
 public class TallyPostVO {
     //流水号
-    @ApiModelProperty(value="流水号",name="serialNum",required=false)
+    @ApiModelProperty(value="流水号",name="serialNum",required=true)
     private int serialNum;
     //维护人员
-    @ApiModelProperty(value="维护人员",name="maintenancer",required=false)
+    @ApiModelProperty(value="维护人员",name="maintenancer",required=true)
     private String maintenancer;
     //申请日期
-    @ApiModelProperty(value="申请日期",name="maintenanceTime",required=false)
+    @ApiModelProperty(value="申请日期",name="maintenanceTime",required=true)
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     private Date maintenanceTime;
     //路线编码
-    @ApiModelProperty(value="路线编码",name="routeCode",required=false)
+    @ApiModelProperty(value="路线编码",name="routeCode",required=true)
     private String routeCode;
     //风电场
-    @ApiModelProperty(value="风电场",name="windId",required=false)
+    @ApiModelProperty(value="风电场",name="windId",required=true)
     private String windId;
     //路线名称
-    @ApiModelProperty(value="路线名称",name="routeName",required=false)
+    @ApiModelProperty(value="路线名称",name="routeName",required=true)
     private String routeName;
     //强制次序
-    @ApiModelProperty(value="强制次序",name="mandatoryOrder",required=false)
-    private String mandatoryOrder;
+    @ApiModelProperty(value="状态",name="status",required=true)
+    private String status;
     //巡检路线备注
     @ApiModelProperty(value="巡检路线备注",name="tallyRouteRemark",required=false)
     private String tallyRouteRemark;
     //周期名称
-    @ApiModelProperty(value="周期名称",name="cycleName",required=false)
+    @ApiModelProperty(value="周期名称",name="cycleName",required=true)
     private String cycleName;
     //基准日期
-    @ApiModelProperty(value="基准日期",name="benchmarkDate",required=false)
+    @ApiModelProperty(value="基准日期",name="benchmarkDate",required=true)
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date benchmarkDate;
-    //路线id
-    @ApiModelProperty(value="路线id",name="routeId",required=false)
-    private String routeId;
+
     //周期单位
-    @ApiModelProperty(value="周期单位",name="cycleUnit",required=false)
+    @ApiModelProperty(value="周期单位",name="cycleUnit",required=true)
     private String cycleUnit;
     //周期
-    @ApiModelProperty(value="周期",name="cycle",required=false)
+    @ApiModelProperty(value="周期",name="cycle",required=true)
     private String cycle;
     //开始时间
-    @ApiModelProperty(value="开始时间",name="startTimes",required=false)
+    @ApiModelProperty(value="开始时间",name="startTimes",required=true)
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private List<Date> startTimes;
     //结束时间
-    @ApiModelProperty(value="结束时间",name="endTimes",required=false)
+    @ApiModelProperty(value="结束时间",name="endTimes",required=true)
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private List<Date> endTimes;
     //人员
-    @ApiModelProperty(value="人员",name="userNames",required=false)
+    @ApiModelProperty(value="人员",name="userNames",required=true)
     private String userNames;
+    //人员
+    @ApiModelProperty(value="用户id",name="userId",required=true)
+    private String userId;
 
     //身份
-    @ApiModelProperty(value="身份（点检执行者0，路线管理者1，漏检负责人2）",name="identity",required=false)
+    @ApiModelProperty(value="身份（点检执行者0，路线管理者1，漏检负责人2）",name="identity",required=true)
     private String identity;
 
-    //备注人员
-    @ApiModelProperty(value="备注-人员那张表的",name="iscUserRemark",required=false)
-    private String iscUserRemark;
+    //部门
+    @ApiModelProperty(value="部门",name="department",required=true)
+    private String department;
+
+
 
     public int getSerialNum() {
         return serialNum;
@@ -116,13 +119,6 @@ public class TallyPostVO {
         this.routeName = routeName;
     }
 
-    public String getMandatoryOrder() {
-        return mandatoryOrder;
-    }
-
-    public void setMandatoryOrder(String mandatoryOrder) {
-        this.mandatoryOrder = mandatoryOrder;
-    }
 
     public String getTallyRouteRemark() {
         return tallyRouteRemark;
@@ -148,13 +144,7 @@ public class TallyPostVO {
         this.benchmarkDate = benchmarkDate;
     }
 
-    public String getRouteId() {
-        return routeId;
-    }
 
-    public void setRouteId(String routeId) {
-        this.routeId = routeId;
-    }
 
     public String getCycleUnit() {
         return cycleUnit;
@@ -204,11 +194,27 @@ public class TallyPostVO {
         this.identity = identity;
     }
 
-    public String getIscUserRemark() {
-        return iscUserRemark;
+    public String getStatus() {
+        return status;
     }
 
-    public void setIscUserRemark(String iscUserRemark) {
-        this.iscUserRemark = iscUserRemark;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

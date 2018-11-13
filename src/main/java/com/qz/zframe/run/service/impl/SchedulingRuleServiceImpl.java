@@ -56,11 +56,12 @@ public class SchedulingRuleServiceImpl implements SchedulingRuleService {
 		if(pageNo != 0 && pageSize != 0){
 			PageHelper.startPage(pageNo, pageSize);
 			//查出记录
-			schedulingRules =schedulingRuleMapper.selectByExample(example);
+			return schedulingRuleMapper.selectByExample(example);
+		}else{
+			return schedulingRuleMapper.selectByExample(example);
 		}
-		return schedulingRules;
 	}
-
+	
 	
 	/**
 	 * 保存信息
@@ -177,6 +178,42 @@ public class SchedulingRuleServiceImpl implements SchedulingRuleService {
 		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("执行成功");
 		return resultEntity;
+	}
+
+
+	/**
+	 * 根据规则编码获取排班规则表
+	 */
+	@Override
+	public SchedulingRule getSchedulingRuleBySchedulingRuleCode(String SchedulingRuleCode) {
+		
+		SchedulingRuleExample example = new SchedulingRuleExample();
+		example.createCriteria().andSchedulingRuleCodeEqualTo(SchedulingRuleCode);
+		
+		List<SchedulingRule> list = schedulingRuleMapper.selectByExample(example);
+		if(CollectionUtils.isNotEmpty(list)){
+			SchedulingRule schedulingRule = list.get(0);
+			return schedulingRule;
+		}
+		return null;
+	}
+
+
+	/**
+	 * 根据排班规则名称查询
+	 */
+	@Override
+	public SchedulingRule getSchedulingRuleBySchedulingRuleName(String schedulingRulename) {
+		
+		SchedulingRuleExample example = new SchedulingRuleExample();
+		example.createCriteria().andSchedulingRuleCodeEqualTo(schedulingRulename);
+		
+		List<SchedulingRule> list = schedulingRuleMapper.selectByExample(example);
+		if(CollectionUtils.isNotEmpty(list)){
+			SchedulingRule schedulingRule = list.get(0);
+			return schedulingRule;
+		}
+		return null;
 	}
 
 

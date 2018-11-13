@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.device.dao.ComponentsMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.device.entity.Components" >
+    <id column="component_id" property="componentId" jdbcType="VARCHAR" />
+    <result column="equipment_asset_id" property="equipmentAssetId" jdbcType="VARCHAR" />
+    <result column="component_code" property="componentCode" jdbcType="VARCHAR" />
+    <result column="component_name" property="componentName" jdbcType="VARCHAR" />
+    <result column="specification_model" property="specificationModel" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="DECIMAL" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    component_id, equipment_asset_id, component_code, component_name, specification_model, 
+    number, company, remarks
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.ComponentsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from components
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from components
+    where component_id = #{componentId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from components
+    where component_id = #{componentId,jdbcType=VARCHAR}
+  </delete>
+  
+   <delete id="deleteByPrimaryKeyList" parameterType="java.lang.String" >
+    delete from components
+   <where>
+   component_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  
+  
+  <delete id="deleteByExample" parameterType="com.qz.zframe.device.entity.ComponentsExample" >
+    delete from components
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.device.entity.Components" >
+    insert into components (component_id, equipment_asset_id, component_code, 
+      component_name, specification_model, number, 
+      company, remarks)
+    values (#{componentId,jdbcType=VARCHAR}, #{equipmentAssetId,jdbcType=VARCHAR}, #{componentCode,jdbcType=VARCHAR}, 
+      #{componentName,jdbcType=VARCHAR}, #{specificationModel,jdbcType=VARCHAR}, #{number,jdbcType=DECIMAL}, 
+      #{company,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.Components" >
+    insert into components
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="componentId != null" >
+        component_id,
+      </if>
+      <if test="equipmentAssetId != null" >
+        equipment_asset_id,
+      </if>
+      <if test="componentCode != null" >
+        component_code,
+      </if>
+      <if test="componentName != null" >
+        component_name,
+      </if>
+      <if test="specificationModel != null" >
+        specification_model,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="company != null" >
+        company,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="componentId != null" >
+        #{componentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentAssetId != null" >
+        #{equipmentAssetId,jdbcType=VARCHAR},
+      </if>
+      <if test="componentCode != null" >
+        #{componentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="componentName != null" >
+        #{componentName,jdbcType=VARCHAR},
+      </if>
+      <if test="specificationModel != null" >
+        #{specificationModel,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=DECIMAL},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.device.entity.ComponentsExample" resultType="java.lang.Integer" >
+    select count(*) from components
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update components
+    <set >
+      <if test="record.componentId != null" >
+        component_id = #{record.componentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentAssetId != null" >
+        equipment_asset_id = #{record.equipmentAssetId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.componentCode != null" >
+        component_code = #{record.componentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.componentName != null" >
+        component_name = #{record.componentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.specificationModel != null" >
+        specification_model = #{record.specificationModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.number != null" >
+        number = #{record.number,jdbcType=DECIMAL},
+      </if>
+      <if test="record.company != null" >
+        company = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update components
+    set component_id = #{record.componentId,jdbcType=VARCHAR},
+      equipment_asset_id = #{record.equipmentAssetId,jdbcType=VARCHAR},
+      component_code = #{record.componentCode,jdbcType=VARCHAR},
+      component_name = #{record.componentName,jdbcType=VARCHAR},
+      specification_model = #{record.specificationModel,jdbcType=VARCHAR},
+      number = #{record.number,jdbcType=DECIMAL},
+      company = #{record.company,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.device.entity.Components" >
+    update components
+    <set >
+      <if test="equipmentAssetId != null" >
+        equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR},
+      </if>
+      <if test="componentCode != null" >
+        component_code = #{componentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="componentName != null" >
+        component_name = #{componentName,jdbcType=VARCHAR},
+      </if>
+      <if test="specificationModel != null" >
+        specification_model = #{specificationModel,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=DECIMAL},
+      </if>
+      <if test="company != null" >
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where component_id = #{componentId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.device.entity.Components" >
+    update components
+    set equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR},
+      component_code = #{componentCode,jdbcType=VARCHAR},
+      component_name = #{componentName,jdbcType=VARCHAR},
+      specification_model = #{specificationModel,jdbcType=VARCHAR},
+      number = #{number,jdbcType=DECIMAL},
+      company = #{company,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where component_id = #{componentId,jdbcType=VARCHAR}
+  </update>
+</mapper>

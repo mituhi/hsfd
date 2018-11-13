@@ -1,5 +1,6 @@
 package com.qz.zframe.tally.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -16,13 +17,14 @@ public class TallyRoute {
     private String routeCode;
     //所属风电场
     private String windId;
-    //强制次序
-    private String mandatoryOrder;
+    //状态
+    private String status;
     //备注
     private String remark;
     //维护人
     private String maintenancer;
     //维护日期
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date maintenanceTime;
     //流水号
     private int serialNum;
@@ -30,12 +32,12 @@ public class TallyRoute {
     public TallyRoute() {
     }
 
-    public TallyRoute(String routeId, String routeName, String routeCode, String windId, String mandatoryOrder, String remark, String maintenancer, Date maintenanceTime, int serialNum) {
+    public TallyRoute(String routeId, String routeName, String routeCode, String windId, String status, String remark, String maintenancer, Date maintenanceTime, int serialNum) {
         this.routeId = routeId;
         this.routeName = routeName;
         this.routeCode = routeCode;
         this.windId = windId;
-        this.mandatoryOrder = mandatoryOrder;
+        this.status = status;
         this.remark = remark;
         this.maintenancer = maintenancer;
         this.maintenanceTime = maintenanceTime;
@@ -74,12 +76,12 @@ public class TallyRoute {
         this.windId = windId;
     }
 
-    public String getMandatoryOrder() {
-        return mandatoryOrder;
+    public String getStatus() {
+        return status;
     }
 
-    public void setMandatoryOrder(String mandatoryOrder) {
-        this.mandatoryOrder = mandatoryOrder;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getRemark() {
@@ -121,7 +123,7 @@ public class TallyRoute {
                 ", routeName='" + routeName + '\'' +
                 ", routeCode='" + routeCode + '\'' +
                 ", windId='" + windId + '\'' +
-                ", mandatoryOrder='" + mandatoryOrder + '\'' +
+                ", status='" + status + '\'' +
                 ", remark='" + remark + '\'' +
                 ", maintenancer='" + maintenancer + '\'' +
                 ", maintenanceTime=" + maintenanceTime +

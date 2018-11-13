@@ -1,8 +1,10 @@
 package com.qz.zframe.run.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,6 +86,40 @@ public class SchedulingManagementServiceImpl implements SchedulingManagementServ
 		resultEntity.setMsg("执行成功");
 		return resultEntity;
 		
+	}
+
+
+	
+	/**
+	 * 根据部门名称查询对应排班管理表信息
+	 */
+	@Override
+	public List<SchedulingManagement> getSchedulingManagementByDepartments(List<String> departments) {
+		SchedulingManagementExample example = new SchedulingManagementExample();
+		if(CollectionUtils.isNotEmpty(departments)){
+			//不为空
+			for (String department : departments) {
+				example.or().andDepartmentEqualTo(department);
+			}
+		}
+		
+		return schedulingManagementMapper.selectByExample(example);
+	}
+
+
+	
+	/**
+	 * 根据排班表名称获取排版管理表信息
+	 */
+	@Override
+	public SchedulingManagement getSchedulingManagementBySchedulingName(String schedulingName) {
+		SchedulingManagementExample example = new SchedulingManagementExample();
+		example.createCriteria().andSchedulingNameEqualTo(schedulingName);
+		List<SchedulingManagement> list = schedulingManagementMapper.selectByExample(example);
+		if(CollectionUtils.isNotEmpty(list)){
+			return list.get(0);
+		}
+		return null;
 	}
 
 }

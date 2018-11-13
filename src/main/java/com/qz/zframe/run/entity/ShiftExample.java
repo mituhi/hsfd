@@ -218,7 +218,7 @@ public class ShiftExample extends PageExample{
         }
 
         public Criteria andShiftCodeLike(String value) {
-            addCriterion("shift_code like", value, "shiftCode");
+            addCriterion("shift_code like", "%"+value+"%", "shiftCode");
             return (Criteria) this;
         }
 
@@ -478,7 +478,7 @@ public class ShiftExample extends PageExample{
         }
 
         public Criteria andStatusLike(String value) {
-            addCriterion("status like", value, "status");
+            addCriterion("status like", "%"+value+"%", "status");
             return (Criteria) this;
         }
 

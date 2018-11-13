@@ -74,4 +74,23 @@ public interface SchedulingRuleService {
 	int getCount(SchedulingRuleExample example);
 	
 	
+	/**
+	 * @Description:根据规则编码获取排班规则表id
+	 * @param: @param SchedulingRuleCode
+	 * @param: @return   
+	 * @return: SchedulingRule
+	 */
+	SchedulingRule getSchedulingRuleBySchedulingRuleCode(String SchedulingRuleCode);
+	
+	
+	
+	/**
+	 * @Description:根据排班规则名称查询
+	 * @param: @param schedulingRulename
+	 * @param: @return   
+	 * @return: SchedulingRule
+	 */
+	SchedulingRule getSchedulingRuleBySchedulingRuleName(String schedulingRulename);
+	
+	
 }

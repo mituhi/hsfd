@@ -3,6 +3,7 @@ package com.qz.zframe.device.service.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ public class CrewInformationServiceImpl implements CrewInformationService {
 		} else {
 			list =crewInformationMapper.selectByExample(crewExample);
 		}
-		resultEntity.setCode(0);
+		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setRows(list);
 		return resultEntity;
 	}
@@ -42,10 +43,10 @@ public class CrewInformationServiceImpl implements CrewInformationService {
 		crew.setCrewId(UUIdUtil.getUUID());
 		int save = crewInformationMapper.insert(crew);
 		if (save == 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("新增失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("新增成功");
 		}
 		return resultEntity;
@@ -61,10 +62,10 @@ public class CrewInformationServiceImpl implements CrewInformationService {
 		} else {
 			int save = crewInformationMapper.update(crew);
 			if (save == 0) {
-				resultEntity.setCode(-1);
+				resultEntity.setCode(ErrorCode.ERROR);
 				resultEntity.setMsg("修改失败");
 			} else {
-				resultEntity.setCode(0);
+				resultEntity.setCode(ErrorCode.SUCCESS);
 				resultEntity.setMsg("修改成功");
 			}
 		}
@@ -77,11 +78,11 @@ public class CrewInformationServiceImpl implements CrewInformationService {
 		List<CrewInformation> list = new ArrayList<CrewInformation>();
 		CrewInformation crews = crewInformationMapper.selectByPrimaryKey(crewId);
 		if (crews == null) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("查询结果有误");
 		} else {
 			list.add(crews);
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setRows(list);
 		}
 		return resultEntity;
@@ -92,10 +93,10 @@ public class CrewInformationServiceImpl implements CrewInformationService {
 		ResultEntity resultEntity = new ResultEntity();
 		int delete = crewInformationMapper.deleteByPrimaryKeyList(crewIds);
 		if (delete < 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("删除失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("删除成功");
 		}
 		return resultEntity;

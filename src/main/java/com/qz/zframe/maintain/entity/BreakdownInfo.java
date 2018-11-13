@@ -7,47 +7,53 @@ import java.util.Date;
 
 public class BreakdownInfo {
 
-    @ApiParam(name="breakdownId",value="故障id",required=true)
+    @ApiParam(name="breakdownId",value="故障id",required=false)
     private String breakdownId;
 
-    @ApiParam(name="serialNumber",value="流水号",required=true)
+    @ApiParam(name="serialNumber",value="(故障编号)流水号",required=false)
     private String serialNumber;
 
-    @ApiParam(name="breakdownCode",value="故障编码",required=true)
+    @ApiParam(name="breakdownCode",value="故障代码",required=false)
     private String breakdownCode;
 
     @ApiParam(name="breakdownDesc",value="故障描述",required=true)
     private String breakdownDesc;
 
-    @ApiParam(name="maintainer",value="维护人",required=true)
+    @ApiParam(name="maintainer",value="维护人",required=false)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=true)
+    @ApiParam(name="maintainDate",value="维护日期",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="status",value="状态  1:处理中  2:完成  0:删除",required=false)
+    @ApiParam(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="modeId",value="处理方式id",required=true)
-    private String modeId;
+    @ApiParam(name="dealwithMode",value="处理方式",required=false)
+    private String dealwithMode;
 
     @ApiParam(name="windId",value="风电场id",required=true)
     private String windId;
 
-    @ApiParam(name="dealwithTeamId",value="处理班组id",required=true)
-    private String dealwithTeamId;
+    @ApiParam(name="company",value="公司",required=false)
+    private String company;
 
-    @ApiParam(name="dealwithPerson",value="处理人",required=true)
+    @ApiParam(name="dealwithTeam",value="处理(负责)班组",required=true)
+    private String dealwithTeam;
+
+    @ApiParam(name="dealwithPerson",value="处理(负责)人",required=true)
     private String dealwithPerson;
 
-    @ApiParam(name="positionId",value="位置",required=true)
+    @ApiParam(name="fillPerson",value="填报人",required=false)
+    private String fillPerson;
+
+    @ApiParam(name="positionId",value="位置id",required=true)
     private String positionId;
 
-    @ApiParam(name="positionDesc",value="位置",required=false)
+    @ApiParam(name="positionDesc",value="位置描述",required=false)
     private String positionDesc;
 
-    @ApiParam(name="crewId",value="机组id",required=true)
+    @ApiParam(name="crewId",value="机组id",required=false)
     private String crewId;
 
     @ApiParam(name="equipmentId",value="设备id",required=false)
@@ -84,7 +90,7 @@ public class BreakdownInfo {
 
     @ApiParam(name="interruptTime",value="中断时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-    private Date interruptTime;
+    private String interruptTime;
 
     @ApiParam(name="electricityLoss",value="损失电量",required=false)
     private String electricityLoss;
@@ -93,11 +99,11 @@ public class BreakdownInfo {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date gridConnectedRecoverTime;
 
-    @ApiParam(name="locationId",value="故障位置",required=false)
-    private String locationId;
+    @ApiParam(name="breakdownLocation",value="故障位置id",required=true)
+    private String breakdownLocation;
 
-    @ApiParam(name="attributeId",value="故障属性",required=false)
-    private String attributeId;
+    @ApiParam(name="breakdownAttribute",value="故障属性id",required=true)
+    private String breakdownAttribute;
 
     @ApiParam(name="maximumLoad",value="最大负荷",required=false)
     private String maximumLoad;
@@ -110,6 +116,24 @@ public class BreakdownInfo {
 
     @ApiParam(name="systemBusbar400",value="400kv系统母线",required=false)
     private String systemBusbar400;
+
+    @ApiParam(name="workorderNumber",value="故障工单号",required=false)
+    private String workorderNumber;
+
+    @ApiParam(name="workorderStatus",value="故障工单状态",required=false)
+    private String workorderStatus;
+
+    @ApiParam(name="workorderDesc",value="工单描述",required=false)
+    private String workorderDesc;
+
+    @ApiParam(name="workorderType",value="工单类型",required=false)
+    private String workorderType;
+
+    @ApiParam(name="phenomenon",value="故障现象",required=false)
+    private String phenomenon;
+
+    @ApiParam(name="remark",value="图片",required=false)
+    private String picture;
 
     @ApiParam(name="remark",value="备注",required=false)
     private String remark;
@@ -170,12 +194,12 @@ public class BreakdownInfo {
         this.status = status == null ? null : status.trim();
     }
 
-    public String getModeId() {
-        return modeId;
+    public String getDealwithMode() {
+        return dealwithMode;
     }
 
-    public void setModeId(String modeId) {
-        this.modeId = modeId == null ? null : modeId.trim();
+    public void setDealwithMode(String dealwithMode) {
+        this.dealwithMode = dealwithMode;
     }
 
     public String getWindId() {
@@ -186,12 +210,20 @@ public class BreakdownInfo {
         this.windId = windId == null ? null : windId.trim();
     }
 
-    public String getDealwithTeamId() {
-        return dealwithTeamId;
+    public String getCompany() {
+        return company;
     }
 
-    public void setDealwithTeamId(String dealwithTeamId) {
-        this.dealwithTeamId = dealwithTeamId == null ? null : dealwithTeamId.trim();
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getDealwithTeam() {
+        return dealwithTeam;
+    }
+
+    public void setDealwithTeam(String dealwithTeam) {
+        this.dealwithTeam = dealwithTeam;
     }
 
     public String getDealwithPerson() {
@@ -200,6 +232,14 @@ public class BreakdownInfo {
 
     public void setDealwithPerson(String dealwithPerson) {
         this.dealwithPerson = dealwithPerson == null ? null : dealwithPerson.trim();
+    }
+
+    public String getFillPerson() {
+        return fillPerson;
+    }
+
+    public void setFillPerson(String fillPerson) {
+        this.fillPerson = fillPerson;
     }
 
     public String getPositionId() {
@@ -306,11 +346,11 @@ public class BreakdownInfo {
         this.recoverWindspeed = recoverWindspeed == null ? null : recoverWindspeed.trim();
     }
 
-    public Date getInterruptTime() {
+    public String getInterruptTime() {
         return interruptTime;
     }
 
-    public void setInterruptTime(Date interruptTime) {
+    public void setInterruptTime(String interruptTime) {
         this.interruptTime = interruptTime;
     }
 
@@ -330,20 +370,20 @@ public class BreakdownInfo {
         this.gridConnectedRecoverTime = gridConnectedRecoverTime;
     }
 
-    public String getLocationId() {
-        return locationId;
+    public String getBreakdownLocation() {
+        return breakdownLocation;
     }
 
-    public void setLocationId(String locationId) {
-        this.locationId = locationId == null ? null : locationId.trim();
+    public void setBreakdownLocation(String breakdownLocation) {
+        this.breakdownLocation = breakdownLocation;
     }
 
-    public String getAttributeId() {
-        return attributeId;
+    public String getBreakdownAttribute() {
+        return breakdownAttribute;
     }
 
-    public void setAttributeId(String attributeId) {
-        this.attributeId = attributeId == null ? null : attributeId.trim();
+    public void setBreakdownAttribute(String breakdownAttribute) {
+        this.breakdownAttribute = breakdownAttribute;
     }
 
     public String getMaximumLoad() {
@@ -376,6 +416,54 @@ public class BreakdownInfo {
 
     public void setSystemBusbar400(String systemBusbar400) {
         this.systemBusbar400 = systemBusbar400 == null ? null : systemBusbar400.trim();
+    }
+
+    public String getWorkorderNumber() {
+        return workorderNumber;
+    }
+
+    public void setWorkorderNumber(String workorderNumber) {
+        this.workorderNumber = workorderNumber;
+    }
+
+    public String getWorkorderStatus() {
+        return workorderStatus;
+    }
+
+    public void setWorkorderStatus(String workorderStatus) {
+        this.workorderStatus = workorderStatus;
+    }
+
+    public String getWorkorderDesc() {
+        return workorderDesc;
+    }
+
+    public void setWorkorderDesc(String workorderDesc) {
+        this.workorderDesc = workorderDesc;
+    }
+
+    public String getWorkorderType() {
+        return workorderType;
+    }
+
+    public void setWorkorderType(String workorderType) {
+        this.workorderType = workorderType;
+    }
+
+    public String getPhenomenon() {
+        return phenomenon;
+    }
+
+    public void setPhenomenon(String phenomenon) {
+        this.phenomenon = phenomenon;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     public String getRemark() {

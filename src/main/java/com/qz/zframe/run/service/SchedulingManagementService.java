@@ -50,5 +50,22 @@ public interface SchedulingManagementService {
 	ResultEntity updateSchedulingManagement(SchedulingManagement schedulingManagement);
 	
 	
+	/**
+	 * @Description:根据部门名称查询对应排班管理表信息
+	 * @param: @param departments
+	 * @param: @return   
+	 * @return: List<SchedulingManagement>
+	 */
+	List<SchedulingManagement> getSchedulingManagementByDepartments(List<String> departments);
+	
+	
+	
+	/**
+	 * @Description:根据排班表名称获取排班管理信息
+	 * @param: @param schedulingName
+	 * @param: @return   
+	 * @return: SchedulingManagement
+	 */
+	SchedulingManagement getSchedulingManagementBySchedulingName(String schedulingName);
 	
 }

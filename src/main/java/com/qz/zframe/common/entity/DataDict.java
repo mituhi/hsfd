@@ -11,6 +11,10 @@ public class DataDict {
 	private String name;
 	@ApiModelProperty(value="代码名称",name="title",required=true)
 	private String title;
+	@ApiModelProperty(value="扩展字段01",name="content01",required=false)
+	private String content01;
+	@ApiModelProperty(value="扩展字段02",name="content02",required=false)
+	private String content02;
 	@ApiModelProperty(value="代码描述",name="description",required=false)
 	private String description;
 	@ApiModelProperty(value="状态 01:有效;02:无效",name="state",required=true)
@@ -48,6 +52,24 @@ public class DataDict {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public String getContent01() {
+		return content01;
+	}
+	public void setContent01(String content01) {
+		this.content01 = content01;
+	}
+	public String getContent02() {
+		return content02;
+	}
+	public void setContent02(String content02) {
+		this.content02 = content02;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
 	}
 	public String getDescription() {
 		return description;

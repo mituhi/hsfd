@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.OrgArchitectureDao">
+
+    <!-- 条件查询组织架构数量 -->
+    <select id="findOrgArchitectureNum" resultType="Integer">
+        select count(architecture_id) from org_architecture 
+        where architecture_type = #{architectureType} 
+		<if test="architectureName != null and architectureName != ''">
+        and architecture_name = #{architectureName} 
+        </if>
+        <if test="isDisable != null and isDisable != ''">
+        and is_disable = #{isDisable}
+        </if>
+    </select>
+    
+    <!-- 分页条件查询组织架构信息 -->
+    <select id="findOrgArchitecture" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark 
+        from org_architecture 
+        where architecture_type = #{architectureType} 
+        <if test="architectureName != null and architectureName != ''">
+        and architecture_name = #{architectureName} 
+        </if>
+        <if test="isDisable != null and isDisable != ''">
+        and is_disable = #{isDisable}
+        </if>
+         limit #{firstIndex},#{lastIndex}
+    </select>
+    
+    <!-- 根据id查询组织架构信息 -->
+    <select id="findOrgArchitectureById" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark 
+        from org_architecture 
+        where architecture_id = #{architectureId}
+    </select>
+    
+    <!-- 根据组织架构id查询机构注册信息 -->
+    <select id="findRegistrationInformationByArchitectureId" resultType="com.qz.zframe.common.entity.RegistrationInformation">
+        select registration_id registrationId,architecture_id architectureId, 
+        registration_code registrationCode, legal_representative legalRepresentative,
+        industry_type industryType,business_sector businessSector,
+        registration_type registrationType,registration_time registrationTime,
+        start_time startTime,end_time endTime,registration_capital registrationCapital,
+        business_license businessLicense,irs_level irsLevel,tax_registration taxRegistration,
+        registration_address registrationAddress
+        from registration_information 
+        where architecture_id = #{architectureId}
+    </select>
+    
+    <!-- 根据组织架构id查询风电场信息 -->
+    <select id="findWindFieldByArchitectureId" resultType="com.qz.zframe.common.entity.WindField">
+        select wind_id windId,architecture_id architectureId,wind_name windName,
+        wind_status windStatus,is_valuable isValuable,remark remark
+        from wind_field 
+        where architecture_id = #{architectureId}
+    </select>
+    
+    <!-- 根据组织架构id查询关联部门人员信息 -->
+    <select id="findOrgArchitectureUserByArchitectureId" resultType="com.qz.zframe.common.entity.OrgArchitectureUser">
+        select au.rela_id relaId,au.architecture_id architectureId,au.user_id userId,
+        u.user_name userName,r.role_name roleName 
+        from org_architecture_user au,isc_user u ,isc_role r,isc_role_user_rela rr
+        where au.user_id = u.user_id and u.user_id = rr.user_id 
+        and rr.role_id = r.role_id and architecture_id = #{architectureId}
+    </select>
+    
+    <!-- 根据组织架构id查询关联班组人员信息 -->
+    <select id="findOrgArchitectureTeamByArchitectureId" resultType="com.qz.zframe.common.entity.OrgArchitectureTeam">
+        select au.rela_id relaId,au.architecture_id architectureId,au.user_id userId,
+        u.user_name userName,r.role_name roleName 
+        from org_architecture_team au,isc_user u ,isc_role r,isc_role_user_rela rr
+        where au.user_id = u.user_id and u.user_id = rr.user_id 
+        and rr.role_id = r.role_id and architecture_id = #{architectureId}
+    </select>
+    
+    <!-- 根据编号或名称查询组织架构信息 -->
+    <select id="findOrgArchitectureByCodeOrName" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark 
+        from org_architecture 
+        where architecture_code = #{architectureCode} 
+        or architecture_name = #{architectureName} 
+    </select>
+    
+    <!-- 新增组织架构信息 -->
+    <insert id="addOrgArchitecture" parameterType="com.qz.zframe.common.entity.OrgArchitecture">
+        insert into org_architecture (architecture_id, architecture_code, 
+        architecture_name,architecture_describe,architecture_type,is_top,is_disable,
+        is_virtual_org,super_competent_department,charge_leadership,header,department_compile,
+        set_up_time,undo_time,security_level,email,phone,fax,work_content,remark)
+        values(#{architectureId},#{architectureCode},#{architectureName},#{architectureDescribe},
+        #{architectureType},#{isTop},#{isDisable},#{isVirtualOrg},#{superCompetentDepartment},
+        #{chargeLeadership},#{header},#{departmentCompile},#{setUpTime},#{undoTime},#{securityLevel},
+        #{email},#{phone},#{fax},#{workContent},#{remark})
+    </insert>
+    
+    <!-- 新增机构注册信息 -->
+    <insert id="addRegistrationInformation" parameterType="com.qz.zframe.common.entity.RegistrationInformation">
+        insert into registration_information (registration_id,architecture_id, registration_code, 
+        legal_representative,industry_type,business_sector,registration_type,registration_time,
+        start_time,end_time,registration_capital,business_license,irs_level,
+        tax_registration,registration_address)
+        values(#{registrationId},#{architectureId},#{registrationCode},#{legalRepresentative},
+        #{industryType},#{businessSector},#{registrationType},#{registrationTime},#{startTime},
+        #{endTime},#{registrationCapital},#{businessLicense},#{irsLevel},#{taxRegistration},
+        #{registrationAddress})
+    </insert>
+    
+    <!-- 新增风场信息 -->
+    <insert id="addWindField" parameterType="com.qz.zframe.common.entity.WindField">
+        insert into wind_field (wind_id,architecture_id, wind_name, 
+        wind_status,is_valuable,remark)
+        values(#{windId},#{architectureId},#{windName},#{windStatus},
+        #{isValuable},#{remark})
+    </insert>
+    
+    <!-- 批量新增部门关联关系 -->
+    <insert id="addOrgArchitectureUsers" parameterType="com.qz.zframe.common.entity.OrgArchitectureUser">
+        insert into org_architecture_user (rela_id, architecture_id, user_id)
+        values
+        <foreach collection ="list" item="orgArchitectureUsers" separator =",">
+         (#{orgArchitectureUsers.relaId},#{orgArchitectureUsers.architectureId},#{orgArchitectureUsers.userId})
+    	</foreach >
+    </insert>
+    
+    <!-- 批量新增班组关联关系 -->
+    <insert id="addOrgArchitectureTeams" parameterType="com.qz.zframe.common.entity.OrgArchitectureTeam">
+        insert into org_architecture_team (rela_id, architecture_id, user_id)
+        values
+        <foreach collection ="list" item="orgArchitectureTeams" separator =",">
+         (#{orgArchitectureTeams.relaId},#{orgArchitectureTeams.architectureId},#{orgArchitectureTeams.userId})
+    	</foreach >
+    </insert>
+    
+    <!-- 批量删除组织架构 -->
+    <delete id="deleteOrgArchitecture" parameterType="java.util.List" >
+	    delete from org_architecture
+	    where architecture_id in 
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除机构注册信息 -->
+    <delete id="deleteRegistrationInformation" parameterType="java.util.List" >
+	    delete from registration_information
+	    where architecture_id in 
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除风场信息 -->
+    <delete id="deleteWindField" parameterType="java.util.List" >
+	    delete from wind_field
+	    where architecture_id in 
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除部门关联关系 -->
+    <delete id="deleteOrgArchitectureUser" parameterType="java.util.List" >
+	    delete from org_architecture_user
+	    where architecture_id in 
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除班组关联关系 -->
+    <delete id="deleteOrgArchitectureTeam" parameterType="java.util.List" >
+	    delete from org_architecture_team
+	    where architecture_id in 
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量查询组织架构信息 -->
+    <select id="findOrgArchitectureByIds" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark 
+        from org_architecture 
+        where architecture_id in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+    </select>
+    
+    <!-- 修改组织架构信息 -->
+    <update id="updateOrgArchitecture" parameterType="com.qz.zframe.common.entity.OrgArchitecture">
+        update org_architecture set 
+        architecture_code = #{architectureCode}, department_compile = #{departmentCompile},
+        architecture_name = #{architectureName},architecture_describe = #{architectureDescribe},
+        architecture_type = #{architectureType},is_top = #{isTop},is_disable = #{isDisable},
+        is_virtual_org = #{isVirtualOrg},super_competent_department = #{superCompetentDepartment},
+        charge_leadership = #{chargeLeadership},header = #{header},
+        set_up_time = #{setUpTime},undo_time = #{undoTime},security_level = #{securityLevel},
+        email = #{email},phone = #{phone},fax = #{fax},work_content = #{workContent},remark = #{remark}
+        where architecture_id = #{architectureId}
+    </update>
+    
+    <!-- 修改组织架构信息 -->
+    <update id="updateRegistrationInformation" parameterType="com.qz.zframe.common.entity.RegistrationInformation">
+        update registration_information set 
+        registration_code = #{registrationCode}, legal_representative = #{legalRepresentative},
+        industry_type = #{industryType},business_sector = #{businessSector},
+        registration_type = #{registrationType},registration_time = #{registrationTime},
+        start_time = #{startTime},end_time = #{endTime},registration_capital = #{registrationCapital},
+        business_license = #{businessLicense},irs_level = #{irsLevel},tax_registration = #{taxRegistration},
+        registration_address = #{registrationAddress}
+        where registration_id = #{registrationId}
+    </update>
+    
+    <!-- 修改风场信息 -->
+    <update id="updateWindField" parameterType="com.qz.zframe.common.entity.WindField">
+        update wind_field set wind_name = #{windName},wind_status = #{windStatus},
+        is_valuable = #{isValuable},remark = #{remark}
+        where wind_id = #{windId}
+    </update>
+</mapper>

@@ -1,19 +1,28 @@
 package com.qz.zframe.tickets.vo;
 
+import io.swagger.annotations.ApiParam;
+
 public class TicketStatisticsRes {
 
+    @ApiParam(name="windName",value="风电场名称",required=false)
     private String windId;
 
+    @ApiParam(name="windName",value="风电场名称",required=false)
     private String windName;
 
+    @ApiParam(name="applyCount",value="申请数",required=false)
     private String applyCount;
 
+    @ApiParam(name="inProcessCount",value="处理中",required=false)
     private String inProcessCount;
 
+    @ApiParam(name="completeCount",value="完成",required=false)
     private String completeCount;
 
+    @ApiParam(name="invalidCount",value="作废",required=false)
     private String invalidCount;
 
+    @ApiParam(name="completeRate",value="完成率",required=false)
     private String completeRate;
 
     public String getWindId() {

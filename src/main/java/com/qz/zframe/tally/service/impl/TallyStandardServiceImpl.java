@@ -66,7 +66,7 @@ public class TallyStandardServiceImpl implements TallyStandardService{
     }
 
     @Override
-    public String findCycleNameByRouteName(String routeName) {
+    public List<String> findCycleNameByRouteName(String routeName) {
         return tallyStandardDao.findCycleNameByRouteName(routeName);
     }
 
@@ -113,6 +113,21 @@ public class TallyStandardServiceImpl implements TallyStandardService{
     @Override
     public int countStandard(String equipmentBelonging, String routeId, String equipmentState, String alarmType, String standardCoding, String checkContent) {
         return tallyStandardDao.countStandard(equipmentBelonging, routeId, equipmentState, alarmType, standardCoding, checkContent);
+    }
+
+    @Override
+    public String findCycleIdByCycleNameAndRouteId(String cycleName, String routeId) {
+        return tallyStandardDao.findCycleIdByCycleNameAndRouteId(cycleName, routeId);
+    }
+
+    @Override
+    public List<String> findRouteNameByWindId(String windId) {
+        return tallyStandardDao.findRouteNameByWindId(windId);
+    }
+
+    @Override
+    public String findCycleNameByStandardIdAndRouteId(String standardId, String routeId) {
+        return tallyStandardDao.findCycleNameByStandardIdAndRouteId(standardId, routeId);
     }
 
 

@@ -244,6 +244,146 @@ public class WorkTicketRiskControlExample {
             return (Criteria) this;
         }
 
+        public Criteria andStandardTicketIdIsNull() {
+            addCriterion("standard_ticket_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdIsNotNull() {
+            addCriterion("standard_ticket_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdEqualTo(String value) {
+            addCriterion("standard_ticket_id =", value, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdNotEqualTo(String value) {
+            addCriterion("standard_ticket_id <>", value, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdGreaterThan(String value) {
+            addCriterion("standard_ticket_id >", value, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdGreaterThanOrEqualTo(String value) {
+            addCriterion("standard_ticket_id >=", value, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdLessThan(String value) {
+            addCriterion("standard_ticket_id <", value, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdLessThanOrEqualTo(String value) {
+            addCriterion("standard_ticket_id <=", value, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdLike(String value) {
+            addCriterion("standard_ticket_id like", value, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdNotLike(String value) {
+            addCriterion("standard_ticket_id not like", value, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdIn(List<String> values) {
+            addCriterion("standard_ticket_id in", values, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdNotIn(List<String> values) {
+            addCriterion("standard_ticket_id not in", values, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdBetween(String value1, String value2) {
+            addCriterion("standard_ticket_id between", value1, value2, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andStandardTicketIdNotBetween(String value1, String value2) {
+            addCriterion("standard_ticket_id not between", value1, value2, "standardTicketId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberIsNull() {
+            addCriterion("measure_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberIsNotNull() {
+            addCriterion("measure_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberEqualTo(String value) {
+            addCriterion("measure_number =", value, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberNotEqualTo(String value) {
+            addCriterion("measure_number <>", value, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberGreaterThan(String value) {
+            addCriterion("measure_number >", value, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("measure_number >=", value, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberLessThan(String value) {
+            addCriterion("measure_number <", value, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberLessThanOrEqualTo(String value) {
+            addCriterion("measure_number <=", value, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberLike(String value) {
+            addCriterion("measure_number like", value, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberNotLike(String value) {
+            addCriterion("measure_number not like", value, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberIn(List<String> values) {
+            addCriterion("measure_number in", values, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberNotIn(List<String> values) {
+            addCriterion("measure_number not in", values, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberBetween(String value1, String value2) {
+            addCriterion("measure_number between", value1, value2, "measureNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andMeasureNumberNotBetween(String value1, String value2) {
+            addCriterion("measure_number not between", value1, value2, "measureNumber");
+            return (Criteria) this;
+        }
+
         public Criteria andDangerPointIsNull() {
             addCriterion("danger_point is null");
             return (Criteria) this;
@@ -384,73 +524,73 @@ public class WorkTicketRiskControlExample {
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonIsNull() {
-            addCriterion("execute_person is null");
+        public Criteria andMeasureExecutorIsNull() {
+            addCriterion("measure_executor is null");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonIsNotNull() {
-            addCriterion("execute_person is not null");
+        public Criteria andMeasureExecutorIsNotNull() {
+            addCriterion("measure_executor is not null");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonEqualTo(String value) {
-            addCriterion("execute_person =", value, "executePerson");
+        public Criteria andMeasureExecutorEqualTo(String value) {
+            addCriterion("measure_executor =", value, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonNotEqualTo(String value) {
-            addCriterion("execute_person <>", value, "executePerson");
+        public Criteria andMeasureExecutorNotEqualTo(String value) {
+            addCriterion("measure_executor <>", value, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonGreaterThan(String value) {
-            addCriterion("execute_person >", value, "executePerson");
+        public Criteria andMeasureExecutorGreaterThan(String value) {
+            addCriterion("measure_executor >", value, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonGreaterThanOrEqualTo(String value) {
-            addCriterion("execute_person >=", value, "executePerson");
+        public Criteria andMeasureExecutorGreaterThanOrEqualTo(String value) {
+            addCriterion("measure_executor >=", value, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonLessThan(String value) {
-            addCriterion("execute_person <", value, "executePerson");
+        public Criteria andMeasureExecutorLessThan(String value) {
+            addCriterion("measure_executor <", value, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonLessThanOrEqualTo(String value) {
-            addCriterion("execute_person <=", value, "executePerson");
+        public Criteria andMeasureExecutorLessThanOrEqualTo(String value) {
+            addCriterion("measure_executor <=", value, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonLike(String value) {
-            addCriterion("execute_person like", value, "executePerson");
+        public Criteria andMeasureExecutorLike(String value) {
+            addCriterion("measure_executor like", value, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonNotLike(String value) {
-            addCriterion("execute_person not like", value, "executePerson");
+        public Criteria andMeasureExecutorNotLike(String value) {
+            addCriterion("measure_executor not like", value, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonIn(List<String> values) {
-            addCriterion("execute_person in", values, "executePerson");
+        public Criteria andMeasureExecutorIn(List<String> values) {
+            addCriterion("measure_executor in", values, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonNotIn(List<String> values) {
-            addCriterion("execute_person not in", values, "executePerson");
+        public Criteria andMeasureExecutorNotIn(List<String> values) {
+            addCriterion("measure_executor not in", values, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonBetween(String value1, String value2) {
-            addCriterion("execute_person between", value1, value2, "executePerson");
+        public Criteria andMeasureExecutorBetween(String value1, String value2) {
+            addCriterion("measure_executor between", value1, value2, "measureExecutor");
             return (Criteria) this;
         }
 
-        public Criteria andExecutePersonNotBetween(String value1, String value2) {
-            addCriterion("execute_person not between", value1, value2, "executePerson");
+        public Criteria andMeasureExecutorNotBetween(String value1, String value2) {
+            addCriterion("measure_executor not between", value1, value2, "measureExecutor");
             return (Criteria) this;
         }
     }

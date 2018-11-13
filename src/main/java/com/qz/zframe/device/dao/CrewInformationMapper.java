@@ -1,13 +1,13 @@
 package com.qz.zframe.device.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.qz.zframe.common.util.BaseMapper;
 import com.qz.zframe.device.entity.CrewInformation;
 import com.qz.zframe.device.entity.CrewInformationExample;
-import com.qz.zframe.device.entity.EquipmentClassification;
 @Mapper
 public interface CrewInformationMapper extends BaseMapper<CrewInformation, CrewInformationExample, Long>{
     int countByExample(CrewInformationExample example);
@@ -21,7 +21,9 @@ public interface CrewInformationMapper extends BaseMapper<CrewInformation, CrewI
     int insertSelective(CrewInformation record);
 
     List<CrewInformation> selectByExample(CrewInformationExample example);
+    
     CrewInformation selectByPrimaryKey(String crewId);
+    
     int update(CrewInformation record);
     
     int updateByExampleSelective(@Param("record") CrewInformation record, @Param("example") CrewInformationExample example);

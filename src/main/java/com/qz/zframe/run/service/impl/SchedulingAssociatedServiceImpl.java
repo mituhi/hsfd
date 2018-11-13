@@ -71,6 +71,8 @@ public class SchedulingAssociatedServiceImpl implements SchedulingAssociatedServ
 			PageHelper.startPage(pageNo, pageSize);
 			//查出记录
 			list = schedulingAssociatedMapper.selectByExample(schedulingAssociatedExample);
+		}else{
+			list = schedulingAssociatedMapper.selectByExample(schedulingAssociatedExample);
 		}
 		return list;
 	}

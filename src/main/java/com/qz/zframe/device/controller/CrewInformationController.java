@@ -1,6 +1,8 @@
 package com.qz.zframe.device.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
@@ -104,7 +106,7 @@ public class CrewInformationController {
 	
 	
 	@RequestMapping(value = "/findByCrewId", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ApiOperation(value = "查询机组信息", notes = "查询机组信息")
+    @ApiOperation(value = "查询机组信息详情", notes = "查询机组信息详情")
     public PageResultEntity findByParameterId(
     		@RequestParam(required = true)
     		@ApiParam(name="crewId",value="机组信息id",required=true) String crewId) {

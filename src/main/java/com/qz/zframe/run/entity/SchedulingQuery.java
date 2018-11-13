@@ -29,6 +29,17 @@ public class SchedulingQuery {
 	@ApiModelProperty(value="用户id",name="userId")
     private String userId;
 
+	@ApiModelProperty(value="排班规则表id",name="schedulingRuleId")
+	private String schedulingRuleId;
+	
+    public String getSchedulingRuleId() {
+        return schedulingRuleId;
+    }
+
+    public void setSchedulingRuleId(String schedulingRuleId) {
+        this.schedulingRuleId = schedulingRuleId == null ? null : schedulingRuleId.trim();
+    }
+	
     public Date getStartTime() {
         return startTime;
     }

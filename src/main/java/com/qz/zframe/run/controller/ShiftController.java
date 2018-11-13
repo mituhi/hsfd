@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.ObjectIsBlankUtil;
@@ -20,7 +19,7 @@ import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.run.entity.Shift;
 import com.qz.zframe.run.entity.ShiftExample;
-import com.qz.zframe.run.entity.ShiftExample.Criteria;
+import com.qz.zframe.run.entity.ValueTime;
 import com.qz.zframe.run.service.ShiftService;
 
 import io.swagger.annotations.Api;
@@ -52,53 +51,42 @@ public class ShiftController {
 	 * @param: @return
 	 * @return: PageResultEntity
 	 */
-	@RequestMapping(value = "/getShiftList", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value = "/getShiftList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "批量获取班次表信息", notes = "批量获取班次表信息")
-	public PageResultEntity getShiftList(@RequestBody Shift shift,
+	public PageResultEntity getShiftList(@RequestParam(required = false) String searchKey,@RequestParam(required = false) String status,
 			@RequestParam(required = false, defaultValue = "1") Integer pageNo,
 			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
 
-		PageResultEntity resultEntity = new PageResultEntity();
+		PageResultEntity pageResultEntity = new PageResultEntity();
 		
-		//设置分页
-		PageHelper.startPage(pageNo, pageSize);
-
 		ShiftExample example = new ShiftExample();
-		//设置排序
-		example.setOrderByClause("sort desc");
-
-		// 封装查询信息
-		Criteria criteria = example.createCriteria();
-		if (StringUtils.isNotBlank(shift.getShiftId())) {
-			criteria.andShiftIdEqualTo(shift.getShiftId());
+		
+		//如果状态值一栏选中
+		if(StringUtils.isNotBlank(status)){
+			//设置模糊查询
+			example.createCriteria().andStatusEqualTo(status);
 		}
 
-		if (StringUtils.isNotBlank(shift.getShiftCode())) {
-			criteria.andShiftCodeEqualTo(shift.getShiftCode());
+		//模糊查询
+		if(StringUtils.isNotBlank(searchKey)){
+			//设置模糊查询
+			example.or().andShiftCodeLike(searchKey);
+			example.or().andShiftNameLike(searchKey);
+			example.or().andStatusLike(searchKey);
 		}
-
-		if (StringUtils.isNotBlank(shift.getShiftId())) {
-			criteria.andShiftIdEqualTo(shift.getShiftId());
-		}
-
-		if (StringUtils.isNotBlank(shift.getShiftName())) {
-			criteria.andShiftNameLike("%" + shift.getShiftName() + "%");
-		}
-
-		if (StringUtils.isNotBlank(shift.getIsMeterRead())) {
-			criteria.andIsMeterReadEqualTo(shift.getIsMeterRead());
-		}
-
-		// 执行查询
-		List<Shift> list = shiftService.listShift(example);
-		// 设置返回结果
+		
+		
+		//执行查询
+		List<Shift> list = shiftService.listShift(example, pageNo, pageSize);
+		//设置返回结果
 		PageInfo<Shift> pageInfo = new PageInfo<Shift>(list);
-		resultEntity.setRows(list);
-		resultEntity.setCode(ErrorCode.SUCCESS);
-		resultEntity.setMsg("查询成功");
-		resultEntity.setTotal((int) pageInfo.getTotal());
 
-		return resultEntity;
+		pageResultEntity.setRows(list);
+		pageResultEntity.setTotal((int) pageInfo.getTotal());
+		pageResultEntity.setCode(ErrorCode.SUCCESS);
+		pageResultEntity.setMsg("执行成功");
+		return pageResultEntity;
+		
 
 	}
 	
@@ -107,7 +95,7 @@ public class ShiftController {
 	/**
 	 * @Description:班次信息添加
 	 * @param: @param
-	 *             shift
+	 *             shift：  需要的字段：除了id都需要
 	 * @param: @return
 	 * @return: ResultEntity
 	 */
@@ -135,13 +123,13 @@ public class ShiftController {
 	
 	/**
 	 * @Description:
-	 * @param: @param shiftIds
+	 * @param: @param shiftIds 需要的字段：勾选的被删除的id
 	 * @param: @return   
 	 * @return: ResultEntity
 	 */
-	@RequestMapping(value = "/deleteShift", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value = "/removeShift", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(notes = "批量班次表信息删除", value = "批量班次表信息删除")
-	public ResultEntity deleteShift(@RequestBody List<String> shiftIds) {
+	public ResultEntity removeShift(@RequestParam List<String> shiftIds) {
 
 		ResultEntity resultEntity = shiftService.removeShifts(shiftIds); 
 		return resultEntity;
@@ -152,7 +140,7 @@ public class ShiftController {
 	
 	/**
 	 * @Description:班次表信息编辑
-	 * @param: @param shifts
+	 * @param: @param shifts：需要的字段：班次表中所有字段都需要
 	 * @param: @return   
 	 * @return: ResultEntity
 	 */
@@ -198,6 +186,26 @@ public class ShiftController {
 	}
 	
 	
+	 /*************************    点击编辑：获取对应信息               ***************************/
+	@RequestMapping(value="/getShift" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value="点击编辑：获取对应信息 ", notes="点击编辑：获取对应信息")
+	public ResultEntity getShift(@RequestParam String shiftId){
+		
+		ResultEntity resultEntity = new ResultEntity();
+
+		// 如果数据不为空
+		if (StringUtils.isNotBlank(shiftId)) {
+			Shift shift = shiftService.getShiftByShiftId(shiftId);
+			resultEntity.setCode(ErrorCode.SUCCESS);
+			resultEntity.setMsg("执行成功");
+			resultEntity.setData(shift);
+			return resultEntity;
+		}
+		resultEntity.setCode(ErrorCode.ERROR);
+		resultEntity.setMsg("缺少字段");
+		return resultEntity;
+
+	}
 	
 
 }

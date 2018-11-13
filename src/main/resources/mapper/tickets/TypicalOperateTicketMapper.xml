@@ -4,18 +4,19 @@
   <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.TypicalOperateTicket" >
     <id column="typical_ticket_id" property="typicalTicketId" jdbcType="VARCHAR" />
     <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
-    <result column="typical_ticke_code" property="typicalTickeCode" jdbcType="VARCHAR" />
-    <result column="ticket_type_id" property="ticketTypeId" jdbcType="VARCHAR" />
-    <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="typical_ticket_name" property="typicalTicketName" jdbcType="VARCHAR" />
+    <result column="oper_ticket_type_id" property="operTicketTypeId" jdbcType="VARCHAR" />
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
     <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
-    <result column="localtion" property="localtion" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
-    <result column="equipment" property="equipment" jdbcType="VARCHAR" />
-    <result column="dapartments" property="dapartments" jdbcType="VARCHAR" />
+    <result column="work_team" property="workTeam" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
     <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
-    <result column="operate_items_ids" property="operateItemsIds" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -76,53 +77,108 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    typical_ticket_id, serial_number, typical_ticke_code, ticket_type_id, ticket_type_name, 
-    status, maintainer, maintain_date, localtion, wind_id, equipment, dapartments, operate_content, 
-    operate_items_ids
+    typical_ticket_id, serial_number, typical_ticket_name, oper_ticket_type_id, maintainer,
+    maintain_date, status, wind_id, work_team, position_id, position_desc, equipment_id,
+    equipment_desc, operate_content, remark
   </sql>
 
+
+
+
   <update id="batchDelete" parameterType="java.lang.String">
-    update typical_operate_ticket set status = "0"
+    update typical_operate_ticket set status = '0'
     where typical_ticket_id in
     <foreach collection="array" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
   </update>
-
-  <select id="getTypicalOperateTicketListByPC" resultMap="BaseResultMap">
+  <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.TypicalOperateTicketVo" >
+    <id column="typical_ticket_id" property="typicalTicketId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="typical_ticket_name" property="typicalTicketName" jdbcType="VARCHAR" />
+    <result column="oper_ticket_type_id" property="operTicketTypeId" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="work_team" property="workTeam" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
+    <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="position_name" property="positionName" jdbcType="VARCHAR" />
+    <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
+    <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.typical_ticket_id as typical_ticket_id, a.serial_number as serial_number, a.typical_ticket_name as typical_ticket_name,
+    a.oper_ticket_type_id as oper_ticket_type_id, a.maintainer as maintainer, a.maintain_date as maintain_date, a.status as status,
+    a.wind_id as wind_id, a.work_team as work_team, a.position_id as position_id, a.position_desc as position_desc, a.equipment_id as equipment_id,
+    a.equipment_desc as equipment_desc, a.operate_content as operate_content, a.remark as remark,
+    b.architecture_name as wind_name,e.position_name as position_name,f.equipment_name as equipment_name,g.ticket_type_name as ticket_type_name
+  </sql>
+  <select id="getTypicalOperateTicketDetail" resultMap="GetResultMap">
     select
-    <include refid="Base_Column_List" />
-    from typical_operate_ticket
-    where 1=1
-    <if test="map.operateContent != null">
-      and operate_content like '%${map.operateContent}%'
+    <include refid="Get_Column_List" />
+    from typical_operate_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+    where a.status != '0' and a.typical_ticket_id = #{typicalTicketId}
+  </select>
+  <select id="getTypicalOperateTicketList" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from typical_operate_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+    where a.status != '0'
+    <if test="map.operTicketTypeId != null">
+      and a.oper_ticket_type_id = #{map.operTicketTypeId}
+    </if>
+    <if test="map.windId != null">
+      and a.wind_id = #{map.windId}
     </if>
     <if test="map.status != null">
-      and status = #{map.status}
+      and a.status = #{map.status}
     </if>
-    <if test="map.departments != null">
-      and departments = #{map.departments}
+    <if test="map.operateContent != null">
+      and a.operate_content like '%${map.operateContent}%'
     </if>
-    order by serial_number desc
+    order by a.serial_number desc
     limit ${map.start},${map.pageSize};
   </select>
-
-  <select id="getTotalCount" resultType="java.lang.Integer">
+  <select id="getTotal" resultType="java.lang.Integer">
     select
     count(*)
     from typical_operate_ticket
-    where 1=1
-    <if test="map.operateContent != null">
-      and operate_content like '%${map.operateContent}%'
+    where status != '0'
+    <if test="map.operTicketTypeId != null">
+      and oper_ticket_type_id = #{map.operTicketTypeId}
+    </if>
+    <if test="map.windId != null">
+      and wind_id = #{map.windId}
     </if>
     <if test="map.status != null">
       and status = #{map.status}
     </if>
-    <if test="map.departments != null">
-      and departments = #{map.departments}
+    <if test="map.operateContent != null">
+      and operate_content like '%${map.operateContent}%'
     </if>
   </select>
+
+
+
+
+
+
 
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.TypicalOperateTicketExample" >
     select
@@ -155,16 +211,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.tickets.entity.TypicalOperateTicket" >
-    insert into typical_operate_ticket (typical_ticket_id, serial_number, typical_ticke_code, 
-      ticket_type_id, ticket_type_name, status, 
-      maintainer, maintain_date, localtion, 
-      wind_id, equipment, dapartments, 
-      operate_content, operate_items_ids)
-    values (#{typicalTicketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{typicalTickeCode,jdbcType=VARCHAR}, 
-      #{ticketTypeId,jdbcType=VARCHAR}, #{ticketTypeName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, #{localtion,jdbcType=VARCHAR}, 
-      #{windId,jdbcType=VARCHAR}, #{equipment,jdbcType=VARCHAR}, #{dapartments,jdbcType=VARCHAR}, 
-      #{operateContent,jdbcType=VARCHAR}, #{operateItemsIds,jdbcType=VARCHAR})
+    insert into typical_operate_ticket (typical_ticket_id, serial_number, typical_ticket_name, 
+      oper_ticket_type_id, maintainer, maintain_date, 
+      status, wind_id, work_team, 
+      position_id, position_desc, equipment_id,
+      equipment_desc, operate_content, remark
+      )
+    values (#{typicalTicketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{typicalTicketName,jdbcType=VARCHAR}, 
+      #{operTicketTypeId,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, 
+      #{status,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{workTeam,jdbcType=VARCHAR}, 
+      #{positionId,jdbcType=VARCHAR}, #{positionDesc,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR},
+      #{equipmentDesc,jdbcType=VARCHAR}, #{operateContent,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.TypicalOperateTicket" >
     insert into typical_operate_ticket
@@ -175,17 +233,11 @@
       <if test="serialNumber != null" >
         serial_number,
       </if>
-      <if test="typicalTickeCode != null" >
-        typical_ticke_code,
+      <if test="typicalTicketName != null" >
+        typical_ticket_name,
       </if>
-      <if test="ticketTypeId != null" >
-        ticket_type_id,
-      </if>
-      <if test="ticketTypeName != null" >
-        ticket_type_name,
-      </if>
-      <if test="status != null" >
-        status,
+      <if test="operTicketTypeId != null" >
+        oper_ticket_type_id,
       </if>
       <if test="maintainer != null" >
         maintainer,
@@ -193,23 +245,32 @@
       <if test="maintainDate != null" >
         maintain_date,
       </if>
-      <if test="localtion != null" >
-        localtion,
+      <if test="status != null" >
+        status,
       </if>
       <if test="windId != null" >
         wind_id,
       </if>
-      <if test="equipment != null" >
-        equipment,
+      <if test="workTeam != null" >
+        work_team,
       </if>
-      <if test="dapartments != null" >
-        dapartments,
+      <if test="positionId != null" >
+        position_id,
+      </if>
+      <if test="positionDesc != null" >
+        position_desc,
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id,
+      </if>
+      <if test="equipmentDesc != null" >
+        equipment_desc,
       </if>
       <if test="operateContent != null" >
         operate_content,
       </if>
-      <if test="operateItemsIds != null" >
-        operate_items_ids,
+      <if test="remark != null" >
+        remark,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -219,17 +280,11 @@
       <if test="serialNumber != null" >
         #{serialNumber,jdbcType=VARCHAR},
       </if>
-      <if test="typicalTickeCode != null" >
-        #{typicalTickeCode,jdbcType=VARCHAR},
+      <if test="typicalTicketName != null" >
+        #{typicalTicketName,jdbcType=VARCHAR},
       </if>
-      <if test="ticketTypeId != null" >
-        #{ticketTypeId,jdbcType=VARCHAR},
-      </if>
-      <if test="ticketTypeName != null" >
-        #{ticketTypeName,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
+      <if test="operTicketTypeId != null" >
+        #{operTicketTypeId,jdbcType=VARCHAR},
       </if>
       <if test="maintainer != null" >
         #{maintainer,jdbcType=VARCHAR},
@@ -237,23 +292,32 @@
       <if test="maintainDate != null" >
         #{maintainDate,jdbcType=DATE},
       </if>
-      <if test="localtion != null" >
-        #{localtion,jdbcType=VARCHAR},
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
       </if>
       <if test="windId != null" >
         #{windId,jdbcType=VARCHAR},
       </if>
-      <if test="equipment != null" >
-        #{equipment,jdbcType=VARCHAR},
+      <if test="workTeam != null" >
+        #{workTeam,jdbcType=VARCHAR},
       </if>
-      <if test="dapartments != null" >
-        #{dapartments,jdbcType=VARCHAR},
+      <if test="positionId != null" >
+        #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionDesc != null" >
+        #{positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentDesc != null" >
+        #{equipmentDesc,jdbcType=VARCHAR},
       </if>
       <if test="operateContent != null" >
         #{operateContent,jdbcType=VARCHAR},
       </if>
-      <if test="operateItemsIds != null" >
-        #{operateItemsIds,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -272,17 +336,11 @@
       <if test="record.serialNumber != null" >
         serial_number = #{record.serialNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.typicalTickeCode != null" >
-        typical_ticke_code = #{record.typicalTickeCode,jdbcType=VARCHAR},
+      <if test="record.typicalTicketName != null" >
+        typical_ticket_name = #{record.typicalTicketName,jdbcType=VARCHAR},
       </if>
-      <if test="record.ticketTypeId != null" >
-        ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.ticketTypeName != null" >
-        ticket_type_name = #{record.ticketTypeName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.status != null" >
-        status = #{record.status,jdbcType=VARCHAR},
+      <if test="record.operTicketTypeId != null" >
+        oper_ticket_type_id = #{record.operTicketTypeId,jdbcType=VARCHAR},
       </if>
       <if test="record.maintainer != null" >
         maintainer = #{record.maintainer,jdbcType=VARCHAR},
@@ -290,23 +348,32 @@
       <if test="record.maintainDate != null" >
         maintain_date = #{record.maintainDate,jdbcType=DATE},
       </if>
-      <if test="record.localtion != null" >
-        localtion = #{record.localtion,jdbcType=VARCHAR},
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.windId != null" >
         wind_id = #{record.windId,jdbcType=VARCHAR},
       </if>
-      <if test="record.equipment != null" >
-        equipment = #{record.equipment,jdbcType=VARCHAR},
+      <if test="record.workTeam != null" >
+        work_team = #{record.workTeam,jdbcType=VARCHAR},
       </if>
-      <if test="record.dapartments != null" >
-        dapartments = #{record.dapartments,jdbcType=VARCHAR},
+      <if test="record.positionId != null" >
+        position_id = #{record.positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionDesc != null" >
+        position_desc = #{record.positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentId != null" >
+        equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentDesc != null" >
+        equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
       </if>
       <if test="record.operateContent != null" >
         operate_content = #{record.operateContent,jdbcType=VARCHAR},
       </if>
-      <if test="record.operateItemsIds != null" >
-        operate_items_ids = #{record.operateItemsIds,jdbcType=VARCHAR},
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -317,18 +384,19 @@
     update typical_operate_ticket
     set typical_ticket_id = #{record.typicalTicketId,jdbcType=VARCHAR},
       serial_number = #{record.serialNumber,jdbcType=VARCHAR},
-      typical_ticke_code = #{record.typicalTickeCode,jdbcType=VARCHAR},
-      ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
-      ticket_type_name = #{record.ticketTypeName,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
+      typical_ticket_name = #{record.typicalTicketName,jdbcType=VARCHAR},
+      oper_ticket_type_id = #{record.operTicketTypeId,jdbcType=VARCHAR},
       maintainer = #{record.maintainer,jdbcType=VARCHAR},
       maintain_date = #{record.maintainDate,jdbcType=DATE},
-      localtion = #{record.localtion,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
       wind_id = #{record.windId,jdbcType=VARCHAR},
-      equipment = #{record.equipment,jdbcType=VARCHAR},
-      dapartments = #{record.dapartments,jdbcType=VARCHAR},
+      work_team = #{record.workTeam,jdbcType=VARCHAR},
+      position_id = #{record.positionId,jdbcType=VARCHAR},
+      position_desc = #{record.positionDesc,jdbcType=VARCHAR},
+      equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
       operate_content = #{record.operateContent,jdbcType=VARCHAR},
-      operate_items_ids = #{record.operateItemsIds,jdbcType=VARCHAR}
+      remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -339,17 +407,11 @@
       <if test="serialNumber != null" >
         serial_number = #{serialNumber,jdbcType=VARCHAR},
       </if>
-      <if test="typicalTickeCode != null" >
-        typical_ticke_code = #{typicalTickeCode,jdbcType=VARCHAR},
+      <if test="typicalTicketName != null" >
+        typical_ticket_name = #{typicalTicketName,jdbcType=VARCHAR},
       </if>
-      <if test="ticketTypeId != null" >
-        ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
-      </if>
-      <if test="ticketTypeName != null" >
-        ticket_type_name = #{ticketTypeName,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
+      <if test="operTicketTypeId != null" >
+        oper_ticket_type_id = #{operTicketTypeId,jdbcType=VARCHAR},
       </if>
       <if test="maintainer != null" >
         maintainer = #{maintainer,jdbcType=VARCHAR},
@@ -357,23 +419,32 @@
       <if test="maintainDate != null" >
         maintain_date = #{maintainDate,jdbcType=DATE},
       </if>
-      <if test="localtion != null" >
-        localtion = #{localtion,jdbcType=VARCHAR},
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="windId != null" >
         wind_id = #{windId,jdbcType=VARCHAR},
       </if>
-      <if test="equipment != null" >
-        equipment = #{equipment,jdbcType=VARCHAR},
+      <if test="workTeam != null" >
+        work_team = #{workTeam,jdbcType=VARCHAR},
       </if>
-      <if test="dapartments != null" >
-        dapartments = #{dapartments,jdbcType=VARCHAR},
+      <if test="positionId != null" >
+        position_id = #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionDesc != null" >
+        position_desc = #{positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentDesc != null" >
+        equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
       </if>
       <if test="operateContent != null" >
         operate_content = #{operateContent,jdbcType=VARCHAR},
       </if>
-      <if test="operateItemsIds != null" >
-        operate_items_ids = #{operateItemsIds,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
     </set>
     where typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR}
@@ -381,18 +452,19 @@
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.TypicalOperateTicket" >
     update typical_operate_ticket
     set serial_number = #{serialNumber,jdbcType=VARCHAR},
-      typical_ticke_code = #{typicalTickeCode,jdbcType=VARCHAR},
-      ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
-      ticket_type_name = #{ticketTypeName,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
+      typical_ticket_name = #{typicalTicketName,jdbcType=VARCHAR},
+      oper_ticket_type_id = #{operTicketTypeId,jdbcType=VARCHAR},
       maintainer = #{maintainer,jdbcType=VARCHAR},
       maintain_date = #{maintainDate,jdbcType=DATE},
-      localtion = #{localtion,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},
-      equipment = #{equipment,jdbcType=VARCHAR},
-      dapartments = #{dapartments,jdbcType=VARCHAR},
+      work_team = #{workTeam,jdbcType=VARCHAR},
+      position_id = #{positionId,jdbcType=VARCHAR},
+      position_desc = #{positionDesc,jdbcType=VARCHAR},
+      equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
       operate_content = #{operateContent,jdbcType=VARCHAR},
-      operate_items_ids = #{operateItemsIds,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR}
     where typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR}
   </update>
 </mapper>

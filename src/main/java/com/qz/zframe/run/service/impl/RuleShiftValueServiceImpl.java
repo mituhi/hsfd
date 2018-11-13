@@ -42,6 +42,8 @@ public class RuleShiftValueServiceImpl implements RuleShiftValueService {
 			PageHelper.startPage(pageNo, pageSize);
 			//查出记录
 			ruleShiftValueList = ruleShiftValueMapper.selectByExample(example);
+		}else{
+			ruleShiftValueList = ruleShiftValueMapper.selectByExample(example);
 		}
 		return ruleShiftValueList;
 	}

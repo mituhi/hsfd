@@ -1,0 +1,757 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.WorkorderInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.WorkorderInfo" >
+    <id column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="workorder_code" property="workorderCode" jdbcType="VARCHAR" />
+    <result column="workorder_type_id" property="workorderTypeId" jdbcType="VARCHAR" />
+    <result column="workorder_desc" property="workorderDesc" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
+    <result column="duty_team" property="dutyTeam" jdbcType="VARCHAR" />
+    <result column="duty_head" property="dutyHead" jdbcType="VARCHAR" />
+    <result column="fill_person" property="fillPerson" jdbcType="VARCHAR" />
+    <result column="scheme_time" property="schemeTime" jdbcType="TIMESTAMP" />
+    <result column="unit_member" property="unitMember" jdbcType="VARCHAR" />
+    <result column="other_unit_member" property="otherUnitMember" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
+    <result column="plan_start_time" property="planStartTime" jdbcType="TIMESTAMP" />
+    <result column="plan_end_time" property="planEndTime" jdbcType="TIMESTAMP" />
+    <result column="plan_work_hour" property="planWorkHour" jdbcType="VARCHAR" />
+    <result column="plan_material_fee" property="planMaterialFee" jdbcType="VARCHAR" />
+    <result column="plan_service_fee" property="planServiceFee" jdbcType="VARCHAR" />
+    <result column="actual_complete_time" property="actualCompleteTime" jdbcType="TIMESTAMP" />
+    <result column="attachment" property="attachment" jdbcType="VARCHAR" />
+    <result column="equipment_status_requirement_1" property="equipmentStatusRequirement1" jdbcType="VARCHAR" />
+    <result column="equipment_status_requirement_2" property="equipmentStatusRequirement2" jdbcType="VARCHAR" />
+    <result column="other_requirement" property="otherRequirement" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    order_id, serial_number, workorder_code, workorder_type_id, workorder_desc, maintainer, 
+    maintain_date, status, wind_id, company, crew_id, duty_team, duty_head, fill_person, 
+    scheme_time, unit_member, other_unit_member, position_id, position_desc, equipment_id, 
+    equipment_desc, plan_start_time, plan_end_time, plan_work_hour, plan_material_fee, 
+    plan_service_fee, actual_complete_time, attachment, equipment_status_requirement_1, 
+    equipment_status_requirement_2, other_requirement
+  </sql>
+
+
+
+
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update workorder_info set status = "0"
+    where order_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+
+    <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.WorkorderVo" >
+      <id column="order_id" property="orderId" jdbcType="VARCHAR" />
+      <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+      <result column="workorder_code" property="workorderCode" jdbcType="VARCHAR" />
+      <result column="workorder_type_id" property="workorderTypeId" jdbcType="VARCHAR" />
+      <result column="workorder_desc" property="workorderDesc" jdbcType="VARCHAR" />
+      <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+      <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+      <result column="status" property="status" jdbcType="VARCHAR" />
+      <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+      <result column="company" property="company" jdbcType="VARCHAR" />
+      <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
+      <result column="duty_team" property="dutyTeam" jdbcType="VARCHAR" />
+      <result column="duty_head" property="dutyHead" jdbcType="VARCHAR" />
+      <result column="fill_person" property="fillPerson" jdbcType="VARCHAR" />
+      <result column="scheme_time" property="schemeTime" jdbcType="TIMESTAMP" />
+      <result column="unit_member" property="unitMember" jdbcType="VARCHAR" />
+      <result column="other_unit_member" property="otherUnitMember" jdbcType="VARCHAR" />
+      <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+      <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+      <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+      <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
+      <result column="plan_start_time" property="planStartTime" jdbcType="TIMESTAMP" />
+      <result column="plan_end_time" property="planEndTime" jdbcType="TIMESTAMP" />
+      <result column="plan_work_hour" property="planWorkHour" jdbcType="VARCHAR" />
+      <result column="plan_material_fee" property="planMaterialFee" jdbcType="VARCHAR" />
+      <result column="plan_service_fee" property="planServiceFee" jdbcType="VARCHAR" />
+      <result column="actual_complete_time" property="actualCompleteTime" jdbcType="TIMESTAMP" />
+      <result column="attachment" property="attachment" jdbcType="VARCHAR" />
+      <result column="equipment_status_requirement_1" property="equipmentStatusRequirement1" jdbcType="VARCHAR" />
+      <result column="equipment_status_requirement_2" property="equipmentStatusRequirement2" jdbcType="VARCHAR" />
+      <result column="other_requirement" property="otherRequirement" jdbcType="VARCHAR" />
+      <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+      <result column="position_name" property="positionName" jdbcType="VARCHAR" />
+      <result column="crew_name" property="crewName" jdbcType="VARCHAR" />
+      <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
+      <result column="workorder_type_name" property="workorderTypeName" jdbcType="VARCHAR" />
+    </resultMap>
+  <sql id="Get_Column_List" >
+    a.order_id as order_id, a.serial_number as serial_number, a.workorder_code as workorder_code, a.workorder_type_id as workorder_type_id,
+    a.workorder_desc as workorder_desc, a.maintainer as maintainer, a.maintain_date as maintain_date, a.status as status, a.wind_id as wind_id,
+    a.company as company, a.crew_id as crew_id, a.duty_team as duty_team, a.duty_head as duty_head, a.fill_person as fill_person,
+    a.scheme_time as scheme_time, a.unit_member as unit_member, a.other_unit_member as other_unit_member, a.position_id as position_id,
+    a.position_desc as position_desc, a.equipment_id as equipment_id, a.equipment_desc as equipment_desc, a.plan_start_time as plan_start_time,
+    a.plan_end_time as plan_end_time, a.plan_work_hour as plan_work_hour, a.plan_material_fee as plan_material_fee,
+    a.plan_service_fee as plan_service_fee, a.actual_complete_time as actual_complete_time, a.attachment as attachment,
+    a.equipment_status_requirement_1 as equipment_status_requirement_1, a.equipment_status_requirement_2 as equipment_status_requirement_2,
+    a.other_requirement as other_requirement,
+    b.architecture_name as wind_name,d.crew_name as crew_name,e.position_name as position_name,f.equipment_name as equipment_name,
+    g.workorder_type_name as workorder_type_name
+  </sql>
+  <select id="getWorkorderDetail" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from workorder_info a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join workorder_type g on a.workorder_type_id = g.workorder_type_id
+    where a.status != '0' and a.order_id = #{orderId}
+  </select>
+  <select id="getWorkorderList" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from workorder_info a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join workorder_type g on a.workorder_type_id = g.workorder_type_id
+    where a.status != '0'
+    <if test="map.windId != null" >
+      and a.wind_id = #{map.windId}
+    </if>
+    <if test="map.crewId != null" >
+      and a.crew_id = #{map.crewId}
+    </if>
+    <if test="map.workorderTypeId != null" >
+      and a.workorder_type_id = #{map.workorderTypeId}
+    </if>
+    <if test="map.status != null" >
+      and a.status = #{map.status}
+    </if>
+    <if test="map.workorderDesc != null" >
+      and a.workorder_desc like '%${map.workorderDesc}%'
+    </if>
+    order by a.serial_number desc
+    limit ${map.start},${map.pageSize}
+  </select>
+  <select id="getTotal" resultType="java.lang.Integer">
+    select
+    count(*)
+    from workorder_info
+    where status != '0'
+    <if test="map.windId != null" >
+      and wind_id = #{map.windId}
+    </if>
+    <if test="map.crewId != null" >
+      and crew_id = #{map.crewId}
+    </if>
+    <if test="map.workorderTypeId != null" >
+      and workorder_type_id = #{map.workorderTypeId}
+    </if>
+    <if test="map.status != null" >
+      and status = #{map.status}
+    </if>
+    <if test="map.workorderDesc != null" >
+      and workorder_desc like '%${map.workorderDesc}%'
+    </if>
+  </select>
+
+
+
+
+
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from workorder_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from workorder_info
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from workorder_info
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderInfoExample" >
+    delete from workorder_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderInfo" >
+    insert into workorder_info (order_id, serial_number, workorder_code, 
+      workorder_type_id, workorder_desc, maintainer, 
+      maintain_date, status, wind_id, 
+      company, crew_id, duty_team, 
+      duty_head, fill_person, scheme_time, 
+      unit_member, other_unit_member, position_id, 
+      position_desc, equipment_id, equipment_desc, 
+      plan_start_time, plan_end_time, plan_work_hour, 
+      plan_material_fee, plan_service_fee, actual_complete_time, 
+      attachment, equipment_status_requirement_1, 
+      equipment_status_requirement_2, other_requirement
+      )
+    values (#{orderId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{workorderCode,jdbcType=VARCHAR}, 
+      #{workorderTypeId,jdbcType=VARCHAR}, #{workorderDesc,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, 
+      #{maintainDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{crewId,jdbcType=VARCHAR}, #{dutyTeam,jdbcType=VARCHAR}, 
+      #{dutyHead,jdbcType=VARCHAR}, #{fillPerson,jdbcType=VARCHAR}, #{schemeTime,jdbcType=TIMESTAMP}, 
+      #{unitMember,jdbcType=VARCHAR}, #{otherUnitMember,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}, 
+      #{positionDesc,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR}, #{equipmentDesc,jdbcType=VARCHAR}, 
+      #{planStartTime,jdbcType=TIMESTAMP}, #{planEndTime,jdbcType=TIMESTAMP}, #{planWorkHour,jdbcType=VARCHAR}, 
+      #{planMaterialFee,jdbcType=VARCHAR}, #{planServiceFee,jdbcType=VARCHAR}, #{actualCompleteTime,jdbcType=TIMESTAMP}, 
+      #{attachment,jdbcType=VARCHAR}, #{equipmentStatusRequirement1,jdbcType=VARCHAR}, 
+      #{equipmentStatusRequirement2,jdbcType=VARCHAR}, #{otherRequirement,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderInfo" >
+    insert into workorder_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="workorderCode != null" >
+        workorder_code,
+      </if>
+      <if test="workorderTypeId != null" >
+        workorder_type_id,
+      </if>
+      <if test="workorderDesc != null" >
+        workorder_desc,
+      </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="company != null" >
+        company,
+      </if>
+      <if test="crewId != null" >
+        crew_id,
+      </if>
+      <if test="dutyTeam != null" >
+        duty_team,
+      </if>
+      <if test="dutyHead != null" >
+        duty_head,
+      </if>
+      <if test="fillPerson != null" >
+        fill_person,
+      </if>
+      <if test="schemeTime != null" >
+        scheme_time,
+      </if>
+      <if test="unitMember != null" >
+        unit_member,
+      </if>
+      <if test="otherUnitMember != null" >
+        other_unit_member,
+      </if>
+      <if test="positionId != null" >
+        position_id,
+      </if>
+      <if test="positionDesc != null" >
+        position_desc,
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id,
+      </if>
+      <if test="equipmentDesc != null" >
+        equipment_desc,
+      </if>
+      <if test="planStartTime != null" >
+        plan_start_time,
+      </if>
+      <if test="planEndTime != null" >
+        plan_end_time,
+      </if>
+      <if test="planWorkHour != null" >
+        plan_work_hour,
+      </if>
+      <if test="planMaterialFee != null" >
+        plan_material_fee,
+      </if>
+      <if test="planServiceFee != null" >
+        plan_service_fee,
+      </if>
+      <if test="actualCompleteTime != null" >
+        actual_complete_time,
+      </if>
+      <if test="attachment != null" >
+        attachment,
+      </if>
+      <if test="equipmentStatusRequirement1 != null" >
+        equipment_status_requirement_1,
+      </if>
+      <if test="equipmentStatusRequirement2 != null" >
+        equipment_status_requirement_2,
+      </if>
+      <if test="otherRequirement != null" >
+        other_requirement,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderCode != null" >
+        #{workorderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderTypeId != null" >
+        #{workorderTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderDesc != null" >
+        #{workorderDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="crewId != null" >
+        #{crewId,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyTeam != null" >
+        #{dutyTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyHead != null" >
+        #{dutyHead,jdbcType=VARCHAR},
+      </if>
+      <if test="fillPerson != null" >
+        #{fillPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="schemeTime != null" >
+        #{schemeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unitMember != null" >
+        #{unitMember,jdbcType=VARCHAR},
+      </if>
+      <if test="otherUnitMember != null" >
+        #{otherUnitMember,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null" >
+        #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionDesc != null" >
+        #{positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentDesc != null" >
+        #{equipmentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="planStartTime != null" >
+        #{planStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planEndTime != null" >
+        #{planEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planWorkHour != null" >
+        #{planWorkHour,jdbcType=VARCHAR},
+      </if>
+      <if test="planMaterialFee != null" >
+        #{planMaterialFee,jdbcType=VARCHAR},
+      </if>
+      <if test="planServiceFee != null" >
+        #{planServiceFee,jdbcType=VARCHAR},
+      </if>
+      <if test="actualCompleteTime != null" >
+        #{actualCompleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attachment != null" >
+        #{attachment,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentStatusRequirement1 != null" >
+        #{equipmentStatusRequirement1,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentStatusRequirement2 != null" >
+        #{equipmentStatusRequirement2,jdbcType=VARCHAR},
+      </if>
+      <if test="otherRequirement != null" >
+        #{otherRequirement,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderInfoExample" resultType="java.lang.Integer" >
+    select count(*) from workorder_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update workorder_info
+    <set >
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderCode != null" >
+        workorder_code = #{record.workorderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderTypeId != null" >
+        workorder_type_id = #{record.workorderTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderDesc != null" >
+        workorder_desc = #{record.workorderDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainDate != null" >
+        maintain_date = #{record.maintainDate,jdbcType=DATE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.company != null" >
+        company = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crewId != null" >
+        crew_id = #{record.crewId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyTeam != null" >
+        duty_team = #{record.dutyTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyHead != null" >
+        duty_head = #{record.dutyHead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fillPerson != null" >
+        fill_person = #{record.fillPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schemeTime != null" >
+        scheme_time = #{record.schemeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.unitMember != null" >
+        unit_member = #{record.unitMember,jdbcType=VARCHAR},
+      </if>
+      <if test="record.otherUnitMember != null" >
+        other_unit_member = #{record.otherUnitMember,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionId != null" >
+        position_id = #{record.positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionDesc != null" >
+        position_desc = #{record.positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentId != null" >
+        equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentDesc != null" >
+        equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planStartTime != null" >
+        plan_start_time = #{record.planStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.planEndTime != null" >
+        plan_end_time = #{record.planEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.planWorkHour != null" >
+        plan_work_hour = #{record.planWorkHour,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planMaterialFee != null" >
+        plan_material_fee = #{record.planMaterialFee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planServiceFee != null" >
+        plan_service_fee = #{record.planServiceFee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualCompleteTime != null" >
+        actual_complete_time = #{record.actualCompleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.attachment != null" >
+        attachment = #{record.attachment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentStatusRequirement1 != null" >
+        equipment_status_requirement_1 = #{record.equipmentStatusRequirement1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentStatusRequirement2 != null" >
+        equipment_status_requirement_2 = #{record.equipmentStatusRequirement2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.otherRequirement != null" >
+        other_requirement = #{record.otherRequirement,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update workorder_info
+    set order_id = #{record.orderId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      workorder_code = #{record.workorderCode,jdbcType=VARCHAR},
+      workorder_type_id = #{record.workorderTypeId,jdbcType=VARCHAR},
+      workorder_desc = #{record.workorderDesc,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      status = #{record.status,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      company = #{record.company,jdbcType=VARCHAR},
+      crew_id = #{record.crewId,jdbcType=VARCHAR},
+      duty_team = #{record.dutyTeam,jdbcType=VARCHAR},
+      duty_head = #{record.dutyHead,jdbcType=VARCHAR},
+      fill_person = #{record.fillPerson,jdbcType=VARCHAR},
+      scheme_time = #{record.schemeTime,jdbcType=TIMESTAMP},
+      unit_member = #{record.unitMember,jdbcType=VARCHAR},
+      other_unit_member = #{record.otherUnitMember,jdbcType=VARCHAR},
+      position_id = #{record.positionId,jdbcType=VARCHAR},
+      position_desc = #{record.positionDesc,jdbcType=VARCHAR},
+      equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
+      plan_start_time = #{record.planStartTime,jdbcType=TIMESTAMP},
+      plan_end_time = #{record.planEndTime,jdbcType=TIMESTAMP},
+      plan_work_hour = #{record.planWorkHour,jdbcType=VARCHAR},
+      plan_material_fee = #{record.planMaterialFee,jdbcType=VARCHAR},
+      plan_service_fee = #{record.planServiceFee,jdbcType=VARCHAR},
+      actual_complete_time = #{record.actualCompleteTime,jdbcType=TIMESTAMP},
+      attachment = #{record.attachment,jdbcType=VARCHAR},
+      equipment_status_requirement_1 = #{record.equipmentStatusRequirement1,jdbcType=VARCHAR},
+      equipment_status_requirement_2 = #{record.equipmentStatusRequirement2,jdbcType=VARCHAR},
+      other_requirement = #{record.otherRequirement,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderInfo" >
+    update workorder_info
+    <set >
+      <if test="serialNumber != null" >
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderCode != null" >
+        workorder_code = #{workorderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderTypeId != null" >
+        workorder_type_id = #{workorderTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderDesc != null" >
+        workorder_desc = #{workorderDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date = #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null" >
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="crewId != null" >
+        crew_id = #{crewId,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyTeam != null" >
+        duty_team = #{dutyTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyHead != null" >
+        duty_head = #{dutyHead,jdbcType=VARCHAR},
+      </if>
+      <if test="fillPerson != null" >
+        fill_person = #{fillPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="schemeTime != null" >
+        scheme_time = #{schemeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unitMember != null" >
+        unit_member = #{unitMember,jdbcType=VARCHAR},
+      </if>
+      <if test="otherUnitMember != null" >
+        other_unit_member = #{otherUnitMember,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null" >
+        position_id = #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionDesc != null" >
+        position_desc = #{positionDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentDesc != null" >
+        equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="planStartTime != null" >
+        plan_start_time = #{planStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planEndTime != null" >
+        plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planWorkHour != null" >
+        plan_work_hour = #{planWorkHour,jdbcType=VARCHAR},
+      </if>
+      <if test="planMaterialFee != null" >
+        plan_material_fee = #{planMaterialFee,jdbcType=VARCHAR},
+      </if>
+      <if test="planServiceFee != null" >
+        plan_service_fee = #{planServiceFee,jdbcType=VARCHAR},
+      </if>
+      <if test="actualCompleteTime != null" >
+        actual_complete_time = #{actualCompleteTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attachment != null" >
+        attachment = #{attachment,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentStatusRequirement1 != null" >
+        equipment_status_requirement_1 = #{equipmentStatusRequirement1,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentStatusRequirement2 != null" >
+        equipment_status_requirement_2 = #{equipmentStatusRequirement2,jdbcType=VARCHAR},
+      </if>
+      <if test="otherRequirement != null" >
+        other_requirement = #{otherRequirement,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.WorkorderInfo" >
+    update workorder_info
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      workorder_code = #{workorderCode,jdbcType=VARCHAR},
+      workorder_type_id = #{workorderTypeId,jdbcType=VARCHAR},
+      workorder_desc = #{workorderDesc,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_date = #{maintainDate,jdbcType=DATE},
+      status = #{status,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      crew_id = #{crewId,jdbcType=VARCHAR},
+      duty_team = #{dutyTeam,jdbcType=VARCHAR},
+      duty_head = #{dutyHead,jdbcType=VARCHAR},
+      fill_person = #{fillPerson,jdbcType=VARCHAR},
+      scheme_time = #{schemeTime,jdbcType=TIMESTAMP},
+      unit_member = #{unitMember,jdbcType=VARCHAR},
+      other_unit_member = #{otherUnitMember,jdbcType=VARCHAR},
+      position_id = #{positionId,jdbcType=VARCHAR},
+      position_desc = #{positionDesc,jdbcType=VARCHAR},
+      equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
+      plan_start_time = #{planStartTime,jdbcType=TIMESTAMP},
+      plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
+      plan_work_hour = #{planWorkHour,jdbcType=VARCHAR},
+      plan_material_fee = #{planMaterialFee,jdbcType=VARCHAR},
+      plan_service_fee = #{planServiceFee,jdbcType=VARCHAR},
+      actual_complete_time = #{actualCompleteTime,jdbcType=TIMESTAMP},
+      attachment = #{attachment,jdbcType=VARCHAR},
+      equipment_status_requirement_1 = #{equipmentStatusRequirement1,jdbcType=VARCHAR},
+      equipment_status_requirement_2 = #{equipmentStatusRequirement2,jdbcType=VARCHAR},
+      other_requirement = #{otherRequirement,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+</mapper>

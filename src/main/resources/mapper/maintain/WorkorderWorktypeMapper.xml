@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.WorkorderWorktypeMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.WorkorderWorktype" >
+    <id column="worktype_id" property="worktypeId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="knowledge_id" property="knowledgeId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="worktype_number" property="worktypeNumber" jdbcType="VARCHAR" />
+    <result column="worktype_name" property="worktypeName" jdbcType="VARCHAR" />
+    <result column="worktype_need_num" property="worktypeNeedNum" jdbcType="VARCHAR" />
+    <result column="worktype_plan_start_time" property="worktypePlanStartTime" jdbcType="TIMESTAMP" />
+    <result column="worktype_plan_end_time" property="worktypePlanEndTime" jdbcType="TIMESTAMP" />
+    <result column="worktype_standard_rate" property="worktypeStandardRate" jdbcType="VARCHAR" />
+    <result column="worktype_plan_use_hour" property="worktypePlanUseHour" jdbcType="VARCHAR" />
+    <result column="worktype_plan_fee" property="worktypePlanFee" jdbcType="VARCHAR" />
+    <result column="worktype_actual_use_hour" property="worktypeActualUseHour" jdbcType="VARCHAR" />
+    <result column="worktype_actual_fee" property="worktypeActualFee" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    worktype_id, workorder_id, knowledge_id, order_id, worktype_number, worktype_name, 
+    worktype_need_num, worktype_plan_start_time, worktype_plan_end_time, worktype_standard_rate, 
+    worktype_plan_use_hour, worktype_plan_fee, worktype_actual_use_hour, worktype_actual_fee
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderWorktypeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from workorder_worktype
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from workorder_worktype
+    where worktype_id = #{worktypeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from workorder_worktype
+    where worktype_id = #{worktypeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderWorktypeExample" >
+    delete from workorder_worktype
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderWorktype" >
+    insert into workorder_worktype (worktype_id, workorder_id, knowledge_id, 
+      order_id, worktype_number, worktype_name, 
+      worktype_need_num, worktype_plan_start_time, 
+      worktype_plan_end_time, worktype_standard_rate, 
+      worktype_plan_use_hour, worktype_plan_fee, worktype_actual_use_hour, 
+      worktype_actual_fee)
+    values (#{worktypeId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{knowledgeId,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{worktypeNumber,jdbcType=VARCHAR}, #{worktypeName,jdbcType=VARCHAR}, 
+      #{worktypeNeedNum,jdbcType=VARCHAR}, #{worktypePlanStartTime,jdbcType=TIMESTAMP}, 
+      #{worktypePlanEndTime,jdbcType=TIMESTAMP}, #{worktypeStandardRate,jdbcType=VARCHAR}, 
+      #{worktypePlanUseHour,jdbcType=VARCHAR}, #{worktypePlanFee,jdbcType=VARCHAR}, #{worktypeActualUseHour,jdbcType=VARCHAR}, 
+      #{worktypeActualFee,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderWorktype" >
+    insert into workorder_worktype
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="worktypeId != null" >
+        worktype_id,
+      </if>
+      <if test="workorderId != null" >
+        workorder_id,
+      </if>
+      <if test="knowledgeId != null" >
+        knowledge_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="worktypeNumber != null" >
+        worktype_number,
+      </if>
+      <if test="worktypeName != null" >
+        worktype_name,
+      </if>
+      <if test="worktypeNeedNum != null" >
+        worktype_need_num,
+      </if>
+      <if test="worktypePlanStartTime != null" >
+        worktype_plan_start_time,
+      </if>
+      <if test="worktypePlanEndTime != null" >
+        worktype_plan_end_time,
+      </if>
+      <if test="worktypeStandardRate != null" >
+        worktype_standard_rate,
+      </if>
+      <if test="worktypePlanUseHour != null" >
+        worktype_plan_use_hour,
+      </if>
+      <if test="worktypePlanFee != null" >
+        worktype_plan_fee,
+      </if>
+      <if test="worktypeActualUseHour != null" >
+        worktype_actual_use_hour,
+      </if>
+      <if test="worktypeActualFee != null" >
+        worktype_actual_fee,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="worktypeId != null" >
+        #{worktypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeId != null" >
+        #{knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeNumber != null" >
+        #{worktypeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeName != null" >
+        #{worktypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeNeedNum != null" >
+        #{worktypeNeedNum,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypePlanStartTime != null" >
+        #{worktypePlanStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="worktypePlanEndTime != null" >
+        #{worktypePlanEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="worktypeStandardRate != null" >
+        #{worktypeStandardRate,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypePlanUseHour != null" >
+        #{worktypePlanUseHour,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypePlanFee != null" >
+        #{worktypePlanFee,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeActualUseHour != null" >
+        #{worktypeActualUseHour,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeActualFee != null" >
+        #{worktypeActualFee,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderWorktypeExample" resultType="java.lang.Integer" >
+    select count(*) from workorder_worktype
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update workorder_worktype
+    <set >
+      <if test="record.worktypeId != null" >
+        worktype_id = #{record.worktypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderId != null" >
+        workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.knowledgeId != null" >
+        knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.worktypeNumber != null" >
+        worktype_number = #{record.worktypeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.worktypeName != null" >
+        worktype_name = #{record.worktypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.worktypeNeedNum != null" >
+        worktype_need_num = #{record.worktypeNeedNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.worktypePlanStartTime != null" >
+        worktype_plan_start_time = #{record.worktypePlanStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.worktypePlanEndTime != null" >
+        worktype_plan_end_time = #{record.worktypePlanEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.worktypeStandardRate != null" >
+        worktype_standard_rate = #{record.worktypeStandardRate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.worktypePlanUseHour != null" >
+        worktype_plan_use_hour = #{record.worktypePlanUseHour,jdbcType=VARCHAR},
+      </if>
+      <if test="record.worktypePlanFee != null" >
+        worktype_plan_fee = #{record.worktypePlanFee,jdbcType=VARCHAR},
+      </if>
+      <if test="record.worktypeActualUseHour != null" >
+        worktype_actual_use_hour = #{record.worktypeActualUseHour,jdbcType=VARCHAR},
+      </if>
+      <if test="record.worktypeActualFee != null" >
+        worktype_actual_fee = #{record.worktypeActualFee,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update workorder_worktype
+    set worktype_id = #{record.worktypeId,jdbcType=VARCHAR},
+      workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      worktype_number = #{record.worktypeNumber,jdbcType=VARCHAR},
+      worktype_name = #{record.worktypeName,jdbcType=VARCHAR},
+      worktype_need_num = #{record.worktypeNeedNum,jdbcType=VARCHAR},
+      worktype_plan_start_time = #{record.worktypePlanStartTime,jdbcType=TIMESTAMP},
+      worktype_plan_end_time = #{record.worktypePlanEndTime,jdbcType=TIMESTAMP},
+      worktype_standard_rate = #{record.worktypeStandardRate,jdbcType=VARCHAR},
+      worktype_plan_use_hour = #{record.worktypePlanUseHour,jdbcType=VARCHAR},
+      worktype_plan_fee = #{record.worktypePlanFee,jdbcType=VARCHAR},
+      worktype_actual_use_hour = #{record.worktypeActualUseHour,jdbcType=VARCHAR},
+      worktype_actual_fee = #{record.worktypeActualFee,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderWorktype" >
+    update workorder_worktype
+    <set >
+      <if test="workorderId != null" >
+        workorder_id = #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeId != null" >
+        knowledge_id = #{knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeNumber != null" >
+        worktype_number = #{worktypeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeName != null" >
+        worktype_name = #{worktypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeNeedNum != null" >
+        worktype_need_num = #{worktypeNeedNum,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypePlanStartTime != null" >
+        worktype_plan_start_time = #{worktypePlanStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="worktypePlanEndTime != null" >
+        worktype_plan_end_time = #{worktypePlanEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="worktypeStandardRate != null" >
+        worktype_standard_rate = #{worktypeStandardRate,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypePlanUseHour != null" >
+        worktype_plan_use_hour = #{worktypePlanUseHour,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypePlanFee != null" >
+        worktype_plan_fee = #{worktypePlanFee,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeActualUseHour != null" >
+        worktype_actual_use_hour = #{worktypeActualUseHour,jdbcType=VARCHAR},
+      </if>
+      <if test="worktypeActualFee != null" >
+        worktype_actual_fee = #{worktypeActualFee,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where worktype_id = #{worktypeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.WorkorderWorktype" >
+    update workorder_worktype
+    set workorder_id = #{workorderId,jdbcType=VARCHAR},
+      knowledge_id = #{knowledgeId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      worktype_number = #{worktypeNumber,jdbcType=VARCHAR},
+      worktype_name = #{worktypeName,jdbcType=VARCHAR},
+      worktype_need_num = #{worktypeNeedNum,jdbcType=VARCHAR},
+      worktype_plan_start_time = #{worktypePlanStartTime,jdbcType=TIMESTAMP},
+      worktype_plan_end_time = #{worktypePlanEndTime,jdbcType=TIMESTAMP},
+      worktype_standard_rate = #{worktypeStandardRate,jdbcType=VARCHAR},
+      worktype_plan_use_hour = #{worktypePlanUseHour,jdbcType=VARCHAR},
+      worktype_plan_fee = #{worktypePlanFee,jdbcType=VARCHAR},
+      worktype_actual_use_hour = #{worktypeActualUseHour,jdbcType=VARCHAR},
+      worktype_actual_fee = #{worktypeActualFee,jdbcType=VARCHAR}
+    where worktype_id = #{worktypeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

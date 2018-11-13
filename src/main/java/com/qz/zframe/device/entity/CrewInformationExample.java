@@ -328,7 +328,7 @@ public class CrewInformationExample extends PageExample{
         }
 
         public Criteria andWindIdEqualTo(String value) {
-            addCriterion("wind_id =", value, "windId");
+            addCriterion("c.wind_id =", value, "windId");
             return (Criteria) this;
         }
 

@@ -4,9 +4,11 @@
   <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.WorkTicketRiskControl" >
     <id column="measure_id" property="measureId" jdbcType="VARCHAR" />
     <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
+    <result column="measure_number" property="measureNumber" jdbcType="VARCHAR" />
     <result column="danger_point" property="dangerPoint" jdbcType="VARCHAR" />
     <result column="measure" property="measure" jdbcType="VARCHAR" />
-    <result column="execute_person" property="executePerson" jdbcType="VARCHAR" />
+    <result column="measure_executor" property="measureExecutor" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +69,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    measure_id, ticket_id, danger_point, measure, execute_person
+    measure_id, ticket_id, standard_ticket_id, measure_number, danger_point, measure, 
+    measure_executor
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.WorkTicketRiskControlExample" >
     select
@@ -100,10 +103,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.tickets.entity.WorkTicketRiskControl" >
-    insert into work_ticket_risk_control (measure_id, ticket_id, danger_point, 
-      measure, execute_person)
-    values (#{measureId,jdbcType=VARCHAR}, #{ticketId,jdbcType=VARCHAR}, #{dangerPoint,jdbcType=VARCHAR}, 
-      #{measure,jdbcType=VARCHAR}, #{executePerson,jdbcType=VARCHAR})
+    insert into work_ticket_risk_control (measure_id, ticket_id, standard_ticket_id, 
+      measure_number, danger_point, measure, 
+      measure_executor)
+    values (#{measureId,jdbcType=VARCHAR}, #{ticketId,jdbcType=VARCHAR}, #{standardTicketId,jdbcType=VARCHAR}, 
+      #{measureNumber,jdbcType=VARCHAR}, #{dangerPoint,jdbcType=VARCHAR}, #{measure,jdbcType=VARCHAR}, 
+      #{measureExecutor,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.WorkTicketRiskControl" >
     insert into work_ticket_risk_control
@@ -114,14 +119,20 @@
       <if test="ticketId != null" >
         ticket_id,
       </if>
+      <if test="standardTicketId != null" >
+        standard_ticket_id,
+      </if>
+      <if test="measureNumber != null" >
+        measure_number,
+      </if>
       <if test="dangerPoint != null" >
         danger_point,
       </if>
       <if test="measure != null" >
         measure,
       </if>
-      <if test="executePerson != null" >
-        execute_person,
+      <if test="measureExecutor != null" >
+        measure_executor,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -131,14 +142,20 @@
       <if test="ticketId != null" >
         #{ticketId,jdbcType=VARCHAR},
       </if>
+      <if test="standardTicketId != null" >
+        #{standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="measureNumber != null" >
+        #{measureNumber,jdbcType=VARCHAR},
+      </if>
       <if test="dangerPoint != null" >
         #{dangerPoint,jdbcType=VARCHAR},
       </if>
       <if test="measure != null" >
         #{measure,jdbcType=VARCHAR},
       </if>
-      <if test="executePerson != null" >
-        #{executePerson,jdbcType=VARCHAR},
+      <if test="measureExecutor != null" >
+        #{measureExecutor,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -157,14 +174,20 @@
       <if test="record.ticketId != null" >
         ticket_id = #{record.ticketId,jdbcType=VARCHAR},
       </if>
+      <if test="record.standardTicketId != null" >
+        standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.measureNumber != null" >
+        measure_number = #{record.measureNumber,jdbcType=VARCHAR},
+      </if>
       <if test="record.dangerPoint != null" >
         danger_point = #{record.dangerPoint,jdbcType=VARCHAR},
       </if>
       <if test="record.measure != null" >
         measure = #{record.measure,jdbcType=VARCHAR},
       </if>
-      <if test="record.executePerson != null" >
-        execute_person = #{record.executePerson,jdbcType=VARCHAR},
+      <if test="record.measureExecutor != null" >
+        measure_executor = #{record.measureExecutor,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -175,9 +198,11 @@
     update work_ticket_risk_control
     set measure_id = #{record.measureId,jdbcType=VARCHAR},
       ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      measure_number = #{record.measureNumber,jdbcType=VARCHAR},
       danger_point = #{record.dangerPoint,jdbcType=VARCHAR},
       measure = #{record.measure,jdbcType=VARCHAR},
-      execute_person = #{record.executePerson,jdbcType=VARCHAR}
+      measure_executor = #{record.measureExecutor,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -188,14 +213,20 @@
       <if test="ticketId != null" >
         ticket_id = #{ticketId,jdbcType=VARCHAR},
       </if>
+      <if test="standardTicketId != null" >
+        standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="measureNumber != null" >
+        measure_number = #{measureNumber,jdbcType=VARCHAR},
+      </if>
       <if test="dangerPoint != null" >
         danger_point = #{dangerPoint,jdbcType=VARCHAR},
       </if>
       <if test="measure != null" >
         measure = #{measure,jdbcType=VARCHAR},
       </if>
-      <if test="executePerson != null" >
-        execute_person = #{executePerson,jdbcType=VARCHAR},
+      <if test="measureExecutor != null" >
+        measure_executor = #{measureExecutor,jdbcType=VARCHAR},
       </if>
     </set>
     where measure_id = #{measureId,jdbcType=VARCHAR}
@@ -203,9 +234,11 @@
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.WorkTicketRiskControl" >
     update work_ticket_risk_control
     set ticket_id = #{ticketId,jdbcType=VARCHAR},
+      standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
+      measure_number = #{measureNumber,jdbcType=VARCHAR},
       danger_point = #{dangerPoint,jdbcType=VARCHAR},
       measure = #{measure,jdbcType=VARCHAR},
-      execute_person = #{executePerson,jdbcType=VARCHAR}
+      measure_executor = #{measureExecutor,jdbcType=VARCHAR}
     where measure_id = #{measureId,jdbcType=VARCHAR}
   </update>
 </mapper>

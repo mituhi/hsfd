@@ -13,6 +13,8 @@ import com.qz.zframe.common.dao.DataDictDao;
 import com.qz.zframe.common.entity.DataDict;
 import com.qz.zframe.common.entity.DataDictType;
 import com.qz.zframe.common.service.DataDictService;
+import com.qz.zframe.common.util.ErrorCode;
+import com.qz.zframe.common.util.PageResultEntity;
 
 @Service
 public class DataDictServiceImpl implements DataDictService {
@@ -21,14 +23,24 @@ public class DataDictServiceImpl implements DataDictService {
 	private DataDictDao codeDao;
 	
 	@Override
-	public List<DataDict> queryCode(String codeType) {
-		List<DataDict> list = null;
-		if (StringUtils.isBlank(codeType)) {
-			list = codeDao.findAllCode();
+	public PageResultEntity queryCode(String codeType, Integer page, Integer size) {
+		PageResultEntity pageResultEntity = new PageResultEntity();
+		//从第几条数据开始
+		int firstIndex  = (page - 1) * size;
+		//到第几条数据结束
+		int lastIndex = page * size;
+		List<DataDict> list = codeDao.findCodeByCodeType(codeType, firstIndex, lastIndex);
+		if (list == null || list.isEmpty()) {
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			pageResultEntity.setRows(null);
+			pageResultEntity.setTotal(0);
 		}else {
-			list = codeDao.findCodeByCodeType(codeType);
+			Integer num = codeDao.findCodeByCodeTypeNum(codeType);
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			pageResultEntity.setRows(list);
+			pageResultEntity.setTotal(num);
 		}
-		return list;
+		return pageResultEntity;
 	}
 
 	@Override
@@ -62,7 +74,7 @@ public class DataDictServiceImpl implements DataDictService {
 	@Override
 	@Transactional
 	public Integer deleteCodeType(List<String> ids) throws Exception {
-		if (ids == null && ids.isEmpty()) {
+		if (ids == null || ids.isEmpty()) {
 			throw new Exception("请选择删除数据！");
 		}
 		codeDao.deleteCodeType(ids);
@@ -72,21 +84,31 @@ public class DataDictServiceImpl implements DataDictService {
 	
 	@Override
 	public Integer deleteCode(List<String> ids) throws Exception {
-		if (ids == null && ids.isEmpty()) {
+		if (ids == null || ids.isEmpty()) {
 			throw new Exception("请选择删除数据！");
 		}
 		return codeDao.deleteCode(ids);
 	}
 
 	@Override
-	public List<DataDictType> queryCodeType(String codeType) {
-		List<DataDictType> list = null;
-		if (StringUtils.isBlank(codeType)) {
-			list = codeDao.findAllCodeType();
+	public PageResultEntity queryCodeType(String codeType, Integer page, Integer size) {
+		PageResultEntity pageResultEntity = new PageResultEntity();
+		//从第几条数据开始
+		int firstIndex  = (page - 1) * size;
+		//到第几条数据结束
+		int lastIndex = page * size;
+		List<DataDictType> list = codeDao.findCodeTypeByCodeType(codeType, firstIndex, lastIndex);
+		if (list == null || list.isEmpty()) {
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			pageResultEntity.setRows(null);
+			pageResultEntity.setTotal(0);
 		}else {
-			list = codeDao.findCodeTypeByCodeType(codeType);
+			Integer num = codeDao.findCodeTypeByCodeTypeNum(codeType);
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			pageResultEntity.setRows(list);
+			pageResultEntity.setTotal(num);
 		}
-		return list;
+		return pageResultEntity;
 	}
 
 	@Override

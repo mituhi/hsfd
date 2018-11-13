@@ -28,4 +28,5 @@ public interface SchedulingQueryMapper {
 	
 	int updateOperator(SchedulingQuery schedulingQuery);
 	
+	
 }

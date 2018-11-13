@@ -3,6 +3,7 @@ package com.qz.zframe.tickets.mapper;
 import com.qz.zframe.tickets.entity.WorkTicket;
 import com.qz.zframe.tickets.entity.WorkTicketExample;
 import com.qz.zframe.tickets.vo.TicketStatisticsRes;
+import com.qz.zframe.tickets.vo.WorkTicketVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,14 +21,16 @@ public interface WorkTicketMapper {
     int insert(WorkTicket record);
 
     int insertSelective(WorkTicket record);
-    //工作票统计
-    List<TicketStatisticsRes> getWorkTicketStatisticsList(@Param("startTime")String startTime, @Param("endTime")String endTime);
     //批量删除
     int batchDelete(@Param("array") String[] ids);
+    //详情查询
+    WorkTicketVo getWorkTicketDetail(@Param("ticketId") String ticketId);
     //列表查询
-    List<WorkTicket> getWorkTicketListByPageAndCondition(@Param("map") Map<String, String> pageAndCondition);
+    List<WorkTicketVo> getWorkTicketList(@Param("map") Map<String, String> pageAndCondition);
     //查询总记录数
-    int getTotalCount(@Param("map") Map<String, String> pageAndCondition);
+    int getTotal(@Param("map") Map<String, String> pageAndCondition);
+    //工作票统计
+    List<TicketStatisticsRes> getWorkTicketStatisticsList(@Param("startTime") String startTime, @Param("endTime") String endTime);
 
     List<WorkTicket> selectByExample(WorkTicketExample example);
 

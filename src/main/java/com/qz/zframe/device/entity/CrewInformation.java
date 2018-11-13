@@ -2,47 +2,55 @@ package com.qz.zframe.device.entity;
 
 import java.util.Date;
 
+import javax.persistence.Transient;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression.DateTime;
+
 
 public class CrewInformation {
-	@ApiParam(name = "crewId", value = "机组信息id", required = false)
+	@ApiModelProperty(name = "crewId", value = "机组信息id", required = false)
 
 	private String crewId;
 
-	@ApiParam(name = "crewCode", value = "机组编码", required = true)
+	@ApiModelProperty(name = "crewCode", value = "机组编码", required = true)
 
 	private String crewCode;
 
-	@ApiParam(name = "crewName", value = "机组名称", required = false)
+	@ApiModelProperty(name = "crewName", value = "机组名称", required = false)
 
 	private String crewName;
 
-	@ApiParam(name = "windId", value = "风电场", required = true)
+	@ApiModelProperty(name = "windId", value = "风电场", required = true)
 
 	private String windId;
 
-	@ApiParam(name = "installedCapacity", value = "装机容量", required = false)
+	@ApiModelProperty(name = "installedCapacity", value = "装机容量", required = false)
 
 	private String installedCapacity;
 
-	@ApiParam(name = "enableDate", value = "启用日期", required = false)
+	@ApiModelProperty(name = "enableDate", value = "启用日期", required = false)
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 
 	private Date enableDate;
 
-	@ApiParam(name = "creater", value = "创建人", required = false)
+	@ApiModelProperty(name = "creater", value = "创建人", required = false)
 
 	private String creater;
 
-	@ApiParam(name = "creatDate", value = "创建时间", required = false)
+	@ApiModelProperty(name = "creatDate", value = "创建时间", required = false)
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 
-	private Date creatDate;
-
+	private Date  creatDate;
+	
+	@ApiModelProperty(name = "windName", value = "风电场名称", required = false)
+	@Transient
+    private String windName;
+	
 	public String getCrewId() {
 		return crewId;
 	}
@@ -83,11 +91,11 @@ public class CrewInformation {
 		this.installedCapacity = installedCapacity == null ? null : installedCapacity.trim();
 	}
 
-	public Date getEnableDate() {
+	public Date  getEnableDate() {
 		return enableDate;
 	}
 
-	public void setEnableDate(Date enableDate) {
+	public void setEnableDate(Date  enableDate) {
 		this.enableDate = enableDate;
 	}
 
@@ -99,11 +107,21 @@ public class CrewInformation {
 		this.creater = creater == null ? null : creater.trim();
 	}
 
-	public Date getCreatDate() {
+	public Date  getCreatDate() {
 		return creatDate;
 	}
 
-	public void setCreatDate(Date creatDate) {
+	public void setCreatDate(Date  creatDate) {
 		this.creatDate = creatDate;
 	}
+	@Transient
+	public String getWindName() {
+		return windName;
+	}
+	@Transient
+	public void setWindName(String windName) {
+		this.windName = windName;
+	}
+	
+	
 }

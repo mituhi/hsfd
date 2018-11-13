@@ -50,7 +50,7 @@ public class PlanController {
     @Autowired
     PeriodTimeService periodTimeService;
 
-    @ApiOperation(value="巡检计划查询(包括条件查询 分页有问题在改)", notes="根据线路，负责人，风机场，开始时间，结束时间" ,httpMethod="GET")
+    @ApiOperation(value="巡检计划查询", notes="根据线路，负责人，风机场，开始时间，结束时间" ,httpMethod="GET")
     @RequestMapping("list")
     @ResponseBody
     public ResultEntity listStandard(String routeName,
@@ -99,7 +99,7 @@ public class PlanController {
 
     }
 
-    @ApiOperation(value="巡检计划删除(包括批量)", notes="根据传入的list进行删除" ,httpMethod="DELETE")
+    @ApiOperation(value="巡检计划删除", notes="根据传入的list进行删除" ,httpMethod="DELETE")
     @RequestMapping("delete")
     @ResponseBody
     public ResultEntity tallyDelete(@RequestBody List<TallyPlanVO> tallyPlanVOList) {
@@ -111,23 +111,9 @@ public class PlanController {
 
             return resultEntity;
         }
-        for (TallyPlanVO tallyPlanVO:tallyPlanVOList){
-            //1.删除时间段表和关联表
-            periodTimeService.deletePeriodTimeByRouteNames(tallyPlanVO.getRouteName(),tallyPlanVO.getStartTime(),tallyPlanVO.getEndTime());
 
 
 
-            
-
-        }
-
-        //tallyRouterService.deleteByRouteId(routeNames);
-        //2.删除路线人员关联表
-        //tallyRouterService.deleteRouteUserByRouteId(routeIds);
-        //3.删除路线标准关联
-        //tallyRouterService.deleteTallyRouteStandardByRouteId(routeIds);
-        //4.删除点检路线表
-        //tallyRouterService.deleteTallyRouteByRouteId(routeIds);
 
         resultEntity.setCode(ErrorCode.SUCCESS);
         resultEntity.setMsg("删除成功!");

@@ -21,9 +21,11 @@ public interface DataDictDao {
 	/**
 	 * 根据编码类型获取编码信息
 	 * @param codeType 
+	 * @param lastIndex 
+	 * @param firstIndex 
 	 * @return
 	 */
-	List<DataDict> findCodeByCodeType(String codeType);
+	List<DataDict> findCodeByCodeType(String codeType, int firstIndex, int lastIndex);
 	
 	/**
 	 * 根据分类编码获取编码类型信息
@@ -70,7 +72,7 @@ public interface DataDictDao {
 	 * @param codeType
 	 * @return
 	 */
-	List<DataDictType> findCodeTypeByCodeType(String codeType);
+	List<DataDictType> findCodeTypeByCodeType(String codeType, int firstIndex, int lastIndex);
 
 	/**
 	 * 根据上级编码id和编码编号查询编码
@@ -118,5 +120,19 @@ public interface DataDictDao {
 	 * @return
 	 */
 	DataDictType queryCodeTypeById(String id);
+
+	/**
+	 * 根据分类编码查询编码分类数量
+	 * @param codeType
+	 * @return
+	 */
+	Integer findCodeTypeByCodeTypeNum(String codeType);
+
+	/**
+	 * 根据分类编码查询编码数量
+	 * @param codeType
+	 * @return
+	 */
+	Integer findCodeByCodeTypeNum(String codeType);
 
 }

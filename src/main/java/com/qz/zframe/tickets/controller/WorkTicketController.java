@@ -26,37 +26,6 @@ public class WorkTicketController {
     @Autowired
     private WorkTicketService workTicketService;
 
-    //工作票列表分页+条件查询
-    @ApiOperation(value = "工作票列表查询", notes = "工作票列表查询")
-    @RequestMapping(value = "getWorkTicketList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public PageResultEntity getWorkTicketList(@RequestParam(defaultValue = "1")@ApiParam(name="pageNum",value="当前页",required=false)String pageNum,
-                                              @RequestParam(defaultValue = "10")@ApiParam(name="pageSize",value="一页记录数",required=false)String pageSize,
-                                              @RequestParam(required = false)@ApiParam(name="windId",value="风电场id",required=false)String windId,
-                                              @RequestParam(required = false)@ApiParam(name="ticketTypeId",value="工作票类型id",required=false)String ticketTypeId,
-                                              @RequestParam(required = false)@ApiParam(name="status",value="状态 1:处理中  2:完成  0:作废",required=false)String status,
-                                              @RequestParam(required = false)@ApiParam(name="crew_id",value="机组",required=false)String crewId,
-                                              @RequestParam(required = false)@ApiParam(name="workContent",value="工作内容",required=false)String workContent,
-                                              @RequestParam(required = false)@ApiParam(name="startTime",value="申请时间",required=false)String startTime,
-                                              @RequestParam(required = false)@ApiParam(name="endTime",value="申请时间",required=false)String endTime) {
-        Map<String,String> pageAndCondition = new HashMap();
-        pageAndCondition.put("pageNum",pageNum);
-        pageAndCondition.put("pageSize",pageSize);
-        pageAndCondition.put("windId",windId);
-        pageAndCondition.put("ticketTypeId",ticketTypeId);
-        pageAndCondition.put("status",status);
-        pageAndCondition.put("machineSet",crewId);
-        pageAndCondition.put("workContent",workContent);
-        pageAndCondition.put("startTime",startTime);
-        pageAndCondition.put("endTime",endTime);
-        return workTicketService.getWorkTicketList(pageAndCondition);
-    }
-
-    @ApiOperation(value = "新建工作票", notes = "后台生成id,流水号,申请人,工作票号给前端为添加工作票类型做准备")
-    @RequestMapping(value = "createWorkTicket", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResultEntity createWorkTicket() {
-        return workTicketService.createWorkTicket();
-    }
-
     @ApiOperation(value = "添加工作票", notes = "添加工作票")
     @RequestMapping(value = "addWorkTicket", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultEntity addWorkTicket(@RequestBody WorkTicketVo workTicketVo) {
@@ -65,7 +34,7 @@ public class WorkTicketController {
 
     @ApiOperation(value = "删除工作票", notes = "删除工作票")
     @RequestMapping(value = "deleteWorkTicket", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResultEntity deleteWorkTicket(@RequestParam(required = true)@ApiParam(name="ticketTypeIds",value="工作票类型ids字符串,逗号分隔",required=false) String ticketIds) {
+    public ResultEntity deleteWorkTicket(@RequestParam(required = false)@ApiParam(name="ticketIds",value="工作票ids字符串,逗号分隔",required=false) String ticketIds) {
         return workTicketService.deleteWorkTicket(ticketIds);
     }
 
@@ -77,8 +46,33 @@ public class WorkTicketController {
 
     @ApiOperation(value = "工作票详情查询", notes = "工作票详情查询")
     @RequestMapping(value = "getWorkTicketDetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResultEntity getWorkTicketDetail(@RequestParam(required = true)@ApiParam(name="ticketTypeId",value="工作票类型id",required=true) String ticketId) {
+    public ResultEntity getWorkTicketDetail(@RequestParam(required = false)@ApiParam(name="ticketId",value="工作票id",required=true) String ticketId) {
         return workTicketService.getWorkTicketDetail(ticketId);
+    }
+
+    //工作票列表分页+条件查询
+    @ApiOperation(value = "工作票列表查询", notes = "工作票列表查询")
+    @RequestMapping(value = "getWorkTicketList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public PageResultEntity getWorkTicketList(@RequestParam(defaultValue = "1")@ApiParam(name="pageNum",value="当前页",required=false)String pageNum,
+                          @RequestParam(defaultValue = "10")@ApiParam(name="pageSize",value="一页记录数",required=false)String pageSize,
+                          @RequestParam(required = false)@ApiParam(name="workTicketTypeId",value="工作票类型id",required=false)String workTicketTypeId,
+                          @RequestParam(required = false)@ApiParam(name="windId",value="风电场id",required=false)String windId,
+                          @RequestParam(required = false)@ApiParam(name="status",value="状态 1:处理中  2:完成  0:作废",required=false)String status,
+                          @RequestParam(required = false)@ApiParam(name="crew_id",value="机组",required=false)String crewId,
+                          @RequestParam(required = false)@ApiParam(name="workContent",value="工作内容",required=false)String workContent,
+                          @RequestParam(required = false)@ApiParam(name="startTime",value="申请时间",required=false)String startTime,
+                          @RequestParam(required = false)@ApiParam(name="endTime",value="申请时间",required=false)String endTime) {
+        Map<String,String> pageAndCondition = new HashMap();
+        pageAndCondition.put("pageNum",pageNum);
+        pageAndCondition.put("pageSize",pageSize);
+        pageAndCondition.put("workTicketTypeId",workTicketTypeId);
+        pageAndCondition.put("windId",windId);
+        pageAndCondition.put("status",status);
+        pageAndCondition.put("machineSet",crewId);
+        pageAndCondition.put("workContent",workContent);
+        pageAndCondition.put("startTime",startTime);
+        pageAndCondition.put("endTime",endTime);
+        return workTicketService.getWorkTicketList(pageAndCondition);
     }
 
     @ApiOperation(value = "工作票统计", notes = "工作票统计")

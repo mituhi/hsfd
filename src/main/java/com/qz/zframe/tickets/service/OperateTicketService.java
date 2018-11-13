@@ -9,17 +9,6 @@ import java.util.Map;
 public interface OperateTicketService {
 
     /**
-     * 分页查询操作票列表
-     * @return
-     */
-    public PageResultEntity getOperateTicketList(Map<String, String> pageAndCondition);
-
-    /**
-     * 新建操作票
-     */
-    public ResultEntity createOperateTicket();
-
-    /**
      * 添加操作票
      */
     public ResultEntity addOperateTicket(OperateTicketVo operateTicketVo);
@@ -35,7 +24,7 @@ public interface OperateTicketService {
     public ResultEntity updateOperateTicket(OperateTicketVo operateTicketVo);
 
     /**
-     * 查询操作票详情
+     * 浏览操作票
      */
     public ResultEntity getOperateTicketDetail(String ticketId);
 
@@ -43,4 +32,9 @@ public interface OperateTicketService {
      * 操作票统计
      */
     public ResultEntity getOperateTicketStatistics(String startDate,String endDate);
+
+    /**
+     * 分页查询操作票列表
+     */
+    public PageResultEntity getOperateTicketList(Map<String, String> pageAndCondition);
 }

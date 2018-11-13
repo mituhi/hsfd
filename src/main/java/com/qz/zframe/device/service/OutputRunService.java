@@ -6,7 +6,6 @@ import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.device.entity.OutputParameters;
 import com.qz.zframe.device.entity.OutputParametersExample;
-import com.qz.zframe.device.entity.Parameters;
 import com.qz.zframe.device.entity.RunParameters;
 import com.qz.zframe.device.entity.RunParametersExample;
 

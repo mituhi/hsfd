@@ -1,5 +1,6 @@
 package com.qz.zframe.run.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.run.dao.RuleShiftValueMapper;
@@ -39,8 +41,15 @@ public class ShiftServiceImpl implements ShiftService {
 	 * 批量获取
 	 */
 	@Override
-	public List<Shift> listShift(ShiftExample example) {
-		return shiftMapper.selectByExample(example);
+	public List<Shift> listShift(ShiftExample example , int pageNo , int pageSize) {
+		List<Shift> shifts = Collections.emptyList();
+		
+		if(pageNo != 0 && pageSize != 0){
+			PageHelper.startPage(pageNo, pageSize);
+			//查出记录
+			shifts =shiftMapper.selectByExample(example);
+		}
+		return shifts;
 	}
 
 	
@@ -67,7 +76,7 @@ public class ShiftServiceImpl implements ShiftService {
 		
 		// 生成id
 		String id = UUID.randomUUID().toString();
-		
+		shift.setShiftId(id);
 		//执行插入操作
 		shiftMapper.insert(shift);
 		
@@ -163,5 +172,34 @@ public class ShiftServiceImpl implements ShiftService {
 			return shift.getShiftId();
 		}
 		return null;
+	}
+
+
+	/**
+	 * 通过班次名称获取对象
+	 */
+	@Override
+	public Shift getShiftByShiftName(String shiftName) {
+		ShiftExample example = new ShiftExample();
+		example.createCriteria().andShiftNameEqualTo(shiftName);
+
+		// 执行查询操作
+		List<Shift> list = shiftMapper.selectByExample(example);
+		// 如果不为空
+		if (CollectionUtils.isNotEmpty(list)) {
+			Shift shift = list.get(0);
+			return shift;
+		}
+
+		return null;
+	}
+
+
+	/**
+	 * 通过id查找
+	 */
+	@Override
+	public Shift getShiftByShiftId(String shiftId) {
+		return shiftMapper.selectByPrimaryKey(shiftId);
 	}
 }

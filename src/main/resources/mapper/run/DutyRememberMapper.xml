@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.DutyRememberMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.DutyRemember" >
+    <id column="duty_id" property="dutyId" jdbcType="VARCHAR" />
+    <result column="run_log_id" property="runLogId" jdbcType="VARCHAR" />
+    <result column="remember_time" property="rememberTime" jdbcType="VARCHAR" />
+    <result column="remember_theme" property="rememberTheme" jdbcType="VARCHAR" />
+    <result column="remember_content" property="rememberContent" jdbcType="VARCHAR" />
+    <result column="remember" property="remember" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    duty_id, run_log_id, remember_time, remember_theme, remember_content, remember
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.DutyRememberExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from duty_remember
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from duty_remember
+    where duty_id = #{dutyId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from duty_remember
+    where duty_id = #{dutyId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.DutyRememberExample" >
+    delete from duty_remember
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.DutyRemember" >
+    insert into duty_remember (duty_id, run_log_id, remember_time, 
+      remember_theme, remember_content, remember
+      )
+    values (#{dutyId,jdbcType=VARCHAR}, #{runLogId,jdbcType=VARCHAR}, #{rememberTime,jdbcType=VARCHAR}, 
+      #{rememberTheme,jdbcType=VARCHAR}, #{rememberContent,jdbcType=VARCHAR}, #{remember,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.DutyRemember" >
+    insert into duty_remember
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dutyId != null" >
+        duty_id,
+      </if>
+      <if test="runLogId != null" >
+        run_log_id,
+      </if>
+      <if test="rememberTime != null" >
+        remember_time,
+      </if>
+      <if test="rememberTheme != null" >
+        remember_theme,
+      </if>
+      <if test="rememberContent != null" >
+        remember_content,
+      </if>
+      <if test="remember != null" >
+        remember,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dutyId != null" >
+        #{dutyId,jdbcType=VARCHAR},
+      </if>
+      <if test="runLogId != null" >
+        #{runLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="rememberTime != null" >
+        #{rememberTime,jdbcType=VARCHAR},
+      </if>
+      <if test="rememberTheme != null" >
+        #{rememberTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="rememberContent != null" >
+        #{rememberContent,jdbcType=VARCHAR},
+      </if>
+      <if test="remember != null" >
+        #{remember,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.DutyRememberExample" resultType="java.lang.Integer" >
+    select count(*) from duty_remember
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update duty_remember
+    <set >
+      <if test="record.dutyId != null" >
+        duty_id = #{record.dutyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runLogId != null" >
+        run_log_id = #{record.runLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rememberTime != null" >
+        remember_time = #{record.rememberTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rememberTheme != null" >
+        remember_theme = #{record.rememberTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rememberContent != null" >
+        remember_content = #{record.rememberContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remember != null" >
+        remember = #{record.remember,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update duty_remember
+    set duty_id = #{record.dutyId,jdbcType=VARCHAR},
+      run_log_id = #{record.runLogId,jdbcType=VARCHAR},
+      remember_time = #{record.rememberTime,jdbcType=VARCHAR},
+      remember_theme = #{record.rememberTheme,jdbcType=VARCHAR},
+      remember_content = #{record.rememberContent,jdbcType=VARCHAR},
+      remember = #{record.remember,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.DutyRemember" >
+    update duty_remember
+    <set >
+      <if test="runLogId != null" >
+        run_log_id = #{runLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="rememberTime != null" >
+        remember_time = #{rememberTime,jdbcType=VARCHAR},
+      </if>
+      <if test="rememberTheme != null" >
+        remember_theme = #{rememberTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="rememberContent != null" >
+        remember_content = #{rememberContent,jdbcType=VARCHAR},
+      </if>
+      <if test="remember != null" >
+        remember = #{remember,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where duty_id = #{dutyId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.DutyRemember" >
+    update duty_remember
+    set run_log_id = #{runLogId,jdbcType=VARCHAR},
+      remember_time = #{rememberTime,jdbcType=VARCHAR},
+      remember_theme = #{rememberTheme,jdbcType=VARCHAR},
+      remember_content = #{rememberContent,jdbcType=VARCHAR},
+      remember = #{remember,jdbcType=VARCHAR}
+    where duty_id = #{dutyId,jdbcType=VARCHAR}
+  </update>
+</mapper>

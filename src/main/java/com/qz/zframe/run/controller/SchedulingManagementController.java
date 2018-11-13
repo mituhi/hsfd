@@ -1,6 +1,7 @@
 package com.qz.zframe.run.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.ObjectIsBlankUtil;
@@ -23,10 +23,7 @@ import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.run.entity.SchedulingAssociated;
 import com.qz.zframe.run.entity.SchedulingAssociatedExample;
 import com.qz.zframe.run.entity.SchedulingManagement;
-import com.qz.zframe.run.entity.SchedulingManagementExample;
-import com.qz.zframe.run.entity.SchedulingManagementExample.Criteria;
 import com.qz.zframe.run.entity.SchedulingRule;
-import com.qz.zframe.run.entity.SchedulingRuleExample;
 import com.qz.zframe.run.entity.result.SchedulingManagementResult;
 import com.qz.zframe.run.entity.submit.SaveSchedulingManagementSubmit;
 import com.qz.zframe.run.service.SchedulingAssociatedService;
@@ -58,21 +55,64 @@ public class SchedulingManagementController {
 	private SchedulingRuleService schedulingRuleService;
 	
 	
-	@RequestMapping(value = "/SchedulingManagementIndexPage", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value = "/SchedulingManagementIndexPage", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(notes = "排班管理信息首页", value = "加载排班管理信息首页数据")
-	public PageResultEntity SchedulingManagementIndexPage(@RequestBody SchedulingAssociated schedulingAssociated,
+	public PageResultEntity SchedulingManagementIndexPage(@RequestParam(required = false) List<String> departments,@RequestParam(required = false) String searchKey,
 			@RequestParam(required = false, defaultValue = "1") Integer pageNo,
 			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-
+		
 		// 返回对象
 		PageResultEntity pageResultEntity = new PageResultEntity();
 
 		SchedulingAssociatedExample example = new SchedulingAssociatedExample();
-		// 封装查询条件
+		
+		//如果所选的部门不为空
+		if(CollectionUtils.isNotEmpty(departments)){
+			//排版管理表中的部门
+			//根据部门名称，获取排班管理id
+			List<SchedulingManagement> schedulingManagements = schedulingManagementService.getSchedulingManagementByDepartments(departments);
+			//封装查询条件
+			if(CollectionUtils.isNotEmpty(schedulingManagements)){
+				for (SchedulingManagement schedulingManagement : schedulingManagements) {
+					example.or().andSchedulingManagementIdEqualTo(schedulingManagement.getSchedulingManagementId());
+				}
+			}
+			
+		}
+		
+		//如果输入了关键字 可以是  排班表  规则编码   规则名称
+		if(StringUtils.isNotBlank(searchKey)){
+			//如果是排班表名称：根据排班表名称获取排版管理表id
+			SchedulingManagement schedulingManagement = schedulingManagementService.getSchedulingManagementBySchedulingName(searchKey);
+
+			if(schedulingManagement!=null){
+				//不为空有结果
+				example.or().andSchedulingManagementIdEqualTo(schedulingManagement.getSchedulingManagementId());
+			}
+			
+			//如果是规则编码：根据规则编码获取排班规则表id
+			SchedulingRule schedulingRule = schedulingRuleService.getSchedulingRuleBySchedulingRuleCode(searchKey);
+			
+			//不为空有结果
+			if(schedulingRule!=null){
+				example.or().andSchedulingRuleIdEqualTo(schedulingRule.getSchedulingRuleId());
+			}
+			
+			//如果是规则名称：根据规则名称查询
+			SchedulingRule schedulingRule2 = schedulingRuleService.getSchedulingRuleBySchedulingRuleName(searchKey);
+			//不为空有结果
+			if(schedulingRule2!=null){
+				example.or().andSchedulingRuleIdEqualTo(schedulingRule2.getSchedulingRuleId());
+			}
+		}
+		
+		//执行查询
 		List<SchedulingAssociated> schedulingAssociateds = schedulingAssociatedService.listSchedulingAssociated(example,
 				pageNo, pageSize);
-		pageResultEntity.setTotal(schedulingAssociatedService.selectCountTotal(example));
-
+		
+		PageInfo<SchedulingAssociated> pageInfo = new PageInfo<SchedulingAssociated>(schedulingAssociateds);
+		pageResultEntity.setTotal((int)pageInfo.getTotal());
+		
 		// 声明返回对象集合
 		List<SchedulingManagementResult> results = new ArrayList<SchedulingManagementResult>();
 
@@ -116,6 +156,67 @@ public class SchedulingManagementController {
 		return pageResultEntity;
 	}
 	
+//	@RequestMapping(value = "/SchedulingManagementIndexPage", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//	@ApiOperation(notes = "排班管理信息首页", value = "加载排班管理信息首页数据")
+//	public PageResultEntity SchedulingManagementIndexPage(@RequestBody SchedulingAssociated schedulingAssociated,
+//			@RequestParam(required = false, defaultValue = "1") Integer pageNo,
+//			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+//		
+//		
+//		
+//		
+//		// 返回对象
+//		PageResultEntity pageResultEntity = new PageResultEntity();
+//		
+//		SchedulingAssociatedExample example = new SchedulingAssociatedExample();
+//		// 封装查询条件
+//		List<SchedulingAssociated> schedulingAssociateds = schedulingAssociatedService.listSchedulingAssociated(example,
+//				pageNo, pageSize);
+//		pageResultEntity.setTotal(schedulingAssociatedService.selectCountTotal(example));
+//		
+//		// 声明返回对象集合
+//		List<SchedulingManagementResult> results = new ArrayList<SchedulingManagementResult>();
+//		
+//		// 不为空
+//		if (CollectionUtils.isNotEmpty(schedulingAssociateds)) {
+//			
+//			
+//			// 遍历查询其他相关表
+//			for (SchedulingAssociated schedulingAssociatedTemp : schedulingAssociateds) {
+//				// 返回对象集合元素
+//				SchedulingManagementResult schedulingManagementResult = new SchedulingManagementResult();
+//				// 设置排班关联表id
+//				schedulingManagementResult.setSchedulingAssociatedId(schedulingAssociatedTemp.getId());
+//				// 封装开始时间，结束时间
+//				schedulingManagementResult.setStartTime(schedulingAssociatedTemp.getStartTime());
+//				schedulingManagementResult.setEndTime(schedulingAssociatedTemp.getEndTime());
+//				// 得到排版管理表id
+//				String schedulingManagementId = schedulingAssociatedTemp.getSchedulingManagementId();
+//				// 根据id查询字段
+//				SchedulingManagement schedulingManagement = schedulingManagementService
+//						.getSchedulingManagementById(schedulingManagementId);
+//				// 封装字段 排班表编号 ，排班表， 风电场
+//				schedulingManagementResult.setSchedulingCode(schedulingManagement.getSchedulingCode());
+//				schedulingManagementResult.setSchedulingName(schedulingManagement.getSchedulingName());
+//				schedulingManagementResult.setDepartment(schedulingManagement.getDepartment());
+//				// 得到排班规则表id
+//				String schedulingRuleId = schedulingAssociatedTemp.getSchedulingRuleId();
+//				SchedulingRule schedulingRule = schedulingRuleService.getSchedulingRuleById(schedulingRuleId);
+//				// 封装字段 规则编码 ， 规则名称
+//				schedulingManagementResult.setSchedulingRuleCode(schedulingRule.getSchedulingRuleCode());
+//				schedulingManagementResult.setSchedulingRule(schedulingRule.getSchedulingRule());
+//				// 添加到集合中
+//				results.add(schedulingManagementResult);
+//			}
+//			
+//		}
+//		
+//		pageResultEntity.setRows(results);
+//		pageResultEntity.setCode(ErrorCode.SUCCESS);
+//		pageResultEntity.setMsg("执行成功");
+//		return pageResultEntity;
+//	}
+	
 	
 	
 	
@@ -126,6 +227,7 @@ public class SchedulingManagementController {
 	 * @param: @return
 	 * @return: PageResultEntity
 	 */
+	/*
 	@RequestMapping(value = "/listSchedulingManagement", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(notes = "批量获取排班管理信息", value = "批量获取排班管理信息")
 	public PageResultEntity listSchedulingManagement(@RequestBody SchedulingManagement schedulingManagement,
@@ -170,14 +272,14 @@ public class SchedulingManagementController {
 		return resultEntity;
 
 	}
-	
+	*/
 	
 	
 	
 	/**
 	 * @Description:排版管理表信息的添加
 	 * @param: @param
-	 *             schedulingManagement
+	 *             schedulingManagement：SaveSchedulingManagementSubmit字段都需要
 	 * @param: @return
 	 * @return: ResultEntity
 	 */
@@ -203,6 +305,40 @@ public class SchedulingManagementController {
 			return resultEntity;
 		}
 		
+		//保存各个时间用来比较
+		List<Long[]> times = new ArrayList<Long[]>();
+		//对选择的时间进行校验：
+		for (SchedulingAssociated schedulingAssociated : list) {
+
+			//开始时间
+			Date startTime = schedulingAssociated.getStartTime();
+			//结束时间
+			Date endTime = schedulingAssociated.getEndTime();
+
+			//比较时间
+			if(CollectionUtils.isNotEmpty(times)){
+				//里面有时间：进行比较
+				for (Long[] longs : times) {
+					//longs[0]:开始时间    longs[1]：结束时间
+					//如果上个日期的开始时间>本次日期的开始时间    或者  如果上个日期的结束时间< 本次日期的结束时间 
+					if(longs[0].longValue() > startTime.getTime()
+							|| longs[1].longValue() >  startTime.getTime()){
+						resultEntity.setCode(ErrorCode.ERROR);
+						resultEntity.setMsg("请按时间顺序添加，时间不能重叠");
+						return resultEntity;
+					}
+				}
+			}
+			
+			//创建对象
+			Long[] longsTime = new Long[]{startTime.getTime(),endTime.getTime()};
+			//存放入集合
+			times.add(longsTime);
+		}
+		
+		//时间正常
+		
+		
 		//生成id
 		String schedulingManagementId = UUID.randomUUID().toString();
 		schedulingManagement.setSchedulingManagementId(schedulingManagementId);
@@ -227,32 +363,35 @@ public class SchedulingManagementController {
 	 * @param: @return   
 	 * @return: PageResultEntity
 	 */
-	@RequestMapping(value = "/injectSchedulingRuleInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(notes = "注入排班规则信息", value = "按规则排班  ---> 点击添加---> 做一次查询   显示必要信息") 
-	public PageResultEntity injectSchedulingRuleInfo(@RequestParam(required = false, defaultValue = "1") Integer pageNo,
-			@RequestParam(required = false, defaultValue = "10") Integer pageSize){
-		
-		
-		SchedulingRuleExample example = new SchedulingRuleExample();
-		// 执行查询操作
-		List<SchedulingRule> list = schedulingRuleService.listSchedulingRule(example , pageNo, pageSize);
-	
-		PageResultEntity pageResultEntity = new PageResultEntity();
-		pageResultEntity.setRows(list);
-		pageResultEntity.setCode(ErrorCode.SUCCESS);
-		pageResultEntity.setMsg("查询成功");
-		return pageResultEntity;
-	}
+//	@RequestMapping(value = "/injectSchedulingRuleInfo", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//	@ApiOperation(notes = "注入排班规则信息", value = "按规则排班  ---> 点击添加---> 做一次查询   显示必要信息") 
+//	public PageResultEntity injectSchedulingRuleInfo(@RequestParam(required = false, defaultValue = "1") Integer pageNo,
+//			@RequestParam(required = false, defaultValue = "10") Integer pageSize){
+//		
+//		
+//		SchedulingRuleExample example = new SchedulingRuleExample();
+//		// 执行查询操作
+//		List<SchedulingRule> list = schedulingRuleService.listSchedulingRule(example , pageNo, pageSize);
+//	
+//		PageResultEntity pageResultEntity = new PageResultEntity();
+//		pageResultEntity.setRows(list);
+//		pageResultEntity.setCode(ErrorCode.SUCCESS);
+//		pageResultEntity.setMsg("查询成功");
+//		return pageResultEntity;
+//	}
 	
 	
 	
 	
 	/**
-	 * 编辑操作：操作排班关联表进行更新
+	 * @Description: 编辑操作：操作排班关联表进行更新
+	 * @param: @param schedulingManagementResults
+	 * @param: @return   
+	 * @return: ResultEntity
 	 */
-	@RequestMapping(value = "/updateSchedulingAssociated", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value = "/editSchedulingAssociated", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(notes = "排班关联表表的修改", value = "修改排班关联表") 
-	public ResultEntity updateSchedulingAssociated(@RequestBody List<SchedulingManagementResult> schedulingManagementResults){
+	public ResultEntity editSchedulingAssociated(@RequestBody List<SchedulingManagementResult> schedulingManagementResults){
 		
 		ResultEntity resultEntity = new ResultEntity();
 		//检查集合是否为空
@@ -335,15 +474,81 @@ public class SchedulingManagementController {
 	
 	/**
 	 * @Description:删除:勾选列，提交排班关联表id，进行删除操作
-	 * @param: @param schedulingAssociateds
+	 * @param: @param schedulingAssociateds：勾选被删除的排班关联表id
 	 * @param: @return   
 	 * @return: ResultEntity
 	 */
 	@RequestMapping(value="/removeSchedulingAssociated",method=RequestMethod.DELETE,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(notes="勾选列，提交排班关联表id，进行删除操作", value="删除排班关联表")
-	public ResultEntity removeSchedulingAssociated(@RequestBody List<String> schedulingAssociateds){
+	public ResultEntity removeSchedulingAssociated(@RequestParam List<String> schedulingAssociateds){
 		return schedulingAssociatedService.removeSchedulingAssociatedById(schedulingAssociateds);
 	}
+	
+	
+	 /*************************    点击编辑：获取对应信息               ***************************/
+	@RequestMapping(value="/getSchedulingAssociated" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value="点击编辑：获取对应信息 ", notes="点击编辑：获取对应信息")
+	public ResultEntity getSchedulingAssociated(@RequestParam String schedulingAssociatedId){
+
+		ResultEntity resultEntity = new ResultEntity();
+
+		if (StringUtils.isBlank(schedulingAssociatedId)) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("缺少字段");
+			return resultEntity;
+		}
+
+		SchedulingAssociatedExample example = new SchedulingAssociatedExample();
+
+		example.createCriteria().andIdEqualTo(schedulingAssociatedId);
+
+		// 执行查询
+		List<SchedulingAssociated> schedulingAssociateds = schedulingAssociatedService.listSchedulingAssociated(example,
+				0, 0);
+
+		// 声明返回对象集合
+		List<SchedulingManagementResult> results = new ArrayList<SchedulingManagementResult>();
+
+		// 不为空
+		if (CollectionUtils.isNotEmpty(schedulingAssociateds)) {
+
+			// 遍历查询其他相关表
+			for (SchedulingAssociated schedulingAssociatedTemp : schedulingAssociateds) {
+				// 返回对象集合元素
+				SchedulingManagementResult schedulingManagementResult = new SchedulingManagementResult();
+				// 设置排班关联表id
+				schedulingManagementResult.setSchedulingAssociatedId(schedulingAssociatedTemp.getId());
+				// 封装开始时间，结束时间
+				schedulingManagementResult.setStartTime(schedulingAssociatedTemp.getStartTime());
+				schedulingManagementResult.setEndTime(schedulingAssociatedTemp.getEndTime());
+				// 得到排版管理表id
+				String schedulingManagementId = schedulingAssociatedTemp.getSchedulingManagementId();
+				// 根据id查询字段
+				SchedulingManagement schedulingManagement = schedulingManagementService
+						.getSchedulingManagementById(schedulingManagementId);
+				// 封装字段 排班表编号 ，排班表， 风电场
+				schedulingManagementResult.setSchedulingCode(schedulingManagement.getSchedulingCode());
+				schedulingManagementResult.setSchedulingName(schedulingManagement.getSchedulingName());
+				schedulingManagementResult.setDepartment(schedulingManagement.getDepartment());
+				// 得到排班规则表id
+				String schedulingRuleId = schedulingAssociatedTemp.getSchedulingRuleId();
+				SchedulingRule schedulingRule = schedulingRuleService.getSchedulingRuleById(schedulingRuleId);
+				// 封装字段 规则编码 ， 规则名称
+				schedulingManagementResult.setSchedulingRuleCode(schedulingRule.getSchedulingRuleCode());
+				schedulingManagementResult.setSchedulingRule(schedulingRule.getSchedulingRule());
+				// 添加到集合中
+				results.add(schedulingManagementResult);
+			}
+
+		}
+
+		resultEntity.setCode(ErrorCode.SUCCESS);
+		resultEntity.setMsg("执行成功");
+		resultEntity.setData(results);
+		return resultEntity;
+	}
+	
+	
 	
 	
 }

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.DeviceAssociationMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.DeviceAssociation" >
+    <id column="device_association_id" property="deviceAssociationId" jdbcType="VARCHAR" />
+    <result column="main_equipment_id" property="mainEquipmentId" jdbcType="VARCHAR" />
+    <result column="main_equipment_info_id" property="mainEquipmentInfoId" jdbcType="VARCHAR" />
+    <result column="device_type_id" property="deviceTypeId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!-- 自定义一个映射类 -->
+  <resultMap id="DeviceAssociationResultMap" type="com.qz.zframe.run.entity.result.DeviceAssociationResult" >
+    <id column="device_association_id" property="deviceAssociationId" jdbcType="VARCHAR" />
+    <id column="main_equipment_id" property="mainEquipmentId" jdbcType="VARCHAR" />
+    <id column="main_equipment_info_id" property="mainEquipmentInfoId" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="log_type" property="logType" jdbcType="VARCHAR" />
+    <result column="log_name" property="logName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <!-- 封装查询语句 -->
+  <select id="listDeviceAssociationResult" resultMap="DeviceAssociationResultMap" parameterType="com.qz.zframe.run.entity.MainEquipment">
+  
+  		SELECT  
+			device_association.device_association_id ,
+			main_equipment.main_equipment_id,
+			main_equipment_info.main_equipment_info_id,
+			department, 
+			main_equipment.log_type,
+			main_equipment.log_name 
+		FROM
+			device_association,main_equipment,main_equipment_info,device_type
+		where 
+			device_association.main_equipment_id = main_equipment.main_equipment_id
+			and device_association.main_equipment_info_id = main_equipment_info.main_equipment_info_id
+			and device_association.device_type_id = device_type.type_id
+			
+			<if test="department != null">
+				and main_equipment.department like #{department}
+			</if>
+  </select>
+  
+  
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    device_association_id, main_equipment_id, main_equipment_info_id, device_type_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.DeviceAssociationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from device_association
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from device_association
+    where device_association_id = #{deviceAssociationId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from device_association
+    where device_association_id = #{deviceAssociationId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.DeviceAssociationExample" >
+    delete from device_association
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.DeviceAssociation" >
+    insert into device_association (device_association_id, main_equipment_id, 
+      main_equipment_info_id, device_type_id)
+    values (#{deviceAssociationId,jdbcType=VARCHAR}, #{mainEquipmentId,jdbcType=VARCHAR}, 
+      #{mainEquipmentInfoId,jdbcType=VARCHAR}, #{deviceTypeId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.DeviceAssociation" >
+    insert into device_association
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deviceAssociationId != null" >
+        device_association_id,
+      </if>
+      <if test="mainEquipmentId != null" >
+        main_equipment_id,
+      </if>
+      <if test="mainEquipmentInfoId != null" >
+        main_equipment_info_id,
+      </if>
+      <if test="deviceTypeId != null" >
+        device_type_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deviceAssociationId != null" >
+        #{deviceAssociationId,jdbcType=VARCHAR},
+      </if>
+      <if test="mainEquipmentId != null" >
+        #{mainEquipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="mainEquipmentInfoId != null" >
+        #{mainEquipmentInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceTypeId != null" >
+        #{deviceTypeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.DeviceAssociationExample" resultType="java.lang.Integer" >
+    select count(*) from device_association
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update device_association
+    <set >
+      <if test="record.deviceAssociationId != null" >
+        device_association_id = #{record.deviceAssociationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mainEquipmentId != null" >
+        main_equipment_id = #{record.mainEquipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mainEquipmentInfoId != null" >
+        main_equipment_info_id = #{record.mainEquipmentInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deviceTypeId != null" >
+        device_type_id = #{record.deviceTypeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update device_association
+    set device_association_id = #{record.deviceAssociationId,jdbcType=VARCHAR},
+      main_equipment_id = #{record.mainEquipmentId,jdbcType=VARCHAR},
+      main_equipment_info_id = #{record.mainEquipmentInfoId,jdbcType=VARCHAR},
+      device_type_id = #{record.deviceTypeId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.DeviceAssociation" >
+    update device_association
+    <set >
+      <if test="mainEquipmentId != null" >
+        main_equipment_id = #{mainEquipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="mainEquipmentInfoId != null" >
+        main_equipment_info_id = #{mainEquipmentInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceTypeId != null" >
+        device_type_id = #{deviceTypeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where device_association_id = #{deviceAssociationId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.DeviceAssociation" >
+    update device_association
+    set main_equipment_id = #{mainEquipmentId,jdbcType=VARCHAR},
+      main_equipment_info_id = #{mainEquipmentInfoId,jdbcType=VARCHAR},
+      device_type_id = #{deviceTypeId,jdbcType=VARCHAR}
+    where device_association_id = #{deviceAssociationId,jdbcType=VARCHAR}
+  </update>
+</mapper>

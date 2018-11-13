@@ -671,6 +671,76 @@ public class SchedulingQueryExample {
             addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
+
+        public Criteria andSchedulingRuleIdIsNull() {
+            addCriterion("scheduling_rule_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdIsNotNull() {
+            addCriterion("scheduling_rule_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdEqualTo(String value) {
+            addCriterion("scheduling_rule_id =", value, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdNotEqualTo(String value) {
+            addCriterion("scheduling_rule_id <>", value, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdGreaterThan(String value) {
+            addCriterion("scheduling_rule_id >", value, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdGreaterThanOrEqualTo(String value) {
+            addCriterion("scheduling_rule_id >=", value, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdLessThan(String value) {
+            addCriterion("scheduling_rule_id <", value, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdLessThanOrEqualTo(String value) {
+            addCriterion("scheduling_rule_id <=", value, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdLike(String value) {
+            addCriterion("scheduling_rule_id like", value, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdNotLike(String value) {
+            addCriterion("scheduling_rule_id not like", value, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdIn(List<String> values) {
+            addCriterion("scheduling_rule_id in", values, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdNotIn(List<String> values) {
+            addCriterion("scheduling_rule_id not in", values, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdBetween(String value1, String value2) {
+            addCriterion("scheduling_rule_id between", value1, value2, "schedulingRuleId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSchedulingRuleIdNotBetween(String value1, String value2) {
+            addCriterion("scheduling_rule_id not between", value1, value2, "schedulingRuleId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

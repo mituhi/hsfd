@@ -15,7 +15,10 @@
     <result column="maintenance_team" property="maintenanceTeam" jdbcType="VARCHAR" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="is_toplevel" jdbcType="VARCHAR" property="isToplevel" />
-   
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="crew_name" property="crewName" jdbcType="VARCHAR" />
+    <result column="status_name" jdbcType="VARCHAR" property="statusName" />
+    <result column="is_toplevel_name" jdbcType="VARCHAR" property="isToplevelName" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -77,27 +80,49 @@
   </sql>
   <sql id="Base_Column_List" >
     position_id, position_code, position_name, superior_position, wind_id, department, 
-    hierarchy, crew, company_code, cost_center, maintenance_team,is_toplevel,status
+    hierarchy, crew, company_code, cost_center, maintenance_team,is_toplevel,status,wind_name,crew_name,status_name,is_toplevel_name
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.PositionEncodeExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from position_encode
-    <!-- <if test="_parameter != null" >
+    select 
+    <include refid="Base_Column_List" /> 
+    from (
+    select  
+    DISTINCT
+    p.*,
+    a.title as status_name ,sc.title as is_toplevel_name ,f.wind_name as wind_name,
+	c.crew_name as crew_name
+    from position_encode p
+    left join wind_field f  on f.wind_id=p.wind_id
+    left join crew_information  c on  c.crew_id=p.crew
+    LEFT JOIN sp_code a ON p.STATUS = a.
+	NAME LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+	LEFT JOIN sp_code sc ON p.is_toplevel = sc.name 
+	LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
+	WHERE
+	b.NAME = 'POSITION_STATUS' 
+	AND d.NAME = 'IS_TOPLEVEL' )p
+   <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
       order by ${orderByClause}
-    </if> -->
+    </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
-    <include refid="Base_Column_List" />
-    from position_encode
-    where position_id = #{positionId,jdbcType=VARCHAR}
+    DISTINCT
+     p.*,a.title as status_name ,sc.title as is_toplevel_name 
+    from position_encode p
+    left join wind_field f  on f.wind_id=p.wind_id
+    left join crew_information  c on  c.crew_id=p.crew
+    LEFT JOIN sp_code a ON p.STATUS = a.
+	NAME LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+	LEFT JOIN sp_code sc ON p.is_toplevel = sc.
+	NAME LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
+WHERE
+	b.NAME = 'POSITION_STATUS' 
+	AND d.NAME = 'IS_TOPLEVEL' 
+    and  position_id = #{positionId,jdbcType=VARCHAR}
   </select>
   
   <select id="selectStructure" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -221,7 +246,9 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qz.zframe.device.entity.PositionEncodeExample" resultType="java.lang.Integer" >
-    select count(*) from position_encode
+    select count(*) from position_encode   p
+    left join wind_field f  on f.wind_id=p.wind_id
+    left join crew_information  c on  c.crew_id=p.crew
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

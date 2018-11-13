@@ -13,7 +13,11 @@
     <select id="findCodeByCodeType" resultType="com.qz.zframe.common.entity.DataDict">
         select c.id,c.code_type_id codeTypeId,c.name,c.title,c.state state,c.description,
         c.disp_order dispOrder,t.name codeTypeName, t.title codeTypeTitle,t.description codeTypeDescription 
-        from sp_code c,sp_code_type t where c.code_type_id = t.id and t.name = #{codeType}
+        from sp_code c,sp_code_type t where c.code_type_id = t.id 
+        <if test="codeType != null and codeType != ''">
+        and t.name = #{codeType}
+        </if>
+        limit #{firstIndex},#{lastIndex}
     </select>
     
     <!-- 根据分类编码获取编码类型信息 -->
@@ -62,7 +66,19 @@
     
     <!-- 根据编码类型获取编码分类信息 -->
     <select id="findCodeTypeByCodeType" resultType="com.qz.zframe.common.entity.DataDictType">
-        select * from sp_code_type where name = #{codeType}
+        select * from sp_code_type 
+        <if test="codeType != null and codeType != ''">
+        where name = #{codeType}
+        </if>
+        limit #{firstIndex},#{lastIndex}
+    </select>
+    
+    <!-- 根据分类编码查询编码分类数量 -->
+    <select id="findCodeTypeByCodeTypeNum" resultType="Integer">
+        select count(id) from sp_code_type 
+        <if test="codeType != null and codeType != ''">
+        where name = #{codeType}
+        </if>
     </select>
     
     <!-- 根据编码类型获取编码分类信息 -->
@@ -77,13 +93,13 @@
     
     <!-- 新增编码 -->
     <insert id="addCode" parameterType="com.qz.zframe.common.entity.DataDict">
-        insert into sp_code (id,code_type_id,name,title,description,state,disp_order)
-        values(#{id},#{codeTypeId},#{name},#{title},#{description},#{state},#{dispOrder})
+        insert into sp_code (id,code_type_id,name,title,content01,content02,description,state,disp_order)
+        values(#{id},#{codeTypeId},#{name},#{title},#{content01},#{content02}#{description},#{state},#{dispOrder})
     </insert>
     
     <!-- 修改编码 -->
     <update id="updateCode" parameterType="com.qz.zframe.common.entity.DataDict">
-        update sp_code set title = #{title} where id = #{id}
+        update sp_code set title = #{title},content01 = #{content01},content02 = #{content02} where id = #{id}
     </update>
     
     <!-- 根据id查询编码 -->
@@ -94,5 +110,14 @@
     <!-- 根据id查询编码分类 -->
     <select id="queryCodeTypeById" resultType="com.qz.zframe.common.entity.DataDictType">
     	select * from sp_code_type where id = #{id}
+    </select>
+    
+    <!-- 根据分类编码查询编码数量 -->
+    <select id="findCodeByCodeTypeNum" resultType="Integer">
+        select count(c.id)
+        from sp_code c,sp_code_type t where c.code_type_id = t.id 
+        <if test="codeType != null and codeType != ''">
+        and t.name = #{codeType}
+        </if>
     </select>
 </mapper>

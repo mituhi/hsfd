@@ -31,7 +31,7 @@ public class EquipmentClassificationServiceImpl implements EquipmentClassificati
 		} else {
 			list = equipmentMapper.selectByExample(equipment);
 		}
-		resultEntity.setCode(0);
+		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setRows(list);     
 		return resultEntity;
 	}
@@ -43,10 +43,10 @@ public class EquipmentClassificationServiceImpl implements EquipmentClassificati
 		equipmentClassification.setEquipmentId(equipmentId);
 		int save = equipmentMapper.insertSelective(equipmentClassification);
 		if(save==0){
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("新增失败");
 		}else{
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("新增成功");
 		}
 		return resultEntity;
@@ -62,10 +62,10 @@ public class EquipmentClassificationServiceImpl implements EquipmentClassificati
 		}else {
 			int save=equipmentMapper.updateByPrimaryKey(equipmentClassification);
 			if(save==0){
-				resultEntity.setCode(-1);
+				resultEntity.setCode(ErrorCode.ERROR);
 				resultEntity.setMsg("修改失败");
 			}else{
-				resultEntity.setCode(0);
+				resultEntity.setCode(ErrorCode.SUCCESS);
 				resultEntity.setMsg("修改成功");
 			}
 		}
@@ -77,10 +77,10 @@ public class EquipmentClassificationServiceImpl implements EquipmentClassificati
 		ResultEntity resultEntity = new ResultEntity();
 		int delete=equipmentMapper.deleteByPrimaryKey(equipmentId);
 		if(delete<0){
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("删除失败");
 		}else{
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("删除成功");
 		}
 		return resultEntity;
@@ -93,11 +93,11 @@ public class EquipmentClassificationServiceImpl implements EquipmentClassificati
 		List<EquipmentClassification> list=new ArrayList<EquipmentClassification>();
 		EquipmentClassification equipmentClassification = equipmentMapper.selectByPrimaryKey(equipmentId);
 		if (equipmentClassification == null) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("查询结果有误");
 		} else {
 			list.add(equipmentClassification);
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setRows(list); 
 		}
 		return resultEntity;
@@ -107,10 +107,10 @@ public class EquipmentClassificationServiceImpl implements EquipmentClassificati
 		ResultEntity resultEntity = new ResultEntity();
 			int delete=equipmentMapper.deleteByPrimaryKeyList(equipmentIds);
 			if(delete<0){
-				resultEntity.setCode(-1);
+				resultEntity.setCode(ErrorCode.ERROR);
 				resultEntity.setMsg("删除失败");
 			}else{
-				resultEntity.setCode(0);
+				resultEntity.setCode(ErrorCode.SUCCESS);
 				resultEntity.setMsg("删除成功");
 			}
 		return resultEntity;
@@ -122,10 +122,10 @@ public class EquipmentClassificationServiceImpl implements EquipmentClassificati
 		
 		List<EquipmentClassification> top=equipmentMapper.selectStructure();
 		if (top==null) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("还未创建顶层设备分类");
 		}else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setRows(top);    
 		}
 		return resultEntity;
@@ -137,10 +137,10 @@ public class EquipmentClassificationServiceImpl implements EquipmentClassificati
 		
 		List<EquipmentClassification> list=equipmentMapper.selectStructureList(superiorEquipment);
 		if (list!=null) {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setRows(list);     
 		}else {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("还未创建设备分类");
 		}
 		return resultEntity;

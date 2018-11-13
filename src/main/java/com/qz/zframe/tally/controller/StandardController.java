@@ -49,7 +49,7 @@ public class StandardController {
     @Autowired
     TallyRouterService tallyRouterService;
 
-    @ApiOperation(value="点检标准查询(包括条件查询)", notes="根据所属设备，状态，所属路线，报警类型，标准编码，点检内容进行查询" ,httpMethod="GET")
+    @ApiOperation(value="查询点检标准", notes="根据所属设备，状态，所属路线，报警类型，标准编码，点检内容进行查询" ,httpMethod="GET")
 
     @RequestMapping("list")
     @ResponseBody
@@ -85,9 +85,6 @@ public class StandardController {
             tallyStandardVO.setStandardCoding(tallyStandard.getStandardCoding());
             tallyStandardVOList.add(tallyStandardVO);
 
-
-
-
         }
         PageBean<TallyStandardVO> pageDate=new PageBean<TallyStandardVO>(currentPage,pageSize,n);
         pageDate.setItems(tallyStandardVOList);
@@ -100,7 +97,7 @@ public class StandardController {
     }
 
 
-    @ApiOperation(value="点检标准删除(包括批量)", notes="根据传入的所属路线数组进行删除" ,httpMethod="DELETE")
+    @ApiOperation(value="删除点检标准", notes="根据传入的所属路线数组进行删除" ,httpMethod="DELETE")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "routeNames", value = "所属路线数组", required = false),
     })
@@ -132,7 +129,7 @@ public class StandardController {
         return resultEntity;
     }
 
-    @ApiOperation(value="点检标准添加", notes="根据点检标准所需信息添加" ,httpMethod="POST")
+    @ApiOperation(value="新增点检标准", notes="根据点检标准所需信息添加" ,httpMethod="POST")
     @RequestMapping("post")
     @ResponseBody
     public ResultEntity postStandard(@RequestBody TallyStandardPostVO tallyStandardPostVO) {
@@ -172,8 +169,8 @@ public class StandardController {
         //todo 前端校验
         String s=tallyStandardService.findRouteIdByRouteName(tallyStandardPostVO.getRouteName());
         tallyStandard.setRouteId(s);
-        tallyStandard.setEquipmentId(UUID.randomUUID()+"");
-        tallyStandard.setStandardCoding(tallyStandardPostVO.getStandardCoding());
+        tallyStandard.setEquipmentId(UUID.randomUUID()+"");//设备id 应该是有专门导入设备 然后可以查的吧 晚点再说
+        tallyStandard.setStandardCoding(tallyStandardPostVO.getStandardCoding());//估计有一定规范
         tallyStandard.setEquipmentBelonging(tallyStandardPostVO.getEquipmentBelonging());
         tallyStandard.setLocation(tallyStandardPostVO.getLocation());
         tallyStandard.setCheckContent(tallyStandardPostVO.getCheckContent());
@@ -203,6 +200,7 @@ public class StandardController {
         tallyRouteStandard.setId(""+UUID.randomUUID()); //以后看具体标准
         tallyRouteStandard.setStandardId(tallyStandard.getStandardId());
         tallyRouteStandard.setRouteId(tallyStandard.getRouteId());
+        tallyRouteStandard.setCycleId(tallyStandardService.findCycleIdByCycleNameAndRouteId(tallyStandardPostVO.getCycleName(),s));
 
         tallyStandardService.addTallyRouteStandard(tallyRouteStandard);
 
@@ -212,26 +210,7 @@ public class StandardController {
         return resultEntity;
     }
 
-    //todo
-    @ApiOperation(value="所属路线匹配所属风电场和执行周期(添加点检标准时使用 还没写好)", notes="选择所属路线后自动加载风电场和执行周期" ,httpMethod="GET")
-    @RequestMapping("checkStandardRouterUser")
-    @ResponseBody
-    public ResultEntity standardRouterUser(String routeName) {
-        ResultEntity resultEntity=new ResultEntity();
-
-        WindIdCycleNameVO windIdCycleNameVO=new WindIdCycleNameVO();
-        windIdCycleNameVO.setWindId(tallyStandardService.findWindIdByRouteName(routeName));
-        windIdCycleNameVO.setCycleName(tallyStandardService.findCycleNameByRouteName(routeName));
-
-
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("匹配风电场和执行周期信息成功!");
-        resultEntity.setData(windIdCycleNameVO);
-        return resultEntity;
-    }
-
-
-    @ApiOperation(value="点检标准更新", notes="根据点检标准所需信息修改" ,httpMethod="PUT")
+    @ApiOperation(value="修改点检标准", notes="根据点检标准所需信息修改" ,httpMethod="PUT")
     @RequestMapping("update")
     @ResponseBody
     public ResultEntity updateStandard(@RequestBody TallyStandardPostVO tallyStandardPostVO) {
@@ -272,6 +251,7 @@ public class StandardController {
         tallyRouteStandard.setId(tallyStandardService.findIdByRouteName(tallyStandardPostVO.getRouteName())); //以后看具体标准
         tallyRouteStandard.setStandardId(tallyStandard.getStandardId());
         tallyRouteStandard.setRouteId(tallyStandard.getRouteId());
+        tallyRouteStandard.setCycleId(tallyStandardService.findCycleIdByCycleNameAndRouteId(tallyStandardPostVO.getCycleName(),tallyStandardService.findRouteIdByRouteName(tallyStandardPostVO.getRouteName())));
 
         // tallyStandardService.addTallyRouteStandard(tallyRouteStandard);
         tallyStandardService.updateTallyRouteStandard(tallyRouteStandard);
@@ -282,7 +262,7 @@ public class StandardController {
         return resultEntity;
     }
 
-    @ApiOperation(value="点击标准更新(获取更新页面显示用信息)", notes="根据路线名称查更新页面信息" ,httpMethod="GET")
+    @ApiOperation(value="获取修改点击标准页面信息", notes="根据路线名称查更新页面信息" ,httpMethod="GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "routeName", value = "所属路线", required = false),
     })
@@ -317,6 +297,7 @@ public class StandardController {
         tallyStandardPostVO.setTwodimensionalcodeLocation(tallyStandard.getTwodimensionalcodeLocation());
         tallyStandardPostVO.setTypicalValue(tallyStandard.getTypicalValue());
         tallyStandardPostVO.setUpperlimitMileage(tallyStandard.getUpperlimitMileage());
+        tallyStandardPostVO.setCycleName(tallyStandardService.findCycleNameByStandardIdAndRouteId(tallyStandard.getStandardId(),tallyStandard.getRouteId()));
 
         resultEntity.setCode(ErrorCode.SUCCESS);
         resultEntity.setMsg("更新信息查询成功");
@@ -324,7 +305,7 @@ public class StandardController {
         return resultEntity;
     }
 
-    @ApiOperation(value="获取流水号，当前日期，申请人（当前登录用户）", notes="获取巡检路线添加基础信息接口" ,httpMethod="GET")
+    @ApiOperation(value="获取流水号，当前日期，申请人", notes="获取巡检路线添加基础信息接口" ,httpMethod="GET")
     @RequestMapping("user")
     @ResponseBody
     public ResultEntity tallyUser() {
@@ -347,8 +328,57 @@ public class StandardController {
         return resultEntity;
     }
 
+    @ApiOperation(value="获取所属路线后匹配风电场和执行周期", notes="自动匹配所属路线对应的风电场和执行周期" ,httpMethod="GET")
+    @RequestMapping("wind")
+    @ResponseBody
+    public ResultEntity wind(String routeName) {
+        ResultEntity resultEntity=new ResultEntity();
+        WindIdCycleNameVO windIdCycleNameVO=new WindIdCycleNameVO();
+        List<String> list=tallyStandardService.findCycleNameByRouteName(routeName);
+
+        windIdCycleNameVO.setWindId(tallyStandardService.findWindIdByRouteName(routeName));
+        windIdCycleNameVO.setCycleName(list);
+        resultEntity.setCode(ErrorCode.SUCCESS);
+        resultEntity.setMsg("匹配风电场成功!");
+        resultEntity.setData(windIdCycleNameVO);
+        return resultEntity;
+    }
+
+    @ApiOperation(value="获取风电场后匹配风电场所属路线", notes="自动匹配所属风电场所属的路线" ,httpMethod="GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "windId", value = "所属风电场", required = false),
+    })
+    @RequestMapping("routeName")
+    @ResponseBody
+    public ResultEntity routeName(String windId) {
+        ResultEntity resultEntity=new ResultEntity();
+
+        resultEntity.setCode(ErrorCode.SUCCESS);
+        resultEntity.setMsg("匹配所属路线成功!");
+        resultEntity.setData(tallyStandardService.findRouteNameByWindId(windId));
+        return resultEntity;
+    }
+
 
 
 
     //todo 一堆下拉
+
+    //todo 下拉获取所属设备
+
+    //todo 下拉获取标准类型
+
+    //todo 下拉获取数据类型
+
+    //todo 下拉获取信号类型
+
+    //todo 下拉获取结果选项
+
+    //todo 下拉获取计量单位
+
+    //todo 下拉获取二维码位置
+
+    //todo 设备状态
+
+
 }

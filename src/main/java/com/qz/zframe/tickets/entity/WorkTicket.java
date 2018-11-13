@@ -7,82 +7,86 @@ import java.util.Date;
 
 public class WorkTicket {
 
-    @ApiParam(name="ticketId",value="工作票id",required=true)
+    @ApiParam(name="ticketId",value="工作票id",required=false)
     private String ticketId;
 
-    @ApiParam(name="serialNumber",value="流水号",required=true)
+    @ApiParam(name="serialNumber",value="工作票号(流水号)",required=false)
     private String serialNumber;
 
-    @ApiParam(name="ticketTypeId",value="工作票类型id",required=true)
-    private String ticketTypeId;
+    @ApiParam(name="workTicketTypeId",value="工作票类型id",required=true)
+    private String workTicketTypeId;
 
-    @ApiParam(name="ticketCode",value="工作票代码",required=true)
-    private String ticketCode;
+    @ApiParam(name="standardTicketId",value="标准工作票id",required=false)
+    private String standardTicketId;
 
-    @ApiParam(name="status",value="状态 1:处理中  2:完成  0:作废",required=false)
+    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    private String workorderId;
+
+    @ApiParam(name="orderId",value="工单id",required=false)
+    private String orderId;
+
+    @ApiParam(name="maintainer",value="维护人",required=false)
+    private String maintainer;
+
+    @ApiParam(name="maintainDate",value="维护日期",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+    private Date maintainDate;
+
+    @ApiParam(name="status",value="状态",required=false)
     private String status;
 
     @ApiParam(name="flowStatus",value="流程节点",required=false)
     private String flowStatus;
 
-    @ApiParam(name="standardTicketId",value="标准工作票id",required=true)
-    private String standardTicketId;
-
     @ApiParam(name="windId",value="风电场id",required=true)
     private String windId;
 
-    @ApiParam(name="companyId",value="公司id",required=false)
-    private String companyId;
+    @ApiParam(name="crewId",value="机组id",required=true)
+    private String crewId;
 
-    @ApiParam(name="departmentId",value="部门id",required=true)
-    private String departments;
-
-    @ApiParam(name="applicant",value="申请人",required=true)
+    @ApiParam(name="applicant",value="申请人",required=false)
     private String applicant;
 
     @ApiParam(name="applyTime",value="申请时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date applyTime;
 
-    @ApiParam(name="workTeamId",value="工作班组",required=true)
+    @ApiParam(name="workTeam",value="工作班组",required=true)
     private String workTeam;
 
     @ApiParam(name="workHead",value="工作负责人",required=true)
     private String workHead;
 
-    @ApiParam(name="safetyOfficer",value="安全员",required=true)
-    private String safetyOfficer;
+    @ApiParam(name="positionId",value="位置id",required=false)
+    private String positionId;
 
-    @ApiParam(name="positionId",value="位置id",required=true)
-    private String location;
+    @ApiParam(name="positionDesc",value="位置描述",required=false)
+    private String positionDesc;
 
     @ApiParam(name="equipmentId",value="设备id",required=false)
-    private String equipment;
+    private String equipmentId;
 
-    @ApiParam(name="crewId",value="机组id",required=false)
-    private String machineSet;
+    @ApiParam(name="equipmentDesc",value="设备描述",required=false)
+    private String equipmentDesc;
 
-    @ApiParam(name="workMember",value="工作成员",required=true)
+    @ApiParam(name="workMember",value="工作成员",required=false)
     private String workMember;
 
-    @ApiParam(name="memberNum",value="共几人",required=true)
+    @ApiParam(name="memberNum",value="共几人",required=false)
     private Integer memberNum;
 
-    @ApiParam(name="workUnit",value="工作单位",required=true)
-    private String workUnit;
-
-    @ApiParam(name="otherUnitMember",value="外单位人员",required=false)
-    private String otherUnitMember;
-
-    @ApiParam(name="startTime",value="开始时间",required=false)
+    @ApiParam(name="planStartTime",value="计划开始时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-    private Date startTime;
+    private Date planStartTime;
 
-    @ApiParam(name="endTime",value="结束时间",required=false)
+    @ApiParam(name="planEndTime",value="计划结束时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-    private Date endTime;
+    private Date planEndTime;
 
-    @ApiParam(name="workPlace",value="工作地点",required=true)
+    @ApiParam(name="doubleNaem",value="工作的风电场、升压站名称及设备双重名称",required=true)
+    private String doubleNaem;
+
+    @ApiParam(name="workPlace",value="工作地点或地段",required=true)
     private String workPlace;
 
     @ApiParam(name="workContent",value="工作内容",required=true)
@@ -91,39 +95,108 @@ public class WorkTicket {
     @ApiParam(name="workCondition",value="工作条件",required=false)
     private String workCondition;
 
-    @ApiParam(name="securityMeasure",value="安全措施",required=false)
-    private String securityMeasure;
-
-    @ApiParam(name="supSecurityMeasure",value="辅助安措",required=false)
-    private String supSecurityMeasure;
-
-    @ApiParam(name="measureIds",value="危险因素控制措施ids",required=false)
-    private String measureIds;
-
-    @ApiParam(name="signer",value="签收人",required=false)
+    @ApiParam(name="signer",value="签发人",required=false)
     private String signer;
 
-    @ApiParam(name="signTime",value="签收时间",required=false)
+    @ApiParam(name="signTime",value="签发时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date signTime;
 
-    @ApiParam(name="licenseStartTime",value="许可开始时间",required=true)
+    @ApiParam(name="runMainPerson",value="运维人员",required=false)
+    private String runMainPerson;
+
+    @ApiParam(name="receiveHead",value="收到工作票工作负责人",required=false)
+    private String receiveHead;
+
+    @ApiParam(name="receiveTime",value="收到工作票时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    private Date receiveTime;
+
+    @ApiParam(name="sceneLicensor",value="现场许可人",required=false)
+    private String sceneLicensor;
+
+    @ApiParam(name="runLicensor",value="运行值班许可人",required=false)
+    private String runLicensor;
+
+    @ApiParam(name="licenseStartTime",value="许可开始时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date licenseStartTime;
 
-    @ApiParam(name="licenseEndTime",value="许可结束时间",required=true)
+    @ApiParam(name="workTeamOpinion",value="工作班组人员确认工作任务和安全措施",required=false)
+    private String workTeamOpinion;
+
+    @ApiParam(name="headChangeTo",value="负责人变更为",required=false)
+    private String headChangeTo;
+
+    @ApiParam(name="headChangeSigner",value="变更签发人",required=false)
+    private String headChangeSigner;
+
+    @ApiParam(name="headChanegTime",value="变更签发时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
-    private Date licenseEndTime;
+    private Date headChanegTime;
 
-    @ApiParam(name="licensor",value="许可人",required=false)
-    private String licensor;
+    @ApiParam(name="delayTime",value="有效期延期至",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    private Date delayTime;
 
-    @ApiParam(name="workEndTime",value="工作完成时间",required=false)
+    @ApiParam(name="delayHead",value="延期工作负责人",required=false)
+    private String delayHead;
+
+    @ApiParam(name="delayHeadSignTime",value="延期工作负责人签名时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    private Date delayHeadSignTime;
+
+    @ApiParam(name="delayLicensor",value="延期许可人",required=false)
+    private String delayLicensor;
+
+    @ApiParam(name="delayLicensorSignTime",value="许可人签名时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    private Date delayLicensorSignTime;
+
+    @ApiParam(name="workEndHead",value="工作结束工作负责人",required=false)
+    private String workEndHead;
+
+    @ApiParam(name="workEndLicensor",value="工作结束许可人",required=false)
+    private String workEndLicensor;
+
+    @ApiParam(name="workEndTime",value="工作结束时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date workEndTime;
 
-    @ApiParam(name="opinion",value="审批意见",required=false)
-    private String opinion;
+    @ApiParam(name="ticketEndLicensor",value="工作票终结许可人",required=false)
+    private String ticketEndLicensor;
+
+    @ApiParam(name="ticketEndTime",value="工作票终结时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    private Date ticketEndTime;
+
+    @ApiParam(name="unuseWireNumber",value="未拆除或未拉开的接地线编号",required=false)
+    private String unuseWireNumber;
+
+    @ApiParam(name="unuseWireNum",value="未拆除或未拉开的接地线共几组",required=false)
+    private Integer unuseWireNum;
+
+    @ApiParam(name="knifeCarNum",value="接地刀闸(小车)共几副(台)",required=false)
+    private Integer knifeCarNum;
+
+    @ApiParam(name="guardian",value="专职监护人",required=false)
+    private String guardian;
+
+    @ApiParam(name="guardianPlaceAndCont",value="负责监护地点及具体工作",required=false)
+    private String guardianPlaceAndCont;
+
+    @ApiParam(name="guardianOtherThing",value="负责监护其他事项",required=false)
+    private String guardianOtherThing;
+
+    @ApiParam(name="evaluation",value="评价人",required=false)
+    private String evaluation;
+
+    @ApiParam(name="evaluationCont",value="评价情况",required=false)
+    private String evaluationCont;
+
+    @ApiParam(name="evaluationTime",value="评价时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    private Date evaluationTime;
 
     public String getTicketId() {
         return ticketId;
@@ -141,20 +214,52 @@ public class WorkTicket {
         this.serialNumber = serialNumber == null ? null : serialNumber.trim();
     }
 
-    public String getTicketTypeId() {
-        return ticketTypeId;
+    public String getWorkTicketTypeId() {
+        return workTicketTypeId;
     }
 
-    public void setTicketTypeId(String ticketTypeId) {
-        this.ticketTypeId = ticketTypeId == null ? null : ticketTypeId.trim();
+    public void setWorkTicketTypeId(String workTicketTypeId) {
+        this.workTicketTypeId = workTicketTypeId == null ? null : workTicketTypeId.trim();
     }
 
-    public String getTicketCode() {
-        return ticketCode;
+    public String getStandardTicketId() {
+        return standardTicketId;
     }
 
-    public void setTicketCode(String ticketCode) {
-        this.ticketCode = ticketCode == null ? null : ticketCode.trim();
+    public void setStandardTicketId(String standardTicketId) {
+        this.standardTicketId = standardTicketId == null ? null : standardTicketId.trim();
+    }
+
+    public String getWorkorderId() {
+        return workorderId;
+    }
+
+    public void setWorkorderId(String workorderId) {
+        this.workorderId = workorderId == null ? null : workorderId.trim();
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId == null ? null : orderId.trim();
+    }
+
+    public String getMaintainer() {
+        return maintainer;
+    }
+
+    public void setMaintainer(String maintainer) {
+        this.maintainer = maintainer == null ? null : maintainer.trim();
+    }
+
+    public Date getMaintainDate() {
+        return maintainDate;
+    }
+
+    public void setMaintainDate(Date maintainDate) {
+        this.maintainDate = maintainDate;
     }
 
     public String getStatus() {
@@ -173,14 +278,6 @@ public class WorkTicket {
         this.flowStatus = flowStatus == null ? null : flowStatus.trim();
     }
 
-    public String getStandardTicketId() {
-        return standardTicketId;
-    }
-
-    public void setStandardTicketId(String standardTicketId) {
-        this.standardTicketId = standardTicketId == null ? null : standardTicketId.trim();
-    }
-
     public String getWindId() {
         return windId;
     }
@@ -189,20 +286,12 @@ public class WorkTicket {
         this.windId = windId == null ? null : windId.trim();
     }
 
-    public String getCompanyId() {
-        return companyId;
+    public String getCrewId() {
+        return crewId;
     }
 
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId == null ? null : companyId.trim();
-    }
-
-    public String getDepartments() {
-        return departments;
-    }
-
-    public void setDepartments(String departments) {
-        this.departments = departments == null ? null : departments.trim();
+    public void setCrewId(String crewId) {
+        this.crewId = crewId == null ? null : crewId.trim();
     }
 
     public String getApplicant() {
@@ -237,36 +326,36 @@ public class WorkTicket {
         this.workHead = workHead == null ? null : workHead.trim();
     }
 
-    public String getSafetyOfficer() {
-        return safetyOfficer;
+    public String getPositionId() {
+        return positionId;
     }
 
-    public void setSafetyOfficer(String safetyOfficer) {
-        this.safetyOfficer = safetyOfficer == null ? null : safetyOfficer.trim();
+    public void setPositionId(String positionId) {
+        this.positionId = positionId == null ? null : positionId.trim();
     }
 
-    public String getLocation() {
-        return location;
+    public String getPositionDesc() {
+        return positionDesc;
     }
 
-    public void setLocation(String location) {
-        this.location = location == null ? null : location.trim();
+    public void setPositionDesc(String positionDesc) {
+        this.positionDesc = positionDesc == null ? null : positionDesc.trim();
     }
 
-    public String getEquipment() {
-        return equipment;
+    public String getEquipmentId() {
+        return equipmentId;
     }
 
-    public void setEquipment(String equipment) {
-        this.equipment = equipment == null ? null : equipment.trim();
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId == null ? null : equipmentId.trim();
     }
 
-    public String getMachineSet() {
-        return machineSet;
+    public String getEquipmentDesc() {
+        return equipmentDesc;
     }
 
-    public void setMachineSet(String machineSet) {
-        this.machineSet = machineSet == null ? null : machineSet.trim();
+    public void setEquipmentDesc(String equipmentDesc) {
+        this.equipmentDesc = equipmentDesc == null ? null : equipmentDesc.trim();
     }
 
     public String getWorkMember() {
@@ -285,36 +374,28 @@ public class WorkTicket {
         this.memberNum = memberNum;
     }
 
-    public String getWorkUnit() {
-        return workUnit;
+    public Date getPlanStartTime() {
+        return planStartTime;
     }
 
-    public void setWorkUnit(String workUnit) {
-        this.workUnit = workUnit == null ? null : workUnit.trim();
+    public void setPlanStartTime(Date planStartTime) {
+        this.planStartTime = planStartTime;
     }
 
-    public String getOtherUnitMember() {
-        return otherUnitMember;
+    public Date getPlanEndTime() {
+        return planEndTime;
     }
 
-    public void setOtherUnitMember(String otherUnitMember) {
-        this.otherUnitMember = otherUnitMember == null ? null : otherUnitMember.trim();
+    public void setPlanEndTime(Date planEndTime) {
+        this.planEndTime = planEndTime;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public String getDoubleNaem() {
+        return doubleNaem;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setDoubleNaem(String doubleNaem) {
+        this.doubleNaem = doubleNaem == null ? null : doubleNaem.trim();
     }
 
     public String getWorkPlace() {
@@ -341,30 +422,6 @@ public class WorkTicket {
         this.workCondition = workCondition == null ? null : workCondition.trim();
     }
 
-    public String getSecurityMeasure() {
-        return securityMeasure;
-    }
-
-    public void setSecurityMeasure(String securityMeasure) {
-        this.securityMeasure = securityMeasure == null ? null : securityMeasure.trim();
-    }
-
-    public String getSupSecurityMeasure() {
-        return supSecurityMeasure;
-    }
-
-    public void setSupSecurityMeasure(String supSecurityMeasure) {
-        this.supSecurityMeasure = supSecurityMeasure == null ? null : supSecurityMeasure.trim();
-    }
-
-    public String getMeasureIds() {
-        return measureIds;
-    }
-
-    public void setMeasureIds(String measureIds) {
-        this.measureIds = measureIds == null ? null : measureIds.trim();
-    }
-
     public String getSigner() {
         return signer;
     }
@@ -381,6 +438,46 @@ public class WorkTicket {
         this.signTime = signTime;
     }
 
+    public String getRunMainPerson() {
+        return runMainPerson;
+    }
+
+    public void setRunMainPerson(String runMainPerson) {
+        this.runMainPerson = runMainPerson == null ? null : runMainPerson.trim();
+    }
+
+    public String getReceiveHead() {
+        return receiveHead;
+    }
+
+    public void setReceiveHead(String receiveHead) {
+        this.receiveHead = receiveHead == null ? null : receiveHead.trim();
+    }
+
+    public Date getReceiveTime() {
+        return receiveTime;
+    }
+
+    public void setReceiveTime(Date receiveTime) {
+        this.receiveTime = receiveTime;
+    }
+
+    public String getSceneLicensor() {
+        return sceneLicensor;
+    }
+
+    public void setSceneLicensor(String sceneLicensor) {
+        this.sceneLicensor = sceneLicensor == null ? null : sceneLicensor.trim();
+    }
+
+    public String getRunLicensor() {
+        return runLicensor;
+    }
+
+    public void setRunLicensor(String runLicensor) {
+        this.runLicensor = runLicensor == null ? null : runLicensor.trim();
+    }
+
     public Date getLicenseStartTime() {
         return licenseStartTime;
     }
@@ -389,20 +486,92 @@ public class WorkTicket {
         this.licenseStartTime = licenseStartTime;
     }
 
-    public Date getLicenseEndTime() {
-        return licenseEndTime;
+    public String getWorkTeamOpinion() {
+        return workTeamOpinion;
     }
 
-    public void setLicenseEndTime(Date licenseEndTime) {
-        this.licenseEndTime = licenseEndTime;
+    public void setWorkTeamOpinion(String workTeamOpinion) {
+        this.workTeamOpinion = workTeamOpinion == null ? null : workTeamOpinion.trim();
     }
 
-    public String getLicensor() {
-        return licensor;
+    public String getHeadChangeTo() {
+        return headChangeTo;
     }
 
-    public void setLicensor(String licensor) {
-        this.licensor = licensor == null ? null : licensor.trim();
+    public void setHeadChangeTo(String headChangeTo) {
+        this.headChangeTo = headChangeTo == null ? null : headChangeTo.trim();
+    }
+
+    public String getHeadChangeSigner() {
+        return headChangeSigner;
+    }
+
+    public void setHeadChangeSigner(String headChangeSigner) {
+        this.headChangeSigner = headChangeSigner == null ? null : headChangeSigner.trim();
+    }
+
+    public Date getHeadChanegTime() {
+        return headChanegTime;
+    }
+
+    public void setHeadChanegTime(Date headChanegTime) {
+        this.headChanegTime = headChanegTime;
+    }
+
+    public Date getDelayTime() {
+        return delayTime;
+    }
+
+    public void setDelayTime(Date delayTime) {
+        this.delayTime = delayTime;
+    }
+
+    public String getDelayHead() {
+        return delayHead;
+    }
+
+    public void setDelayHead(String delayHead) {
+        this.delayHead = delayHead == null ? null : delayHead.trim();
+    }
+
+    public Date getDelayHeadSignTime() {
+        return delayHeadSignTime;
+    }
+
+    public void setDelayHeadSignTime(Date delayHeadSignTime) {
+        this.delayHeadSignTime = delayHeadSignTime;
+    }
+
+    public String getDelayLicensor() {
+        return delayLicensor;
+    }
+
+    public void setDelayLicensor(String delayLicensor) {
+        this.delayLicensor = delayLicensor == null ? null : delayLicensor.trim();
+    }
+
+    public Date getDelayLicensorSignTime() {
+        return delayLicensorSignTime;
+    }
+
+    public void setDelayLicensorSignTime(Date delayLicensorSignTime) {
+        this.delayLicensorSignTime = delayLicensorSignTime;
+    }
+
+    public String getWorkEndHead() {
+        return workEndHead;
+    }
+
+    public void setWorkEndHead(String workEndHead) {
+        this.workEndHead = workEndHead == null ? null : workEndHead.trim();
+    }
+
+    public String getWorkEndLicensor() {
+        return workEndLicensor;
+    }
+
+    public void setWorkEndLicensor(String workEndLicensor) {
+        this.workEndLicensor = workEndLicensor == null ? null : workEndLicensor.trim();
     }
 
     public Date getWorkEndTime() {
@@ -413,11 +582,91 @@ public class WorkTicket {
         this.workEndTime = workEndTime;
     }
 
-    public String getOpinion() {
-        return opinion;
+    public String getTicketEndLicensor() {
+        return ticketEndLicensor;
     }
 
-    public void setOpinion(String opinion) {
-        this.opinion = opinion == null ? null : opinion.trim();
+    public void setTicketEndLicensor(String ticketEndLicensor) {
+        this.ticketEndLicensor = ticketEndLicensor == null ? null : ticketEndLicensor.trim();
+    }
+
+    public Date getTicketEndTime() {
+        return ticketEndTime;
+    }
+
+    public void setTicketEndTime(Date ticketEndTime) {
+        this.ticketEndTime = ticketEndTime;
+    }
+
+    public String getUnuseWireNumber() {
+        return unuseWireNumber;
+    }
+
+    public void setUnuseWireNumber(String unuseWireNumber) {
+        this.unuseWireNumber = unuseWireNumber == null ? null : unuseWireNumber.trim();
+    }
+
+    public Integer getUnuseWireNum() {
+        return unuseWireNum;
+    }
+
+    public void setUnuseWireNum(Integer unuseWireNum) {
+        this.unuseWireNum = unuseWireNum;
+    }
+
+    public Integer getKnifeCarNum() {
+        return knifeCarNum;
+    }
+
+    public void setKnifeCarNum(Integer knifeCarNum) {
+        this.knifeCarNum = knifeCarNum;
+    }
+
+    public String getGuardian() {
+        return guardian;
+    }
+
+    public void setGuardian(String guardian) {
+        this.guardian = guardian == null ? null : guardian.trim();
+    }
+
+    public String getGuardianPlaceAndCont() {
+        return guardianPlaceAndCont;
+    }
+
+    public void setGuardianPlaceAndCont(String guardianPlaceAndCont) {
+        this.guardianPlaceAndCont = guardianPlaceAndCont == null ? null : guardianPlaceAndCont.trim();
+    }
+
+    public String getGuardianOtherThing() {
+        return guardianOtherThing;
+    }
+
+    public void setGuardianOtherThing(String guardianOtherThing) {
+        this.guardianOtherThing = guardianOtherThing == null ? null : guardianOtherThing.trim();
+    }
+
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation == null ? null : evaluation.trim();
+    }
+
+    public String getEvaluationCont() {
+        return evaluationCont;
+    }
+
+    public void setEvaluationCont(String evaluationCont) {
+        this.evaluationCont = evaluationCont == null ? null : evaluationCont.trim();
+    }
+
+    public Date getEvaluationTime() {
+        return evaluationTime;
+    }
+
+    public void setEvaluationTime(Date evaluationTime) {
+        this.evaluationTime = evaluationTime;
     }
 }

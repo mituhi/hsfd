@@ -73,7 +73,7 @@ public interface TallyStandardService {
      * @param routeName
      * @return
      */
-    String findCycleNameByRouteName(String routeName);
+    List<String> findCycleNameByRouteName(String routeName);
 
     /**
      * 根据路线名称查标准id
@@ -140,6 +140,28 @@ public interface TallyStandardService {
     int countStandard(String equipmentBelonging,  String routeId, String equipmentState, String alarmType,  String standardCoding, String checkContent);
 
 
+    /**
+     * 根据周期名称和路线id查询周期id
+     * @param cycleName
+     * @param routeId
+     * @return
+     */
+    String findCycleIdByCycleNameAndRouteId(String cycleName,String routeId);
+
+    /**
+     * 根据所属风场查询所属风场下面的所属路线
+     * @param windId
+     * @return
+     */
+    List<String> findRouteNameByWindId(String windId);
+
+    /**
+     * 根据标准id和路线id查询周期名称
+     * @param standardId
+     * @param routeId
+     * @return
+     */
+    String findCycleNameByStandardIdAndRouteId(@Param("standardId") String standardId,@Param("routeId") String routeId);
     //**************************************************************************************
 
 

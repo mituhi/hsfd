@@ -2,12 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qz.zframe.tickets.mapper.WorkTicketTypeMapper" >
   <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.WorkTicketType" >
-    <id column="ticket_type_id" property="ticketTypeId" jdbcType="VARCHAR" />
-    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <id column="work_ticket_type_id" property="workTicketTypeId" jdbcType="VARCHAR" />
+    <result column="ticket_type_number" property="ticketTypeNumber" jdbcType="VARCHAR" />
+    <result column="ticket_type_desc" property="ticketTypeDesc" jdbcType="VARCHAR" />
     <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
     <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,17 +71,70 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ticket_type_id, serial_number, ticket_type_name, status, maintainer, maintain_date
+    work_ticket_type_id, ticket_type_number, ticket_type_desc, ticket_type_name, maintainer, 
+    maintain_date, status, wind_id, remark
   </sql>
+
+
+
+
+
 
   <update id="batchDelete" parameterType="java.lang.String">
     update work_ticket_type set status = "0"
-    where ticket_type_id in
+    where work_ticket_type_id in
     <foreach collection="array" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
   </update>
+  <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.WorkTicketTypeVo" >
+    <id column="work_ticket_type_id" property="workTicketTypeId" jdbcType="VARCHAR" />
+    <result column="ticket_type_number" property="ticketTypeNumber" jdbcType="VARCHAR" />
+    <result column="ticket_type_desc" property="ticketTypeDesc" jdbcType="VARCHAR" />
+    <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.work_ticket_type_id as work_ticket_type_id, a.ticket_type_number as ticket_type_number, a.ticket_type_desc as ticket_type_desc,
+    a.ticket_type_name as ticket_type_name, a.maintainer as maintainer,a.maintain_date as maintain_date, a.status as status,
+    a.wind_id as wind_id, a.remark as remark,
+    b.architecture_name as wind_name
+  </sql>
+  <select id="getWorkTicketTypeDetail" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from work_ticket_type a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    where a.status != '0' and a.work_ticket_type_id = #{workTicketTypeId}
+  </select>
+  <select id="getWorkTicketTypeList" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from work_ticket_type a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    where a.status != '0'
+    order by a.ticket_type_number desc
+    limit ${map.start},${map.pageSize}
+  </select>
+  <select id="getTotal" resultType="java.lang.Integer">
+    select
+    count(*)
+    from work_ticket_type
+    where status != 0
+  </select>
+
+
+
+
+
+
 
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.WorkTicketTypeExample" >
     select
@@ -98,11 +154,11 @@
     select 
     <include refid="Base_Column_List" />
     from work_ticket_type
-    where ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR}
+    where work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from work_ticket_type
-    where ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR}
+    where work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.qz.zframe.tickets.entity.WorkTicketTypeExample" >
     delete from work_ticket_type
@@ -111,27 +167,29 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.tickets.entity.WorkTicketType" >
-    insert into work_ticket_type (ticket_type_id, serial_number, ticket_type_name, 
-      status, maintainer, maintain_date
+    insert into work_ticket_type (work_ticket_type_id, ticket_type_number, ticket_type_desc, 
+      ticket_type_name, maintainer, maintain_date, 
+      status, wind_id, remark
       )
-    values (#{ticketTypeId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{ticketTypeName,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}
+    values (#{workTicketTypeId,jdbcType=VARCHAR}, #{ticketTypeNumber,jdbcType=VARCHAR}, #{ticketTypeDesc,jdbcType=VARCHAR}, 
+      #{ticketTypeName,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, 
+      #{status,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.WorkTicketType" >
     insert into work_ticket_type
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="ticketTypeId != null" >
-        ticket_type_id,
+      <if test="workTicketTypeId != null" >
+        work_ticket_type_id,
       </if>
-      <if test="serialNumber != null" >
-        serial_number,
+      <if test="ticketTypeNumber != null" >
+        ticket_type_number,
+      </if>
+      <if test="ticketTypeDesc != null" >
+        ticket_type_desc,
       </if>
       <if test="ticketTypeName != null" >
         ticket_type_name,
-      </if>
-      <if test="status != null" >
-        status,
       </if>
       <if test="maintainer != null" >
         maintainer,
@@ -139,25 +197,43 @@
       <if test="maintainDate != null" >
         maintain_date,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="ticketTypeId != null" >
-        #{ticketTypeId,jdbcType=VARCHAR},
+      <if test="workTicketTypeId != null" >
+        #{workTicketTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="serialNumber != null" >
-        #{serialNumber,jdbcType=VARCHAR},
+      <if test="ticketTypeNumber != null" >
+        #{ticketTypeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeDesc != null" >
+        #{ticketTypeDesc,jdbcType=VARCHAR},
       </if>
       <if test="ticketTypeName != null" >
         #{ticketTypeName,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
       </if>
       <if test="maintainer != null" >
         #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="maintainDate != null" >
         #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -170,23 +246,32 @@
   <update id="updateByExampleSelective" parameterType="map" >
     update work_ticket_type
     <set >
-      <if test="record.ticketTypeId != null" >
-        ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      <if test="record.workTicketTypeId != null" >
+        work_ticket_type_id = #{record.workTicketTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="record.serialNumber != null" >
-        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      <if test="record.ticketTypeNumber != null" >
+        ticket_type_number = #{record.ticketTypeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketTypeDesc != null" >
+        ticket_type_desc = #{record.ticketTypeDesc,jdbcType=VARCHAR},
       </if>
       <if test="record.ticketTypeName != null" >
         ticket_type_name = #{record.ticketTypeName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.status != null" >
-        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.maintainer != null" >
         maintainer = #{record.maintainer,jdbcType=VARCHAR},
       </if>
       <if test="record.maintainDate != null" >
         maintain_date = #{record.maintainDate,jdbcType=DATE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -195,12 +280,15 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update work_ticket_type
-    set ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
-      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+    set work_ticket_type_id = #{record.workTicketTypeId,jdbcType=VARCHAR},
+      ticket_type_number = #{record.ticketTypeNumber,jdbcType=VARCHAR},
+      ticket_type_desc = #{record.ticketTypeDesc,jdbcType=VARCHAR},
       ticket_type_name = #{record.ticketTypeName,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
       maintainer = #{record.maintainer,jdbcType=VARCHAR},
-      maintain_date = #{record.maintainDate,jdbcType=DATE}
+      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      status = #{record.status,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -208,14 +296,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.tickets.entity.WorkTicketType" >
     update work_ticket_type
     <set >
-      <if test="serialNumber != null" >
-        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      <if test="ticketTypeNumber != null" >
+        ticket_type_number = #{ticketTypeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeDesc != null" >
+        ticket_type_desc = #{ticketTypeDesc,jdbcType=VARCHAR},
       </if>
       <if test="ticketTypeName != null" >
         ticket_type_name = #{ticketTypeName,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="maintainer != null" >
         maintainer = #{maintainer,jdbcType=VARCHAR},
@@ -223,16 +311,28 @@
       <if test="maintainDate != null" >
         maintain_date = #{maintainDate,jdbcType=DATE},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
     </set>
-    where ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR}
+    where work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.WorkTicketType" >
     update work_ticket_type
-    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+    set ticket_type_number = #{ticketTypeNumber,jdbcType=VARCHAR},
+      ticket_type_desc = #{ticketTypeDesc,jdbcType=VARCHAR},
       ticket_type_name = #{ticketTypeName,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
       maintainer = #{maintainer,jdbcType=VARCHAR},
-      maintain_date = #{maintainDate,jdbcType=DATE}
-    where ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR}
+      maintain_date = #{maintainDate,jdbcType=DATE},
+      status = #{status,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR}
   </update>
 </mapper>

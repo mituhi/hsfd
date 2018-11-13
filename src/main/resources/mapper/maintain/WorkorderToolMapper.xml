@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.WorkorderToolMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.WorkorderTool" >
+    <id column="tool_id" property="toolId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="knowledge_id" property="knowledgeId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="tool_number" property="toolNumber" jdbcType="VARCHAR" />
+    <result column="tool_desc" property="toolDesc" jdbcType="VARCHAR" />
+    <result column="tool_plan_amount" property="toolPlanAmount" jdbcType="VARCHAR" />
+    <result column="tool_unit" property="toolUnit" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    tool_id, workorder_id, knowledge_id, order_id, tool_number, tool_desc, tool_plan_amount, 
+    tool_unit
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderToolExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from workorder_tool
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from workorder_tool
+    where tool_id = #{toolId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from workorder_tool
+    where tool_id = #{toolId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderToolExample" >
+    delete from workorder_tool
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderTool" >
+    insert into workorder_tool (tool_id, workorder_id, knowledge_id, 
+      order_id, tool_number, tool_desc, 
+      tool_plan_amount, tool_unit)
+    values (#{toolId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{knowledgeId,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{toolNumber,jdbcType=VARCHAR}, #{toolDesc,jdbcType=VARCHAR}, 
+      #{toolPlanAmount,jdbcType=VARCHAR}, #{toolUnit,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderTool" >
+    insert into workorder_tool
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="toolId != null" >
+        tool_id,
+      </if>
+      <if test="workorderId != null" >
+        workorder_id,
+      </if>
+      <if test="knowledgeId != null" >
+        knowledge_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="toolNumber != null" >
+        tool_number,
+      </if>
+      <if test="toolDesc != null" >
+        tool_desc,
+      </if>
+      <if test="toolPlanAmount != null" >
+        tool_plan_amount,
+      </if>
+      <if test="toolUnit != null" >
+        tool_unit,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="toolId != null" >
+        #{toolId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeId != null" >
+        #{knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="toolNumber != null" >
+        #{toolNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="toolDesc != null" >
+        #{toolDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="toolPlanAmount != null" >
+        #{toolPlanAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="toolUnit != null" >
+        #{toolUnit,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderToolExample" resultType="java.lang.Integer" >
+    select count(*) from workorder_tool
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update workorder_tool
+    <set >
+      <if test="record.toolId != null" >
+        tool_id = #{record.toolId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderId != null" >
+        workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.knowledgeId != null" >
+        knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toolNumber != null" >
+        tool_number = #{record.toolNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toolDesc != null" >
+        tool_desc = #{record.toolDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toolPlanAmount != null" >
+        tool_plan_amount = #{record.toolPlanAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toolUnit != null" >
+        tool_unit = #{record.toolUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update workorder_tool
+    set tool_id = #{record.toolId,jdbcType=VARCHAR},
+      workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      tool_number = #{record.toolNumber,jdbcType=VARCHAR},
+      tool_desc = #{record.toolDesc,jdbcType=VARCHAR},
+      tool_plan_amount = #{record.toolPlanAmount,jdbcType=VARCHAR},
+      tool_unit = #{record.toolUnit,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderTool" >
+    update workorder_tool
+    <set >
+      <if test="workorderId != null" >
+        workorder_id = #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeId != null" >
+        knowledge_id = #{knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="toolNumber != null" >
+        tool_number = #{toolNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="toolDesc != null" >
+        tool_desc = #{toolDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="toolPlanAmount != null" >
+        tool_plan_amount = #{toolPlanAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="toolUnit != null" >
+        tool_unit = #{toolUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where tool_id = #{toolId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.WorkorderTool" >
+    update workorder_tool
+    set workorder_id = #{workorderId,jdbcType=VARCHAR},
+      knowledge_id = #{knowledgeId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      tool_number = #{toolNumber,jdbcType=VARCHAR},
+      tool_desc = #{toolDesc,jdbcType=VARCHAR},
+      tool_plan_amount = #{toolPlanAmount,jdbcType=VARCHAR},
+      tool_unit = #{toolUnit,jdbcType=VARCHAR}
+    where tool_id = #{toolId,jdbcType=VARCHAR}
+  </update>
+</mapper>

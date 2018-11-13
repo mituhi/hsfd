@@ -74,6 +74,9 @@ public class TallyStandardPostVO {
     @ApiModelProperty(value="里程下限",name="lowerlimitMileage",required=false)
     private String lowerlimitMileage;
 
+    @ApiModelProperty(value="执行周期",name="cycleName",required=false)
+    private String cycleName;
+
     public String getRouteName() {
         return routeName;
     }
@@ -256,5 +259,13 @@ public class TallyStandardPostVO {
 
     public void setLowerlimitMileage(String lowerlimitMileage) {
         this.lowerlimitMileage = lowerlimitMileage;
+    }
+
+    public String getCycleName() {
+        return cycleName;
+    }
+
+    public void setCycleName(String cycleName) {
+        this.cycleName = cycleName;
     }
 }

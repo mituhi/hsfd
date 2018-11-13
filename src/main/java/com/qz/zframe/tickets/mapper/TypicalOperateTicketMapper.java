@@ -2,6 +2,7 @@ package com.qz.zframe.tickets.mapper;
 
 import com.qz.zframe.tickets.entity.TypicalOperateTicket;
 import com.qz.zframe.tickets.entity.TypicalOperateTicketExample;
+import com.qz.zframe.tickets.vo.TypicalOperateTicketVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,12 +20,14 @@ public interface TypicalOperateTicketMapper {
     int insert(TypicalOperateTicket record);
 
     int insertSelective(TypicalOperateTicket record);
-
+    //批量删除
     int batchDelete(@Param("array") String[] ids);
-
-    List<TypicalOperateTicket> getTypicalOperateTicketListByPC(@Param("map") Map<String, String> pageAndCondition);
-
-    int getTotalCount(@Param("map") Map<String, String> pageAndCondition);
+    //详情查询
+    TypicalOperateTicketVo getTypicalOperateTicketDetail(@Param("typicalTicketId") String typicalTicketId);
+    //列表查询
+    List<TypicalOperateTicketVo> getTypicalOperateTicketList(@Param("map") Map<String, String> pageAndCondition);
+    //查询总记录数
+    int getTotal(@Param("map") Map<String, String> pageAndCondition);
 
     List<TypicalOperateTicket> selectByExample(TypicalOperateTicketExample example);
 

@@ -31,9 +31,6 @@ public class MaterialClassify implements Serializable {
 	@JsonView({ ListView.class })
 	private String classifyName;
 
-	/**
-	 * 物资分类描述
-	 */
 	@ApiModelProperty(name="classifyDescribe",value="物资分类描述",required=true)
 	@JsonView({ ListView.class })
 	private String classifyDescribe;

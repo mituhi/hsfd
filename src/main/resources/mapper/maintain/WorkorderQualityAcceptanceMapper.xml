@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.WorkorderQualityAcceptanceMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.WorkorderQualityAcceptance" >
+    <id column="quality_acceptance_id" property="qualityAcceptanceId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="acceptance_evaluation" property="acceptanceEvaluation" jdbcType="VARCHAR" />
+    <result column="acceptance_remark" property="acceptanceRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    quality_acceptance_id, workorder_id, order_id, acceptance_evaluation, acceptance_remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderQualityAcceptanceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from workorder_quality_acceptance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from workorder_quality_acceptance
+    where quality_acceptance_id = #{qualityAcceptanceId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from workorder_quality_acceptance
+    where quality_acceptance_id = #{qualityAcceptanceId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderQualityAcceptanceExample" >
+    delete from workorder_quality_acceptance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderQualityAcceptance" >
+    insert into workorder_quality_acceptance (quality_acceptance_id, workorder_id, 
+      order_id, acceptance_evaluation, acceptance_remark
+      )
+    values (#{qualityAcceptanceId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{acceptanceEvaluation,jdbcType=VARCHAR}, #{acceptanceRemark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderQualityAcceptance" >
+    insert into workorder_quality_acceptance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="qualityAcceptanceId != null" >
+        quality_acceptance_id,
+      </if>
+      <if test="workorderId != null" >
+        workorder_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="acceptanceEvaluation != null" >
+        acceptance_evaluation,
+      </if>
+      <if test="acceptanceRemark != null" >
+        acceptance_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="qualityAcceptanceId != null" >
+        #{qualityAcceptanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceEvaluation != null" >
+        #{acceptanceEvaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceRemark != null" >
+        #{acceptanceRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderQualityAcceptanceExample" resultType="java.lang.Integer" >
+    select count(*) from workorder_quality_acceptance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update workorder_quality_acceptance
+    <set >
+      <if test="record.qualityAcceptanceId != null" >
+        quality_acceptance_id = #{record.qualityAcceptanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderId != null" >
+        workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acceptanceEvaluation != null" >
+        acceptance_evaluation = #{record.acceptanceEvaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acceptanceRemark != null" >
+        acceptance_remark = #{record.acceptanceRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update workorder_quality_acceptance
+    set quality_acceptance_id = #{record.qualityAcceptanceId,jdbcType=VARCHAR},
+      workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      acceptance_evaluation = #{record.acceptanceEvaluation,jdbcType=VARCHAR},
+      acceptance_remark = #{record.acceptanceRemark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderQualityAcceptance" >
+    update workorder_quality_acceptance
+    <set >
+      <if test="workorderId != null" >
+        workorder_id = #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceEvaluation != null" >
+        acceptance_evaluation = #{acceptanceEvaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptanceRemark != null" >
+        acceptance_remark = #{acceptanceRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where quality_acceptance_id = #{qualityAcceptanceId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.WorkorderQualityAcceptance" >
+    update workorder_quality_acceptance
+    set workorder_id = #{workorderId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      acceptance_evaluation = #{acceptanceEvaluation,jdbcType=VARCHAR},
+      acceptance_remark = #{acceptanceRemark,jdbcType=VARCHAR}
+    where quality_acceptance_id = #{qualityAcceptanceId,jdbcType=VARCHAR}
+  </update>
+</mapper>

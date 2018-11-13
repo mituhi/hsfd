@@ -1,56 +1,63 @@
 package com.qz.zframe.tickets.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.qz.zframe.tickets.entity.UserAssoInfo;
+import com.qz.zframe.tickets.entity.WorkTicketSafeMeasure;
 import com.qz.zframe.tickets.entity.WorkTicketType;
-import com.qz.zframe.tickets.entity.WorkTicketTypeSafeMeasure;
-import com.qz.zframe.tickets.entity.WorkTicketTypeUser;
+import io.swagger.annotations.ApiParam;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class WorkTicketTypeVo extends WorkTicketType{
+public class WorkTicketTypeVo extends WorkTicketType {
 
-    private List<WorkTicketTypeSafeMeasure> safeMeasureList = new ArrayList<>();
+    @ApiParam(name="windName",value="风电场名称",required=false)
+    private String windName;
 
-    private List<WorkTicketTypeUser> workHeadList = new ArrayList<>();
+    private List<WorkTicketSafeMeasure> safeMeasureList = new ArrayList<>();
 
-    private List<WorkTicketTypeUser> signerList = new ArrayList<>();
+    private List<UserAssoInfo> workHeadList = new ArrayList<>();
 
-    private List<WorkTicketTypeUser> licensorList = new ArrayList<>();
+    private List<UserAssoInfo> signerList = new ArrayList<>();
 
-    public List<WorkTicketTypeSafeMeasure> getSafeMeasureList() {
+    private List<UserAssoInfo> licensorList = new ArrayList<>();
+
+    public String getWindName() {
+        return windName;
+    }
+
+    public void setWindName(String windName) {
+        this.windName = windName;
+    }
+
+    public List<WorkTicketSafeMeasure> getSafeMeasureList() {
         return safeMeasureList;
     }
 
-    public void setSafeMeasureList(List<WorkTicketTypeSafeMeasure> safeMeasureList) {
+    public void setSafeMeasureList(List<WorkTicketSafeMeasure> safeMeasureList) {
         this.safeMeasureList = safeMeasureList;
     }
 
-    public List<WorkTicketTypeUser> getWorkHeadList() {
+    public List<UserAssoInfo> getWorkHeadList() {
         return workHeadList;
     }
 
-    public void setWorkHeadList(List<WorkTicketTypeUser> workHeadList) {
+    public void setWorkHeadList(List<UserAssoInfo> workHeadList) {
         this.workHeadList = workHeadList;
     }
 
-    public List<WorkTicketTypeUser> getSignerList() {
+    public List<UserAssoInfo> getSignerList() {
         return signerList;
     }
 
-    public void setSignerList(List<WorkTicketTypeUser> signerList) {
+    public void setSignerList(List<UserAssoInfo> signerList) {
         this.signerList = signerList;
     }
 
-    public List<WorkTicketTypeUser> getLicensorList() {
+    public List<UserAssoInfo> getLicensorList() {
         return licensorList;
     }
 
-    public void setLicensorList(List<WorkTicketTypeUser> licensorList) {
+    public void setLicensorList(List<UserAssoInfo> licensorList) {
         this.licensorList = licensorList;
     }
-
-
 }

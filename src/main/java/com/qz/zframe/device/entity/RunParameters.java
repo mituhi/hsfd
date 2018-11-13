@@ -1,49 +1,50 @@
 package com.qz.zframe.device.entity;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
+
 
 public class RunParameters {
-	@ApiParam(name = "runId", value = "运行技术参数id", required = false)
+	@ApiModelProperty(name = "runId", value = "运行技术参数id", required = false)
 
 	private String runId;
 
-	@ApiParam(name = "equipmentAssetId", value = "设备资产台账id", required = false)
+	@ApiModelProperty(name = "equipmentAssetId", value = "设备资产台账id", required = false)
 
 	private String equipmentAssetId;
 
-	@ApiParam(name = "technicalId", value = "技术参数表id", required = false)
+	@ApiModelProperty(name = "technicalId", value = "技术参数表id", required = false)
 
 	private String technicalId;
 
-	@ApiParam(name = "technicalType", value = "技术参数类型", required = false)
+	@ApiModelProperty(name = "technicalType", value = "技术参数类型", required = false)
 
 	private String technicalType;
 
-	@ApiParam(name = "parameterCode", value = "参数编号", required = false)
+	@ApiModelProperty(name = "parameterCode", value = "参数编号", required = false)
 
 	private String parameterCode;
 
-	@ApiParam(name = "parameterName", value = "参数名称", required = false)
+	@ApiModelProperty(name = "parameterName", value = "参数名称", required = false)
 
 	private String parameterName;
 
-	@ApiParam(name = "type", value = "数据类型", required = false)
+	@ApiModelProperty(name = "type", value = "数据类型", required = false)
 
 	private String type;
 
-	@ApiParam(name = "numberValue", value = "数字值", required = false)
+	@ApiModelProperty(name = "numberValue", value = "数字值", required = false)
 
 	private String numberValue;
 
-	@ApiParam(name = "company", value = "单位", required = false)
+	@ApiModelProperty(name = "company", value = "单位", required = false)
 
 	private String company;
 
-	@ApiParam(name = "alphabetValue", value = "字母值", required = false)
+	@ApiModelProperty(name = "alphabetValue", value = "字母值", required = false)
 
 	private String alphabetValue;
 
-	@ApiParam(name = "importantGrade", value = "重要等级", required = false)
+	@ApiModelProperty(name = "importantGrade", value = "重要等级", required = false)
 
 	private String importantGrade;
 

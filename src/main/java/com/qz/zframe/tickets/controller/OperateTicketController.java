@@ -22,35 +22,6 @@ public class OperateTicketController {
     @Autowired
     private OperateTicketService operateTicketService;
 
-    //操作票列表分页+条件查询
-    @ApiOperation(value = "操作票列表查询", notes = "操作票列表查询")
-    @RequestMapping(value = "getOperateTicketList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public PageResultEntity getOperateTicketList(@RequestParam(defaultValue = "1")@ApiParam(name="pageNum",value="当前页",required=false)String pageNum,
-                                                 @RequestParam(defaultValue = "10")@ApiParam(name="pageSize",value="一页记录数",required=false)String pageSize,
-                                                 @RequestParam(required = false)@ApiParam(name="ticketTypeId",value="操作票类型id",required=false)String ticketTypeId,
-                                                 @RequestParam(required = false)@ApiParam(name="crewId",value="一页记录数",required=false)String crewId,
-                                                 @RequestParam(required = false)@ApiParam(name="status",value="状态  1:处理中  2:完成  0:作废",required=false)String status,
-                                                 @RequestParam(required = false)@ApiParam(name="operateContent",value="操作内容",required=false)String operateContent,
-                                                 @RequestParam(required = false)@ApiParam(name="startTime",value="申请时间",required=false)String startTime,
-                                                 @RequestParam(required = false)@ApiParam(name="endTime",value="申请时间",required=false)String endTime) {
-        Map<String,String> pageAndCondition = new HashMap();
-        pageAndCondition.put("pageNum",pageNum);
-        pageAndCondition.put("pageSize",pageSize);
-        pageAndCondition.put("ticketTypeId",ticketTypeId);
-        pageAndCondition.put("machineSet",crewId);
-        pageAndCondition.put("status",status);
-        pageAndCondition.put("operateContent",operateContent);
-        pageAndCondition.put("applyStartTimr",startTime);
-        pageAndCondition.put("applyEndTime",endTime);
-        return operateTicketService.getOperateTicketList(pageAndCondition);
-    }
-
-    @ApiOperation(value = "新建操作票", notes = "后台生成id,流水号,申请人,操作票号给前端为添加工作票类型做准备")
-    @RequestMapping(value = "createOperateTicket", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResultEntity createOperateTicket() {
-        return operateTicketService.createOperateTicket();
-    }
-
     @ApiOperation(value = "添加操作票", notes = "添加操作票")
     @RequestMapping(value = "addOperateTicket", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultEntity addOperateTicket(@RequestBody OperateTicketVo operateTicketVo) {
@@ -69,10 +40,33 @@ public class OperateTicketController {
         return operateTicketService.updateOperateTicket(operateTicketVo);
     }
 
-    @ApiOperation(value = "操作票详情查询", notes = "操作票详情查询")
+    @ApiOperation(value = "浏览操作票", notes = "浏览操作票")
     @RequestMapping(value = "getOperateTicketDetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultEntity getOperateTicketDetail(@RequestParam(required = true)@ApiParam(name="ticketId",value="操作票id",required=true) String ticketId) {
         return operateTicketService.getOperateTicketDetail(ticketId);
+    }
+
+    //操作票列表分页+条件查询
+    @ApiOperation(value = "操作票列表查询", notes = "操作票列表查询")
+    @RequestMapping(value = "getOperateTicketList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public PageResultEntity getOperateTicketList(@RequestParam(defaultValue = "1")@ApiParam(name="pageNum",value="当前页",required=false)String pageNum,
+                                 @RequestParam(defaultValue = "10")@ApiParam(name="pageSize",value="一页记录数",required=false)String pageSize,
+                                 @RequestParam(required = false)@ApiParam(name="operTicketTypeId",value="操作票类型id",required=false)String operTicketTypeId,
+                                 @RequestParam(required = false)@ApiParam(name="windId",value="风电场id",required=false)String windId,
+                                 @RequestParam(required = false)@ApiParam(name="status",value="状态  1:处理中  2:完成  0:作废",required=false)String status,
+                                 @RequestParam(required = false)@ApiParam(name="operateContent",value="操作内容",required=false)String operateContent,
+                                 @RequestParam(required = false)@ApiParam(name="startTime",value="申请时间",required=false)String startTime,
+                                 @RequestParam(required = false)@ApiParam(name="endTime",value="申请时间",required=false)String endTime) {
+        Map<String,String> pageAndCondition = new HashMap();
+        pageAndCondition.put("pageNum",pageNum);
+        pageAndCondition.put("pageSize",pageSize);
+        pageAndCondition.put("operTicketTypeId",operTicketTypeId);
+        pageAndCondition.put("windId",windId);
+        pageAndCondition.put("status",status);
+        pageAndCondition.put("operateContent",operateContent);
+        pageAndCondition.put("startTime",startTime);
+        pageAndCondition.put("startTime",endTime);
+        return operateTicketService.getOperateTicketList(pageAndCondition);
     }
 
     @ApiOperation(value = "操作票统计", notes = "操作票统计")

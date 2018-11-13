@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.WorkorderSummaryMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.WorkorderSummary" >
+    <id column="summary_id" property="summaryId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="summary_problem_desc" property="summaryProblemDesc" jdbcType="VARCHAR" />
+    <result column="summary_breakdown_phenomenon" property="summaryBreakdownPhenomenon" jdbcType="VARCHAR" />
+    <result column="summary_breakdown_cause" property="summaryBreakdownCause" jdbcType="VARCHAR" />
+    <result column="summary_repair_before_cond" property="summaryRepairBeforeCond" jdbcType="VARCHAR" />
+    <result column="summary_repair_process_desc" property="summaryRepairProcessDesc" jdbcType="VARCHAR" />
+    <result column="summary_cause_analysis" property="summaryCauseAnalysis" jdbcType="VARCHAR" />
+    <result column="summary_solution" property="summarySolution" jdbcType="VARCHAR" />
+    <result column="summary_konwledge_apply" property="summaryKonwledgeApply" jdbcType="VARCHAR" />
+    <result column="summary_attachment" property="summaryAttachment" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    summary_id, workorder_id, order_id, summary_problem_desc, summary_breakdown_phenomenon, 
+    summary_breakdown_cause, summary_repair_before_cond, summary_repair_process_desc, 
+    summary_cause_analysis, summary_solution, summary_konwledge_apply, summary_attachment
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderSummaryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from workorder_summary
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from workorder_summary
+    where summary_id = #{summaryId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from workorder_summary
+    where summary_id = #{summaryId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderSummaryExample" >
+    delete from workorder_summary
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderSummary" >
+    insert into workorder_summary (summary_id, workorder_id, order_id, 
+      summary_problem_desc, summary_breakdown_phenomenon, 
+      summary_breakdown_cause, summary_repair_before_cond, 
+      summary_repair_process_desc, summary_cause_analysis, 
+      summary_solution, summary_konwledge_apply, 
+      summary_attachment)
+    values (#{summaryId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{summaryProblemDesc,jdbcType=VARCHAR}, #{summaryBreakdownPhenomenon,jdbcType=VARCHAR}, 
+      #{summaryBreakdownCause,jdbcType=VARCHAR}, #{summaryRepairBeforeCond,jdbcType=VARCHAR}, 
+      #{summaryRepairProcessDesc,jdbcType=VARCHAR}, #{summaryCauseAnalysis,jdbcType=VARCHAR}, 
+      #{summarySolution,jdbcType=VARCHAR}, #{summaryKonwledgeApply,jdbcType=VARCHAR}, 
+      #{summaryAttachment,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderSummary" >
+    insert into workorder_summary
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="summaryId != null" >
+        summary_id,
+      </if>
+      <if test="workorderId != null" >
+        workorder_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="summaryProblemDesc != null" >
+        summary_problem_desc,
+      </if>
+      <if test="summaryBreakdownPhenomenon != null" >
+        summary_breakdown_phenomenon,
+      </if>
+      <if test="summaryBreakdownCause != null" >
+        summary_breakdown_cause,
+      </if>
+      <if test="summaryRepairBeforeCond != null" >
+        summary_repair_before_cond,
+      </if>
+      <if test="summaryRepairProcessDesc != null" >
+        summary_repair_process_desc,
+      </if>
+      <if test="summaryCauseAnalysis != null" >
+        summary_cause_analysis,
+      </if>
+      <if test="summarySolution != null" >
+        summary_solution,
+      </if>
+      <if test="summaryKonwledgeApply != null" >
+        summary_konwledge_apply,
+      </if>
+      <if test="summaryAttachment != null" >
+        summary_attachment,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="summaryId != null" >
+        #{summaryId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryProblemDesc != null" >
+        #{summaryProblemDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryBreakdownPhenomenon != null" >
+        #{summaryBreakdownPhenomenon,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryBreakdownCause != null" >
+        #{summaryBreakdownCause,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryRepairBeforeCond != null" >
+        #{summaryRepairBeforeCond,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryRepairProcessDesc != null" >
+        #{summaryRepairProcessDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryCauseAnalysis != null" >
+        #{summaryCauseAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="summarySolution != null" >
+        #{summarySolution,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryKonwledgeApply != null" >
+        #{summaryKonwledgeApply,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryAttachment != null" >
+        #{summaryAttachment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderSummaryExample" resultType="java.lang.Integer" >
+    select count(*) from workorder_summary
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update workorder_summary
+    <set >
+      <if test="record.summaryId != null" >
+        summary_id = #{record.summaryId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderId != null" >
+        workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.summaryProblemDesc != null" >
+        summary_problem_desc = #{record.summaryProblemDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.summaryBreakdownPhenomenon != null" >
+        summary_breakdown_phenomenon = #{record.summaryBreakdownPhenomenon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.summaryBreakdownCause != null" >
+        summary_breakdown_cause = #{record.summaryBreakdownCause,jdbcType=VARCHAR},
+      </if>
+      <if test="record.summaryRepairBeforeCond != null" >
+        summary_repair_before_cond = #{record.summaryRepairBeforeCond,jdbcType=VARCHAR},
+      </if>
+      <if test="record.summaryRepairProcessDesc != null" >
+        summary_repair_process_desc = #{record.summaryRepairProcessDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.summaryCauseAnalysis != null" >
+        summary_cause_analysis = #{record.summaryCauseAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="record.summarySolution != null" >
+        summary_solution = #{record.summarySolution,jdbcType=VARCHAR},
+      </if>
+      <if test="record.summaryKonwledgeApply != null" >
+        summary_konwledge_apply = #{record.summaryKonwledgeApply,jdbcType=VARCHAR},
+      </if>
+      <if test="record.summaryAttachment != null" >
+        summary_attachment = #{record.summaryAttachment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update workorder_summary
+    set summary_id = #{record.summaryId,jdbcType=VARCHAR},
+      workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      summary_problem_desc = #{record.summaryProblemDesc,jdbcType=VARCHAR},
+      summary_breakdown_phenomenon = #{record.summaryBreakdownPhenomenon,jdbcType=VARCHAR},
+      summary_breakdown_cause = #{record.summaryBreakdownCause,jdbcType=VARCHAR},
+      summary_repair_before_cond = #{record.summaryRepairBeforeCond,jdbcType=VARCHAR},
+      summary_repair_process_desc = #{record.summaryRepairProcessDesc,jdbcType=VARCHAR},
+      summary_cause_analysis = #{record.summaryCauseAnalysis,jdbcType=VARCHAR},
+      summary_solution = #{record.summarySolution,jdbcType=VARCHAR},
+      summary_konwledge_apply = #{record.summaryKonwledgeApply,jdbcType=VARCHAR},
+      summary_attachment = #{record.summaryAttachment,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderSummary" >
+    update workorder_summary
+    <set >
+      <if test="workorderId != null" >
+        workorder_id = #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryProblemDesc != null" >
+        summary_problem_desc = #{summaryProblemDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryBreakdownPhenomenon != null" >
+        summary_breakdown_phenomenon = #{summaryBreakdownPhenomenon,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryBreakdownCause != null" >
+        summary_breakdown_cause = #{summaryBreakdownCause,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryRepairBeforeCond != null" >
+        summary_repair_before_cond = #{summaryRepairBeforeCond,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryRepairProcessDesc != null" >
+        summary_repair_process_desc = #{summaryRepairProcessDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryCauseAnalysis != null" >
+        summary_cause_analysis = #{summaryCauseAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="summarySolution != null" >
+        summary_solution = #{summarySolution,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryKonwledgeApply != null" >
+        summary_konwledge_apply = #{summaryKonwledgeApply,jdbcType=VARCHAR},
+      </if>
+      <if test="summaryAttachment != null" >
+        summary_attachment = #{summaryAttachment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where summary_id = #{summaryId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.WorkorderSummary" >
+    update workorder_summary
+    set workorder_id = #{workorderId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      summary_problem_desc = #{summaryProblemDesc,jdbcType=VARCHAR},
+      summary_breakdown_phenomenon = #{summaryBreakdownPhenomenon,jdbcType=VARCHAR},
+      summary_breakdown_cause = #{summaryBreakdownCause,jdbcType=VARCHAR},
+      summary_repair_before_cond = #{summaryRepairBeforeCond,jdbcType=VARCHAR},
+      summary_repair_process_desc = #{summaryRepairProcessDesc,jdbcType=VARCHAR},
+      summary_cause_analysis = #{summaryCauseAnalysis,jdbcType=VARCHAR},
+      summary_solution = #{summarySolution,jdbcType=VARCHAR},
+      summary_konwledge_apply = #{summaryKonwledgeApply,jdbcType=VARCHAR},
+      summary_attachment = #{summaryAttachment,jdbcType=VARCHAR}
+    where summary_id = #{summaryId,jdbcType=VARCHAR}
+  </update>
+</mapper>

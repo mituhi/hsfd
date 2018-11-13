@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class ValueTime {
 	
-	@ApiModelProperty(value="值次id",name="valueId",required=true)
+	@ApiModelProperty(value="值次id",name="valueId")
     private String valueId;
     
     @ApiModelProperty(value="值次编码",name="valueCode",required=true)

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.WorkClassificationMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.WorkClassification" >
+    <id column="classification_id" property="classificationId" jdbcType="VARCHAR" />
+    <result column="classification_code" property="classificationCode" jdbcType="VARCHAR" />
+    <result column="classification_name" property="classificationName" jdbcType="VARCHAR" />
+    <result column="task_properties" property="taskProperties" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="fat_classification_id" property="fatClassificationId" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    classification_id, classification_code, classification_name, task_properties, status, 
+    user_id, create_time, fat_classification_id, remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.WorkClassificationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from work_classification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_classification
+    where classification_id = #{classificationId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from work_classification
+    where classification_id = #{classificationId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.WorkClassificationExample" >
+    delete from work_classification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.WorkClassification" >
+    insert into work_classification (classification_id, classification_code, 
+      classification_name, task_properties, status, 
+      user_id, create_time, fat_classification_id, 
+      remark)
+    values (#{classificationId,jdbcType=VARCHAR}, #{classificationCode,jdbcType=VARCHAR}, 
+      #{classificationName,jdbcType=VARCHAR}, #{taskProperties,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{fatClassificationId,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.WorkClassification" >
+    insert into work_classification
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="classificationId != null" >
+        classification_id,
+      </if>
+      <if test="classificationCode != null" >
+        classification_code,
+      </if>
+      <if test="classificationName != null" >
+        classification_name,
+      </if>
+      <if test="taskProperties != null" >
+        task_properties,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="fatClassificationId != null" >
+        fat_classification_id,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="classificationId != null" >
+        #{classificationId,jdbcType=VARCHAR},
+      </if>
+      <if test="classificationCode != null" >
+        #{classificationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="classificationName != null" >
+        #{classificationName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskProperties != null" >
+        #{taskProperties,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fatClassificationId != null" >
+        #{fatClassificationId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.WorkClassificationExample" resultType="java.lang.Integer" >
+    select count(*) from work_classification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update work_classification
+    <set >
+      <if test="record.classificationId != null" >
+        classification_id = #{record.classificationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classificationCode != null" >
+        classification_code = #{record.classificationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classificationName != null" >
+        classification_name = #{record.classificationName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskProperties != null" >
+        task_properties = #{record.taskProperties,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.fatClassificationId != null" >
+        fat_classification_id = #{record.fatClassificationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update work_classification
+    set classification_id = #{record.classificationId,jdbcType=VARCHAR},
+      classification_code = #{record.classificationCode,jdbcType=VARCHAR},
+      classification_name = #{record.classificationName,jdbcType=VARCHAR},
+      task_properties = #{record.taskProperties,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      fat_classification_id = #{record.fatClassificationId,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.WorkClassification" >
+    update work_classification
+    <set >
+      <if test="classificationCode != null" >
+        classification_code = #{classificationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="classificationName != null" >
+        classification_name = #{classificationName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskProperties != null" >
+        task_properties = #{taskProperties,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fatClassificationId != null" >
+        fat_classification_id = #{fatClassificationId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where classification_id = #{classificationId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.WorkClassification" >
+    update work_classification
+    set classification_code = #{classificationCode,jdbcType=VARCHAR},
+      classification_name = #{classificationName,jdbcType=VARCHAR},
+      task_properties = #{taskProperties,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      fat_classification_id = #{fatClassificationId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where classification_id = #{classificationId,jdbcType=VARCHAR}
+  </update>
+</mapper>

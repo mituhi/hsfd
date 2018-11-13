@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.WorkorderDangerPointMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.WorkorderDangerPoint" >
+    <id column="danger_point_id" property="dangerPointId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="knowledge_id" property="knowledgeId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="danger_number" property="dangerNumber" jdbcType="VARCHAR" />
+    <result column="danger_danger_source" property="dangerDangerSource" jdbcType="VARCHAR" />
+    <result column="danger_pre_measures" property="dangerPreMeasures" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    danger_point_id, workorder_id, knowledge_id, order_id, danger_number, danger_danger_source, 
+    danger_pre_measures
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderDangerPointExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from workorder_danger_point
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from workorder_danger_point
+    where danger_point_id = #{dangerPointId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from workorder_danger_point
+    where danger_point_id = #{dangerPointId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderDangerPointExample" >
+    delete from workorder_danger_point
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderDangerPoint" >
+    insert into workorder_danger_point (danger_point_id, workorder_id, knowledge_id, 
+      order_id, danger_number, danger_danger_source, 
+      danger_pre_measures)
+    values (#{dangerPointId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{knowledgeId,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{dangerNumber,jdbcType=VARCHAR}, #{dangerDangerSource,jdbcType=VARCHAR}, 
+      #{dangerPreMeasures,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderDangerPoint" >
+    insert into workorder_danger_point
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dangerPointId != null" >
+        danger_point_id,
+      </if>
+      <if test="workorderId != null" >
+        workorder_id,
+      </if>
+      <if test="knowledgeId != null" >
+        knowledge_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="dangerNumber != null" >
+        danger_number,
+      </if>
+      <if test="dangerDangerSource != null" >
+        danger_danger_source,
+      </if>
+      <if test="dangerPreMeasures != null" >
+        danger_pre_measures,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dangerPointId != null" >
+        #{dangerPointId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeId != null" >
+        #{knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="dangerNumber != null" >
+        #{dangerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="dangerDangerSource != null" >
+        #{dangerDangerSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dangerPreMeasures != null" >
+        #{dangerPreMeasures,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderDangerPointExample" resultType="java.lang.Integer" >
+    select count(*) from workorder_danger_point
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update workorder_danger_point
+    <set >
+      <if test="record.dangerPointId != null" >
+        danger_point_id = #{record.dangerPointId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderId != null" >
+        workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.knowledgeId != null" >
+        knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dangerNumber != null" >
+        danger_number = #{record.dangerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dangerDangerSource != null" >
+        danger_danger_source = #{record.dangerDangerSource,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dangerPreMeasures != null" >
+        danger_pre_measures = #{record.dangerPreMeasures,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update workorder_danger_point
+    set danger_point_id = #{record.dangerPointId,jdbcType=VARCHAR},
+      workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      danger_number = #{record.dangerNumber,jdbcType=VARCHAR},
+      danger_danger_source = #{record.dangerDangerSource,jdbcType=VARCHAR},
+      danger_pre_measures = #{record.dangerPreMeasures,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderDangerPoint" >
+    update workorder_danger_point
+    <set >
+      <if test="workorderId != null" >
+        workorder_id = #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeId != null" >
+        knowledge_id = #{knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="dangerNumber != null" >
+        danger_number = #{dangerNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="dangerDangerSource != null" >
+        danger_danger_source = #{dangerDangerSource,jdbcType=VARCHAR},
+      </if>
+      <if test="dangerPreMeasures != null" >
+        danger_pre_measures = #{dangerPreMeasures,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where danger_point_id = #{dangerPointId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.WorkorderDangerPoint" >
+    update workorder_danger_point
+    set workorder_id = #{workorderId,jdbcType=VARCHAR},
+      knowledge_id = #{knowledgeId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      danger_number = #{dangerNumber,jdbcType=VARCHAR},
+      danger_danger_source = #{dangerDangerSource,jdbcType=VARCHAR},
+      danger_pre_measures = #{dangerPreMeasures,jdbcType=VARCHAR}
+    where danger_point_id = #{dangerPointId,jdbcType=VARCHAR}
+  </update>
+</mapper>

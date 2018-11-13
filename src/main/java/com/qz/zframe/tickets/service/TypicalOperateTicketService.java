@@ -2,26 +2,17 @@ package com.qz.zframe.tickets.service;
 
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
-import com.qz.zframe.tickets.entity.TypicalOperateTicket;
+import com.qz.zframe.tickets.vo.TypicalOperateTicketVo;
+import com.qz.zframe.tickets.vo.WorkTicketTypeVo;
 
 import java.util.Map;
 
 public interface TypicalOperateTicketService {
 
     /**
-     * 典型操作票列表分页+条件查询
-     */
-    public PageResultEntity getTypicalOperateTicketList(Map<String, String> pageAndCondition);
-
-    /**
-     * 新增典型操作票
-     */
-    public ResultEntity createTypicalOperateTicket();
-
-    /**
      * 添加典型操作票
      */
-    public ResultEntity addTypicalOperateTicket(TypicalOperateTicket typicalOperateTicket);
+    public ResultEntity addTypicalOperateTicket(TypicalOperateTicketVo typicalOperateTicketVo);
 
     /**
      * 删除典型操作票
@@ -31,10 +22,15 @@ public interface TypicalOperateTicketService {
     /**
      * 修改典型操作票
      */
-    public ResultEntity updateTypicalOperateTicket(TypicalOperateTicket typicalOperateTicket);
+    public ResultEntity updateTypicalOperateTicket(TypicalOperateTicketVo typicalOperateTicketVo);
 
     /**
      * 查询典型操作票详情
      */
-    public ResultEntity selectTypicalOperateTicket(String typicalTicketId);
+    public ResultEntity getTypicalOperateTicketDetail(String typicalTicketId);
+
+    /**
+     * 典型操作票列表分页+条件查询
+     */
+    public PageResultEntity getTypicalOperateTicketList(Map<String, String> pageAndCondition);
 }

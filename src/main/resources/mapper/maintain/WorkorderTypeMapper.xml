@@ -73,6 +73,12 @@
     maintain_date, remark
   </sql>
 
+
+
+
+
+
+
   <update id="batchDelete" parameterType="java.lang.String">
     update workorder_type set status = "0"
     where workorder_type_id in
@@ -81,6 +87,13 @@
       #{item}
     </foreach>
   </update>
+
+
+
+
+
+
+
 
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderTypeExample" >
     select

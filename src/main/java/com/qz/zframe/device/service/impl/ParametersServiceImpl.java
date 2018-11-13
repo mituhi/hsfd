@@ -15,7 +15,6 @@ import com.qz.zframe.common.util.UUIdUtil;
 import com.qz.zframe.device.dao.ParametersMapper;
 import com.qz.zframe.device.entity.Parameters;
 import com.qz.zframe.device.entity.ParametersExample;
-import com.qz.zframe.device.entity.PositionEncode;
 import com.qz.zframe.device.service.ParametersService;
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -33,7 +32,7 @@ public class ParametersServiceImpl implements ParametersService {
 		} else { 
 			list = parametersMapper.selectByExample(parametersExample);
 		}
-		resultEntity.setCode(0);
+		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setRows(list);
 		return resultEntity;
 	}
@@ -44,10 +43,10 @@ public class ParametersServiceImpl implements ParametersService {
 		parameters.setParameterId(UUIdUtil.getUUID());
 		int save = parametersMapper.insert(parameters);
 		if (save == 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("新增失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("新增成功");
 		}
 		return resultEntity;
@@ -63,10 +62,10 @@ public class ParametersServiceImpl implements ParametersService {
 		} else {
 			int save = parametersMapper.updateByPrimaryKey(parameters);
 			if (save == 0) {
-				resultEntity.setCode(-1);
+				resultEntity.setCode(ErrorCode.ERROR);
 				resultEntity.setMsg("修改失败");
 			} else {
-				resultEntity.setCode(0);
+				resultEntity.setCode(ErrorCode.SUCCESS);
 				resultEntity.setMsg("修改成功");
 			}
 		}
@@ -79,11 +78,11 @@ public class ParametersServiceImpl implements ParametersService {
 		List<Parameters> list = new ArrayList<Parameters>();
 		Parameters paramerers = parametersMapper.selectByPrimaryKey(parameterId);
 		if (paramerers == null) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("查询结果有误");
 		} else {
 			list.add(paramerers);
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setRows(list);
 		}
 		return resultEntity;
@@ -94,10 +93,10 @@ public class ParametersServiceImpl implements ParametersService {
 		ResultEntity resultEntity = new ResultEntity();
 		int delete = parametersMapper.deleteByPrimaryKeyList(parameterIds);
 		if (delete < 0) {
-			resultEntity.setCode(-1);
+			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("删除失败");
 		} else {
-			resultEntity.setCode(0);
+			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("删除成功");
 		}
 		return resultEntity;

@@ -4,41 +4,63 @@
   <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.WorkTicket" >
     <id column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
     <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
-    <result column="ticket_type_id" property="ticketTypeId" jdbcType="VARCHAR" />
-    <result column="ticket_code" property="ticketCode" jdbcType="VARCHAR" />
+    <result column="work_ticket_type_id" property="workTicketTypeId" jdbcType="VARCHAR" />
+    <result column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="flow_status" property="flowStatus" jdbcType="VARCHAR" />
-    <result column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
-    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
-    <result column="departments" property="departments" jdbcType="VARCHAR" />
+    <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
     <result column="applicant" property="applicant" jdbcType="VARCHAR" />
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
     <result column="work_team" property="workTeam" jdbcType="VARCHAR" />
     <result column="work_head" property="workHead" jdbcType="VARCHAR" />
-    <result column="safety_officer" property="safetyOfficer" jdbcType="VARCHAR" />
-    <result column="location" property="location" jdbcType="VARCHAR" />
-    <result column="equipment" property="equipment" jdbcType="VARCHAR" />
-    <result column="machine_set" property="machineSet" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
     <result column="work_member" property="workMember" jdbcType="VARCHAR" />
     <result column="member_num" property="memberNum" jdbcType="INTEGER" />
-    <result column="work_unit" property="workUnit" jdbcType="VARCHAR" />
-    <result column="other_unit_member" property="otherUnitMember" jdbcType="VARCHAR" />
-    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
-    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="plan_start_time" property="planStartTime" jdbcType="TIMESTAMP" />
+    <result column="plan_end_time" property="planEndTime" jdbcType="TIMESTAMP" />
+    <result column="double_naem" property="doubleNaem" jdbcType="VARCHAR" />
     <result column="work_place" property="workPlace" jdbcType="VARCHAR" />
     <result column="work_content" property="workContent" jdbcType="VARCHAR" />
     <result column="work_condition" property="workCondition" jdbcType="VARCHAR" />
-    <result column="security_measure" property="securityMeasure" jdbcType="VARCHAR" />
-    <result column="sup_security_measure" property="supSecurityMeasure" jdbcType="VARCHAR" />
-    <result column="measure_ids" property="measureIds" jdbcType="VARCHAR" />
     <result column="signer" property="signer" jdbcType="VARCHAR" />
     <result column="sign_time" property="signTime" jdbcType="TIMESTAMP" />
+    <result column="run_main_person" property="runMainPerson" jdbcType="VARCHAR" />
+    <result column="receive_head" property="receiveHead" jdbcType="VARCHAR" />
+    <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
+    <result column="scene_licensor" property="sceneLicensor" jdbcType="VARCHAR" />
+    <result column="run_licensor" property="runLicensor" jdbcType="VARCHAR" />
     <result column="license_start_time" property="licenseStartTime" jdbcType="TIMESTAMP" />
-    <result column="license_end_time" property="licenseEndTime" jdbcType="TIMESTAMP" />
-    <result column="licensor" property="licensor" jdbcType="VARCHAR" />
+    <result column="work_team_opinion" property="workTeamOpinion" jdbcType="VARCHAR" />
+    <result column="head_change_to" property="headChangeTo" jdbcType="VARCHAR" />
+    <result column="head_change_signer" property="headChangeSigner" jdbcType="VARCHAR" />
+    <result column="head_chaneg_time" property="headChanegTime" jdbcType="TIMESTAMP" />
+    <result column="delay_time" property="delayTime" jdbcType="TIMESTAMP" />
+    <result column="delay_head" property="delayHead" jdbcType="VARCHAR" />
+    <result column="delay_head_sign_time" property="delayHeadSignTime" jdbcType="TIMESTAMP" />
+    <result column="delay_licensor" property="delayLicensor" jdbcType="VARCHAR" />
+    <result column="delay_licensor_sign_time" property="delayLicensorSignTime" jdbcType="TIMESTAMP" />
+    <result column="work_end_head" property="workEndHead" jdbcType="VARCHAR" />
+    <result column="work_end_licensor" property="workEndLicensor" jdbcType="VARCHAR" />
     <result column="work_end_time" property="workEndTime" jdbcType="TIMESTAMP" />
-    <result column="opinion" property="opinion" jdbcType="VARCHAR" />
+    <result column="ticket_end_licensor" property="ticketEndLicensor" jdbcType="VARCHAR" />
+    <result column="ticket_end_time" property="ticketEndTime" jdbcType="TIMESTAMP" />
+    <result column="unuse_wire_number" property="unuseWireNumber" jdbcType="VARCHAR" />
+    <result column="unuse_wire_num" property="unuseWireNum" jdbcType="INTEGER" />
+    <result column="knife_car_num" property="knifeCarNum" jdbcType="INTEGER" />
+    <result column="guardian" property="guardian" jdbcType="VARCHAR" />
+    <result column="guardian_place_and_cont" property="guardianPlaceAndCont" jdbcType="VARCHAR" />
+    <result column="guardian_other_thing" property="guardianOtherThing" jdbcType="VARCHAR" />
+    <result column="evaluation" property="evaluation" jdbcType="VARCHAR" />
+    <result column="evaluation_cont" property="evaluationCont" jdbcType="VARCHAR" />
+    <result column="evaluation_time" property="evaluationTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -99,14 +121,196 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    ticket_id, serial_number, ticket_type_id, ticket_code, status, flow_status, standard_ticket_id, 
-    wind_id, company_id, departments, applicant, apply_time, work_team, work_head, safety_officer, 
-    location, equipment, machine_set, work_member, member_num, work_unit, other_unit_member, 
-    start_time, end_time, work_place, work_content, work_condition, security_measure, 
-    sup_security_measure, measure_ids, signer, sign_time, license_start_time, license_end_time, 
-    licensor, work_end_time, opinion
+    ticket_id, serial_number, work_ticket_type_id, standard_ticket_id, workorder_id, 
+    order_id, maintainer, maintain_date, status, flow_status, wind_id, crew_id, applicant, 
+    apply_time, work_team, work_head, position_id, position_desc, equipment_id, equipment_desc, 
+    work_member, member_num, plan_start_time, plan_end_time, double_naem, work_place, 
+    work_content, work_condition, signer, sign_time, run_main_person, receive_head, receive_time, 
+    scene_licensor, run_licensor, license_start_time, work_team_opinion, head_change_to, 
+    head_change_signer, head_chaneg_time, delay_time, delay_head, delay_head_sign_time, 
+    delay_licensor, delay_licensor_sign_time, work_end_head, work_end_licensor, work_end_time, 
+    ticket_end_licensor, ticket_end_time, unuse_wire_number, unuse_wire_num, knife_car_num, 
+    guardian, guardian_place_and_cont, guardian_other_thing, evaluation, evaluation_cont, 
+    evaluation_time
   </sql>
 
+
+
+
+
+  <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.WorkTicketVo" >
+    <id column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="work_ticket_type_id" property="workTicketTypeId" jdbcType="VARCHAR" />
+    <result column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="flow_status" property="flowStatus" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="work_team" property="workTeam" jdbcType="VARCHAR" />
+    <result column="work_head" property="workHead" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
+    <result column="work_member" property="workMember" jdbcType="VARCHAR" />
+    <result column="member_num" property="memberNum" jdbcType="INTEGER" />
+    <result column="plan_start_time" property="planStartTime" jdbcType="TIMESTAMP" />
+    <result column="plan_end_time" property="planEndTime" jdbcType="TIMESTAMP" />
+    <result column="double_naem" property="doubleNaem" jdbcType="VARCHAR" />
+    <result column="work_place" property="workPlace" jdbcType="VARCHAR" />
+    <result column="work_content" property="workContent" jdbcType="VARCHAR" />
+    <result column="work_condition" property="workCondition" jdbcType="VARCHAR" />
+    <result column="signer" property="signer" jdbcType="VARCHAR" />
+    <result column="sign_time" property="signTime" jdbcType="TIMESTAMP" />
+    <result column="run_main_person" property="runMainPerson" jdbcType="VARCHAR" />
+    <result column="receive_head" property="receiveHead" jdbcType="VARCHAR" />
+    <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
+    <result column="scene_licensor" property="sceneLicensor" jdbcType="VARCHAR" />
+    <result column="run_licensor" property="runLicensor" jdbcType="VARCHAR" />
+    <result column="license_start_time" property="licenseStartTime" jdbcType="TIMESTAMP" />
+    <result column="work_team_opinion" property="workTeamOpinion" jdbcType="VARCHAR" />
+    <result column="head_change_to" property="headChangeTo" jdbcType="VARCHAR" />
+    <result column="head_change_signer" property="headChangeSigner" jdbcType="VARCHAR" />
+    <result column="head_chaneg_time" property="headChanegTime" jdbcType="TIMESTAMP" />
+    <result column="delay_time" property="delayTime" jdbcType="TIMESTAMP" />
+    <result column="delay_head" property="delayHead" jdbcType="VARCHAR" />
+    <result column="delay_head_sign_time" property="delayHeadSignTime" jdbcType="TIMESTAMP" />
+    <result column="delay_licensor" property="delayLicensor" jdbcType="VARCHAR" />
+    <result column="delay_licensor_sign_time" property="delayLicensorSignTime" jdbcType="TIMESTAMP" />
+    <result column="work_end_head" property="workEndHead" jdbcType="VARCHAR" />
+    <result column="work_end_licensor" property="workEndLicensor" jdbcType="VARCHAR" />
+    <result column="work_end_time" property="workEndTime" jdbcType="TIMESTAMP" />
+    <result column="ticket_end_licensor" property="ticketEndLicensor" jdbcType="VARCHAR" />
+    <result column="ticket_end_time" property="ticketEndTime" jdbcType="TIMESTAMP" />
+    <result column="unuse_wire_number" property="unuseWireNumber" jdbcType="VARCHAR" />
+    <result column="unuse_wire_num" property="unuseWireNum" jdbcType="INTEGER" />
+    <result column="knife_car_num" property="knifeCarNum" jdbcType="INTEGER" />
+    <result column="guardian" property="guardian" jdbcType="VARCHAR" />
+    <result column="guardian_place_and_cont" property="guardianPlaceAndCont" jdbcType="VARCHAR" />
+    <result column="guardian_other_thing" property="guardianOtherThing" jdbcType="VARCHAR" />
+    <result column="evaluation" property="evaluation" jdbcType="VARCHAR" />
+    <result column="evaluation_cont" property="evaluationCont" jdbcType="VARCHAR" />
+    <result column="evaluation_time" property="evaluationTime" jdbcType="TIMESTAMP" />
+    <result column="wind_name" property="windName" jdbcType="TIMESTAMP" />
+    <result column="crew_name" property="crewName" jdbcType="TIMESTAMP" />
+    <result column="position_name" property="positionName" jdbcType="TIMESTAMP" />
+    <result column="equipment_name" property="equipmentName" jdbcType="TIMESTAMP" />
+    <result column="ticket_type_name" property="ticketTypeName" jdbcType="TIMESTAMP" />
+    <result column="standard_ticket_name" property="standardTicketName" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.ticket_id as ticket_id, a.serial_number as serial_number, a.work_ticket_type_id as work_ticket_type_id,
+    a.standard_ticket_id as standard_ticket_id, a.workorder_id as workorder_id,
+    a.order_id as order_id, a.maintainer as maintainer, a.maintain_date as maintain_date, a.status as status,
+    a.flow_status as flow_status, a.wind_id as wind_id, a.crew_id as crew_id, a.applicant as applicant,
+    a.apply_time as apply_time, a.work_team as work_team, a.work_head as work_head, a.position_id as position_id,
+    a.position_desc as position_desc, a.equipment_id as equipment_id, a.equipment_desc as equipment_desc,
+    a.work_member as work_member, a.member_num as member_num, a.plan_start_time as plan_start_time, a.plan_end_time as plan_end_time,
+    a.double_naem as double_naem, a.work_place as work_place, a.work_content as work_content, a.work_condition as work_condition, a.signer as signer,
+    a.sign_time as sign_time, a.run_main_person as run_main_person, a.receive_head as receive_head, a.receive_time as receive_time,
+    a.scene_licensor as scene_licensor, a.run_licensor as run_licensor, a.license_start_time as license_start_time,
+    a.work_team_opinion as work_team_opinion, a.head_change_to as head_change_to,
+    a.head_change_signer as head_change_signer, a.head_chaneg_time as head_chaneg_time, a.delay_time as delay_time,
+    a.delay_head as delay_head, a.delay_head_sign_time as delay_head_sign_time,
+    a.delay_licensor as delay_licensor, a.delay_licensor_sign_time as delay_licensor_sign_time, a.work_end_head as work_end_head,
+    a.work_end_licensor as work_end_licensor, a.work_end_time as work_end_time,
+    a.ticket_end_licensor as ticket_end_licensor, a.ticket_end_time as ticket_end_time, a.unuse_wire_number as unuse_wire_number,
+    a.unuse_wire_num as unuse_wire_num, a.knife_car_num as knife_car_num,
+    a.guardian as guardian, a.guardian_place_and_cont as guardian_place_and_cont, a.guardian_other_thing as guardian_other_thing,
+    a.evaluation as evaluation, a.evaluation_cont as evaluation_cont, a.evaluation_time as evaluation_time,
+    b.architecture_name as wind_name,d.crew_name as crew_name,e.position_name as position_name,f.equipment_name as equipment_name,
+    g.ticket_type_name as ticket_type_name,h.standard_ticket_name as standard_ticket_name
+  </sql>
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update work_ticket set status = "0"
+    where ticket_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+  <select id="getWorkTicketDetail" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from work_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join work_ticket_type g on a.work_ticket_type_id = g.work_ticket_type_id
+    left join standard_work_ticket h on a.standard_ticket_id = h.standard_ticket_id
+    where a.status != '0' and a.ticket_id = #{ticketId}
+  </select>
+  <select id="getWorkTicketList" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from work_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join work_ticket_type g on a.work_ticket_type_id = g.work_ticket_type_id
+    left join standard_work_ticket h on a.standard_ticket_id = h.standard_ticket_id
+    where a.status != '0'
+    <if test="map.workTicketTypeId != null">
+      and a.work_ticket_type_id = #{map.workTicketTypeId}
+    </if>
+    <if test="map.windId != null">
+      and a.wind_id = #{map.windId}
+    </if>
+    <if test="map.status != null">
+      and a.status = #{map.status}
+    </if>
+    <if test="map.crewId != null">
+      and a.crew_id = #{map.crewId}
+    </if>
+    <if test="map.workContent != null">
+      and a.work_content like '%${map.workContent}%'
+    </if>
+    <if test="map.startTime != null">
+      and a.apply_time &gt;= #{map.startTime}
+    </if>
+    <if test="map.endTime != null">
+      and a.apply_time &lt;= #{map.endTime}
+    </if>
+    order by a.serial_number desc
+    limit ${map.start},${map.pageSize}
+  </select>
+  <select id="getTotal" resultType="java.lang.Integer">
+    select
+    count(*)
+    from work_ticket
+    where status != '0'
+    <if test="map.workTicketTypeId != null">
+      and work_ticket_type_id = #{map.workTicketTypeId}
+    </if>
+    <if test="map.windId != null">
+      and wind_id = #{map.windId}
+    </if>
+    <if test="map.status != null">
+      and status = #{map.status}
+    </if>
+    <if test="map.crewId != null">
+      and crew_id = #{map.crewId}
+    </if>
+    <if test="map.workContent != null">
+      and work_content like '%${map.workContent}%'
+    </if>
+    <if test="map.startTime != null">
+      and apply_time &gt;= #{map.startTime}
+    </if>
+    <if test="map.endTime != null">
+      and apply_time &lt;= #{map.endTime}
+    </if>
+  </select>
   <resultMap id="WorkTicketStatisticsMap" type="com.qz.zframe.tickets.vo.TicketStatisticsRes">
     <id column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="apply_count" property="applyCount" jdbcType="VARCHAR" />
@@ -118,86 +322,29 @@
   <select id="getWorkTicketStatisticsList" resultMap="WorkTicketStatisticsMap">
     select a.*,(a.complete_count/a.apply_count) as 'complete_rate'
     from (select wind_id,count(*) as 'apply_count',
-              sum(IF(status = '1', 1, 0)) as 'in_process_count',
-              sum(IF(status = '2', 1, 0)) as 'complete_count',
-              sum(IF(status = '0', 1, 0)) as 'invalid_count'
-              from work_ticket
-              where 1=1
-                <if test="startTime != null">
-                  and apply_time &gt;= #{startTime}
-                </if>
-                <if test="endTime != null">
-                  and apply_time &lt;= #{endTime}
-                </if>
-              group by wind_id) as a;
-  </select>
-
-  <update id="batchDelete" parameterType="java.lang.String">
-    update work_ticket set status = "0"
-    where ticket_id in
-    <foreach collection="array" index="index" item="item"
-             open="(" separator="," close=")">
-      #{item}
-    </foreach>
-  </update>
-
-  <select id="getWorkTicketListByPageAndCondition" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
+    sum(IF(status = '1', 1, 0)) as 'in_process_count',
+    sum(IF(status = '2', 1, 0)) as 'complete_count',
+    sum(IF(status = '0', 1, 0)) as 'invalid_count'
     from work_ticket
     where 1=1
-    <if test="map.windId != null">
-      and wind_id = #{map.windId}
+    <if test="startTime != null">
+      and apply_time &gt;= #{startTime}
     </if>
-    <if test="map.ticketTypeId != null">
-      and ticket_type_id = #{map.ticketTypeId}
+    <if test="endTime != null">
+      and apply_time &lt;= #{endTime}
     </if>
-    <if test="map.status != null">
-      and status = #{map.status}
-    </if>
-    <if test="map.machineSet != null">
-      and machine_set = #{map.machineSet}
-    </if>
-    <if test="map.workContent != null">
-      and work_content like '%${map.workContent}%'
-    </if>
-    <if test="map.startTime != null">
-      and apply_time &gt;= #{map.startTime}
-    </if>
-    <if test="map.endTime != null">
-      and apply_time &lt;= #{map.endTime}
-    </if>
-    order by ticket_code desc
-    limit ${map.start},${map.pageSize}
+    group by wind_id) as a;
   </select>
 
-  <select id="getTotalCount" resultType="java.lang.Integer">
-    select
-    count(*)
-    from work_ticket
-    where 1=1
-    <if test="map.windId != null">
-      and wind_id = #{map.windId}
-    </if>
-    <if test="map.ticketTypeId != null">
-      and ticket_type_id = #{map.ticketTypeId}
-    </if>
-    <if test="map.status != null">
-      and status = #{map.status}
-    </if>
-    <if test="map.machineSet != null">
-      and machine_set = #{map.machineSet}
-    </if>
-    <if test="map.workContent != null">
-      and work_content like '%${map.workContent}%'
-    </if>
-    <if test="map.applyStartTime != null">
-      and apply_time &gt;= #{map.applyStartTime}
-    </if>
-    <if test="map.applyEndTime != null">
-      and apply_time &lt;= #{map.applyEndTime}
-    </if>
-  </select>
+
+
+
+
+
+
+
+
+
 
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.WorkTicketExample" >
     select
@@ -230,32 +377,48 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.tickets.entity.WorkTicket" >
-    insert into work_ticket (ticket_id, serial_number, ticket_type_id, 
-      ticket_code, status, flow_status, 
-      standard_ticket_id, wind_id, company_id, 
-      departments, applicant, apply_time, 
-      work_team, work_head, safety_officer, 
-      location, equipment, machine_set, 
-      work_member, member_num, work_unit, 
-      other_unit_member, start_time, end_time, 
-      work_place, work_content, work_condition, 
-      security_measure, sup_security_measure, measure_ids, 
-      signer, sign_time, license_start_time, 
-      license_end_time, licensor, work_end_time, 
-      opinion)
-    values (#{ticketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{ticketTypeId,jdbcType=VARCHAR}, 
-      #{ticketCode,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{flowStatus,jdbcType=VARCHAR}, 
-      #{standardTicketId,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, 
-      #{departments,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
-      #{workTeam,jdbcType=VARCHAR}, #{workHead,jdbcType=VARCHAR}, #{safetyOfficer,jdbcType=VARCHAR}, 
-      #{location,jdbcType=VARCHAR}, #{equipment,jdbcType=VARCHAR}, #{machineSet,jdbcType=VARCHAR}, 
-      #{workMember,jdbcType=VARCHAR}, #{memberNum,jdbcType=INTEGER}, #{workUnit,jdbcType=VARCHAR}, 
-      #{otherUnitMember,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{workPlace,jdbcType=VARCHAR}, #{workContent,jdbcType=VARCHAR}, #{workCondition,jdbcType=VARCHAR}, 
-      #{securityMeasure,jdbcType=VARCHAR}, #{supSecurityMeasure,jdbcType=VARCHAR}, #{measureIds,jdbcType=VARCHAR}, 
-      #{signer,jdbcType=VARCHAR}, #{signTime,jdbcType=TIMESTAMP}, #{licenseStartTime,jdbcType=TIMESTAMP}, 
-      #{licenseEndTime,jdbcType=TIMESTAMP}, #{licensor,jdbcType=VARCHAR}, #{workEndTime,jdbcType=TIMESTAMP}, 
-      #{opinion,jdbcType=VARCHAR})
+    insert into work_ticket (ticket_id, serial_number, work_ticket_type_id, 
+      standard_ticket_id, workorder_id, order_id, 
+      maintainer, maintain_date, status, 
+      flow_status, wind_id, crew_id, 
+      applicant, apply_time, work_team, 
+      work_head, position_id, position_desc, 
+      equipment_id, equipment_desc, work_member, 
+      member_num, plan_start_time, plan_end_time, 
+      double_naem, work_place, work_content, 
+      work_condition, signer, sign_time, 
+      run_main_person, receive_head, receive_time, 
+      scene_licensor, run_licensor, license_start_time, 
+      work_team_opinion, head_change_to, head_change_signer, 
+      head_chaneg_time, delay_time, delay_head, 
+      delay_head_sign_time, delay_licensor, delay_licensor_sign_time, 
+      work_end_head, work_end_licensor, work_end_time, 
+      ticket_end_licensor, ticket_end_time, unuse_wire_number, 
+      unuse_wire_num, knife_car_num, guardian, 
+      guardian_place_and_cont, guardian_other_thing, 
+      evaluation, evaluation_cont, evaluation_time
+      )
+    values (#{ticketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{workTicketTypeId,jdbcType=VARCHAR}, 
+      #{standardTicketId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, 
+      #{flowStatus,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{crewId,jdbcType=VARCHAR}, 
+      #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, #{workTeam,jdbcType=VARCHAR}, 
+      #{workHead,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}, #{positionDesc,jdbcType=VARCHAR}, 
+      #{equipmentId,jdbcType=VARCHAR}, #{equipmentDesc,jdbcType=VARCHAR}, #{workMember,jdbcType=VARCHAR}, 
+      #{memberNum,jdbcType=INTEGER}, #{planStartTime,jdbcType=TIMESTAMP}, #{planEndTime,jdbcType=TIMESTAMP}, 
+      #{doubleNaem,jdbcType=VARCHAR}, #{workPlace,jdbcType=VARCHAR}, #{workContent,jdbcType=VARCHAR}, 
+      #{workCondition,jdbcType=VARCHAR}, #{signer,jdbcType=VARCHAR}, #{signTime,jdbcType=TIMESTAMP}, 
+      #{runMainPerson,jdbcType=VARCHAR}, #{receiveHead,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{sceneLicensor,jdbcType=VARCHAR}, #{runLicensor,jdbcType=VARCHAR}, #{licenseStartTime,jdbcType=TIMESTAMP}, 
+      #{workTeamOpinion,jdbcType=VARCHAR}, #{headChangeTo,jdbcType=VARCHAR}, #{headChangeSigner,jdbcType=VARCHAR}, 
+      #{headChanegTime,jdbcType=TIMESTAMP}, #{delayTime,jdbcType=TIMESTAMP}, #{delayHead,jdbcType=VARCHAR}, 
+      #{delayHeadSignTime,jdbcType=TIMESTAMP}, #{delayLicensor,jdbcType=VARCHAR}, #{delayLicensorSignTime,jdbcType=TIMESTAMP}, 
+      #{workEndHead,jdbcType=VARCHAR}, #{workEndLicensor,jdbcType=VARCHAR}, #{workEndTime,jdbcType=TIMESTAMP}, 
+      #{ticketEndLicensor,jdbcType=VARCHAR}, #{ticketEndTime,jdbcType=TIMESTAMP}, #{unuseWireNumber,jdbcType=VARCHAR}, 
+      #{unuseWireNum,jdbcType=INTEGER}, #{knifeCarNum,jdbcType=INTEGER}, #{guardian,jdbcType=VARCHAR}, 
+      #{guardianPlaceAndCont,jdbcType=VARCHAR}, #{guardianOtherThing,jdbcType=VARCHAR}, 
+      #{evaluation,jdbcType=VARCHAR}, #{evaluationCont,jdbcType=VARCHAR}, #{evaluationTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.WorkTicket" >
     insert into work_ticket
@@ -266,11 +429,23 @@
       <if test="serialNumber != null" >
         serial_number,
       </if>
-      <if test="ticketTypeId != null" >
-        ticket_type_id,
+      <if test="workTicketTypeId != null" >
+        work_ticket_type_id,
       </if>
-      <if test="ticketCode != null" >
-        ticket_code,
+      <if test="standardTicketId != null" >
+        standard_ticket_id,
+      </if>
+      <if test="workorderId != null" >
+        workorder_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date,
       </if>
       <if test="status != null" >
         status,
@@ -278,17 +453,11 @@
       <if test="flowStatus != null" >
         flow_status,
       </if>
-      <if test="standardTicketId != null" >
-        standard_ticket_id,
-      </if>
       <if test="windId != null" >
         wind_id,
       </if>
-      <if test="companyId != null" >
-        company_id,
-      </if>
-      <if test="departments != null" >
-        departments,
+      <if test="crewId != null" >
+        crew_id,
       </if>
       <if test="applicant != null" >
         applicant,
@@ -302,17 +471,17 @@
       <if test="workHead != null" >
         work_head,
       </if>
-      <if test="safetyOfficer != null" >
-        safety_officer,
+      <if test="positionId != null" >
+        position_id,
       </if>
-      <if test="location != null" >
-        location,
+      <if test="positionDesc != null" >
+        position_desc,
       </if>
-      <if test="equipment != null" >
-        equipment,
+      <if test="equipmentId != null" >
+        equipment_id,
       </if>
-      <if test="machineSet != null" >
-        machine_set,
+      <if test="equipmentDesc != null" >
+        equipment_desc,
       </if>
       <if test="workMember != null" >
         work_member,
@@ -320,17 +489,14 @@
       <if test="memberNum != null" >
         member_num,
       </if>
-      <if test="workUnit != null" >
-        work_unit,
+      <if test="planStartTime != null" >
+        plan_start_time,
       </if>
-      <if test="otherUnitMember != null" >
-        other_unit_member,
+      <if test="planEndTime != null" >
+        plan_end_time,
       </if>
-      <if test="startTime != null" >
-        start_time,
-      </if>
-      <if test="endTime != null" >
-        end_time,
+      <if test="doubleNaem != null" >
+        double_naem,
       </if>
       <if test="workPlace != null" >
         work_place,
@@ -341,35 +507,98 @@
       <if test="workCondition != null" >
         work_condition,
       </if>
-      <if test="securityMeasure != null" >
-        security_measure,
-      </if>
-      <if test="supSecurityMeasure != null" >
-        sup_security_measure,
-      </if>
-      <if test="measureIds != null" >
-        measure_ids,
-      </if>
       <if test="signer != null" >
         signer,
       </if>
       <if test="signTime != null" >
         sign_time,
       </if>
+      <if test="runMainPerson != null" >
+        run_main_person,
+      </if>
+      <if test="receiveHead != null" >
+        receive_head,
+      </if>
+      <if test="receiveTime != null" >
+        receive_time,
+      </if>
+      <if test="sceneLicensor != null" >
+        scene_licensor,
+      </if>
+      <if test="runLicensor != null" >
+        run_licensor,
+      </if>
       <if test="licenseStartTime != null" >
         license_start_time,
       </if>
-      <if test="licenseEndTime != null" >
-        license_end_time,
+      <if test="workTeamOpinion != null" >
+        work_team_opinion,
       </if>
-      <if test="licensor != null" >
-        licensor,
+      <if test="headChangeTo != null" >
+        head_change_to,
+      </if>
+      <if test="headChangeSigner != null" >
+        head_change_signer,
+      </if>
+      <if test="headChanegTime != null" >
+        head_chaneg_time,
+      </if>
+      <if test="delayTime != null" >
+        delay_time,
+      </if>
+      <if test="delayHead != null" >
+        delay_head,
+      </if>
+      <if test="delayHeadSignTime != null" >
+        delay_head_sign_time,
+      </if>
+      <if test="delayLicensor != null" >
+        delay_licensor,
+      </if>
+      <if test="delayLicensorSignTime != null" >
+        delay_licensor_sign_time,
+      </if>
+      <if test="workEndHead != null" >
+        work_end_head,
+      </if>
+      <if test="workEndLicensor != null" >
+        work_end_licensor,
       </if>
       <if test="workEndTime != null" >
         work_end_time,
       </if>
-      <if test="opinion != null" >
-        opinion,
+      <if test="ticketEndLicensor != null" >
+        ticket_end_licensor,
+      </if>
+      <if test="ticketEndTime != null" >
+        ticket_end_time,
+      </if>
+      <if test="unuseWireNumber != null" >
+        unuse_wire_number,
+      </if>
+      <if test="unuseWireNum != null" >
+        unuse_wire_num,
+      </if>
+      <if test="knifeCarNum != null" >
+        knife_car_num,
+      </if>
+      <if test="guardian != null" >
+        guardian,
+      </if>
+      <if test="guardianPlaceAndCont != null" >
+        guardian_place_and_cont,
+      </if>
+      <if test="guardianOtherThing != null" >
+        guardian_other_thing,
+      </if>
+      <if test="evaluation != null" >
+        evaluation,
+      </if>
+      <if test="evaluationCont != null" >
+        evaluation_cont,
+      </if>
+      <if test="evaluationTime != null" >
+        evaluation_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -379,11 +608,23 @@
       <if test="serialNumber != null" >
         #{serialNumber,jdbcType=VARCHAR},
       </if>
-      <if test="ticketTypeId != null" >
-        #{ticketTypeId,jdbcType=VARCHAR},
+      <if test="workTicketTypeId != null" >
+        #{workTicketTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="ticketCode != null" >
-        #{ticketCode,jdbcType=VARCHAR},
+      <if test="standardTicketId != null" >
+        #{standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        #{maintainDate,jdbcType=DATE},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
@@ -391,17 +632,11 @@
       <if test="flowStatus != null" >
         #{flowStatus,jdbcType=VARCHAR},
       </if>
-      <if test="standardTicketId != null" >
-        #{standardTicketId,jdbcType=VARCHAR},
-      </if>
       <if test="windId != null" >
         #{windId,jdbcType=VARCHAR},
       </if>
-      <if test="companyId != null" >
-        #{companyId,jdbcType=VARCHAR},
-      </if>
-      <if test="departments != null" >
-        #{departments,jdbcType=VARCHAR},
+      <if test="crewId != null" >
+        #{crewId,jdbcType=VARCHAR},
       </if>
       <if test="applicant != null" >
         #{applicant,jdbcType=VARCHAR},
@@ -415,17 +650,17 @@
       <if test="workHead != null" >
         #{workHead,jdbcType=VARCHAR},
       </if>
-      <if test="safetyOfficer != null" >
-        #{safetyOfficer,jdbcType=VARCHAR},
+      <if test="positionId != null" >
+        #{positionId,jdbcType=VARCHAR},
       </if>
-      <if test="location != null" >
-        #{location,jdbcType=VARCHAR},
+      <if test="positionDesc != null" >
+        #{positionDesc,jdbcType=VARCHAR},
       </if>
-      <if test="equipment != null" >
-        #{equipment,jdbcType=VARCHAR},
+      <if test="equipmentId != null" >
+        #{equipmentId,jdbcType=VARCHAR},
       </if>
-      <if test="machineSet != null" >
-        #{machineSet,jdbcType=VARCHAR},
+      <if test="equipmentDesc != null" >
+        #{equipmentDesc,jdbcType=VARCHAR},
       </if>
       <if test="workMember != null" >
         #{workMember,jdbcType=VARCHAR},
@@ -433,17 +668,14 @@
       <if test="memberNum != null" >
         #{memberNum,jdbcType=INTEGER},
       </if>
-      <if test="workUnit != null" >
-        #{workUnit,jdbcType=VARCHAR},
+      <if test="planStartTime != null" >
+        #{planStartTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="otherUnitMember != null" >
-        #{otherUnitMember,jdbcType=VARCHAR},
+      <if test="planEndTime != null" >
+        #{planEndTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="startTime != null" >
-        #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null" >
-        #{endTime,jdbcType=TIMESTAMP},
+      <if test="doubleNaem != null" >
+        #{doubleNaem,jdbcType=VARCHAR},
       </if>
       <if test="workPlace != null" >
         #{workPlace,jdbcType=VARCHAR},
@@ -454,35 +686,98 @@
       <if test="workCondition != null" >
         #{workCondition,jdbcType=VARCHAR},
       </if>
-      <if test="securityMeasure != null" >
-        #{securityMeasure,jdbcType=VARCHAR},
-      </if>
-      <if test="supSecurityMeasure != null" >
-        #{supSecurityMeasure,jdbcType=VARCHAR},
-      </if>
-      <if test="measureIds != null" >
-        #{measureIds,jdbcType=VARCHAR},
-      </if>
       <if test="signer != null" >
         #{signer,jdbcType=VARCHAR},
       </if>
       <if test="signTime != null" >
         #{signTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="runMainPerson != null" >
+        #{runMainPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveHead != null" >
+        #{receiveHead,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null" >
+        #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sceneLicensor != null" >
+        #{sceneLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="runLicensor != null" >
+        #{runLicensor,jdbcType=VARCHAR},
+      </if>
       <if test="licenseStartTime != null" >
         #{licenseStartTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="licenseEndTime != null" >
-        #{licenseEndTime,jdbcType=TIMESTAMP},
+      <if test="workTeamOpinion != null" >
+        #{workTeamOpinion,jdbcType=VARCHAR},
       </if>
-      <if test="licensor != null" >
-        #{licensor,jdbcType=VARCHAR},
+      <if test="headChangeTo != null" >
+        #{headChangeTo,jdbcType=VARCHAR},
+      </if>
+      <if test="headChangeSigner != null" >
+        #{headChangeSigner,jdbcType=VARCHAR},
+      </if>
+      <if test="headChanegTime != null" >
+        #{headChanegTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delayTime != null" >
+        #{delayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delayHead != null" >
+        #{delayHead,jdbcType=VARCHAR},
+      </if>
+      <if test="delayHeadSignTime != null" >
+        #{delayHeadSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delayLicensor != null" >
+        #{delayLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="delayLicensorSignTime != null" >
+        #{delayLicensorSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workEndHead != null" >
+        #{workEndHead,jdbcType=VARCHAR},
+      </if>
+      <if test="workEndLicensor != null" >
+        #{workEndLicensor,jdbcType=VARCHAR},
       </if>
       <if test="workEndTime != null" >
         #{workEndTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="opinion != null" >
-        #{opinion,jdbcType=VARCHAR},
+      <if test="ticketEndLicensor != null" >
+        #{ticketEndLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketEndTime != null" >
+        #{ticketEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unuseWireNumber != null" >
+        #{unuseWireNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="unuseWireNum != null" >
+        #{unuseWireNum,jdbcType=INTEGER},
+      </if>
+      <if test="knifeCarNum != null" >
+        #{knifeCarNum,jdbcType=INTEGER},
+      </if>
+      <if test="guardian != null" >
+        #{guardian,jdbcType=VARCHAR},
+      </if>
+      <if test="guardianPlaceAndCont != null" >
+        #{guardianPlaceAndCont,jdbcType=VARCHAR},
+      </if>
+      <if test="guardianOtherThing != null" >
+        #{guardianOtherThing,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluation != null" >
+        #{evaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationCont != null" >
+        #{evaluationCont,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationTime != null" >
+        #{evaluationTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -501,11 +796,23 @@
       <if test="record.serialNumber != null" >
         serial_number = #{record.serialNumber,jdbcType=VARCHAR},
       </if>
-      <if test="record.ticketTypeId != null" >
-        ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      <if test="record.workTicketTypeId != null" >
+        work_ticket_type_id = #{record.workTicketTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="record.ticketCode != null" >
-        ticket_code = #{record.ticketCode,jdbcType=VARCHAR},
+      <if test="record.standardTicketId != null" >
+        standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderId != null" >
+        workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainDate != null" >
+        maintain_date = #{record.maintainDate,jdbcType=DATE},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
@@ -513,17 +820,11 @@
       <if test="record.flowStatus != null" >
         flow_status = #{record.flowStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.standardTicketId != null" >
-        standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
-      </if>
       <if test="record.windId != null" >
         wind_id = #{record.windId,jdbcType=VARCHAR},
       </if>
-      <if test="record.companyId != null" >
-        company_id = #{record.companyId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.departments != null" >
-        departments = #{record.departments,jdbcType=VARCHAR},
+      <if test="record.crewId != null" >
+        crew_id = #{record.crewId,jdbcType=VARCHAR},
       </if>
       <if test="record.applicant != null" >
         applicant = #{record.applicant,jdbcType=VARCHAR},
@@ -537,17 +838,17 @@
       <if test="record.workHead != null" >
         work_head = #{record.workHead,jdbcType=VARCHAR},
       </if>
-      <if test="record.safetyOfficer != null" >
-        safety_officer = #{record.safetyOfficer,jdbcType=VARCHAR},
+      <if test="record.positionId != null" >
+        position_id = #{record.positionId,jdbcType=VARCHAR},
       </if>
-      <if test="record.location != null" >
-        location = #{record.location,jdbcType=VARCHAR},
+      <if test="record.positionDesc != null" >
+        position_desc = #{record.positionDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.equipment != null" >
-        equipment = #{record.equipment,jdbcType=VARCHAR},
+      <if test="record.equipmentId != null" >
+        equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
       </if>
-      <if test="record.machineSet != null" >
-        machine_set = #{record.machineSet,jdbcType=VARCHAR},
+      <if test="record.equipmentDesc != null" >
+        equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
       </if>
       <if test="record.workMember != null" >
         work_member = #{record.workMember,jdbcType=VARCHAR},
@@ -555,17 +856,14 @@
       <if test="record.memberNum != null" >
         member_num = #{record.memberNum,jdbcType=INTEGER},
       </if>
-      <if test="record.workUnit != null" >
-        work_unit = #{record.workUnit,jdbcType=VARCHAR},
+      <if test="record.planStartTime != null" >
+        plan_start_time = #{record.planStartTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.otherUnitMember != null" >
-        other_unit_member = #{record.otherUnitMember,jdbcType=VARCHAR},
+      <if test="record.planEndTime != null" >
+        plan_end_time = #{record.planEndTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.startTime != null" >
-        start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.endTime != null" >
-        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      <if test="record.doubleNaem != null" >
+        double_naem = #{record.doubleNaem,jdbcType=VARCHAR},
       </if>
       <if test="record.workPlace != null" >
         work_place = #{record.workPlace,jdbcType=VARCHAR},
@@ -576,35 +874,98 @@
       <if test="record.workCondition != null" >
         work_condition = #{record.workCondition,jdbcType=VARCHAR},
       </if>
-      <if test="record.securityMeasure != null" >
-        security_measure = #{record.securityMeasure,jdbcType=VARCHAR},
-      </if>
-      <if test="record.supSecurityMeasure != null" >
-        sup_security_measure = #{record.supSecurityMeasure,jdbcType=VARCHAR},
-      </if>
-      <if test="record.measureIds != null" >
-        measure_ids = #{record.measureIds,jdbcType=VARCHAR},
-      </if>
       <if test="record.signer != null" >
         signer = #{record.signer,jdbcType=VARCHAR},
       </if>
       <if test="record.signTime != null" >
         sign_time = #{record.signTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.runMainPerson != null" >
+        run_main_person = #{record.runMainPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiveHead != null" >
+        receive_head = #{record.receiveHead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiveTime != null" >
+        receive_time = #{record.receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sceneLicensor != null" >
+        scene_licensor = #{record.sceneLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runLicensor != null" >
+        run_licensor = #{record.runLicensor,jdbcType=VARCHAR},
+      </if>
       <if test="record.licenseStartTime != null" >
         license_start_time = #{record.licenseStartTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.licenseEndTime != null" >
-        license_end_time = #{record.licenseEndTime,jdbcType=TIMESTAMP},
+      <if test="record.workTeamOpinion != null" >
+        work_team_opinion = #{record.workTeamOpinion,jdbcType=VARCHAR},
       </if>
-      <if test="record.licensor != null" >
-        licensor = #{record.licensor,jdbcType=VARCHAR},
+      <if test="record.headChangeTo != null" >
+        head_change_to = #{record.headChangeTo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headChangeSigner != null" >
+        head_change_signer = #{record.headChangeSigner,jdbcType=VARCHAR},
+      </if>
+      <if test="record.headChanegTime != null" >
+        head_chaneg_time = #{record.headChanegTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delayTime != null" >
+        delay_time = #{record.delayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delayHead != null" >
+        delay_head = #{record.delayHead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delayHeadSignTime != null" >
+        delay_head_sign_time = #{record.delayHeadSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.delayLicensor != null" >
+        delay_licensor = #{record.delayLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delayLicensorSignTime != null" >
+        delay_licensor_sign_time = #{record.delayLicensorSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.workEndHead != null" >
+        work_end_head = #{record.workEndHead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workEndLicensor != null" >
+        work_end_licensor = #{record.workEndLicensor,jdbcType=VARCHAR},
       </if>
       <if test="record.workEndTime != null" >
         work_end_time = #{record.workEndTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.opinion != null" >
-        opinion = #{record.opinion,jdbcType=VARCHAR},
+      <if test="record.ticketEndLicensor != null" >
+        ticket_end_licensor = #{record.ticketEndLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketEndTime != null" >
+        ticket_end_time = #{record.ticketEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.unuseWireNumber != null" >
+        unuse_wire_number = #{record.unuseWireNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unuseWireNum != null" >
+        unuse_wire_num = #{record.unuseWireNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.knifeCarNum != null" >
+        knife_car_num = #{record.knifeCarNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.guardian != null" >
+        guardian = #{record.guardian,jdbcType=VARCHAR},
+      </if>
+      <if test="record.guardianPlaceAndCont != null" >
+        guardian_place_and_cont = #{record.guardianPlaceAndCont,jdbcType=VARCHAR},
+      </if>
+      <if test="record.guardianOtherThing != null" >
+        guardian_other_thing = #{record.guardianOtherThing,jdbcType=VARCHAR},
+      </if>
+      <if test="record.evaluation != null" >
+        evaluation = #{record.evaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.evaluationCont != null" >
+        evaluation_cont = #{record.evaluationCont,jdbcType=VARCHAR},
+      </if>
+      <if test="record.evaluationTime != null" >
+        evaluation_time = #{record.evaluationTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -615,41 +976,63 @@
     update work_ticket
     set ticket_id = #{record.ticketId,jdbcType=VARCHAR},
       serial_number = #{record.serialNumber,jdbcType=VARCHAR},
-      ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
-      ticket_code = #{record.ticketCode,jdbcType=VARCHAR},
+      work_ticket_type_id = #{record.workTicketTypeId,jdbcType=VARCHAR},
+      standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_date = #{record.maintainDate,jdbcType=DATE},
       status = #{record.status,jdbcType=VARCHAR},
       flow_status = #{record.flowStatus,jdbcType=VARCHAR},
-      standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
       wind_id = #{record.windId,jdbcType=VARCHAR},
-      company_id = #{record.companyId,jdbcType=VARCHAR},
-      departments = #{record.departments,jdbcType=VARCHAR},
+      crew_id = #{record.crewId,jdbcType=VARCHAR},
       applicant = #{record.applicant,jdbcType=VARCHAR},
       apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
       work_team = #{record.workTeam,jdbcType=VARCHAR},
       work_head = #{record.workHead,jdbcType=VARCHAR},
-      safety_officer = #{record.safetyOfficer,jdbcType=VARCHAR},
-      location = #{record.location,jdbcType=VARCHAR},
-      equipment = #{record.equipment,jdbcType=VARCHAR},
-      machine_set = #{record.machineSet,jdbcType=VARCHAR},
+      position_id = #{record.positionId,jdbcType=VARCHAR},
+      position_desc = #{record.positionDesc,jdbcType=VARCHAR},
+      equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{record.equipmentDesc,jdbcType=VARCHAR},
       work_member = #{record.workMember,jdbcType=VARCHAR},
       member_num = #{record.memberNum,jdbcType=INTEGER},
-      work_unit = #{record.workUnit,jdbcType=VARCHAR},
-      other_unit_member = #{record.otherUnitMember,jdbcType=VARCHAR},
-      start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      plan_start_time = #{record.planStartTime,jdbcType=TIMESTAMP},
+      plan_end_time = #{record.planEndTime,jdbcType=TIMESTAMP},
+      double_naem = #{record.doubleNaem,jdbcType=VARCHAR},
       work_place = #{record.workPlace,jdbcType=VARCHAR},
       work_content = #{record.workContent,jdbcType=VARCHAR},
       work_condition = #{record.workCondition,jdbcType=VARCHAR},
-      security_measure = #{record.securityMeasure,jdbcType=VARCHAR},
-      sup_security_measure = #{record.supSecurityMeasure,jdbcType=VARCHAR},
-      measure_ids = #{record.measureIds,jdbcType=VARCHAR},
       signer = #{record.signer,jdbcType=VARCHAR},
       sign_time = #{record.signTime,jdbcType=TIMESTAMP},
+      run_main_person = #{record.runMainPerson,jdbcType=VARCHAR},
+      receive_head = #{record.receiveHead,jdbcType=VARCHAR},
+      receive_time = #{record.receiveTime,jdbcType=TIMESTAMP},
+      scene_licensor = #{record.sceneLicensor,jdbcType=VARCHAR},
+      run_licensor = #{record.runLicensor,jdbcType=VARCHAR},
       license_start_time = #{record.licenseStartTime,jdbcType=TIMESTAMP},
-      license_end_time = #{record.licenseEndTime,jdbcType=TIMESTAMP},
-      licensor = #{record.licensor,jdbcType=VARCHAR},
+      work_team_opinion = #{record.workTeamOpinion,jdbcType=VARCHAR},
+      head_change_to = #{record.headChangeTo,jdbcType=VARCHAR},
+      head_change_signer = #{record.headChangeSigner,jdbcType=VARCHAR},
+      head_chaneg_time = #{record.headChanegTime,jdbcType=TIMESTAMP},
+      delay_time = #{record.delayTime,jdbcType=TIMESTAMP},
+      delay_head = #{record.delayHead,jdbcType=VARCHAR},
+      delay_head_sign_time = #{record.delayHeadSignTime,jdbcType=TIMESTAMP},
+      delay_licensor = #{record.delayLicensor,jdbcType=VARCHAR},
+      delay_licensor_sign_time = #{record.delayLicensorSignTime,jdbcType=TIMESTAMP},
+      work_end_head = #{record.workEndHead,jdbcType=VARCHAR},
+      work_end_licensor = #{record.workEndLicensor,jdbcType=VARCHAR},
       work_end_time = #{record.workEndTime,jdbcType=TIMESTAMP},
-      opinion = #{record.opinion,jdbcType=VARCHAR}
+      ticket_end_licensor = #{record.ticketEndLicensor,jdbcType=VARCHAR},
+      ticket_end_time = #{record.ticketEndTime,jdbcType=TIMESTAMP},
+      unuse_wire_number = #{record.unuseWireNumber,jdbcType=VARCHAR},
+      unuse_wire_num = #{record.unuseWireNum,jdbcType=INTEGER},
+      knife_car_num = #{record.knifeCarNum,jdbcType=INTEGER},
+      guardian = #{record.guardian,jdbcType=VARCHAR},
+      guardian_place_and_cont = #{record.guardianPlaceAndCont,jdbcType=VARCHAR},
+      guardian_other_thing = #{record.guardianOtherThing,jdbcType=VARCHAR},
+      evaluation = #{record.evaluation,jdbcType=VARCHAR},
+      evaluation_cont = #{record.evaluationCont,jdbcType=VARCHAR},
+      evaluation_time = #{record.evaluationTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -660,11 +1043,23 @@
       <if test="serialNumber != null" >
         serial_number = #{serialNumber,jdbcType=VARCHAR},
       </if>
-      <if test="ticketTypeId != null" >
-        ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      <if test="workTicketTypeId != null" >
+        work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="ticketCode != null" >
-        ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      <if test="standardTicketId != null" >
+        standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        workorder_id = #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date = #{maintainDate,jdbcType=DATE},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -672,17 +1067,11 @@
       <if test="flowStatus != null" >
         flow_status = #{flowStatus,jdbcType=VARCHAR},
       </if>
-      <if test="standardTicketId != null" >
-        standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
-      </if>
       <if test="windId != null" >
         wind_id = #{windId,jdbcType=VARCHAR},
       </if>
-      <if test="companyId != null" >
-        company_id = #{companyId,jdbcType=VARCHAR},
-      </if>
-      <if test="departments != null" >
-        departments = #{departments,jdbcType=VARCHAR},
+      <if test="crewId != null" >
+        crew_id = #{crewId,jdbcType=VARCHAR},
       </if>
       <if test="applicant != null" >
         applicant = #{applicant,jdbcType=VARCHAR},
@@ -696,17 +1085,17 @@
       <if test="workHead != null" >
         work_head = #{workHead,jdbcType=VARCHAR},
       </if>
-      <if test="safetyOfficer != null" >
-        safety_officer = #{safetyOfficer,jdbcType=VARCHAR},
+      <if test="positionId != null" >
+        position_id = #{positionId,jdbcType=VARCHAR},
       </if>
-      <if test="location != null" >
-        location = #{location,jdbcType=VARCHAR},
+      <if test="positionDesc != null" >
+        position_desc = #{positionDesc,jdbcType=VARCHAR},
       </if>
-      <if test="equipment != null" >
-        equipment = #{equipment,jdbcType=VARCHAR},
+      <if test="equipmentId != null" >
+        equipment_id = #{equipmentId,jdbcType=VARCHAR},
       </if>
-      <if test="machineSet != null" >
-        machine_set = #{machineSet,jdbcType=VARCHAR},
+      <if test="equipmentDesc != null" >
+        equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
       </if>
       <if test="workMember != null" >
         work_member = #{workMember,jdbcType=VARCHAR},
@@ -714,17 +1103,14 @@
       <if test="memberNum != null" >
         member_num = #{memberNum,jdbcType=INTEGER},
       </if>
-      <if test="workUnit != null" >
-        work_unit = #{workUnit,jdbcType=VARCHAR},
+      <if test="planStartTime != null" >
+        plan_start_time = #{planStartTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="otherUnitMember != null" >
-        other_unit_member = #{otherUnitMember,jdbcType=VARCHAR},
+      <if test="planEndTime != null" >
+        plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="startTime != null" >
-        start_time = #{startTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="endTime != null" >
-        end_time = #{endTime,jdbcType=TIMESTAMP},
+      <if test="doubleNaem != null" >
+        double_naem = #{doubleNaem,jdbcType=VARCHAR},
       </if>
       <if test="workPlace != null" >
         work_place = #{workPlace,jdbcType=VARCHAR},
@@ -735,35 +1121,98 @@
       <if test="workCondition != null" >
         work_condition = #{workCondition,jdbcType=VARCHAR},
       </if>
-      <if test="securityMeasure != null" >
-        security_measure = #{securityMeasure,jdbcType=VARCHAR},
-      </if>
-      <if test="supSecurityMeasure != null" >
-        sup_security_measure = #{supSecurityMeasure,jdbcType=VARCHAR},
-      </if>
-      <if test="measureIds != null" >
-        measure_ids = #{measureIds,jdbcType=VARCHAR},
-      </if>
       <if test="signer != null" >
         signer = #{signer,jdbcType=VARCHAR},
       </if>
       <if test="signTime != null" >
         sign_time = #{signTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="runMainPerson != null" >
+        run_main_person = #{runMainPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveHead != null" >
+        receive_head = #{receiveHead,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null" >
+        receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sceneLicensor != null" >
+        scene_licensor = #{sceneLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="runLicensor != null" >
+        run_licensor = #{runLicensor,jdbcType=VARCHAR},
+      </if>
       <if test="licenseStartTime != null" >
         license_start_time = #{licenseStartTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="licenseEndTime != null" >
-        license_end_time = #{licenseEndTime,jdbcType=TIMESTAMP},
+      <if test="workTeamOpinion != null" >
+        work_team_opinion = #{workTeamOpinion,jdbcType=VARCHAR},
       </if>
-      <if test="licensor != null" >
-        licensor = #{licensor,jdbcType=VARCHAR},
+      <if test="headChangeTo != null" >
+        head_change_to = #{headChangeTo,jdbcType=VARCHAR},
+      </if>
+      <if test="headChangeSigner != null" >
+        head_change_signer = #{headChangeSigner,jdbcType=VARCHAR},
+      </if>
+      <if test="headChanegTime != null" >
+        head_chaneg_time = #{headChanegTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delayTime != null" >
+        delay_time = #{delayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delayHead != null" >
+        delay_head = #{delayHead,jdbcType=VARCHAR},
+      </if>
+      <if test="delayHeadSignTime != null" >
+        delay_head_sign_time = #{delayHeadSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delayLicensor != null" >
+        delay_licensor = #{delayLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="delayLicensorSignTime != null" >
+        delay_licensor_sign_time = #{delayLicensorSignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workEndHead != null" >
+        work_end_head = #{workEndHead,jdbcType=VARCHAR},
+      </if>
+      <if test="workEndLicensor != null" >
+        work_end_licensor = #{workEndLicensor,jdbcType=VARCHAR},
       </if>
       <if test="workEndTime != null" >
         work_end_time = #{workEndTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="opinion != null" >
-        opinion = #{opinion,jdbcType=VARCHAR},
+      <if test="ticketEndLicensor != null" >
+        ticket_end_licensor = #{ticketEndLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketEndTime != null" >
+        ticket_end_time = #{ticketEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unuseWireNumber != null" >
+        unuse_wire_number = #{unuseWireNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="unuseWireNum != null" >
+        unuse_wire_num = #{unuseWireNum,jdbcType=INTEGER},
+      </if>
+      <if test="knifeCarNum != null" >
+        knife_car_num = #{knifeCarNum,jdbcType=INTEGER},
+      </if>
+      <if test="guardian != null" >
+        guardian = #{guardian,jdbcType=VARCHAR},
+      </if>
+      <if test="guardianPlaceAndCont != null" >
+        guardian_place_and_cont = #{guardianPlaceAndCont,jdbcType=VARCHAR},
+      </if>
+      <if test="guardianOtherThing != null" >
+        guardian_other_thing = #{guardianOtherThing,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluation != null" >
+        evaluation = #{evaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationCont != null" >
+        evaluation_cont = #{evaluationCont,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationTime != null" >
+        evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where ticket_id = #{ticketId,jdbcType=VARCHAR}
@@ -771,41 +1220,63 @@
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.WorkTicket" >
     update work_ticket
     set serial_number = #{serialNumber,jdbcType=VARCHAR},
-      ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
-      ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR},
+      standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
+      workorder_id = #{workorderId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_date = #{maintainDate,jdbcType=DATE},
       status = #{status,jdbcType=VARCHAR},
       flow_status = #{flowStatus,jdbcType=VARCHAR},
-      standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},
-      company_id = #{companyId,jdbcType=VARCHAR},
-      departments = #{departments,jdbcType=VARCHAR},
+      crew_id = #{crewId,jdbcType=VARCHAR},
       applicant = #{applicant,jdbcType=VARCHAR},
       apply_time = #{applyTime,jdbcType=TIMESTAMP},
       work_team = #{workTeam,jdbcType=VARCHAR},
       work_head = #{workHead,jdbcType=VARCHAR},
-      safety_officer = #{safetyOfficer,jdbcType=VARCHAR},
-      location = #{location,jdbcType=VARCHAR},
-      equipment = #{equipment,jdbcType=VARCHAR},
-      machine_set = #{machineSet,jdbcType=VARCHAR},
+      position_id = #{positionId,jdbcType=VARCHAR},
+      position_desc = #{positionDesc,jdbcType=VARCHAR},
+      equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
       work_member = #{workMember,jdbcType=VARCHAR},
       member_num = #{memberNum,jdbcType=INTEGER},
-      work_unit = #{workUnit,jdbcType=VARCHAR},
-      other_unit_member = #{otherUnitMember,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
+      plan_start_time = #{planStartTime,jdbcType=TIMESTAMP},
+      plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
+      double_naem = #{doubleNaem,jdbcType=VARCHAR},
       work_place = #{workPlace,jdbcType=VARCHAR},
       work_content = #{workContent,jdbcType=VARCHAR},
       work_condition = #{workCondition,jdbcType=VARCHAR},
-      security_measure = #{securityMeasure,jdbcType=VARCHAR},
-      sup_security_measure = #{supSecurityMeasure,jdbcType=VARCHAR},
-      measure_ids = #{measureIds,jdbcType=VARCHAR},
       signer = #{signer,jdbcType=VARCHAR},
       sign_time = #{signTime,jdbcType=TIMESTAMP},
+      run_main_person = #{runMainPerson,jdbcType=VARCHAR},
+      receive_head = #{receiveHead,jdbcType=VARCHAR},
+      receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      scene_licensor = #{sceneLicensor,jdbcType=VARCHAR},
+      run_licensor = #{runLicensor,jdbcType=VARCHAR},
       license_start_time = #{licenseStartTime,jdbcType=TIMESTAMP},
-      license_end_time = #{licenseEndTime,jdbcType=TIMESTAMP},
-      licensor = #{licensor,jdbcType=VARCHAR},
+      work_team_opinion = #{workTeamOpinion,jdbcType=VARCHAR},
+      head_change_to = #{headChangeTo,jdbcType=VARCHAR},
+      head_change_signer = #{headChangeSigner,jdbcType=VARCHAR},
+      head_chaneg_time = #{headChanegTime,jdbcType=TIMESTAMP},
+      delay_time = #{delayTime,jdbcType=TIMESTAMP},
+      delay_head = #{delayHead,jdbcType=VARCHAR},
+      delay_head_sign_time = #{delayHeadSignTime,jdbcType=TIMESTAMP},
+      delay_licensor = #{delayLicensor,jdbcType=VARCHAR},
+      delay_licensor_sign_time = #{delayLicensorSignTime,jdbcType=TIMESTAMP},
+      work_end_head = #{workEndHead,jdbcType=VARCHAR},
+      work_end_licensor = #{workEndLicensor,jdbcType=VARCHAR},
       work_end_time = #{workEndTime,jdbcType=TIMESTAMP},
-      opinion = #{opinion,jdbcType=VARCHAR}
+      ticket_end_licensor = #{ticketEndLicensor,jdbcType=VARCHAR},
+      ticket_end_time = #{ticketEndTime,jdbcType=TIMESTAMP},
+      unuse_wire_number = #{unuseWireNumber,jdbcType=VARCHAR},
+      unuse_wire_num = #{unuseWireNum,jdbcType=INTEGER},
+      knife_car_num = #{knifeCarNum,jdbcType=INTEGER},
+      guardian = #{guardian,jdbcType=VARCHAR},
+      guardian_place_and_cont = #{guardianPlaceAndCont,jdbcType=VARCHAR},
+      guardian_other_thing = #{guardianOtherThing,jdbcType=VARCHAR},
+      evaluation = #{evaluation,jdbcType=VARCHAR},
+      evaluation_cont = #{evaluationCont,jdbcType=VARCHAR},
+      evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP}
     where ticket_id = #{ticketId,jdbcType=VARCHAR}
   </update>
 </mapper>

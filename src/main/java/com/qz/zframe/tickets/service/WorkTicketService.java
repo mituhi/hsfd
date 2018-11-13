@@ -9,17 +9,6 @@ import java.util.Map;
 public interface WorkTicketService {
 
     /**
-     * 工作票列表分页+条件查询
-     * @return
-     */
-    public PageResultEntity getWorkTicketList(Map<String, String> pageAndCondition);
-
-    /**
-     * 新建工作票
-     */
-    public ResultEntity createWorkTicket();
-
-    /**
      * 添加工作票
      */
     public ResultEntity addWorkTicket(WorkTicketVo workTicketVo);
@@ -38,6 +27,12 @@ public interface WorkTicketService {
      * 查询工作票详情
      */
     public ResultEntity getWorkTicketDetail(String ticketId);
+
+    /**
+     * 工作票列表分页+条件查询
+     * @return
+     */
+    public PageResultEntity getWorkTicketList(Map<String, String> pageAndCondition);
 
     /**
      * 工作票统计

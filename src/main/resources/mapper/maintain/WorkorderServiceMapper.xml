@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.WorkorderServiceMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.WorkorderService" >
+    <id column="service_id" property="serviceId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="knowledge_id" property="knowledgeId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="service_number" property="serviceNumber" jdbcType="VARCHAR" />
+    <result column="service_desc" property="serviceDesc" jdbcType="VARCHAR" />
+    <result column="service_unit" property="serviceUnit" jdbcType="VARCHAR" />
+    <result column="service_plan_amount" property="servicePlanAmount" jdbcType="VARCHAR" />
+    <result column="service_cost" property="serviceCost" jdbcType="VARCHAR" />
+    <result column="service_actual_amount" property="serviceActualAmount" jdbcType="VARCHAR" />
+    <result column="service_actual_money" property="serviceActualMoney" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    service_id, workorder_id, knowledge_id, order_id, service_number, service_desc, service_unit, 
+    service_plan_amount, service_cost, service_actual_amount, service_actual_money
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderServiceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from workorder_service
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from workorder_service
+    where service_id = #{serviceId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from workorder_service
+    where service_id = #{serviceId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderServiceExample" >
+    delete from workorder_service
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderService" >
+    insert into workorder_service (service_id, workorder_id, knowledge_id, 
+      order_id, service_number, service_desc, 
+      service_unit, service_plan_amount, service_cost, 
+      service_actual_amount, service_actual_money
+      )
+    values (#{serviceId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{knowledgeId,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=VARCHAR}, #{serviceNumber,jdbcType=VARCHAR}, #{serviceDesc,jdbcType=VARCHAR}, 
+      #{serviceUnit,jdbcType=VARCHAR}, #{servicePlanAmount,jdbcType=VARCHAR}, #{serviceCost,jdbcType=VARCHAR}, 
+      #{serviceActualAmount,jdbcType=VARCHAR}, #{serviceActualMoney,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderService" >
+    insert into workorder_service
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serviceId != null" >
+        service_id,
+      </if>
+      <if test="workorderId != null" >
+        workorder_id,
+      </if>
+      <if test="knowledgeId != null" >
+        knowledge_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="serviceNumber != null" >
+        service_number,
+      </if>
+      <if test="serviceDesc != null" >
+        service_desc,
+      </if>
+      <if test="serviceUnit != null" >
+        service_unit,
+      </if>
+      <if test="servicePlanAmount != null" >
+        service_plan_amount,
+      </if>
+      <if test="serviceCost != null" >
+        service_cost,
+      </if>
+      <if test="serviceActualAmount != null" >
+        service_actual_amount,
+      </if>
+      <if test="serviceActualMoney != null" >
+        service_actual_money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serviceId != null" >
+        #{serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="workorderId != null" >
+        #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeId != null" >
+        #{knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceNumber != null" >
+        #{serviceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceDesc != null" >
+        #{serviceDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceUnit != null" >
+        #{serviceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePlanAmount != null" >
+        #{servicePlanAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCost != null" >
+        #{serviceCost,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceActualAmount != null" >
+        #{serviceActualAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceActualMoney != null" >
+        #{serviceActualMoney,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.WorkorderServiceExample" resultType="java.lang.Integer" >
+    select count(*) from workorder_service
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update workorder_service
+    <set >
+      <if test="record.serviceId != null" >
+        service_id = #{record.serviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workorderId != null" >
+        workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.knowledgeId != null" >
+        knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderId != null" >
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceNumber != null" >
+        service_number = #{record.serviceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceDesc != null" >
+        service_desc = #{record.serviceDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceUnit != null" >
+        service_unit = #{record.serviceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.servicePlanAmount != null" >
+        service_plan_amount = #{record.servicePlanAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceCost != null" >
+        service_cost = #{record.serviceCost,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceActualAmount != null" >
+        service_actual_amount = #{record.serviceActualAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceActualMoney != null" >
+        service_actual_money = #{record.serviceActualMoney,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update workorder_service
+    set service_id = #{record.serviceId,jdbcType=VARCHAR},
+      workorder_id = #{record.workorderId,jdbcType=VARCHAR},
+      knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      service_number = #{record.serviceNumber,jdbcType=VARCHAR},
+      service_desc = #{record.serviceDesc,jdbcType=VARCHAR},
+      service_unit = #{record.serviceUnit,jdbcType=VARCHAR},
+      service_plan_amount = #{record.servicePlanAmount,jdbcType=VARCHAR},
+      service_cost = #{record.serviceCost,jdbcType=VARCHAR},
+      service_actual_amount = #{record.serviceActualAmount,jdbcType=VARCHAR},
+      service_actual_money = #{record.serviceActualMoney,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderService" >
+    update workorder_service
+    <set >
+      <if test="workorderId != null" >
+        workorder_id = #{workorderId,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeId != null" >
+        knowledge_id = #{knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceNumber != null" >
+        service_number = #{serviceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceDesc != null" >
+        service_desc = #{serviceDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceUnit != null" >
+        service_unit = #{serviceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="servicePlanAmount != null" >
+        service_plan_amount = #{servicePlanAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCost != null" >
+        service_cost = #{serviceCost,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceActualAmount != null" >
+        service_actual_amount = #{serviceActualAmount,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceActualMoney != null" >
+        service_actual_money = #{serviceActualMoney,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where service_id = #{serviceId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.WorkorderService" >
+    update workorder_service
+    set workorder_id = #{workorderId,jdbcType=VARCHAR},
+      knowledge_id = #{knowledgeId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      service_number = #{serviceNumber,jdbcType=VARCHAR},
+      service_desc = #{serviceDesc,jdbcType=VARCHAR},
+      service_unit = #{serviceUnit,jdbcType=VARCHAR},
+      service_plan_amount = #{servicePlanAmount,jdbcType=VARCHAR},
+      service_cost = #{serviceCost,jdbcType=VARCHAR},
+      service_actual_amount = #{serviceActualAmount,jdbcType=VARCHAR},
+      service_actual_money = #{serviceActualMoney,jdbcType=VARCHAR}
+    where service_id = #{serviceId,jdbcType=VARCHAR}
+  </update>
+</mapper>

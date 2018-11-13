@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.BreakdownKnowledgeBaseMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.BreakdownKnowledgeBase" >
+    <id column="knowledge_id" property="knowledgeId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="knowledge_desc" property="knowledgeDesc" jdbcType="VARCHAR" />
+    <result column="knowledge_name" property="knowledgeName" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="breakdown_location" property="breakdownLocation" jdbcType="VARCHAR" />
+    <result column="breakdown_attribute" property="breakdownAttribute" jdbcType="VARCHAR" />
+    <result column="breakdown_code" property="breakdownCode" jdbcType="VARCHAR" />
+    <result column="breakdown_desc" property="breakdownDesc" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="defect_phenomenon" property="defectPhenomenon" jdbcType="VARCHAR" />
+    <result column="cause_analysis" property="causeAnalysis" jdbcType="VARCHAR" />
+    <result column="repair_process_desc" property="repairProcessDesc" jdbcType="VARCHAR" />
+    <result column="solution" property="solution" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    knowledge_id, serial_number, knowledge_desc, knowledge_name, maintainer, maintain_date, 
+    breakdown_location, breakdown_attribute, breakdown_code, breakdown_desc, wind_id, 
+    applicant, apply_time, status, defect_phenomenon, cause_analysis, repair_process_desc, 
+    solution, remark
+  </sql>
+
+
+
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update Breakdown_knowledge_base set status = "0"
+    where knowledge_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+  <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.KnowledgeVo" >
+    <id column="knowledge_id" property="knowledgeId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="knowledge_desc" property="knowledgeDesc" jdbcType="VARCHAR" />
+    <result column="knowledge_name" property="knowledgeName" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="breakdown_location" property="breakdownLocation" jdbcType="VARCHAR" />
+    <result column="breakdown_attribute" property="breakdownAttribute" jdbcType="VARCHAR" />
+    <result column="breakdown_code" property="breakdownCode" jdbcType="VARCHAR" />
+    <result column="breakdown_desc" property="breakdownDesc" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="defect_phenomenon" property="defectPhenomenon" jdbcType="VARCHAR" />
+    <result column="cause_analysis" property="causeAnalysis" jdbcType="VARCHAR" />
+    <result column="repair_process_desc" property="repairProcessDesc" jdbcType="VARCHAR" />
+    <result column="solution" property="solution" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="breakdown_location_name" property="breakdownLocationName" jdbcType="VARCHAR" />
+    <result column="breakdown_attribute_name" property="breakdownAttributeName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.knowledge_id as knowledge_id, a.serial_number as serial_number, a.knowledge_desc as knowledge_desc, a.knowledge_name as knowledge_name,
+    a.maintain_date as maintainer, a.maintain_date as maintain_date,a.breakdown_location as breakdown_location, a.breakdown_attribute as breakdown_attribute,
+    a.breakdown_code as breakdown_code, a.breakdown_desc as breakdown_desc, a.wind_id as wind_id,a.applicant as applicant, a.apply_time as apply_time,
+    a.status as status, a.defect_phenomenon as defect_phenomenon, a.cause_analysis as cause_analysis, a.repair_process_desc as repair_process_desc,
+    a.solution as solution, a.remark as remark,
+    b.architecture_name as wind_name,d.location_name as breakdown_location_name,e.attribute_name as breakdown_attribute_name
+  </sql>
+  <select id="getBreakdownKnowledgeDetail" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from breakdown_knowledge_base a
+    left join org_architecture b on a.wind_id = b.architecture_id and b.architecture_type = '02'
+    left join breakdown_location d on a.breakdown_location =d.location_id
+    left join breakdown_attribute e on a.breakdown_attribute =e.attribute_id
+    where a.status != '0' and a.knowledge_id = #{knowledgeId}
+  </select>
+  <select id="getBreakdownKnowledgeListByPageAndCondition" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from breakdown_knowledge_base a
+    left join org_architecture b on a.wind_id = b.architecture_id and b.architecture_type = '02'
+    left join breakdown_location d on a.breakdown_location =d.location_id
+    left join breakdown_attribute e on a.breakdown_attribute =e.attribute_id
+    where a.status != '0'
+    <if test="map.windId != null" >
+      and a.wind_id = #{map.windId}
+    </if>
+    <if test="map.breakdownLocation != null" >
+      and a.breakdown_location = #{map.breakdownLocation}
+    </if>
+    <if test="map.breakdownAttribute != null" >
+      and a.breakdown_attribute = #{map.breakdownAttribute}
+    </if>
+    <if test="map.breakdownDesc != null" >
+      and a.breakdown_desc like '%${map.breakdownDesc}%'
+    </if>
+    <if test="map.breakdownCode != null" >
+      and a.breakdown_code = #{map.breakdownCode}
+    </if>
+    order by a.serial_number desc
+    limit ${map.start},${map.pageSize}
+  </select>
+  <select id="getTotal" resultType="java.lang.Integer">
+    select
+    count(*)
+    from breakdown_knowledge_base
+    where status <![CDATA[ <> ]]> '0'
+    <if test="map.windId != null" >
+      and wind_id = #{map.windId}
+    </if>
+    <if test="map.breakdownLocation != null" >
+      and breakdown_location = #{map.breakdownLocation}
+    </if>
+    <if test="map.breakdownAttribute != null" >
+      and breakdown_attribute = #{map.breakdownAttribute}
+    </if>
+    <if test="map.breakdownDesc != null" >
+      and breakdown_desc like '%${map.breakdownDesc}%'
+    </if>
+    <if test="map.breakdownCode != null" >
+      and breakdown_code = #{map.breakdownCode}
+    </if>
+  </select>
+
+
+
+
+
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.BreakdownKnowledgeBaseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from breakdown_knowledge_base
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from breakdown_knowledge_base
+    where knowledge_id = #{knowledgeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from breakdown_knowledge_base
+    where knowledge_id = #{knowledgeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.BreakdownKnowledgeBaseExample" >
+    delete from breakdown_knowledge_base
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.BreakdownKnowledgeBase" >
+    insert into breakdown_knowledge_base (knowledge_id, serial_number, knowledge_desc, 
+      knowledge_name, maintainer, maintain_date, 
+      breakdown_location, breakdown_attribute, 
+      breakdown_code, breakdown_desc, wind_id, 
+      applicant, apply_time, status, 
+      defect_phenomenon, cause_analysis, repair_process_desc, 
+      solution, remark)
+    values (#{knowledgeId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{knowledgeDesc,jdbcType=VARCHAR}, 
+      #{knowledgeName,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, 
+      #{breakdownLocation,jdbcType=VARCHAR}, #{breakdownAttribute,jdbcType=VARCHAR}, 
+      #{breakdownCode,jdbcType=VARCHAR}, #{breakdownDesc,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, 
+      #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
+      #{defectPhenomenon,jdbcType=VARCHAR}, #{causeAnalysis,jdbcType=VARCHAR}, #{repairProcessDesc,jdbcType=VARCHAR}, 
+      #{solution,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.BreakdownKnowledgeBase" >
+    insert into breakdown_knowledge_base
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="knowledgeId != null" >
+        knowledge_id,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="knowledgeDesc != null" >
+        knowledge_desc,
+      </if>
+      <if test="knowledgeName != null" >
+        knowledge_name,
+      </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date,
+      </if>
+      <if test="breakdownLocation != null" >
+        breakdown_location,
+      </if>
+      <if test="breakdownAttribute != null" >
+        breakdown_attribute,
+      </if>
+      <if test="breakdownCode != null" >
+        breakdown_code,
+      </if>
+      <if test="breakdownDesc != null" >
+        breakdown_desc,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="applicant != null" >
+        applicant,
+      </if>
+      <if test="applyTime != null" >
+        apply_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="defectPhenomenon != null" >
+        defect_phenomenon,
+      </if>
+      <if test="causeAnalysis != null" >
+        cause_analysis,
+      </if>
+      <if test="repairProcessDesc != null" >
+        repair_process_desc,
+      </if>
+      <if test="solution != null" >
+        solution,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="knowledgeId != null" >
+        #{knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeDesc != null" >
+        #{knowledgeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeName != null" >
+        #{knowledgeName,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="breakdownLocation != null" >
+        #{breakdownLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownAttribute != null" >
+        #{breakdownAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownCode != null" >
+        #{breakdownCode,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownDesc != null" >
+        #{breakdownDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="defectPhenomenon != null" >
+        #{defectPhenomenon,jdbcType=VARCHAR},
+      </if>
+      <if test="causeAnalysis != null" >
+        #{causeAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="repairProcessDesc != null" >
+        #{repairProcessDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="solution != null" >
+        #{solution,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.BreakdownKnowledgeBaseExample" resultType="java.lang.Integer" >
+    select count(*) from breakdown_knowledge_base
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update breakdown_knowledge_base
+    <set >
+      <if test="record.knowledgeId != null" >
+        knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.knowledgeDesc != null" >
+        knowledge_desc = #{record.knowledgeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.knowledgeName != null" >
+        knowledge_name = #{record.knowledgeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainDate != null" >
+        maintain_date = #{record.maintainDate,jdbcType=DATE},
+      </if>
+      <if test="record.breakdownLocation != null" >
+        breakdown_location = #{record.breakdownLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breakdownAttribute != null" >
+        breakdown_attribute = #{record.breakdownAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breakdownCode != null" >
+        breakdown_code = #{record.breakdownCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.breakdownDesc != null" >
+        breakdown_desc = #{record.breakdownDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicant != null" >
+        applicant = #{record.applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applyTime != null" >
+        apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.defectPhenomenon != null" >
+        defect_phenomenon = #{record.defectPhenomenon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.causeAnalysis != null" >
+        cause_analysis = #{record.causeAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="record.repairProcessDesc != null" >
+        repair_process_desc = #{record.repairProcessDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.solution != null" >
+        solution = #{record.solution,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update breakdown_knowledge_base
+    set knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      knowledge_desc = #{record.knowledgeDesc,jdbcType=VARCHAR},
+      knowledge_name = #{record.knowledgeName,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      breakdown_location = #{record.breakdownLocation,jdbcType=VARCHAR},
+      breakdown_attribute = #{record.breakdownAttribute,jdbcType=VARCHAR},
+      breakdown_code = #{record.breakdownCode,jdbcType=VARCHAR},
+      breakdown_desc = #{record.breakdownDesc,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      applicant = #{record.applicant,jdbcType=VARCHAR},
+      apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR},
+      defect_phenomenon = #{record.defectPhenomenon,jdbcType=VARCHAR},
+      cause_analysis = #{record.causeAnalysis,jdbcType=VARCHAR},
+      repair_process_desc = #{record.repairProcessDesc,jdbcType=VARCHAR},
+      solution = #{record.solution,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.BreakdownKnowledgeBase" >
+    update breakdown_knowledge_base
+    <set >
+      <if test="serialNumber != null" >
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeDesc != null" >
+        knowledge_desc = #{knowledgeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="knowledgeName != null" >
+        knowledge_name = #{knowledgeName,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date = #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="breakdownLocation != null" >
+        breakdown_location = #{breakdownLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownAttribute != null" >
+        breakdown_attribute = #{breakdownAttribute,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownCode != null" >
+        breakdown_code = #{breakdownCode,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownDesc != null" >
+        breakdown_desc = #{breakdownDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="applicant != null" >
+        applicant = #{applicant,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null" >
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="defectPhenomenon != null" >
+        defect_phenomenon = #{defectPhenomenon,jdbcType=VARCHAR},
+      </if>
+      <if test="causeAnalysis != null" >
+        cause_analysis = #{causeAnalysis,jdbcType=VARCHAR},
+      </if>
+      <if test="repairProcessDesc != null" >
+        repair_process_desc = #{repairProcessDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="solution != null" >
+        solution = #{solution,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where knowledge_id = #{knowledgeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.BreakdownKnowledgeBase" >
+    update breakdown_knowledge_base
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      knowledge_desc = #{knowledgeDesc,jdbcType=VARCHAR},
+      knowledge_name = #{knowledgeName,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_date = #{maintainDate,jdbcType=DATE},
+      breakdown_location = #{breakdownLocation,jdbcType=VARCHAR},
+      breakdown_attribute = #{breakdownAttribute,jdbcType=VARCHAR},
+      breakdown_code = #{breakdownCode,jdbcType=VARCHAR},
+      breakdown_desc = #{breakdownDesc,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      applicant = #{applicant,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      defect_phenomenon = #{defectPhenomenon,jdbcType=VARCHAR},
+      cause_analysis = #{causeAnalysis,jdbcType=VARCHAR},
+      repair_process_desc = #{repairProcessDesc,jdbcType=VARCHAR},
+      solution = #{solution,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where knowledge_id = #{knowledgeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

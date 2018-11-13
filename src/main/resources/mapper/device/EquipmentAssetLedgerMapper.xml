@@ -1,0 +1,820 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.device.dao.EquipmentAssetLedgerMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.device.entity.EquipmentAssetLedger" >
+    <id column="equipment_asset_id" property="equipmentAssetId" jdbcType="VARCHAR" />
+    <result column="equipment_code" property="equipmentCode" jdbcType="VARCHAR" />
+    <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
+    <result column="position_code" property="positionCode" jdbcType="VARCHAR" />
+    <result column="position_name" property="positionName" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="hierarchy" property="hierarchy" jdbcType="VARCHAR" />
+    <result column="crew" property="crew" jdbcType="VARCHAR" />
+    <result column="company_code" property="companyCode" jdbcType="VARCHAR" />
+    <result column="cost_center" property="costCenter" jdbcType="VARCHAR" />
+    <result column="maintenance_team" property="maintenanceTeam" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="DECIMAL" />
+    <result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
+    <result column="equipment_number" property="equipmentNumber" jdbcType="VARCHAR" />
+    <result column="fixed_assets" property="fixedAssets" jdbcType="VARCHAR" />
+    <result column="date_manufacture" property="dateManufacture" jdbcType="TIMESTAMP" />
+    <result column="install_date" property="installDate" jdbcType="TIMESTAMP" />
+    <result column="date_delivery" property="dateDelivery" jdbcType="TIMESTAMP" />
+    <result column="equipment_information" property="equipmentInformation" jdbcType="VARCHAR" />
+    <result column="supplier" property="supplier" jdbcType="VARCHAR" />
+    <result column="asset_status" property="assetStatus" jdbcType="VARCHAR" />
+    <result column="asset_status_date" property="assetStatusDate" jdbcType="TIMESTAMP" />
+    <result column="asset_code" property="assetCode" jdbcType="VARCHAR" />
+    <result column="asset_value" property="assetValue" jdbcType="DECIMAL" />
+    <result column="monthly_depreciation_rate" property="monthlyDepreciationRate" jdbcType="DECIMAL" />
+    <result column="component_id" property="componentId" jdbcType="VARCHAR" />
+    <result column="output_id" property="outputId" jdbcType="VARCHAR" />
+    <result column="run_id" property="runId" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="crew_name" property="crewName" jdbcType="VARCHAR" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="asset_status_name" property="assetStatusName" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="equipment_type" property="equipmentType" jdbcType="VARCHAR" />
+  </resultMap>
+ <resultMap id="ResultMapWithBLOBs" type="com.qz.zframe.device.entity.EquipmentAssetLedger" extends="BaseResultMap" >
+    <result column="enclosure" property="enclosure" jdbcType="LONGVARBINARY" />
+  </resultMap> 
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    equipment_asset_id, equipment_code, equipment_name, position_code, position_name, 
+    wind_id, department, hierarchy, crew, company_code, cost_center, maintenance_team, 
+    address, manufacturer, equipment_number, fixed_assets, date_manufacture, install_date, 
+    date_delivery, equipment_information, supplier, asset_status, asset_status_date, 
+    asset_code, asset_value, monthly_depreciation_rate, component_id, output_id, run_id, 
+    equipment_id,position_id,wind_name,crew_name,type_name,supplier_name,asset_status_name,equipment_type
+  </sql>
+  <sql id="Blob_Column_List" >
+    enclosure
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from equipment_asset_ledger
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" >
+  
+  select 
+  <include refid="Base_Column_List" />
+  from
+   ( select e.*,sc.title as asset_status_name,f.wind_name as wind_name,
+	c.crew_name as crew_name,i.equipment_type as equipment_type,
+	p.position_name as  position_name,s.supplier_name as supplier_name,
+	p.position_code as  position_code,i.type_name as type_name
+    <if test="distinct" >
+      distinct
+    </if>
+    from equipment_asset_ledger  e
+    left  join  crew_information  c  on  c.crew_id=e.crew
+    left join  equipment_classification i on i.equipment_id=e.equipment_id
+    left join position_encode   p on p.position_id=e.position_id
+    left join wind_field   f  on f.wind_id=e.wind_id
+    left join  supplier  s on s.supplier_id=e.supplier
+    left join sp_code sc ON e.asset_status = sc.name 
+    left join sp_code_type d ON sc.code_type_id = d.id where  d.name='ASSET_STATUS') e
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+   <select id="selectByExamples" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" >
+    select  
+    <include refid="Base_Column_List" />
+    from  (
+    select 
+    DISTINCT
+    e.*,sc.title as asset_status_name,f.wind_name as wind_name,
+	c.crew_name as crew_name,i.equipment_type as equipment_type,
+	p.position_name as  position_name,s.supplier_name as supplier_name,
+	i.type_name as type_name,p.position_code as  position_code
+    from equipment_asset_ledger  e
+    left  join  crew_information  c  on  c.crew_id=e.crew
+    left join  equipment_classification i on i.equipment_id=e.equipment_id
+    left join position_encode   p on p.position_id=e.position_id
+    left join wind_field   f  on f.wind_id=e.wind_id
+    left join  supplier  s on s.supplier_id=e.supplier
+    left join sp_code sc ON e.asset_status = sc.name 
+    left join sp_code_type d ON sc.code_type_id = d.id where d.name='ASSET_STATUS' and e.asset_status != '01' ) e
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if> 
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    e.*,sc.title as asset_status_name,f.wind_name as wind_name,
+	c.crew_name as crew_name,i.equipment_type as equipment_type,
+	p.position_name as  position_name,s.supplier_name as supplier_name,
+	p.position_code as  position_code,i.type_name as type_name
+    from equipment_asset_ledger  e
+    left  join  crew_information  c  on  c.crew_id=e.crew
+    left join  equipment_classification i on i.equipment_id=e.equipment_id
+    left join position_encode   p on p.position_id=e.position_id
+    left join wind_field   f  on f.wind_id=e.wind_id
+    left join  supplier  s on s.supplier_id=e.supplier
+    left join sp_code sc ON e.asset_status = sc.name 
+    left join sp_code_type d ON sc.code_type_id = d.id 
+    where d.name='ASSET_STATUS' and e.asset_status != '01'  and equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKeys" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select
+    e.*,sc.title as asset_status_name,f.wind_name as wind_name,
+	c.crew_name as crew_name,i.equipment_type as equipment_type,
+	p.position_name as  position_name,s.supplier_name as supplier_name,
+	p.position_code as  position_code,i.type_name as type_name
+    from equipment_asset_ledger  e
+    left  join  crew_information  c  on  c.crew_id=e.crew
+    left join  equipment_classification i on i.equipment_id=e.equipment_id
+    left join position_encode   p on p.position_id=e.position_id
+    left join wind_field   f  on f.wind_id=e.wind_id
+    left join  supplier  s on s.supplier_id=e.supplier
+    left join sp_code sc ON e.asset_status = sc.name 
+    left join sp_code_type d ON sc.code_type_id = d.id 
+    where d.name='ASSET_STATUS' and e.asset_status != '01'  and equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from equipment_asset_ledger
+    where equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
+  </delete>
+  
+   <delete id="deleteByPrimaryKeyList" parameterType="java.lang.String" >
+    delete from equipment_asset_ledger
+   <where>
+    equipment_asset_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  
+  <delete id="deleteByExample" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" >
+    delete from equipment_asset_ledger
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedger" >
+    insert into equipment_asset_ledger (equipment_asset_id, equipment_code, 
+      equipment_name, position_code, position_name, 
+      wind_id, department, hierarchy, 
+      crew, company_code, cost_center, 
+      maintenance_team, address, manufacturer, 
+      equipment_number, fixed_assets, date_manufacture, 
+      install_date, date_delivery, equipment_information, 
+      supplier, asset_status, asset_status_date, 
+      asset_code, asset_value, monthly_depreciation_rate, 
+      component_id, output_id, run_id, 
+      equipment_id, enclosure)
+    values (#{equipmentAssetId,jdbcType=VARCHAR}, #{equipmentCode,jdbcType=VARCHAR}, 
+      #{equipmentName,jdbcType=VARCHAR}, #{positionCode,jdbcType=VARCHAR}, #{positionName,jdbcType=VARCHAR}, 
+      #{windId,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{hierarchy,jdbcType=VARCHAR}, 
+      #{crew,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, #{costCenter,jdbcType=VARCHAR}, 
+      #{maintenanceTeam,jdbcType=VARCHAR}, #{address,jdbcType=DECIMAL}, #{manufacturer,jdbcType=VARCHAR}, 
+      #{equipmentNumber,jdbcType=VARCHAR}, #{fixedAssets,jdbcType=VARCHAR}, #{dateManufacture,jdbcType=TIMESTAMP}, 
+      #{installDate,jdbcType=TIMESTAMP}, #{dateDelivery,jdbcType=TIMESTAMP}, #{equipmentInformation,jdbcType=VARCHAR}, 
+      #{supplier,jdbcType=VARCHAR}, #{assetStatus,jdbcType=VARCHAR}, #{assetStatusDate,jdbcType=TIMESTAMP}, 
+      #{assetCode,jdbcType=VARCHAR}, #{assetValue,jdbcType=DECIMAL}, #{monthlyDepreciationRate,jdbcType=DECIMAL}, 
+      #{componentId,jdbcType=VARCHAR}, #{outputId,jdbcType=VARCHAR}, #{runId,jdbcType=VARCHAR}, 
+      #{equipmentId,jdbcType=VARCHAR}, #{enclosure,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedger" >
+    insert into equipment_asset_ledger
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="equipmentAssetId != null" >
+        equipment_asset_id,
+      </if>
+      <if test="equipmentCode != null" >
+        equipment_code,
+      </if>
+      <if test="equipmentName != null" >
+        equipment_name,
+      </if>
+      <if test="positionCode != null" >
+        position_code,
+      </if>
+      <if test="positionName != null" >
+        position_name,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="department != null" >
+        department,
+      </if>
+      <if test="hierarchy != null" >
+        hierarchy,
+      </if>
+      <if test="crew != null" >
+        crew,
+      </if>
+      <if test="companyCode != null" >
+        company_code,
+      </if>
+      <if test="costCenter != null" >
+        cost_center,
+      </if>
+      <if test="maintenanceTeam != null" >
+        maintenance_team,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="manufacturer != null" >
+        manufacturer,
+      </if>
+      <if test="equipmentNumber != null" >
+        equipment_number,
+      </if>
+      <if test="fixedAssets != null" >
+        fixed_assets,
+      </if>
+      <if test="dateManufacture != null" >
+        date_manufacture,
+      </if>
+      <if test="installDate != null" >
+        install_date,
+      </if>
+      <if test="dateDelivery != null" >
+        date_delivery,
+      </if>
+      <if test="equipmentInformation != null" >
+        equipment_information,
+      </if>
+      <if test="supplier != null" >
+        supplier,
+      </if>
+      <if test="assetStatus != null" >
+        asset_status,
+      </if>
+      <if test="assetStatusDate != null" >
+        asset_status_date,
+      </if>
+      <if test="assetCode != null" >
+        asset_code,
+      </if>
+      <if test="assetValue != null" >
+        asset_value,
+      </if>
+      <if test="monthlyDepreciationRate != null" >
+        monthly_depreciation_rate,
+      </if>
+      <if test="componentId != null" >
+        component_id,
+      </if>
+      <if test="outputId != null" >
+        output_id,
+      </if>
+      <if test="runId != null" >
+        run_id,
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id,
+      </if>
+      <if test="enclosure != null" >
+        enclosure,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="equipmentAssetId != null" >
+        #{equipmentAssetId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentCode != null" >
+        #{equipmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentName != null" >
+        #{equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="positionCode != null" >
+        #{positionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="positionName != null" >
+        #{positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="hierarchy != null" >
+        #{hierarchy,jdbcType=VARCHAR},
+      </if>
+      <if test="crew != null" >
+        #{crew,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="costCenter != null" >
+        #{costCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="maintenanceTeam != null" >
+        #{maintenanceTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=DECIMAL},
+      </if>
+      <if test="manufacturer != null" >
+        #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentNumber != null" >
+        #{equipmentNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="fixedAssets != null" >
+        #{fixedAssets,jdbcType=VARCHAR},
+      </if>
+      <if test="dateManufacture != null" >
+        #{dateManufacture,jdbcType=TIMESTAMP},
+      </if>
+      <if test="installDate != null" >
+        #{installDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateDelivery != null" >
+        #{dateDelivery,jdbcType=TIMESTAMP},
+      </if>
+      <if test="equipmentInformation != null" >
+        #{equipmentInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="supplier != null" >
+        #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="assetStatus != null" >
+        #{assetStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="assetStatusDate != null" >
+        #{assetStatusDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="assetCode != null" >
+        #{assetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="assetValue != null" >
+        #{assetValue,jdbcType=DECIMAL},
+      </if>
+      <if test="monthlyDepreciationRate != null" >
+        #{monthlyDepreciationRate,jdbcType=DECIMAL},
+      </if>
+      <if test="componentId != null" >
+        #{componentId,jdbcType=VARCHAR},
+      </if>
+      <if test="outputId != null" >
+        #{outputId,jdbcType=VARCHAR},
+      </if>
+      <if test="runId != null" >
+        #{runId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="enclosure != null" >
+        #{enclosure,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" resultType="java.lang.Integer" >
+    select distinct count(*) from equipment_asset_ledger e
+    left  join  crew_information  c  on  c.crew_id=e.crew
+    left join  equipment_classification i on i.equipment_id=e.equipment_id
+    left join position_encode   p on p.position_id=e.position_id
+    left join wind_field   f  on f.wind_id=e.wind_id
+    left join  supplier  s on s.supplier_id=e.supplier
+ 
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+   <select id="countByExamples" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" resultType="java.lang.Integer" >
+     select
+     distinct count(*) from
+    (select 
+     e.*
+    from equipment_asset_ledger e
+    left  join  crew_information  c  on  c.crew_id=e.crew
+    left join  equipment_classification i on i.equipment_id=e.equipment_id
+    left join position_encode   p on p.position_id=e.position_id
+    left join wind_field   f  on f.wind_id=e.wind_id
+    left join  supplier  s on s.supplier_id=e.supplier where e.asset_status != '01' ) e
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update equipment_asset_ledger
+    <set >
+      <if test="record.equipmentAssetId != null" >
+        equipment_asset_id = #{record.equipmentAssetId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentCode != null" >
+        equipment_code = #{record.equipmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentName != null" >
+        equipment_name = #{record.equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionCode != null" >
+        position_code = #{record.positionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionName != null" >
+        position_name = #{record.positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.department != null" >
+        department = #{record.department,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hierarchy != null" >
+        hierarchy = #{record.hierarchy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crew != null" >
+        crew = #{record.crew,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyCode != null" >
+        company_code = #{record.companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.costCenter != null" >
+        cost_center = #{record.costCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintenanceTeam != null" >
+        maintenance_team = #{record.maintenanceTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=DECIMAL},
+      </if>
+      <if test="record.manufacturer != null" >
+        manufacturer = #{record.manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentNumber != null" >
+        equipment_number = #{record.equipmentNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fixedAssets != null" >
+        fixed_assets = #{record.fixedAssets,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dateManufacture != null" >
+        date_manufacture = #{record.dateManufacture,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.installDate != null" >
+        install_date = #{record.installDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dateDelivery != null" >
+        date_delivery = #{record.dateDelivery,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.equipmentInformation != null" >
+        equipment_information = #{record.equipmentInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.supplier != null" >
+        supplier = #{record.supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assetStatus != null" >
+        asset_status = #{record.assetStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assetStatusDate != null" >
+        asset_status_date = #{record.assetStatusDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.assetCode != null" >
+        asset_code = #{record.assetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assetValue != null" >
+        asset_value = #{record.assetValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.monthlyDepreciationRate != null" >
+        monthly_depreciation_rate = #{record.monthlyDepreciationRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.componentId != null" >
+        component_id = #{record.componentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.outputId != null" >
+        output_id = #{record.outputId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.runId != null" >
+        run_id = #{record.runId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipmentId != null" >
+        equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enclosure != null" >
+        enclosure = #{record.enclosure,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update equipment_asset_ledger
+    set equipment_asset_id = #{record.equipmentAssetId,jdbcType=VARCHAR},
+      equipment_code = #{record.equipmentCode,jdbcType=VARCHAR},
+      equipment_name = #{record.equipmentName,jdbcType=VARCHAR},
+      position_code = #{record.positionCode,jdbcType=VARCHAR},
+      position_name = #{record.positionName,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      department = #{record.department,jdbcType=VARCHAR},
+      hierarchy = #{record.hierarchy,jdbcType=VARCHAR},
+      crew = #{record.crew,jdbcType=VARCHAR},
+      company_code = #{record.companyCode,jdbcType=VARCHAR},
+      cost_center = #{record.costCenter,jdbcType=VARCHAR},
+      maintenance_team = #{record.maintenanceTeam,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=DECIMAL},
+      manufacturer = #{record.manufacturer,jdbcType=VARCHAR},
+      equipment_number = #{record.equipmentNumber,jdbcType=VARCHAR},
+      fixed_assets = #{record.fixedAssets,jdbcType=VARCHAR},
+      date_manufacture = #{record.dateManufacture,jdbcType=TIMESTAMP},
+      install_date = #{record.installDate,jdbcType=TIMESTAMP},
+      date_delivery = #{record.dateDelivery,jdbcType=TIMESTAMP},
+      equipment_information = #{record.equipmentInformation,jdbcType=VARCHAR},
+      supplier = #{record.supplier,jdbcType=VARCHAR},
+      asset_status = #{record.assetStatus,jdbcType=VARCHAR},
+      asset_status_date = #{record.assetStatusDate,jdbcType=TIMESTAMP},
+      asset_code = #{record.assetCode,jdbcType=VARCHAR},
+      asset_value = #{record.assetValue,jdbcType=DECIMAL},
+      monthly_depreciation_rate = #{record.monthlyDepreciationRate,jdbcType=DECIMAL},
+      component_id = #{record.componentId,jdbcType=VARCHAR},
+      output_id = #{record.outputId,jdbcType=VARCHAR},
+      run_id = #{record.runId,jdbcType=VARCHAR},
+      equipment_id = #{record.equipmentId,jdbcType=VARCHAR},
+      enclosure = #{record.enclosure,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update equipment_asset_ledger
+    set equipment_asset_id = #{record.equipmentAssetId,jdbcType=VARCHAR},
+      equipment_code = #{record.equipmentCode,jdbcType=VARCHAR},
+      equipment_name = #{record.equipmentName,jdbcType=VARCHAR},
+      position_code = #{record.positionCode,jdbcType=VARCHAR},
+      position_name = #{record.positionName,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      department = #{record.department,jdbcType=VARCHAR},
+      hierarchy = #{record.hierarchy,jdbcType=VARCHAR},
+      crew = #{record.crew,jdbcType=VARCHAR},
+      company_code = #{record.companyCode,jdbcType=VARCHAR},
+      cost_center = #{record.costCenter,jdbcType=VARCHAR},
+      maintenance_team = #{record.maintenanceTeam,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=DECIMAL},
+      manufacturer = #{record.manufacturer,jdbcType=VARCHAR},
+      equipment_number = #{record.equipmentNumber,jdbcType=VARCHAR},
+      fixed_assets = #{record.fixedAssets,jdbcType=VARCHAR},
+      date_manufacture = #{record.dateManufacture,jdbcType=TIMESTAMP},
+      install_date = #{record.installDate,jdbcType=TIMESTAMP},
+      date_delivery = #{record.dateDelivery,jdbcType=TIMESTAMP},
+      equipment_information = #{record.equipmentInformation,jdbcType=VARCHAR},
+      supplier = #{record.supplier,jdbcType=VARCHAR},
+      asset_status = #{record.assetStatus,jdbcType=VARCHAR},
+      asset_status_date = #{record.assetStatusDate,jdbcType=TIMESTAMP},
+      asset_code = #{record.assetCode,jdbcType=VARCHAR},
+      asset_value = #{record.assetValue,jdbcType=DECIMAL},
+      monthly_depreciation_rate = #{record.monthlyDepreciationRate,jdbcType=DECIMAL},
+      component_id = #{record.componentId,jdbcType=VARCHAR},
+      output_id = #{record.outputId,jdbcType=VARCHAR},
+      run_id = #{record.runId,jdbcType=VARCHAR},
+      equipment_id = #{record.equipmentId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedger" >
+    update equipment_asset_ledger
+    <set >
+      <if test="equipmentCode != null" >
+        equipment_code = #{equipmentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentName != null" >
+        equipment_name = #{equipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="positionCode != null" >
+        position_code = #{positionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="positionName != null" >
+        position_name = #{positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="hierarchy != null" >
+        hierarchy = #{hierarchy,jdbcType=VARCHAR},
+      </if>
+      <if test="crew != null" >
+        crew = #{crew,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null" >
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="costCenter != null" >
+        cost_center = #{costCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="maintenanceTeam != null" >
+        maintenance_team = #{maintenanceTeam,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=DECIMAL},
+      </if>
+      <if test="manufacturer != null" >
+        manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentNumber != null" >
+        equipment_number = #{equipmentNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="fixedAssets != null" >
+        fixed_assets = #{fixedAssets,jdbcType=VARCHAR},
+      </if>
+      <if test="dateManufacture != null" >
+        date_manufacture = #{dateManufacture,jdbcType=TIMESTAMP},
+      </if>
+      <if test="installDate != null" >
+        install_date = #{installDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dateDelivery != null" >
+        date_delivery = #{dateDelivery,jdbcType=TIMESTAMP},
+      </if>
+      <if test="equipmentInformation != null" >
+        equipment_information = #{equipmentInformation,jdbcType=VARCHAR},
+      </if>
+      <if test="supplier != null" >
+        supplier = #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="assetStatus != null" >
+        asset_status = #{assetStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="assetStatusDate != null" >
+        asset_status_date = #{assetStatusDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="assetCode != null" >
+        asset_code = #{assetCode,jdbcType=VARCHAR},
+      </if>
+      <if test="assetValue != null" >
+        asset_value = #{assetValue,jdbcType=DECIMAL},
+      </if>
+      <if test="monthlyDepreciationRate != null" >
+        monthly_depreciation_rate = #{monthlyDepreciationRate,jdbcType=DECIMAL},
+      </if>
+      <if test="componentId != null" >
+        component_id = #{componentId,jdbcType=VARCHAR},
+      </if>
+      <if test="outputId != null" >
+        output_id = #{outputId,jdbcType=VARCHAR},
+      </if>
+      <if test="runId != null" >
+        run_id = #{runId,jdbcType=VARCHAR},
+      </if>
+      <if test="equipmentId != null" >
+        equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="enclosure != null" >
+        enclosure = #{enclosure,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedger" >
+    update equipment_asset_ledger
+    set equipment_code = #{equipmentCode,jdbcType=VARCHAR},
+      equipment_name = #{equipmentName,jdbcType=VARCHAR},
+      position_code = #{positionCode,jdbcType=VARCHAR},
+      position_name = #{positionName,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      hierarchy = #{hierarchy,jdbcType=VARCHAR},
+      crew = #{crew,jdbcType=VARCHAR},
+      company_code = #{companyCode,jdbcType=VARCHAR},
+      cost_center = #{costCenter,jdbcType=VARCHAR},
+      maintenance_team = #{maintenanceTeam,jdbcType=VARCHAR},
+      address = #{address,jdbcType=DECIMAL},
+      manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      equipment_number = #{equipmentNumber,jdbcType=VARCHAR},
+      fixed_assets = #{fixedAssets,jdbcType=VARCHAR},
+      date_manufacture = #{dateManufacture,jdbcType=TIMESTAMP},
+      install_date = #{installDate,jdbcType=TIMESTAMP},
+      date_delivery = #{dateDelivery,jdbcType=TIMESTAMP},
+      equipment_information = #{equipmentInformation,jdbcType=VARCHAR},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      asset_status = #{assetStatus,jdbcType=VARCHAR},
+      asset_status_date = #{assetStatusDate,jdbcType=TIMESTAMP},
+      asset_code = #{assetCode,jdbcType=VARCHAR},
+      asset_value = #{assetValue,jdbcType=DECIMAL},
+      monthly_depreciation_rate = #{monthlyDepreciationRate,jdbcType=DECIMAL},
+      component_id = #{componentId,jdbcType=VARCHAR},
+      output_id = #{outputId,jdbcType=VARCHAR},
+      run_id = #{runId,jdbcType=VARCHAR},
+      equipment_id = #{equipmentId,jdbcType=VARCHAR},
+      enclosure = #{enclosure,jdbcType=LONGVARBINARY}
+    where equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedger" >
+    update equipment_asset_ledger
+    set equipment_code = #{equipmentCode,jdbcType=VARCHAR},
+      equipment_name = #{equipmentName,jdbcType=VARCHAR},
+      position_code = #{positionCode,jdbcType=VARCHAR},
+      position_name = #{positionName,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      hierarchy = #{hierarchy,jdbcType=VARCHAR},
+      crew = #{crew,jdbcType=VARCHAR},
+      company_code = #{companyCode,jdbcType=VARCHAR},
+      cost_center = #{costCenter,jdbcType=VARCHAR},
+      maintenance_team = #{maintenanceTeam,jdbcType=VARCHAR},
+      address = #{address,jdbcType=DECIMAL},
+      manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      equipment_number = #{equipmentNumber,jdbcType=VARCHAR},
+      fixed_assets = #{fixedAssets,jdbcType=VARCHAR},
+      date_manufacture = #{dateManufacture,jdbcType=TIMESTAMP},
+      install_date = #{installDate,jdbcType=TIMESTAMP},
+      date_delivery = #{dateDelivery,jdbcType=TIMESTAMP},
+      equipment_information = #{equipmentInformation,jdbcType=VARCHAR},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      asset_status = #{assetStatus,jdbcType=VARCHAR},
+      asset_status_date = #{assetStatusDate,jdbcType=TIMESTAMP},
+      asset_code = #{assetCode,jdbcType=VARCHAR},
+      asset_value = #{assetValue,jdbcType=DECIMAL},
+      monthly_depreciation_rate = #{monthlyDepreciationRate,jdbcType=DECIMAL},
+      component_id = #{componentId,jdbcType=VARCHAR},
+      output_id = #{outputId,jdbcType=VARCHAR},
+      run_id = #{runId,jdbcType=VARCHAR},
+      equipment_id = #{equipmentId,jdbcType=VARCHAR}
+    where equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
+  </update>
+</mapper>

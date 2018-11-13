@@ -1,9 +1,11 @@
 package com.qz.zframe.tally.vo;
 
+import java.util.List;
+
 public class WindIdCycleNameVO {
 
     private String windId;
-    private String cycleName;
+    private List<String> cycleName;
 
     public String getWindId() {
         return windId;
@@ -13,11 +15,11 @@ public class WindIdCycleNameVO {
         this.windId = windId;
     }
 
-    public String getCycleName() {
+    public List<String> getCycleName() {
         return cycleName;
     }
 
-    public void setCycleName(String cycleName) {
+    public void setCycleName(List<String> cycleName) {
         this.cycleName = cycleName;
     }
 }

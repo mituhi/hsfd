@@ -2,6 +2,7 @@ package com.qz.zframe.tally.dao;
 
 import com.qz.zframe.tally.dto.PostDto;
 import com.qz.zframe.tally.dto.TallyRouterDto;
+import com.qz.zframe.tally.dto.UserDto;
 import com.qz.zframe.tally.entity.*;
 import com.qz.zframe.tally.vo.TallyPlanVO;
 import com.qz.zframe.tally.vo.TallyRouterVO;
@@ -189,6 +190,64 @@ public interface TallyRouterDao {
      * @return
      */
     List<PeriodTime> findPeriodTimeByCycleId(String cycleId);
+
+    /**
+     * 更新巡检路线信息
+     * @param tallyRoute
+     */
+    void updateTallyRoute(TallyRoute tallyRoute);
+
+    /**
+     * 更新周期信息
+     * @param cycle
+     */
+    void updateCycle(Cycle cycle);
+
+    /**
+     * 查时间段id
+     * @param cycleId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    String findPeriodTimeIdByCycleIdStartTimeAndEndTime(@Param("cycleId")String cycleId,@Param("startTime")Date startTime,@Param("endTime")Date endTime);
+
+    /**
+     * 更新时间段表
+     * @param periodTime
+     */
+    void updatePeriodTime(PeriodTime periodTime);
+
+    /**
+     * 根据路线id和用户id查关联表id
+     * @param routeId
+     * @param userId
+     * @return
+     */
+    String findIdByRouteIdAndUserId(@Param("routeId")String routeId,@Param("userId")String userId);
+
+    /**
+     * 更新用户路线关系表
+     * @param routeUser
+     */
+    void updateRouteUser(RouteUser routeUser);
+
+    /**
+     * 根据周期名称 开始时间 结束时间删除时间表
+     * @param cycleName
+     * @param startTime
+     * @param endTime
+     */
+    void deletePeriodTimeByCycleNameAndStartTimeAndEndTime(@Param("cycleName")String cycleName,@Param("startTime")Date startTime,@Param("endTime")Date endTime);
+
+    /**
+     * 查时间段id
+     * @param cycleId
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    int findPeriodTimeByCycleIdStartTimeAndEndTime(@Param("cycleId")String cycleId,@Param("startTime")Date startTime,@Param("endTime")Date endTime);
     //**********************************************************
 
     /**
@@ -213,6 +272,44 @@ public interface TallyRouterDao {
      */
      List<TallyPlanVO> findTallyPlanVOByPlan(@Param("routeName")String routeName, @Param("maintenancer") String maintenancer,
                                              @Param("windId") String windId, @Param("startTime")Date startTime, @Param("endTime")Date endTime);
+
+
+    /**
+     * 根据路线名称和风电场名称查巡检路线
+     * @param routeName
+     * @param windId
+     * @return
+     */
+     List<TallyRoute> findTallyRouteByWindIdAndRouteName(@Param("routeName")String routeName,@Param("windId") String windId);
+
+    /**
+     * 根据路线名称和风电场id计算
+     * @param routeName
+     * @param windId
+     * @return
+     */
+    int countByWindIdAndRouteName(@Param("routeName")String routeName,@Param("windId") String windId);
+
+    /**
+     * 查询路线id最大值
+     * @return
+     */
+    String findRouteId();
+
+    /**
+     * 查询周期id最大值
+     * @return
+     */
+    String findCycleId();
+
+    String findDepartmentByUserName(String userName);
+
+
+    /**
+     * 查巡检路线添加的用户信息相关
+     * @return
+     */
+    List<UserDto> findAllUserDto();
 
 
 

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tickets.mapper.WorkTicketWorkTimeMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.WorkTicketWorkTime" >
+    <id column="work_time_id" property="workTimeId" jdbcType="VARCHAR" />
+    <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="work_time_number" property="workTimeNumber" jdbcType="VARCHAR" />
+    <result column="work_start_time" property="workStartTime" jdbcType="TIMESTAMP" />
+    <result column="work_start_head" property="workStartHead" jdbcType="VARCHAR" />
+    <result column="work_start_licensor" property="workStartLicensor" jdbcType="VARCHAR" />
+    <result column="work_end_time" property="workEndTime" jdbcType="TIMESTAMP" />
+    <result column="work_end_head" property="workEndHead" jdbcType="VARCHAR" />
+    <result column="work_end_licensor" property="workEndLicensor" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    work_time_id, ticket_id, work_time_number, work_start_time, work_start_head, work_start_licensor, 
+    work_end_time, work_end_head, work_end_licensor
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.WorkTicketWorkTimeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from work_ticket_work_time
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_ticket_work_time
+    where work_time_id = #{workTimeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from work_ticket_work_time
+    where work_time_id = #{workTimeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.tickets.entity.WorkTicketWorkTimeExample" >
+    delete from work_ticket_work_time
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.tickets.entity.WorkTicketWorkTime" >
+    insert into work_ticket_work_time (work_time_id, ticket_id, work_time_number, 
+      work_start_time, work_start_head, work_start_licensor, 
+      work_end_time, work_end_head, work_end_licensor
+      )
+    values (#{workTimeId,jdbcType=VARCHAR}, #{ticketId,jdbcType=VARCHAR}, #{workTimeNumber,jdbcType=VARCHAR}, 
+      #{workStartTime,jdbcType=TIMESTAMP}, #{workStartHead,jdbcType=VARCHAR}, #{workStartLicensor,jdbcType=VARCHAR}, 
+      #{workEndTime,jdbcType=TIMESTAMP}, #{workEndHead,jdbcType=VARCHAR}, #{workEndLicensor,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.WorkTicketWorkTime" >
+    insert into work_ticket_work_time
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="workTimeId != null" >
+        work_time_id,
+      </if>
+      <if test="ticketId != null" >
+        ticket_id,
+      </if>
+      <if test="workTimeNumber != null" >
+        work_time_number,
+      </if>
+      <if test="workStartTime != null" >
+        work_start_time,
+      </if>
+      <if test="workStartHead != null" >
+        work_start_head,
+      </if>
+      <if test="workStartLicensor != null" >
+        work_start_licensor,
+      </if>
+      <if test="workEndTime != null" >
+        work_end_time,
+      </if>
+      <if test="workEndHead != null" >
+        work_end_head,
+      </if>
+      <if test="workEndLicensor != null" >
+        work_end_licensor,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="workTimeId != null" >
+        #{workTimeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketId != null" >
+        #{ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="workTimeNumber != null" >
+        #{workTimeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="workStartTime != null" >
+        #{workStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workStartHead != null" >
+        #{workStartHead,jdbcType=VARCHAR},
+      </if>
+      <if test="workStartLicensor != null" >
+        #{workStartLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="workEndTime != null" >
+        #{workEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workEndHead != null" >
+        #{workEndHead,jdbcType=VARCHAR},
+      </if>
+      <if test="workEndLicensor != null" >
+        #{workEndLicensor,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.tickets.entity.WorkTicketWorkTimeExample" resultType="java.lang.Integer" >
+    select count(*) from work_ticket_work_time
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update work_ticket_work_time
+    <set >
+      <if test="record.workTimeId != null" >
+        work_time_id = #{record.workTimeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketId != null" >
+        ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workTimeNumber != null" >
+        work_time_number = #{record.workTimeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workStartTime != null" >
+        work_start_time = #{record.workStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.workStartHead != null" >
+        work_start_head = #{record.workStartHead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workStartLicensor != null" >
+        work_start_licensor = #{record.workStartLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workEndTime != null" >
+        work_end_time = #{record.workEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.workEndHead != null" >
+        work_end_head = #{record.workEndHead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workEndLicensor != null" >
+        work_end_licensor = #{record.workEndLicensor,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update work_ticket_work_time
+    set work_time_id = #{record.workTimeId,jdbcType=VARCHAR},
+      ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      work_time_number = #{record.workTimeNumber,jdbcType=VARCHAR},
+      work_start_time = #{record.workStartTime,jdbcType=TIMESTAMP},
+      work_start_head = #{record.workStartHead,jdbcType=VARCHAR},
+      work_start_licensor = #{record.workStartLicensor,jdbcType=VARCHAR},
+      work_end_time = #{record.workEndTime,jdbcType=TIMESTAMP},
+      work_end_head = #{record.workEndHead,jdbcType=VARCHAR},
+      work_end_licensor = #{record.workEndLicensor,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.tickets.entity.WorkTicketWorkTime" >
+    update work_ticket_work_time
+    <set >
+      <if test="ticketId != null" >
+        ticket_id = #{ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="workTimeNumber != null" >
+        work_time_number = #{workTimeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="workStartTime != null" >
+        work_start_time = #{workStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workStartHead != null" >
+        work_start_head = #{workStartHead,jdbcType=VARCHAR},
+      </if>
+      <if test="workStartLicensor != null" >
+        work_start_licensor = #{workStartLicensor,jdbcType=VARCHAR},
+      </if>
+      <if test="workEndTime != null" >
+        work_end_time = #{workEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workEndHead != null" >
+        work_end_head = #{workEndHead,jdbcType=VARCHAR},
+      </if>
+      <if test="workEndLicensor != null" >
+        work_end_licensor = #{workEndLicensor,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where work_time_id = #{workTimeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.WorkTicketWorkTime" >
+    update work_ticket_work_time
+    set ticket_id = #{ticketId,jdbcType=VARCHAR},
+      work_time_number = #{workTimeNumber,jdbcType=VARCHAR},
+      work_start_time = #{workStartTime,jdbcType=TIMESTAMP},
+      work_start_head = #{workStartHead,jdbcType=VARCHAR},
+      work_start_licensor = #{workStartLicensor,jdbcType=VARCHAR},
+      work_end_time = #{workEndTime,jdbcType=TIMESTAMP},
+      work_end_head = #{workEndHead,jdbcType=VARCHAR},
+      work_end_licensor = #{workEndLicensor,jdbcType=VARCHAR}
+    where work_time_id = #{workTimeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

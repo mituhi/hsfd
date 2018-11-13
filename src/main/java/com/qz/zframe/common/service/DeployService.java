@@ -38,11 +38,20 @@ public interface DeployService {
 	 */
 	Deploy queryDeployById(String deployId) throws Exception;
 
-//	/**
-//	 * 新增修改流程步骤
-//	 * @param deploy
-//	 * @return
-//	 */
-//	Deploy addAndUpdateDeploy(Deploy deploy);
+	/**
+	 * 新增修改流程步骤
+	 * @param deploy
+	 * @return
+	 * @throws Exception 
+	 */
+	Deploy addAndUpdateDeploy(Deploy deploy) throws Exception;
+
+	/**
+	 * 删除流程步骤
+	 * @param deployIds
+	 * @return
+	 * @throws Exception 
+	 */
+	Integer deleteDeploy(List<String> deployIds) throws Exception;
 
 }

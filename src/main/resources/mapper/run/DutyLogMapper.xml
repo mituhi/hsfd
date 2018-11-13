@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.DutyLogMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.DutyLog" >
+    <id column="duty_log_id" property="dutyLogId" jdbcType="VARCHAR" />
+    <result column="log_type_id" property="logTypeId" jdbcType="VARCHAR" />
+    <result column="log_type" property="logType" jdbcType="VARCHAR" />
+    <result column="log_name" property="logName" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="scheduling_management_id" property="schedulingManagementId" jdbcType="VARCHAR" />
+    <result column="scheduling_name" property="schedulingName" jdbcType="VARCHAR" />
+    <result column="duty_user" property="dutyUser" jdbcType="VARCHAR" />
+    <result column="duty_user_ids" property="dutyUserIds" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="is_face_to_face" property="isFaceToFace" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="duty_remember_id" property="dutyRememberId" jdbcType="VARCHAR" />
+    <result column="TAB_id" property="tabId" jdbcType="VARCHAR" />
+    <result column="maintain_user" property="maintainUser" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    duty_log_id, log_type_id, log_type, log_name, department, scheduling_management_id, 
+    scheduling_name, duty_user, duty_user_ids, status, is_face_to_face, phone, remark, 
+    duty_remember_id, TAB_id, maintain_user, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.DutyLogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from duty_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from duty_log
+    where duty_log_id = #{dutyLogId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from duty_log
+    where duty_log_id = #{dutyLogId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.DutyLogExample" >
+    delete from duty_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.DutyLog" >
+    insert into duty_log (duty_log_id, log_type_id, log_type, 
+      log_name, department, scheduling_management_id, 
+      scheduling_name, duty_user, duty_user_ids, 
+      status, is_face_to_face, phone, 
+      remark, duty_remember_id, TAB_id, 
+      maintain_user, update_time)
+    values (#{dutyLogId,jdbcType=VARCHAR}, #{logTypeId,jdbcType=VARCHAR}, #{logType,jdbcType=VARCHAR}, 
+      #{logName,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{schedulingManagementId,jdbcType=VARCHAR}, 
+      #{schedulingName,jdbcType=VARCHAR}, #{dutyUser,jdbcType=VARCHAR}, #{dutyUserIds,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{isFaceToFace,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{dutyRememberId,jdbcType=VARCHAR}, #{tabId,jdbcType=VARCHAR}, 
+      #{maintainUser,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.DutyLog" >
+    insert into duty_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dutyLogId != null" >
+        duty_log_id,
+      </if>
+      <if test="logTypeId != null" >
+        log_type_id,
+      </if>
+      <if test="logType != null" >
+        log_type,
+      </if>
+      <if test="logName != null" >
+        log_name,
+      </if>
+      <if test="department != null" >
+        department,
+      </if>
+      <if test="schedulingManagementId != null" >
+        scheduling_management_id,
+      </if>
+      <if test="schedulingName != null" >
+        scheduling_name,
+      </if>
+      <if test="dutyUser != null" >
+        duty_user,
+      </if>
+      <if test="dutyUserIds != null" >
+        duty_user_ids,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="isFaceToFace != null" >
+        is_face_to_face,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="dutyRememberId != null" >
+        duty_remember_id,
+      </if>
+      <if test="tabId != null" >
+        TAB_id,
+      </if>
+      <if test="maintainUser != null" >
+        maintain_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dutyLogId != null" >
+        #{dutyLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="logTypeId != null" >
+        #{logTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="logType != null" >
+        #{logType,jdbcType=VARCHAR},
+      </if>
+      <if test="logName != null" >
+        #{logName,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingManagementId != null" >
+        #{schedulingManagementId,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingName != null" >
+        #{schedulingName,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyUser != null" >
+        #{dutyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyUserIds != null" >
+        #{dutyUserIds,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isFaceToFace != null" >
+        #{isFaceToFace,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyRememberId != null" >
+        #{dutyRememberId,jdbcType=VARCHAR},
+      </if>
+      <if test="tabId != null" >
+        #{tabId,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainUser != null" >
+        #{maintainUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.DutyLogExample" resultType="java.lang.Integer" >
+    select count(*) from duty_log
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update duty_log
+    <set >
+      <if test="record.dutyLogId != null" >
+        duty_log_id = #{record.dutyLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logTypeId != null" >
+        log_type_id = #{record.logTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logType != null" >
+        log_type = #{record.logType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logName != null" >
+        log_name = #{record.logName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.department != null" >
+        department = #{record.department,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schedulingManagementId != null" >
+        scheduling_management_id = #{record.schedulingManagementId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schedulingName != null" >
+        scheduling_name = #{record.schedulingName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyUser != null" >
+        duty_user = #{record.dutyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyUserIds != null" >
+        duty_user_ids = #{record.dutyUserIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isFaceToFace != null" >
+        is_face_to_face = #{record.isFaceToFace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyRememberId != null" >
+        duty_remember_id = #{record.dutyRememberId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tabId != null" >
+        TAB_id = #{record.tabId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainUser != null" >
+        maintain_user = #{record.maintainUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update duty_log
+    set duty_log_id = #{record.dutyLogId,jdbcType=VARCHAR},
+      log_type_id = #{record.logTypeId,jdbcType=VARCHAR},
+      log_type = #{record.logType,jdbcType=VARCHAR},
+      log_name = #{record.logName,jdbcType=VARCHAR},
+      department = #{record.department,jdbcType=VARCHAR},
+      scheduling_management_id = #{record.schedulingManagementId,jdbcType=VARCHAR},
+      scheduling_name = #{record.schedulingName,jdbcType=VARCHAR},
+      duty_user = #{record.dutyUser,jdbcType=VARCHAR},
+      duty_user_ids = #{record.dutyUserIds,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      is_face_to_face = #{record.isFaceToFace,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      duty_remember_id = #{record.dutyRememberId,jdbcType=VARCHAR},
+      TAB_id = #{record.tabId,jdbcType=VARCHAR},
+      maintain_user = #{record.maintainUser,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.DutyLog" >
+    update duty_log
+    <set >
+      <if test="logTypeId != null" >
+        log_type_id = #{logTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="logType != null" >
+        log_type = #{logType,jdbcType=VARCHAR},
+      </if>
+      <if test="logName != null" >
+        log_name = #{logName,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingManagementId != null" >
+        scheduling_management_id = #{schedulingManagementId,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingName != null" >
+        scheduling_name = #{schedulingName,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyUser != null" >
+        duty_user = #{dutyUser,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyUserIds != null" >
+        duty_user_ids = #{dutyUserIds,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="isFaceToFace != null" >
+        is_face_to_face = #{isFaceToFace,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyRememberId != null" >
+        duty_remember_id = #{dutyRememberId,jdbcType=VARCHAR},
+      </if>
+      <if test="tabId != null" >
+        TAB_id = #{tabId,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainUser != null" >
+        maintain_user = #{maintainUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where duty_log_id = #{dutyLogId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.DutyLog" >
+    update duty_log
+    set log_type_id = #{logTypeId,jdbcType=VARCHAR},
+      log_type = #{logType,jdbcType=VARCHAR},
+      log_name = #{logName,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      scheduling_management_id = #{schedulingManagementId,jdbcType=VARCHAR},
+      scheduling_name = #{schedulingName,jdbcType=VARCHAR},
+      duty_user = #{dutyUser,jdbcType=VARCHAR},
+      duty_user_ids = #{dutyUserIds,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      is_face_to_face = #{isFaceToFace,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      duty_remember_id = #{dutyRememberId,jdbcType=VARCHAR},
+      TAB_id = #{tabId,jdbcType=VARCHAR},
+      maintain_user = #{maintainUser,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where duty_log_id = #{dutyLogId,jdbcType=VARCHAR}
+  </update>
+</mapper>

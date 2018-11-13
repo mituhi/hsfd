@@ -4,16 +4,18 @@ import java.util.List;
 
 import com.qz.zframe.common.entity.DataDict;
 import com.qz.zframe.common.entity.DataDictType;
+import com.qz.zframe.common.util.PageResultEntity;
 
 public interface DataDictService {
 
 	/**
 	 * 根据标准代码类型查询标准代码
 	 * @param codeType
-	 * @param pageable
+	 * @param size 
+	 * @param page 
 	 * @return
 	 */
-	List<DataDict> queryCode(String codeType);
+	PageResultEntity queryCode(String codeType, Integer page, Integer size);
 
 	/**
 	 * 新增及修改标准代码分类
@@ -42,9 +44,11 @@ public interface DataDictService {
 	/**
 	 * 根据类型查询标准代码分类
 	 * @param codeType
+	 * @param size 
+	 * @param page 
 	 * @return
 	 */
-	List<DataDictType> queryCodeType(String codeType);
+	PageResultEntity queryCodeType(String codeType, Integer page, Integer size);
 
 	/**
 	 * 新增及修改标准代码

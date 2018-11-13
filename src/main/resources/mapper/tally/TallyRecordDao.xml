@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyRecordDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.TallyRecord" >
+        <id column="record_id" property="recordId" />
+        <result column="route_id" property="routeId" />
+        <result column="practitioner_name" property="practitionerName"/>
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime"/>
+        <result column="standard_quantity" property="standardQuantity" />
+        <result column="record_number" property="recordNumber"/>
+        <result column="alarm_number" property="alarmNumber" />
+        <result column="processed_alerts" property="processedAlerts"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.qz.zframe.tally.dto.TallyRecordDto" >
+        <id column="record_id" property="recordId" />
+        <result column="route_id" property="routeId" />
+        <result column="practitioner_name" property="practitionerName"/>
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime"/>
+        <result column="standard_quantity" property="standardQuantity" />
+        <result column="record_number" property="recordNumber"/>
+        <result column="alarm_number" property="alarmNumber" />
+        <result column="processed_alerts" property="processedAlerts"/>
+        <result column="wind_id" property="windId"/>
+        <result column="route_name" property="routeName"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        record_id,route_id,practitioner_name,start_time,end_time,standard_quantity,record_number,alarm_number,processed_alerts
+    </sql>
+
+    <select id="findAllTallyRecord" resultMap="BaseResultMap2">
+        SELECT
+         tally_record.record_id,tally_record.route_id,tally_record.practitioner_name,tally_record.start_time,tally_record.end_time,
+         tally_record.standard_quantity,tally_record.record_number,tally_record.alarm_number,tally_record.processed_alerts,
+         tally_route.wind_id,tally_route.route_name
+        FROM tally_route,tally_record
+        WHERE 1=1
+        <if test="windId !=null">
+            and tally_route.wind_id=#{windId}
+        </if>
+        <if test="routeName !=null">
+            and tally_route.route_name=#{routeName}
+        </if>
+        <if test="practitioners !=null">
+            and tally_record.practitioner_name =#{practitioners}
+        </if>
+        <if test="startTime !=null">
+            and tally_record.start_time =#{startTime}
+        </if>
+        <if test="endTime !=null">
+            and tally_record.end_time =#{endTime}
+        </if>
+        and tally_route.route_id=tally_record.route_id
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

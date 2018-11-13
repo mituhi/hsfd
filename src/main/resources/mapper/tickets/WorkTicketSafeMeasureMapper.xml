@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tickets.mapper.WorkTicketSafeMeasureMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.tickets.entity.WorkTicketSafeMeasure" >
+    <id column="safe_id" property="safeId" jdbcType="VARCHAR" />
+    <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
+    <result column="ticket_type_id" property="ticketTypeId" jdbcType="VARCHAR" />
+    <result column="safe_number" property="safeNumber" jdbcType="VARCHAR" />
+    <result column="safe_title" property="safeTitle" jdbcType="VARCHAR" />
+    <result column="safe_content" property="safeContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    safe_id, ticket_id, standard_ticket_id, ticket_type_id, safe_number, safe_title, 
+    safe_content
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasureExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from work_ticket_safe_measure
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_ticket_safe_measure
+    where safe_id = #{safeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from work_ticket_safe_measure
+    where safe_id = #{safeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasureExample" >
+    delete from work_ticket_safe_measure
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasure" >
+    insert into work_ticket_safe_measure (safe_id, ticket_id, standard_ticket_id, 
+      ticket_type_id, safe_number, safe_title, 
+      safe_content)
+    values (#{safeId,jdbcType=VARCHAR}, #{ticketId,jdbcType=VARCHAR}, #{standardTicketId,jdbcType=VARCHAR}, 
+      #{ticketTypeId,jdbcType=VARCHAR}, #{safeNumber,jdbcType=VARCHAR}, #{safeTitle,jdbcType=VARCHAR}, 
+      #{safeContent,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasure" >
+    insert into work_ticket_safe_measure
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="safeId != null" >
+        safe_id,
+      </if>
+      <if test="ticketId != null" >
+        ticket_id,
+      </if>
+      <if test="standardTicketId != null" >
+        standard_ticket_id,
+      </if>
+      <if test="ticketTypeId != null" >
+        ticket_type_id,
+      </if>
+      <if test="safeNumber != null" >
+        safe_number,
+      </if>
+      <if test="safeTitle != null" >
+        safe_title,
+      </if>
+      <if test="safeContent != null" >
+        safe_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="safeId != null" >
+        #{safeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketId != null" >
+        #{ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="standardTicketId != null" >
+        #{standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeId != null" >
+        #{ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="safeNumber != null" >
+        #{safeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="safeTitle != null" >
+        #{safeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent != null" >
+        #{safeContent,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasureExample" resultType="java.lang.Integer" >
+    select count(*) from work_ticket_safe_measure
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update work_ticket_safe_measure
+    <set >
+      <if test="record.safeId != null" >
+        safe_id = #{record.safeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketId != null" >
+        ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.standardTicketId != null" >
+        standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketTypeId != null" >
+        ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeNumber != null" >
+        safe_number = #{record.safeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeTitle != null" >
+        safe_title = #{record.safeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent != null" >
+        safe_content = #{record.safeContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update work_ticket_safe_measure
+    set safe_id = #{record.safeId,jdbcType=VARCHAR},
+      ticket_id = #{record.ticketId,jdbcType=VARCHAR},
+      standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
+      ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
+      safe_number = #{record.safeNumber,jdbcType=VARCHAR},
+      safe_title = #{record.safeTitle,jdbcType=VARCHAR},
+      safe_content = #{record.safeContent,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasure" >
+    update work_ticket_safe_measure
+    <set >
+      <if test="ticketId != null" >
+        ticket_id = #{ticketId,jdbcType=VARCHAR},
+      </if>
+      <if test="standardTicketId != null" >
+        standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketTypeId != null" >
+        ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="safeNumber != null" >
+        safe_number = #{safeNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="safeTitle != null" >
+        safe_title = #{safeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent != null" >
+        safe_content = #{safeContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where safe_id = #{safeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasure" >
+    update work_ticket_safe_measure
+    set ticket_id = #{ticketId,jdbcType=VARCHAR},
+      standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
+      ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
+      safe_number = #{safeNumber,jdbcType=VARCHAR},
+      safe_title = #{safeTitle,jdbcType=VARCHAR},
+      safe_content = #{safeContent,jdbcType=VARCHAR}
+    where safe_id = #{safeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

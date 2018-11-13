@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.MaintainLogInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.MaintainLogInfo" >
+    <id column="day_id" property="dayId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="day_of_week" property="dayOfWeek" jdbcType="VARCHAR" />
+    <result column="weather" property="weather" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="record_person" property="recordPerson" jdbcType="VARCHAR" />
+    <result column="maintain_time" property="maintainTime" jdbcType="TIMESTAMP" />
+    <result column="on_duty_person" property="onDutyPerson" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    day_id, serial_number, maintainer, maintain_date, status, day_of_week, weather, wind_id, 
+    record_person, maintain_time, on_duty_person, remark
+  </sql>
+
+
+
+
+
+
+  <update id="batchDelete" parameterType="java.lang.String">
+    update maintain_log_info set status = "0"
+    where day_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+  <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.MaintainLogVo" >
+    <id column="day_id" property="dayId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="day_of_week" property="dayOfWeek" jdbcType="VARCHAR" />
+    <result column="weather" property="weather" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="record_person" property="recordPerson" jdbcType="VARCHAR" />
+    <result column="maintain_time" property="maintainTime" jdbcType="TIMESTAMP" />
+    <result column="on_duty_person" property="onDutyPerson" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.day_id as day_id, a.serial_number as serial_number, a.maintainer as maintainer, a.maintain_date as maintain_date,a.status as status,
+    a.day_of_week as day_of_week, a.weather as weather, a.wind_id as wind_id,a.record_person as record_person,
+    a.maintain_time as maintain_time, a.on_duty_person as on_duty_person, a.remark as remark,
+    b.architecture_name as wind_name
+  </sql>
+  <select id="getMaintainLogDetail" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from maintain_log_info a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    where a.status != '0' and a.day_id = #{dayId}
+  </select>
+  <select id="getMaintainLogList" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from maintain_log_info a
+    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    where a.status != '0'
+    <if test="map.windId != null" >
+      and a.wind_id = #{map.windId}
+    </if>
+    <if test="map.startDate != null">
+      and a.maintain_date &gt;= #{map.startDate}
+    </if>
+    <if test="map.endDate != null">
+      and a.maintain_date &lt;= #{map.endDate}
+    </if>
+    order by a.serial_number desc
+    limit ${map.start},${map.pageSize}
+  </select>
+  <select id="getTotal" resultType="java.lang.Integer">
+    select
+    count(*)
+    from maintain_log_info
+    where status != '0'
+    <if test="map.windId != null" >
+      and wind_id = #{map.windId}
+    </if>
+    <if test="map.startDate != null">
+      and maintain_date &gt;= #{map.startDate}
+    </if>
+    <if test="map.endDate != null">
+      and maintain_date &lt;= #{map.endDate}
+    </if>
+  </select>
+
+
+
+
+
+
+
+
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.MaintainLogInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from maintain_log_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from maintain_log_info
+    where day_id = #{dayId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from maintain_log_info
+    where day_id = #{dayId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.maintain.entity.MaintainLogInfoExample" >
+    delete from maintain_log_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.MaintainLogInfo" >
+    insert into maintain_log_info (day_id, serial_number, maintainer, 
+      maintain_date, status, day_of_week, 
+      weather, wind_id, record_person, 
+      maintain_time, on_duty_person, remark
+      )
+    values (#{dayId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, 
+      #{maintainDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, #{dayOfWeek,jdbcType=VARCHAR}, 
+      #{weather,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{recordPerson,jdbcType=VARCHAR}, 
+      #{maintainTime,jdbcType=TIMESTAMP}, #{onDutyPerson,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.MaintainLogInfo" >
+    insert into maintain_log_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dayId != null" >
+        day_id,
+      </if>
+      <if test="serialNumber != null" >
+        serial_number,
+      </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="dayOfWeek != null" >
+        day_of_week,
+      </if>
+      <if test="weather != null" >
+        weather,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="recordPerson != null" >
+        record_person,
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time,
+      </if>
+      <if test="onDutyPerson != null" >
+        on_duty_person,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dayId != null" >
+        #{dayId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="dayOfWeek != null" >
+        #{dayOfWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="weather != null" >
+        #{weather,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordPerson != null" >
+        #{recordPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        #{maintainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="onDutyPerson != null" >
+        #{onDutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.maintain.entity.MaintainLogInfoExample" resultType="java.lang.Integer" >
+    select count(*) from maintain_log_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update maintain_log_info
+    <set >
+      <if test="record.dayId != null" >
+        day_id = #{record.dayId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null" >
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainDate != null" >
+        maintain_date = #{record.maintainDate,jdbcType=DATE},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dayOfWeek != null" >
+        day_of_week = #{record.dayOfWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weather != null" >
+        weather = #{record.weather,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordPerson != null" >
+        record_person = #{record.recordPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainTime != null" >
+        maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.onDutyPerson != null" >
+        on_duty_person = #{record.onDutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update maintain_log_info
+    set day_id = #{record.dayId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      status = #{record.status,jdbcType=VARCHAR},
+      day_of_week = #{record.dayOfWeek,jdbcType=VARCHAR},
+      weather = #{record.weather,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      record_person = #{record.recordPerson,jdbcType=VARCHAR},
+      maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP},
+      on_duty_person = #{record.onDutyPerson,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.MaintainLogInfo" >
+    update maintain_log_info
+    <set >
+      <if test="serialNumber != null" >
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainDate != null" >
+        maintain_date = #{maintainDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="dayOfWeek != null" >
+        day_of_week = #{dayOfWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="weather != null" >
+        weather = #{weather,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="recordPerson != null" >
+        record_person = #{recordPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time = #{maintainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="onDutyPerson != null" >
+        on_duty_person = #{onDutyPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where day_id = #{dayId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.MaintainLogInfo" >
+    update maintain_log_info
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_date = #{maintainDate,jdbcType=DATE},
+      status = #{status,jdbcType=VARCHAR},
+      day_of_week = #{dayOfWeek,jdbcType=VARCHAR},
+      weather = #{weather,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      record_person = #{recordPerson,jdbcType=VARCHAR},
+      maintain_time = #{maintainTime,jdbcType=TIMESTAMP},
+      on_duty_person = #{onDutyPerson,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where day_id = #{dayId,jdbcType=VARCHAR}
+  </update>
+</mapper>

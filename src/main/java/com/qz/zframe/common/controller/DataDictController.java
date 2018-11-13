@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.qz.zframe.common.entity.DataDict;
 import com.qz.zframe.common.entity.DataDictType;
 import com.qz.zframe.common.service.DataDictService;
+import com.qz.zframe.common.util.PageResultEntity;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,12 +34,12 @@ public class DataDictController {
 	
 	@ApiOperation(value = "根据类型查询编码分类", notes = "根据类型查询编码分类")
 	@RequestMapping(value = "queryCodeType", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<List<DataDictType>> queryCodeType(
+	public PageResultEntity queryCodeType(
 			@RequestParam(required = false)
-			@ApiParam(name="codeType",value="分类编码",required=false) String codeType) {
+			@ApiParam(name="codeType",value="分类编码",required=false) String codeType,
+			@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
 		logger.info("===== 根据类型查询编码分类 DataDictController.queryCodeByCodeType ===== codeType:"+codeType);
-		List<DataDictType> pageorgan = dataDictService.queryCodeType(codeType);
-		return new ResponseEntity<List<DataDictType>>(pageorgan, HttpStatus.OK);
+		return dataDictService.queryCodeType(codeType, page, size);
 	}
 	
 	@ApiOperation(value = "根据id查询编码分类", notes = "根据id查询编码分类")
@@ -77,10 +78,10 @@ public class DataDictController {
 	
 	@ApiOperation(value = "根据类型查询编码", notes = "根据类型查询编码")
 	@RequestMapping(value = "queryCode", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<List<DataDict>> queryCode(@RequestParam(required = false) String codeType) {
+	public PageResultEntity queryCode(@RequestParam(required = false) String codeType,
+			@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
 		logger.info("===== 根据类型查询编码 DataDictController.queryCode ===== codeType:"+codeType);
-		List<DataDict> list = dataDictService.queryCode(codeType);
-		return new ResponseEntity<List<DataDict>>(list, HttpStatus.OK);
+		return dataDictService.queryCode(codeType, page, size);
 	}
 	
 	@ApiOperation(value = "根据id查询编码", notes = "根据id查询编码")

@@ -77,7 +77,7 @@ public interface TallyStandardDao {
      * @param routeName
      * @return
      */
-    String findCycleNameByRouteName(String routeName);
+    List<String> findCycleNameByRouteName(String routeName);
 
     /**
      * 更新标准
@@ -142,4 +142,27 @@ public interface TallyStandardDao {
      * @return
      */
     int countStandard(@Param("equipmentBelonging") String equipmentBelonging, @Param("routeId") String routeId, @Param("equipmentState") String equipmentState, @Param("alarmType") String alarmType, @Param("standardCoding") String standardCoding, @Param("checkContent") String checkContent);
+
+    /**
+     * 根据周期名称和路线id查询周期id
+     * @param cycleName
+     * @param routeId
+     * @return
+     */
+    String findCycleIdByCycleNameAndRouteId(@Param("cycleName")String cycleName,@Param("routeId")String routeId);
+
+    /**
+     * 根据所属风场查询所属风场下面的所属路线
+     * @param windId
+     * @return
+     */
+    List<String> findRouteNameByWindId(String windId);
+
+    /**
+     * 根据标准id和路线id查询周期名称
+     * @param standardId
+     * @param routeId
+     * @return
+     */
+    String findCycleNameByStandardIdAndRouteId(@Param("standardId") String standardId,@Param("routeId") String routeId);
 }

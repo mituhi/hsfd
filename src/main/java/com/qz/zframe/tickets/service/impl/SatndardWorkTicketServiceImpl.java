@@ -2,26 +2,22 @@ package com.qz.zframe.tickets.service.impl;
 
 import com.qz.zframe.authentication.CurrentUserService;
 import com.qz.zframe.common.util.ErrorCode;
+import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.common.util.UUIdUtil;
 import com.qz.zframe.tickets.entity.*;
-import com.qz.zframe.tickets.mapper.StandardWorkTicketMapper;
-import com.qz.zframe.tickets.mapper.WorkTicketTypeMapper;
-import com.qz.zframe.tickets.mapper.WorkTicketTypeSafeMeasureMapper;
-import com.qz.zframe.tickets.mapper.WorkTicketTypeUserMapper;
+import com.qz.zframe.tickets.mapper.*;
 import com.qz.zframe.tickets.service.StandardWorkTicketService;
-import com.qz.zframe.tickets.vo.StandardWorkTicketRes;
+import com.qz.zframe.tickets.vo.StandardWorkTicketVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -34,70 +30,82 @@ public class SatndardWorkTicketServiceImpl implements StandardWorkTicketService 
     private StandardWorkTicketMapper standardWorkTicketMapper;
 
     @Autowired
-    private WorkTicketTypeMapper workTicketTypeMapper;
+    private WorkTicketSafeMeasureMapper workTicketSafeMeasureMapper;
 
     @Autowired
-    private WorkTicketTypeSafeMeasureMapper workTicketTypeSafeMeasureMapper;
-
-    @Autowired
-    private WorkTicketTypeUserMapper workTicketTypeUserMapper;
+    private WorkTicketRiskControlMapper workTicketRiskControlMapper;
 
     @Override
-    public ResultEntity getStandardWorkTicketList() {
+    public ResultEntity addStandardWorkTicket(StandardWorkTicketVo standardWorkTicketVo) {
         ResultEntity resultEntity = new ResultEntity();
-        List<StandardWorkTicketRes> standardWorkTicketReList = new ArrayList<>();
 
-        List<StandardWorkTicket> standardWorkTicketList = standardWorkTicketMapper.selectByExample(new StandardWorkTicketExample());
-        standardWorkTicketList.forEach(standardWorkTicket -> {
-            StandardWorkTicketRes standardWorkTicketRes = new StandardWorkTicketRes();
-            BeanUtils.copyProperties(standardWorkTicket,standardWorkTicketRes);
-            WorkTicketTypeSafeMeasureExample workTicketTypeSafeMeasureExample = new WorkTicketTypeSafeMeasureExample();
-            workTicketTypeSafeMeasureExample.createCriteria().andTicketTypeIdEqualTo(standardWorkTicket.getTicketTypeId());
-            List<WorkTicketTypeSafeMeasure> workTicketTypeSafeMeasureList = workTicketTypeSafeMeasureMapper.selectByExample(workTicketTypeSafeMeasureExample);
-            workTicketTypeSafeMeasureList.forEach(workTicketTypeSafeMeasure -> {
-                standardWorkTicketRes.getSafeMeasureList().add(workTicketTypeSafeMeasure);
-            });
-            standardWorkTicketReList.add(standardWorkTicketRes);
-        });
-
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("操作成功");
-        resultEntity.setData(standardWorkTicketReList);
-        return resultEntity;
-    }
-
-    @Override
-    public ResultEntity createStandardWorkTicket() {
-        ResultEntity resultEntity = new ResultEntity();
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getMaintainer())) {
+            resultEntity.setMsg("维护人不能为空");
+            return resultEntity;
+        }
+        if (standardWorkTicketVo.getMaintainDate()==null) {
+            resultEntity.setMsg("维护日期不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getTicketTypeId())) {
+            resultEntity.setMsg("工作票类型不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getSerialNumber())) {
+            resultEntity.setMsg("标准工作票号不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getWindId())) {
+            resultEntity.setMsg("风电场id不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getCrewId())) {
+            resultEntity.setMsg("机组id不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getWorkTeam())) {
+            resultEntity.setMsg("工作班组不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getDoubleName())) {
+            resultEntity.setMsg("工作的风电场、升压站名称及设备双重名称不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getWorkPlace())) {
+            resultEntity.setMsg("工作地点或地段不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getWorkContent())) {
+            resultEntity.setMsg("工作内容不能为空");
+            return resultEntity;
+        }
+        //添加主数据
         StandardWorkTicket standardWorkTicket = new StandardWorkTicket();
-
-        try {
-            String standardTicketId = UUIdUtil.getUUID();
-            String serialNumber = "1111";
-            String maintainer = currentUserService.getUsername();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date maintainDate = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
-            standardWorkTicket.setTicketTypeId(standardTicketId);
-            standardWorkTicket.setSerialNumber(serialNumber);
-            standardWorkTicket.setMaintainer(maintainer);
-            standardWorkTicket.setMaintainDate(maintainDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        BeanUtils.copyProperties(standardWorkTicketVo,standardWorkTicket);
+        standardWorkTicket.setStandardTicketId(UUIdUtil.getUUID());
+        standardWorkTicket.setSerialNumber(String.valueOf(standardWorkTicketMapper.countByExample(new StandardWorkTicketExample())+1));
+        standardWorkTicketMapper.insert(standardWorkTicket);
+        //添加安措
+        List<WorkTicketSafeMeasure> safeMeasureList = standardWorkTicketVo.getSafeMeasureList();
+        if (safeMeasureList!=null && safeMeasureList.size()!=0) {
+            safeMeasureList.forEach(workTicketSafeMeasure -> {
+                workTicketSafeMeasure.setSafeId(UUIdUtil.getUUID());
+                workTicketSafeMeasure.setStandardTicketId(standardWorkTicket.getStandardTicketId());
+                workTicketSafeMeasureMapper.insert(workTicketSafeMeasure);
+            });
+        }
+        //添加危险因素控制措施
+        List<WorkTicketRiskControl> riskControlList = standardWorkTicketVo.getRiskControlList();
+        if (riskControlList!=null && riskControlList.size()!=0) {
+            riskControlList.forEach(workTicketRiskControl -> {
+                workTicketRiskControl.setMeasureId(UUIdUtil.getUUID());
+                workTicketRiskControl.setStandardTicketId(standardWorkTicket.getStandardTicketId());
+                workTicketRiskControlMapper.insert(workTicketRiskControl);
+            });
         }
 
         resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("操作成功");
-        resultEntity.setData(standardWorkTicket);
-        return resultEntity;
-    }
-
-    @Override
-    public ResultEntity addStandardWorkTicket(StandardWorkTicket standardWorkTicket) {
-        ResultEntity resultEntity = new ResultEntity();
-
-        standardWorkTicketMapper.insert(standardWorkTicket);
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("操作成功");
+        resultEntity.setMsg("添加成功");
         return resultEntity;
     }
 
@@ -105,23 +113,102 @@ public class SatndardWorkTicketServiceImpl implements StandardWorkTicketService 
     public ResultEntity deleteStandardWorkTicket(String standardTicketIds) {
         ResultEntity resultEntity = new ResultEntity();
 
-        String[] ids = standardTicketIds.split(",");
+        if (!StringUtils.isNoneBlank(standardTicketIds)) {
+            resultEntity.setMsg("ids不能为空");
+            return resultEntity;
+        }
 
+        String[] ids = standardTicketIds.split(",");
         standardWorkTicketMapper.batchDelete(ids);
 
         resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("操作成功");
+        resultEntity.setMsg("删除成功");
         return resultEntity;
     }
 
     @Override
-    public ResultEntity updateStandardWorkTicket(StandardWorkTicket standardWorkTicket) {
+    public ResultEntity updateStandardWorkTicket(StandardWorkTicketVo standardWorkTicketVo) {
         ResultEntity resultEntity = new ResultEntity();
 
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getStandardTicketId())) {
+            resultEntity.setMsg("标准工作票id不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getSerialNumber())) {
+            resultEntity.setMsg("标准工作票号");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getMaintainer())) {
+            resultEntity.setMsg("维护人不能为空");
+            return resultEntity;
+        }
+        if (standardWorkTicketVo.getMaintainDate()==null) {
+            resultEntity.setMsg("维护日期不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getTicketTypeId())) {
+            resultEntity.setMsg("工作票类型不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getSerialNumber())) {
+            resultEntity.setMsg("标准工作票号不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getWindId())) {
+            resultEntity.setMsg("风电场id不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getCrewId())) {
+            resultEntity.setMsg("机组id不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getWorkTeam())) {
+            resultEntity.setMsg("工作班组不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getDoubleName())) {
+            resultEntity.setMsg("工作的风电场、升压站名称及设备双重名称不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getWorkPlace())) {
+            resultEntity.setMsg("工作地点或地段不能为空");
+            return resultEntity;
+        }
+        if (!StringUtils.isNoneBlank(standardWorkTicketVo.getWorkContent())) {
+            resultEntity.setMsg("工作内容不能为空");
+            return resultEntity;
+        }
+        //修改主数据
+        StandardWorkTicket standardWorkTicket = new StandardWorkTicket();
+        BeanUtils.copyProperties(standardWorkTicketVo,standardWorkTicket);
         standardWorkTicketMapper.updateByPrimaryKey(standardWorkTicket);
+        //修改安措
+        WorkTicketSafeMeasureExample workTicketSafeMeasureExample = new WorkTicketSafeMeasureExample();
+        workTicketSafeMeasureExample.createCriteria().andStandardTicketIdEqualTo(standardWorkTicketVo.getStandardTicketId());
+        workTicketSafeMeasureMapper.deleteByExample(workTicketSafeMeasureExample);
+        List<WorkTicketSafeMeasure> safeMeasureList = standardWorkTicketVo.getSafeMeasureList();
+        if (safeMeasureList!=null && safeMeasureList.size()!=0) {
+            safeMeasureList.forEach(workTicketSafeMeasure -> {
+                workTicketSafeMeasure.setSafeId(UUIdUtil.getUUID());
+                workTicketSafeMeasure.setStandardTicketId(standardWorkTicketVo.getStandardTicketId());
+                workTicketSafeMeasureMapper.insert(workTicketSafeMeasure);
+            });
+        }
+        //添加危险因素控制措施
+        WorkTicketRiskControlExample workTicketRiskControlExample = new WorkTicketRiskControlExample();
+        workTicketRiskControlExample.createCriteria().andStandardTicketIdEqualTo(standardWorkTicketVo.getStandardTicketId());
+        workTicketRiskControlMapper.deleteByExample(workTicketRiskControlExample);
+        List<WorkTicketRiskControl> riskControlList = standardWorkTicketVo.getRiskControlList();
+        if (riskControlList!=null && riskControlList.size()!=0) {
+            riskControlList.forEach(workTicketRiskControl -> {
+                workTicketRiskControl.setMeasureId(UUIdUtil.getUUID());
+                workTicketRiskControl.setStandardTicketId(standardWorkTicketVo.getStandardTicketId());
+                workTicketRiskControlMapper.insert(workTicketRiskControl);
+            });
+        }
 
         resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("操作成功");
+        resultEntity.setMsg("修改成功");
         return resultEntity;
     }
 
@@ -129,60 +216,78 @@ public class SatndardWorkTicketServiceImpl implements StandardWorkTicketService 
     public ResultEntity getStandardWorkTicketDetail(String standardTicketId) {
         ResultEntity resultEntity = new ResultEntity();
 
-        StandardWorkTicket standardWorkTicket = standardWorkTicketMapper.selectByPrimaryKey(standardTicketId);
-
-        StandardWorkTicketRes standardWorkTicketRes = new StandardWorkTicketRes();
-        BeanUtils.copyProperties(standardWorkTicket,standardWorkTicketRes);
-
-        WorkTicketType workTicketType = workTicketTypeMapper.selectByPrimaryKey(standardWorkTicket.getTicketTypeId());
-        if ("0".equals(workTicketType.getStatus())||"2".equals(workTicketType.getStatus())) {
-            resultEntity.setMsg("该标准工作票使用的工作票类型已被删除或停用");
+        if (!StringUtils.isNoneBlank(standardTicketId)) {
+            resultEntity.setMsg("id不能为空");
             return resultEntity;
         }
-        //获取安全措施
-        WorkTicketTypeSafeMeasureExample workTicketTypeSafeMeasureExample = new WorkTicketTypeSafeMeasureExample();
-        workTicketTypeSafeMeasureExample.createCriteria().andTicketTypeIdEqualTo(standardWorkTicket.getTicketTypeId());
-        List<WorkTicketTypeSafeMeasure> safeMeasureList = workTicketTypeSafeMeasureMapper.selectByExample(workTicketTypeSafeMeasureExample);
-        if (safeMeasureList!=null) {
-            safeMeasureList.forEach(workTicketTypeSafeMeasure -> {
-                standardWorkTicketRes.getSafeMeasureList().add(workTicketTypeSafeMeasure);
-            });
-        }
-        //获取工作负责人
-        WorkTicketTypeUserExample workTicketTypeUserExample = new WorkTicketTypeUserExample();
-        WorkTicketTypeUserExample.Criteria workHeadCriteria = workTicketTypeUserExample.createCriteria();
-        workHeadCriteria.andTicketTypeIdEqualTo(standardWorkTicket.getTicketTypeId());
-        workHeadCriteria.andUserTypeEqualTo("01");
-        List<WorkTicketTypeUser> workHeadList = workTicketTypeUserMapper.selectByExample(workTicketTypeUserExample);
-        if (workHeadList!=null) {
-            workHeadList.forEach(workTicketTypeUser -> {
-                standardWorkTicketRes.getWorkHeadList().add(workTicketTypeUser);
-            });
-        }
-        //获取签收人
-        WorkTicketTypeUserExample.Criteria signerCriteria = workTicketTypeUserExample.createCriteria();
-        signerCriteria.andTicketTypeIdEqualTo(standardWorkTicket.getTicketTypeId());
-        signerCriteria.andUserTypeEqualTo("02");
-        List<WorkTicketTypeUser> signerList = workTicketTypeUserMapper.selectByExample(workTicketTypeUserExample);
-        if (workHeadList!=null) {
-            workHeadList.forEach(workTicketTypeUser -> {
-                standardWorkTicketRes.getSignerList().add(workTicketTypeUser);
-            });
-        }
-        //获取许可人
-        WorkTicketTypeUserExample.Criteria licensorCriteria = workTicketTypeUserExample.createCriteria();
-        licensorCriteria.andTicketTypeIdEqualTo(standardWorkTicket.getTicketTypeId());
-        licensorCriteria.andUserTypeEqualTo("03");
-        List<WorkTicketTypeUser> licensorList = workTicketTypeUserMapper.selectByExample(workTicketTypeUserExample);
-        if (workHeadList!=null) {
-            licensorList.forEach(workTicketTypeUser -> {
-                standardWorkTicketRes.getLicensorList().add(workTicketTypeUser);
-            });
+
+        StandardWorkTicketVo standardWorkTicketVo = standardWorkTicketMapper.getStandardWorkTicketDetail(standardTicketId);
+        if (standardWorkTicketVo!=null) {
+            //获取安全措施
+            WorkTicketSafeMeasureExample workTicketSafeMeasureExample = new WorkTicketSafeMeasureExample();
+            workTicketSafeMeasureExample.setOrderByClause("safe_number");
+            workTicketSafeMeasureExample.createCriteria().andTicketTypeIdEqualTo(standardWorkTicketVo.getStandardTicketId());
+            List<WorkTicketSafeMeasure> safeMeasureList = workTicketSafeMeasureMapper.selectByExample(workTicketSafeMeasureExample);
+            if (safeMeasureList!=null && safeMeasureList.size()!=0) {
+                safeMeasureList.forEach(safeMeasure -> {
+                    standardWorkTicketVo.getSafeMeasureList().add(safeMeasure);
+                });
+            }
+            //获取危险因素控制措施
+            WorkTicketRiskControlExample workTicketRiskControlExample = new WorkTicketRiskControlExample();
+            workTicketRiskControlExample.setOrderByClause("measure_number");
+            workTicketRiskControlExample.createCriteria().andStandardTicketIdEqualTo(standardWorkTicketVo.getStandardTicketId());
+            List<WorkTicketRiskControl> riskControlList = workTicketRiskControlMapper.selectByExample(workTicketRiskControlExample);
+            if(riskControlList!=null && riskControlList.size()!=0) {
+                riskControlList.forEach(workTicketRiskControl -> {
+                    standardWorkTicketVo.getRiskControlList().add(workTicketRiskControl);
+                });
+            }
         }
 
         resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("操作成功");
-        resultEntity.setData(standardWorkTicketRes);
+        resultEntity.setMsg("查询成功");
+        resultEntity.setData(standardWorkTicketVo);
         return resultEntity;
+    }
+
+    @Override
+    public PageResultEntity getStandardWorkTicketList(Map<String,String> pageAndCondition) {
+        PageResultEntity pageResultEntity = new PageResultEntity();
+        pageResultEntity.setRows(new ArrayList());
+
+        String start = String.valueOf((Integer.parseInt(pageAndCondition.get("pageNum"))-1)*(Integer.parseInt(pageAndCondition.get("pageSize"))));
+        pageAndCondition.put("start",start);
+        List<StandardWorkTicketVo> standardWorkTicketVoList = standardWorkTicketMapper.getStandardWorkTicketList(pageAndCondition);
+        int total = standardWorkTicketMapper.getTotal(pageAndCondition);
+        standardWorkTicketVoList.forEach(standardWorkTicketVo -> {
+            //获取安全措施
+            WorkTicketSafeMeasureExample workTicketSafeMeasureExample = new WorkTicketSafeMeasureExample();
+            workTicketSafeMeasureExample.setOrderByClause("safe_number");
+            workTicketSafeMeasureExample.createCriteria().andTicketTypeIdEqualTo(standardWorkTicketVo.getStandardTicketId());
+            List<WorkTicketSafeMeasure> safeMeasureList = workTicketSafeMeasureMapper.selectByExample(workTicketSafeMeasureExample);
+            if (safeMeasureList!=null && safeMeasureList.size()!=0) {
+                safeMeasureList.forEach(safeMeasure -> {
+                    standardWorkTicketVo.getSafeMeasureList().add(safeMeasure);
+                });
+            }
+            //获取危险因素控制措施
+            WorkTicketRiskControlExample workTicketRiskControlExample = new WorkTicketRiskControlExample();
+            workTicketRiskControlExample.setOrderByClause("measure_number");
+            workTicketRiskControlExample.createCriteria().andStandardTicketIdEqualTo(standardWorkTicketVo.getStandardTicketId());
+            List<WorkTicketRiskControl> riskControlList = workTicketRiskControlMapper.selectByExample(workTicketRiskControlExample);
+            if(riskControlList!=null && riskControlList.size()!=0) {
+                riskControlList.forEach(workTicketRiskControl -> {
+                    standardWorkTicketVo.getRiskControlList().add(workTicketRiskControl);
+                });
+            }
+
+        });
+
+        pageResultEntity.setCode(ErrorCode.SUCCESS);
+        pageResultEntity.setMsg("操作成功");
+        pageResultEntity.setRows(standardWorkTicketVoList);
+        pageResultEntity.setTotal(total);
+        return pageResultEntity;
     }
 }

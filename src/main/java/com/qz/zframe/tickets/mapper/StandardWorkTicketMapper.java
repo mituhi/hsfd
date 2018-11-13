@@ -2,10 +2,12 @@ package com.qz.zframe.tickets.mapper;
 
 import com.qz.zframe.tickets.entity.StandardWorkTicket;
 import com.qz.zframe.tickets.entity.StandardWorkTicketExample;
+import com.qz.zframe.tickets.vo.StandardWorkTicketVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface StandardWorkTicketMapper {
@@ -18,8 +20,14 @@ public interface StandardWorkTicketMapper {
     int insert(StandardWorkTicket record);
 
     int insertSelective(StandardWorkTicket record);
-
+    //批量删除
     int batchDelete(@Param("array") String[] ids);
+    //详情查询
+    StandardWorkTicketVo getStandardWorkTicketDetail(@Param("standardTicketId") String standardTicketId);
+    //列表查询
+    List<StandardWorkTicketVo> getStandardWorkTicketList(@Param("map") Map<String,String> pageAndCondition);
+    //查询总记录数
+    int getTotal(@Param("map") Map<String,String> pageAndCondition);
 
     List<StandardWorkTicket> selectByExample(StandardWorkTicketExample example);
 

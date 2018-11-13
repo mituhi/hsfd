@@ -157,11 +157,13 @@
             <if test="id!=null and id!=''">id,</if>
             <if test="routeId!=null and routeId!=''">route_id,</if>
             <if test="standardId!=null and standardId!=''">standard_id,</if>
+            <if test="cycleId!=null and cycleId!=''">cycle_id,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id!=null and id!=''">#{id},</if>
             <if test="routeId!=null and routeId!=''">#{routeId},</if>
             <if test="standardId!=null and standardId!=''">#{standardId},</if>
+            <if test="cycleId!=null and cycleId!=''">#{cycleId},</if>
         </trim>
     </insert>
 
@@ -231,8 +233,7 @@
     <update id="updateTallyRouteStandard">
         UPDATE tally_route_standard
         <set>
-            <if test="routeId!=null and routeId!=''">route_id=#{routeId},</if>
-            <if test="standardId!=null and standardId!=''">standard_id=#{standardId},</if>
+            <if test="cycleId!=null and cycleId!=''">cycle_id=#{cycleId},</if>
         </set>
         WHERE id = #{id}
     </update>
@@ -282,6 +283,24 @@
         <if test="checkContent !=null">
             and check_content like "%"#{checkContent}"%"
         </if>
+    </select>
+
+    <select id="findCycleIdByCycleNameAndRouteId" resultType="string">
+        SELECT cycle_id
+        FROM cycle
+        WHERE cycle_name=#{cycleName} and route_id=#{routeId}
+    </select>
+
+    <select id="findRouteNameByWindId" parameterType="string" resultType="string">
+        SELECT route_name
+        FROM tally_route
+        WHERE wind_id=#{windId}
+    </select>
+
+    <select id="findCycleNameByStandardIdAndRouteId" resultType="string">
+          SELECT cycle_name
+          FROM cycle,tally_route_standard
+          WHERE tally_route_standard.standard_id=#{standardId} and tally_route_standard.route_id=#{routeId} and cycle.cycle_id=tally_route_standard.cycle_id
     </select>
 
 

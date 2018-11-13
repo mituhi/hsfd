@@ -1,24 +1,17 @@
 package com.qz.zframe.tickets.service;
 
+import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
-import com.qz.zframe.tickets.entity.OperateTicketType;
+import com.qz.zframe.tickets.vo.OperateTicketTypeVo;
+
+import java.util.Map;
 
 public interface OperateTicketTypeService {
 
     /**
-     * 查询操作票类型列表
-     */
-    public ResultEntity getOperateTicketTypeList();
-
-    /**
-     * 新建操作票类型
-     */
-    public ResultEntity createOperateTicketType();
-
-    /**
      * 添加操作票类型
      */
-    public ResultEntity addOperateTicketType(OperateTicketType operateTicketType);
+    public ResultEntity addOperateTicketType(OperateTicketTypeVo operateTicketTypeVo);
 
     /**
      * 删除操作票类型
@@ -28,10 +21,15 @@ public interface OperateTicketTypeService {
     /**
      * 修改操作票类型
      */
-    public ResultEntity updateOperateTicketType(OperateTicketType operateTicketType);
+    public ResultEntity updateOperateTicketType(OperateTicketTypeVo operateTicketTypeVo);
 
     /**
-     * 查询操作票类型详情
+     * 浏览操作票类型
      */
-    public ResultEntity selectOperateTicketType(String ticketTypeId);
+    public ResultEntity getOperateTicketTypeDetail(String ticketTypeId);
+
+    /**
+     * 操作票类型列表查询
+     */
+    public PageResultEntity getOperateTicketTypeList(Map<String,String> pageAndCondition);
 }

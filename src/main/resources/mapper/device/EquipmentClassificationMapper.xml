@@ -13,6 +13,8 @@
     <result column="equipment_type_describe" jdbcType="VARCHAR" property="equipmentTypeDescribe" />
     <result column="output_id" jdbcType="VARCHAR" property="outputId" />
     <result column="run_id" jdbcType="VARCHAR" property="runId" />
+    <result column="status_name" jdbcType="VARCHAR" property="statusName" />
+    <result column="is_toplevel_name" jdbcType="VARCHAR" property="isToplevelName" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,13 +79,58 @@
     superior_equipment_name, status, is_toplevel, equipment_type_describe, output_id, 
     run_id
   </sql>
-  <select id="selectByExample" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
+  
+  <sql id="Base_Column_Lists">
+    equipment_id, equipment_type, type_name, superior_equipment, superior_equipment_describe, 
+    superior_equipment_name, status, is_toplevel, equipment_type_describe, output_id, 
+    run_id, status_name,is_toplevel_name
+  </sql>
+<!--   <select id="selectByExample" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultMap="BaseResultMap">
+   
+
+   
+    select  e.*, a.title as status_name,c.title as is_toplevel_name
+     <if test="distinct">
       distinct
+    </if> 
+     <include refid="Base_Column_Lists" /> 
+    c.title as statusName,sc.title as isTopLevelName 
+    from equipment_classification e
+    left join sp_code a on  e.status=a.name
+	left  join  sp_code_type  b on  a.code_type_id=b.id
+	left join sp_code c on  e.is_toplevel=c.name
+	left  join  sp_code_type  d on  c.code_type_id=d.id
+    
+    
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+      and 
     </if>
-    <include refid="Base_Column_List" />
-    from equipment_classification  
+    <if test="_parameter =null">
+      where 
+     </if>
+      b.name='EQUIPMENT_STATUS' and d.name='IS_TOPLEVEL'
+  
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select> -->
+  
+  
+  <select id="selectByExample" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultMap="BaseResultMap">
+   
+
+   select 
+    <include refid="Base_Column_Lists" /> 
+    from (
+    select  e.*, a.title as status_name,c.title as is_toplevel_name
+    from equipment_classification e
+    left join sp_code a on  e.status=a.name
+	left  join  sp_code_type  b on  a.code_type_id=b.id
+	left join sp_code c on  e.is_toplevel=c.name
+	left  join  sp_code_type  d on  c.code_type_id=d.id
+    where   b.name='EQUIPMENT_STATUS' and d.name='IS_TOPLEVEL')  h
+    
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -107,23 +154,27 @@
     </if>  -->
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from equipment_classification
-    where equipment_id = #{equipmentId,jdbcType=VARCHAR}
+    select  *,a.title as status_name ,c.title as is_Toplevel_Name  
+    from equipment_classification  e 
+    left join sp_code a on  e.status=a.name 
+	left  join  sp_code_type  b on  a.code_type_id=b.id 
+    left join sp_code c  on  e.is_toplevel=c.name 
+	left  join  sp_code_type  d on  c.code_type_id=d.id 
+	where  b.name='EQUIPMENT_STATUS' and d.name='IS_TOPLEVEL' 
+    and  equipment_id = #{equipmentId,jdbcType=VARCHAR}
   </select>
   
   <select id="selectStructure" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from equipment_classification
-     where is_toplevel=0
+    where is_toplevel=0
   </select>
   
    <select id="selectStructureList" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from equipment_classification
+     from equipment_classification
      where  superior_equipment=#{superiorEquipment,jdbcType=VARCHAR}
   </select>
   
@@ -231,12 +282,21 @@
       </if>
     </trim>
   </insert>
+  
   <select id="countByExample" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultType="java.lang.Integer">
-    select count(*) from equipment_classification
+    select 
+    distinct
+    count(*) from equipment_classification 
+	
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause" /> 
     </if>
+   <!--  <if test="_parameter = null">
+      where 
+     </if>
+      b.name='EQUIPMENT_STATUS' and d.name='IS_TOPLEVEL' -->
   </select>
+  
   <update id="updateByExampleSelective" parameterType="map">
     update equipment_classification
     <set>

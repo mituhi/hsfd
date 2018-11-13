@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.DutyInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.DutyInfo" >
+    <id column="duty_info_id" property="dutyInfoId" jdbcType="VARCHAR" />
+    <result column="duty_log_id" property="dutyLogId" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="shift_id" property="shiftId" jdbcType="VARCHAR" />
+    <result column="shift_name" property="shiftName" jdbcType="VARCHAR" />
+    <result column="value_id" property="valueId" jdbcType="VARCHAR" />
+    <result column="value_name" property="valueName" jdbcType="VARCHAR" />
+    <result column="duty_user_ids" property="dutyUserIds" jdbcType="VARCHAR" />
+    <result column="successor" property="successor" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    duty_info_id, duty_log_id, start_time, shift_id, shift_name, value_id, value_name, 
+    duty_user_ids, successor
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.DutyInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from duty_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from duty_info
+    where duty_info_id = #{dutyInfoId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from duty_info
+    where duty_info_id = #{dutyInfoId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.DutyInfoExample" >
+    delete from duty_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.DutyInfo" >
+    insert into duty_info (duty_info_id, duty_log_id, start_time, 
+      shift_id, shift_name, value_id, 
+      value_name, duty_user_ids, successor
+      )
+    values (#{dutyInfoId,jdbcType=VARCHAR}, #{dutyLogId,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{shiftId,jdbcType=VARCHAR}, #{shiftName,jdbcType=VARCHAR}, #{valueId,jdbcType=VARCHAR}, 
+      #{valueName,jdbcType=VARCHAR}, #{dutyUserIds,jdbcType=VARCHAR}, #{successor,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.DutyInfo" >
+    insert into duty_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dutyInfoId != null" >
+        duty_info_id,
+      </if>
+      <if test="dutyLogId != null" >
+        duty_log_id,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="shiftId != null" >
+        shift_id,
+      </if>
+      <if test="shiftName != null" >
+        shift_name,
+      </if>
+      <if test="valueId != null" >
+        value_id,
+      </if>
+      <if test="valueName != null" >
+        value_name,
+      </if>
+      <if test="dutyUserIds != null" >
+        duty_user_ids,
+      </if>
+      <if test="successor != null" >
+        successor,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dutyInfoId != null" >
+        #{dutyInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyLogId != null" >
+        #{dutyLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shiftId != null" >
+        #{shiftId,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftName != null" >
+        #{shiftName,jdbcType=VARCHAR},
+      </if>
+      <if test="valueId != null" >
+        #{valueId,jdbcType=VARCHAR},
+      </if>
+      <if test="valueName != null" >
+        #{valueName,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyUserIds != null" >
+        #{dutyUserIds,jdbcType=VARCHAR},
+      </if>
+      <if test="successor != null" >
+        #{successor,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.DutyInfoExample" resultType="java.lang.Integer" >
+    select count(*) from duty_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update duty_info
+    <set >
+      <if test="record.dutyInfoId != null" >
+        duty_info_id = #{record.dutyInfoId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyLogId != null" >
+        duty_log_id = #{record.dutyLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.shiftId != null" >
+        shift_id = #{record.shiftId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shiftName != null" >
+        shift_name = #{record.shiftName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.valueId != null" >
+        value_id = #{record.valueId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.valueName != null" >
+        value_name = #{record.valueName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyUserIds != null" >
+        duty_user_ids = #{record.dutyUserIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.successor != null" >
+        successor = #{record.successor,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update duty_info
+    set duty_info_id = #{record.dutyInfoId,jdbcType=VARCHAR},
+      duty_log_id = #{record.dutyLogId,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      shift_id = #{record.shiftId,jdbcType=VARCHAR},
+      shift_name = #{record.shiftName,jdbcType=VARCHAR},
+      value_id = #{record.valueId,jdbcType=VARCHAR},
+      value_name = #{record.valueName,jdbcType=VARCHAR},
+      duty_user_ids = #{record.dutyUserIds,jdbcType=VARCHAR},
+      successor = #{record.successor,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.DutyInfo" >
+    update duty_info
+    <set >
+      <if test="dutyLogId != null" >
+        duty_log_id = #{dutyLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shiftId != null" >
+        shift_id = #{shiftId,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftName != null" >
+        shift_name = #{shiftName,jdbcType=VARCHAR},
+      </if>
+      <if test="valueId != null" >
+        value_id = #{valueId,jdbcType=VARCHAR},
+      </if>
+      <if test="valueName != null" >
+        value_name = #{valueName,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyUserIds != null" >
+        duty_user_ids = #{dutyUserIds,jdbcType=VARCHAR},
+      </if>
+      <if test="successor != null" >
+        successor = #{successor,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where duty_info_id = #{dutyInfoId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.DutyInfo" >
+    update duty_info
+    set duty_log_id = #{dutyLogId,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      shift_id = #{shiftId,jdbcType=VARCHAR},
+      shift_name = #{shiftName,jdbcType=VARCHAR},
+      value_id = #{valueId,jdbcType=VARCHAR},
+      value_name = #{valueName,jdbcType=VARCHAR},
+      duty_user_ids = #{dutyUserIds,jdbcType=VARCHAR},
+      successor = #{successor,jdbcType=VARCHAR}
+    where duty_info_id = #{dutyInfoId,jdbcType=VARCHAR}
+  </update>
+</mapper>

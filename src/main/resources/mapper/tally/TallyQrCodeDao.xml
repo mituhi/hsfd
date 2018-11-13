@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyQrCodeDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.QrCode" >
+        <id column="qr_code_id" property="qrCodeId" />
+        <result column="code" property="code"/>
+        <result column="wind_id" property="windId" />
+        <result column="address_name" property="addressName" />
+        <result column="wind_code" property="windCode" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        qr_code.qr_code_id,qr_code.code,qr_code.wind_id,qr_code.address_name,qr_code.wind_code
+    </sql>
+
+    <select id="findAllQrCode" resultMap="BaseResultMap">
+        SELECT
+        qr_code.qr_code_id,qr_code.code,qr_code.wind_id,qr_code.address_name,qr_code.wind_code
+        FROM qr_code
+        order by code asc
+    </select>
+
+    <select id="findAllQrCode2" resultMap="BaseResultMap">
+        SELECT
+        qr_code.qr_code_id,qr_code.code,qr_code.wind_id,qr_code.address_name,qr_code.wind_code
+        FROM qr_code
+        WHERE 1=1
+        <if test="addressName !=null">
+            and qr_code.address_name like "%"#{addressName}"%"
+        </if>
+        order by code asc
+    </select>
+
+    <!-- 新增 -->
+    <insert id="insertByCodes">
+        INSERT INTO qr_code
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="qrCodeId!=null and qrCodeId!=''">qr_code_id,</if>
+            <if test="code!=null and code!=''">code,</if>
+            <if test="windId!=null and windId!=''">wind_id,</if>
+            <if test="addressName!=null and addressName!=''">address_name,</if>
+            <if test="windCode!=null and windCode!=''">wind_code,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="qrCodeId!=null and qrCodeId!=''">#{qrCodeId},</if>
+            <if test="code!=null and code!=''">#{code},</if>
+            <if test="windId!=null and windId!=''">#{windId},</if>
+            <if test="addressName!=null and addressName!=''">#{addressName},</if>
+            <if test="windCode!=null and windCode!=''">#{windCode},</if>
+        </trim>
+    </insert>
+
+    <select id="countByCodes" resultType="int">
+        SELECT
+        COUNT(code)
+        FROM qr_code
+        WHERE code BETWEEN #{code1} and #{code2}
+    </select>
+
+
+
+    <select id="findQrCodeByCode" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+         qr_code.qr_code_id,qr_code.code,qr_code.wind_id,qr_code.address_name,qr_code.wind_code
+         FROM qr_code
+         WHERE qr_code.code=#{code}
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateQrCodeByCode">
+        UPDATE qr_code
+        <set>
+            <if test="qrCodeId!=null and qrCodeId!=''">qr_code_id=#{qrCodeId},</if>
+            <if test="windId!=null and windId!=''">wind_id=#{windId},</if>
+            <if test="addressName!=null and addressName!=''">address_name=#{addressName},</if>
+            <if test="windCode!=null and windCode!=''">wind_code=#{windCode},</if>
+        </set>
+        WHERE code=#{code}
+    </update>
+
+    <delete id="deleteQrCodeByCode">
+        DELETE
+        FROM qr_code
+        WHERE code=#{code}
+    </delete>
+
+    <select id="countQrCode" resultType="int">
+        SELECT COUNT(*)
+        FROM qr_code
+    </select>
+
+
+</mapper>

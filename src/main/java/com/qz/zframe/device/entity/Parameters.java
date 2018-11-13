@@ -1,40 +1,46 @@
 package com.qz.zframe.device.entity;
 
-import io.swagger.annotations.ApiParam;
+import javax.persistence.Transient;
+
+import io.swagger.annotations.ApiModelProperty;
+
 
 public class Parameters {
-	@ApiParam(name = "parameterId", value = "技术参数id", required = false)
+	@ApiModelProperty(name = "parameterId", value = "技术参数id", required = false)
 
 	private String parameterId;
 
-	@ApiParam(name = "output", value = "出场技术参数id", required = false)
+	@ApiModelProperty(name = "output", value = "出场技术参数id", required = false)
 
 	private String output;
 
-	@ApiParam(name = "run", value = "运行技术参数id", required = false)
+	@ApiModelProperty(name = "run", value = "运行技术参数id", required = false)
 
 	private String run;
 
-	@ApiParam(name = "parameterCode", value = "参数编号", required = true)
+	@ApiModelProperty(name = "parameterCode", value = "参数编号", required = true)
 
 	private String parameterCode;
 
-	@ApiParam(name = "parameterName", value = "参数名称", required = true)
+	@ApiModelProperty(name = "parameterName", value = "参数名称", required = true)
 
 	private String parameterName;
 
-	@ApiParam(name = "type", value = "数据类型", required = true)
+	@ApiModelProperty(name = "type", value = "数据类型", required = true)
 
 	private String type;
 
-	@ApiParam(name = "company", value = "单位", required = true)
+	@ApiModelProperty(name = "company", value = "单位", required = true)
 
 	private String company;
 
-	@ApiParam(name = "status", value = "状态", required = true)
+	@ApiModelProperty(name = "status", value = "状态", required = true)
 
 	private String status;
 
+	@ApiModelProperty(name = "statusName", value = "状态名称", required = false)
+	@Transient
+	private String statusName;
 	public String getParameterId() {
 		return parameterId;
 	}
@@ -98,4 +104,13 @@ public class Parameters {
 	public void setStatus(String status) {
 		this.status = status == null ? null : status.trim();
 	}
+	@Transient
+	public String getStatusName() {
+		return statusName;
+	}
+	@Transient
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+	
 }

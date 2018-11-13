@@ -11,14 +11,12 @@ import com.qz.zframe.material.entity.Material;
 import com.qz.zframe.material.entity.Material.ListView;
 import com.qz.zframe.material.entity.MaterialExample;
 import com.qz.zframe.material.entity.MaterialExample.Criteria;
-import com.qz.zframe.material.entity.WindField;
 import com.qz.zframe.material.enums.IsDeleteEnum;
 import com.qz.zframe.material.service.MaterialService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

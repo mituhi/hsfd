@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyAlarmDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.TallyAlarm" >
+        <id column="alarm_id" property="alarmId" />
+        <result column="wind_id" property="windId" />
+        <result column="route_name" property="routeName"/>
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime"/>
+        <result column="equipment_belonging" property="equipmentBelonging" />
+        <result column="check_content" property="checkContent"/>
+        <result column="check_standard" property="checkStandard" />
+        <result column="treatment_standard" property="treatmentStandard"/>
+        <result column="result" property="result"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        alarm_id,wind_id,route_name,start_time,end_time,equipment_belonging,check_content,check_standard,treatment_standard,result
+    </sql>
+
+
+    <select id="findAllTallyAlarm" resultMap="BaseResultMap">
+        SELECT
+         alarm_id,wind_id,route_name,start_time,end_time,equipment_belonging,check_content,check_standard,treatment_standard,result
+         FROM tally_alarm
+        WHERE  1=1
+        <if test="windId !=null">
+            and wind_id=#{windId}
+        </if>
+        <if test="routeName !=null">
+            and route_name=#{routeName}
+        </if>
+        <if test="treatmentStandard !=null">
+            and treatment_standard =#{treatmentStandard}
+        </if>
+        <if test="startTime !=null">
+            and start_time =#{startTime}
+        </if>
+        <if test="endTime !=null">
+            and end_time =#{endTime}
+        </if>
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

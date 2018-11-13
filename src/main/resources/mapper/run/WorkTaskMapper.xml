@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.WorkTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.WorkTask" >
+    <id column="work_task_id" property="workTaskId" jdbcType="VARCHAR" />
+    <result column="classification_id" property="classificationId" jdbcType="VARCHAR" />
+    <result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="depart" property="depart" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="work_name" property="workName" jdbcType="VARCHAR" />
+    <result column="work_describe" property="workDescribe" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="equipment" property="equipment" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="rate_time" property="rateTime" jdbcType="TIMESTAMP" />
+    <result column="failure_time" property="failureTime" jdbcType="TIMESTAMP" />
+    <result column="lead_time" property="leadTime" jdbcType="INTEGER" />
+    <result column="execution_time" property="executionTime" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    work_task_id, classification_id, serial_num, wind_id, depart, user_id, work_name, 
+    work_describe, address, equipment, unit, start_time, rate_time, failure_time, lead_time, 
+    execution_time, status, file_id, username, create_time, create_user
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.WorkTaskExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from work_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_task
+    where work_task_id = #{workTaskId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from work_task
+    where work_task_id = #{workTaskId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.WorkTaskExample" >
+    delete from work_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.WorkTask" >
+    insert into work_task (work_task_id, classification_id, serial_num, 
+      wind_id, depart, user_id, 
+      work_name, work_describe, address, 
+      equipment, unit, start_time, 
+      rate_time, failure_time, lead_time, 
+      execution_time, status, file_id, 
+      username, create_time, create_user
+      )
+    values (#{workTaskId,jdbcType=VARCHAR}, #{classificationId,jdbcType=VARCHAR}, #{serialNum,jdbcType=VARCHAR}, 
+      #{windId,jdbcType=VARCHAR}, #{depart,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{workName,jdbcType=VARCHAR}, #{workDescribe,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{equipment,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{rateTime,jdbcType=TIMESTAMP}, #{failureTime,jdbcType=TIMESTAMP}, #{leadTime,jdbcType=INTEGER}, 
+      #{executionTime,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.WorkTask" >
+    insert into work_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="workTaskId != null" >
+        work_task_id,
+      </if>
+      <if test="classificationId != null" >
+        classification_id,
+      </if>
+      <if test="serialNum != null" >
+        serial_num,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="depart != null" >
+        depart,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="workName != null" >
+        work_name,
+      </if>
+      <if test="workDescribe != null" >
+        work_describe,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="equipment != null" >
+        equipment,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="rateTime != null" >
+        rate_time,
+      </if>
+      <if test="failureTime != null" >
+        failure_time,
+      </if>
+      <if test="leadTime != null" >
+        lead_time,
+      </if>
+      <if test="executionTime != null" >
+        execution_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="workTaskId != null" >
+        #{workTaskId,jdbcType=VARCHAR},
+      </if>
+      <if test="classificationId != null" >
+        #{classificationId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="depart != null" >
+        #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="workName != null" >
+        #{workName,jdbcType=VARCHAR},
+      </if>
+      <if test="workDescribe != null" >
+        #{workDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rateTime != null" >
+        #{rateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failureTime != null" >
+        #{failureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="leadTime != null" >
+        #{leadTime,jdbcType=INTEGER},
+      </if>
+      <if test="executionTime != null" >
+        #{executionTime,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.WorkTaskExample" resultType="java.lang.Integer" >
+    select count(*) from work_task
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update work_task
+    <set >
+      <if test="record.workTaskId != null" >
+        work_task_id = #{record.workTaskId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classificationId != null" >
+        classification_id = #{record.classificationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNum != null" >
+        serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.depart != null" >
+        depart = #{record.depart,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workName != null" >
+        work_name = #{record.workName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workDescribe != null" >
+        work_describe = #{record.workDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.equipment != null" >
+        equipment = #{record.equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null" >
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rateTime != null" >
+        rate_time = #{record.rateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.failureTime != null" >
+        failure_time = #{record.failureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.leadTime != null" >
+        lead_time = #{record.leadTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.executionTime != null" >
+        execution_time = #{record.executionTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileId != null" >
+        file_id = #{record.fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null" >
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUser != null" >
+        create_user = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update work_task
+    set work_task_id = #{record.workTaskId,jdbcType=VARCHAR},
+      classification_id = #{record.classificationId,jdbcType=VARCHAR},
+      serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      depart = #{record.depart,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      work_name = #{record.workName,jdbcType=VARCHAR},
+      work_describe = #{record.workDescribe,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      equipment = #{record.equipment,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      rate_time = #{record.rateTime,jdbcType=TIMESTAMP},
+      failure_time = #{record.failureTime,jdbcType=TIMESTAMP},
+      lead_time = #{record.leadTime,jdbcType=INTEGER},
+      execution_time = #{record.executionTime,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=VARCHAR},
+      file_id = #{record.fileId,jdbcType=VARCHAR},
+      username = #{record.username,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_user = #{record.createUser,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.WorkTask" >
+    update work_task
+    <set >
+      <if test="classificationId != null" >
+        classification_id = #{classificationId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null" >
+        serial_num = #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="depart != null" >
+        depart = #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="workName != null" >
+        work_name = #{workName,jdbcType=VARCHAR},
+      </if>
+      <if test="workDescribe != null" >
+        work_describe = #{workDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="equipment != null" >
+        equipment = #{equipment,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rateTime != null" >
+        rate_time = #{rateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="failureTime != null" >
+        failure_time = #{failureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="leadTime != null" >
+        lead_time = #{leadTime,jdbcType=INTEGER},
+      </if>
+      <if test="executionTime != null" >
+        execution_time = #{executionTime,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where work_task_id = #{workTaskId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.WorkTask" >
+    update work_task
+    set classification_id = #{classificationId,jdbcType=VARCHAR},
+      serial_num = #{serialNum,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      depart = #{depart,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      work_name = #{workName,jdbcType=VARCHAR},
+      work_describe = #{workDescribe,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      equipment = #{equipment,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      rate_time = #{rateTime,jdbcType=TIMESTAMP},
+      failure_time = #{failureTime,jdbcType=TIMESTAMP},
+      lead_time = #{leadTime,jdbcType=INTEGER},
+      execution_time = #{executionTime,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR}
+    where work_task_id = #{workTaskId,jdbcType=VARCHAR}
+  </update>
+</mapper>

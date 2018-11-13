@@ -1,20 +1,13 @@
 package com.qz.zframe.tickets.service;
 
+import com.github.pagehelper.Page;
+import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.tickets.vo.WorkTicketTypeVo;
 
+import java.util.Map;
+
 public interface WorkTicketTypeService {
-
-    /**
-     * 工作票类型列表查询
-     */
-    public ResultEntity getWorkTicketTypeList();
-
-    /**
-     * 新建工作票类型
-     * @return
-     */
-    public ResultEntity createWorkTicketType();
 
     /**
      * 添加工作票类型
@@ -24,7 +17,7 @@ public interface WorkTicketTypeService {
     /**
      * 删除工作票类型
      */
-    public ResultEntity deleteWorkTicketType(String ticketTypeIds);
+    public ResultEntity deleteWorkTicketType(String workTicketTypeIds);
 
     /**
      * 修改工作票类型
@@ -34,5 +27,11 @@ public interface WorkTicketTypeService {
     /**
      * 工作票类型详情查询
      */
-    public ResultEntity getWorkTicketTypeDetail(String ticketTypeId);
+    public ResultEntity getWorkTicketTypeDetail(String workTicketTypeId);
+
+    /**
+     * 工作票类型列表查询
+     */
+    public PageResultEntity getWorkTicketTypeList(Map<String,String> pageAndCondition);
+
 }

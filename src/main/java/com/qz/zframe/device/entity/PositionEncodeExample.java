@@ -257,7 +257,7 @@ public class PositionEncodeExample extends PageExample{
         }
 
         public Criteria andPositionNameEqualTo(String value) {
-            addCriterion("position_name =", value, "positionName");
+            addCriterion("p.position_name =", value, "positionName");
             return (Criteria) this;
         }
 
@@ -287,7 +287,7 @@ public class PositionEncodeExample extends PageExample{
         }
 
         public Criteria andPositionNameLike(String value) {
-            addCriterion("position_name like", value, "positionName");
+            addCriterion("p.position_name like", "%"+value+"%", "positionName");
             return (Criteria) this;
         }
 
@@ -397,7 +397,7 @@ public class PositionEncodeExample extends PageExample{
         }
 
         public Criteria andWindIdEqualTo(String value) {
-            addCriterion("wind_id =", value, "windId");
+            addCriterion("p.wind_id =", value, "windId");
             return (Criteria) this;
         }
 
@@ -537,7 +537,7 @@ public class PositionEncodeExample extends PageExample{
         }
 
         public Criteria andHierarchyEqualTo(String value) {
-            addCriterion("hierarchy =", value, "hierarchy");
+            addCriterion("p.hierarchy =", value, "hierarchy");
             return (Criteria) this;
         }
 
@@ -607,7 +607,7 @@ public class PositionEncodeExample extends PageExample{
         }
 
         public Criteria andCrewEqualTo(String value) {
-            addCriterion("crew =", value, "crew");
+            addCriterion("p.crew =", value, "crew");
             return (Criteria) this;
         }
 
