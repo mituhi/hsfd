@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
  * <p> Title: UserValueTimeUpload</p>
  * <p>@Description: 规则信息新增 接收字段实体类</p>
  * 
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月2日 上午11:17:19
  * @version:V1.0
  */

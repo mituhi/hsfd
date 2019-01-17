@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.material.dao.PickingRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.material.entity.PickingRecord" >
+    <id column="picking_id" property="pickingId" jdbcType="VARCHAR" />
+    <result column="picking_order" property="pickingOrder" jdbcType="VARCHAR" />
+    <result column="picking_type" property="pickingType" jdbcType="VARCHAR" />
+    <result column="prcking_describe" property="prckingDescribe" jdbcType="VARCHAR" />
+    <result column="work_order" property="workOrder" jdbcType="VARCHAR" />
+    <result column="work_order_describe" property="workOrderDescribe" jdbcType="VARCHAR" />
+    <result column="picker" property="picker" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="stock_add_id" property="stockAddId" jdbcType="VARCHAR" />
+    <result column="department_id" property="departmentId" jdbcType="VARCHAR" />
+    <result column="approval_status" property="approvalStatus" jdbcType="VARCHAR" />
+    <result column="approval_opinion" property="approvalOpinion" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="proposer" property="proposer" jdbcType="VARCHAR" />
+    <result column="application_time" property="applicationDate" jdbcType="DATE" />
+    <result column="return_picking_order" property="returnPickingOrder" jdbcType="VARCHAR" />
+     <result column="return_picking_id" property="returnPickingId" jdbcType="VARCHAR" />
+    <!-- 关联 -->
+    <result column="createName" property="createName" jdbcType="VARCHAR" />
+    <result column="architecture_name" property="windName" jdbcType="VARCHAR" />
+    <result column="departmentName" property="departmentName" jdbcType="VARCHAR" />
+    <result column="stock_add_name" property="stockAddName" jdbcType="VARCHAR" />
+    <result column="pickingTypeName" property="pickingTypeName" jdbcType="VARCHAR" /> 
+    <result column="original_name" property="fileName" jdbcType="VARCHAR" />   
+    
+  </resultMap>
+  
+  <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</sql>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    picking_id, picking_order, picking_type, prcking_describe, work_order, work_order_describe, 
+    picker, wind_id, stock_add_id, department_id, approval_status, approval_opinion, 
+    create_time, status, file_id, creater
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.PickingRecordExample" >
+    select a.*,b.architecture_name,c.stock_add_name,d.architecture_name as departmentName,f.user_name  as createName,g.type_name as pickingTypeName,m.original_name from picking_record 
+    a left join org_architecture b on a.wind_id=b.architecture_code
+    left join stock_address c on a.stock_add_id=c.stock_add_id
+    left join org_architecture d on a.department_id=d.architecture_id
+    left join isc_user f on a.creater=f.user_id
+    left join storehouse_type g on a.picking_type = g.type_code
+    left join sp_file_upload m on a.file_id=m.file_id
+    <if test="_parameter != null" > 
+      <include refid="Example_Where_Clause" />
+    </if>
+    and b.architecture_type='02' and g.is_delete='01'
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="Pagination_Sql" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   select a.*,b.architecture_name,c.stock_add_name,d.architecture_name as departmentName,f.user_name  as createName,g.type_name as pickingTypeName,original_name from picking_record a 
+   left join org_architecture b on a.wind_id=b.architecture_code
+    left join stock_address c on a.stock_add_id=c.stock_add_id
+    left join org_architecture d on a.department_id=d.architecture_id
+    left join isc_user f on a.creater=f.user_id
+    left join storehouse_type g on a.picking_type = g.type_code
+    left join sp_file_upload m on a.file_id=m.file_id
+    where b.architecture_type='02' and g.is_delete='01' and a.picking_id = #{pickingId,jdbcType=VARCHAR}
+  </select>
+  
+  
+   <select id="selectMaxOrder" resultType="java.lang.String"  >
+   select max(picking_order) from picking_record
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from picking_record
+    where picking_id = #{pickingId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.material.entity.PickingRecordExample" >
+    delete from picking_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.material.entity.PickingRecord" >
+    insert into picking_record (picking_id, picking_order, picking_type, 
+      prcking_describe, work_order, work_order_describe, 
+      picker, wind_id, stock_add_id, 
+      department_id, approval_status, approval_opinion, 
+      create_time, status, file_id, 
+      creater)
+    values (#{pickingId,jdbcType=VARCHAR}, #{pickingOrder,jdbcType=VARCHAR}, #{pickingType,jdbcType=VARCHAR}, 
+      #{prckingDescribe,jdbcType=VARCHAR}, #{workOrder,jdbcType=VARCHAR}, #{workOrderDescribe,jdbcType=VARCHAR}, 
+      #{picker,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{stockAddId,jdbcType=VARCHAR}, 
+      #{departmentId,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, #{approvalOpinion,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
+      #{creater,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.material.entity.PickingRecord" >
+    insert into picking_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pickingId != null" >
+        picking_id,
+      </if>
+      <if test="pickingOrder != null" >
+        picking_order,
+      </if>
+      <if test="pickingType != null" >
+        picking_type,
+      </if>
+      <if test="prckingDescribe != null" >
+        prcking_describe,
+      </if>
+      <if test="workOrder != null" >
+        work_order,
+      </if>
+      <if test="workOrderDescribe != null" >
+        work_order_describe,
+      </if>
+      <if test="picker != null" >
+        picker,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="stockAddId != null" >
+        stock_add_id,
+      </if>
+      <if test="departmentId != null" >
+        department_id,
+      </if>
+      <if test="approvalStatus != null" >
+        approval_status,
+      </if>
+      <if test="approvalOpinion != null" >
+        approval_opinion,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+       <if test="proposer != null" >
+        proposer,
+      </if>
+       <if test="applicationDate != null" >
+        application_time,
+      </if>   
+       <if test="returnPickingOrder != null" >
+        return_picking_order,
+      </if>   
+       <if test="returnPickingId != null" >
+        return_picking_id,
+      </if>   
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pickingId != null" >
+        #{pickingId,jdbcType=VARCHAR},
+      </if>
+      <if test="pickingOrder != null" >
+        #{pickingOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="pickingType != null" >
+        #{pickingType,jdbcType=VARCHAR},
+      </if>
+      <if test="prckingDescribe != null" >
+        #{prckingDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrder != null" >
+        #{workOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrderDescribe != null" >
+        #{workOrderDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="picker != null" >
+        #{picker,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddId != null" >
+        #{stockAddId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null" >
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalStatus != null" >
+        #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null" >
+        #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="proposer != null" >
+        #{proposer,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="applicationDate != null" >
+        #{applicationDate,jdbcType=DATE},
+      </if>
+      
+       <if test="returnPickingOrder != null" >
+        #{returnPickingOrder,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="returnPickingId != null" >
+        #{returnPickingId,jdbcType=VARCHAR},
+      </if>
+      
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.material.entity.PickingRecordExample" resultType="java.lang.Integer" >
+    select count(a.picking_id) from picking_record a left join org_architecture b on a.wind_id=b.architecture_code
+    left join stock_address c on a.stock_add_id=c.stock_add_id
+    left join org_architecture d on a.department_id=d.architecture_id
+    left join isc_user f on a.creater=f.user_id
+     left join storehouse_type g on a.picking_type = g.type_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+     and b.architecture_type='02' and g.is_delete='01'
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update picking_record
+    <set >
+      <if test="record.pickingId != null" >
+        picking_id = #{record.pickingId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pickingOrder != null" >
+        picking_order = #{record.pickingOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pickingType != null" >
+        picking_type = #{record.pickingType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prckingDescribe != null" >
+        prcking_describe = #{record.prckingDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workOrder != null" >
+        work_order = #{record.workOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workOrderDescribe != null" >
+        work_order_describe = #{record.workOrderDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.picker != null" >
+        picker = #{record.picker,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockAddId != null" >
+        stock_add_id = #{record.stockAddId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentId != null" >
+        department_id = #{record.departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalStatus != null" >
+        approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalOpinion != null" >
+        approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fileId != null" >
+        file_id = #{record.fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creater != null" >
+        creater = #{record.creater,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update picking_record
+    set picking_id = #{record.pickingId,jdbcType=VARCHAR},
+      picking_order = #{record.pickingOrder,jdbcType=VARCHAR},
+      picking_type = #{record.pickingType,jdbcType=VARCHAR},
+      prcking_describe = #{record.prckingDescribe,jdbcType=VARCHAR},
+      work_order = #{record.workOrder,jdbcType=VARCHAR},
+      work_order_describe = #{record.workOrderDescribe,jdbcType=VARCHAR},
+      picker = #{record.picker,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      stock_add_id = #{record.stockAddId,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=VARCHAR},
+      approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR},
+      file_id = #{record.fileId,jdbcType=VARCHAR},
+      creater = #{record.creater,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.material.entity.PickingRecord" >
+    update picking_record
+    <set >
+      <if test="pickingOrder != null" >
+        picking_order = #{pickingOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="pickingType != null" >
+        picking_type = #{pickingType,jdbcType=VARCHAR},
+      </if>
+      <if test="prckingDescribe != null" >
+        prcking_describe = #{prckingDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrder != null" >
+        work_order = #{workOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrderDescribe != null" >
+        work_order_describe = #{workOrderDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="picker != null" >
+        picker = #{picker,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        wind_id = #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddId != null" >
+        stock_add_id = #{stockAddId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null" >
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalStatus != null" >
+        approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalOpinion != null" >
+        approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+       <if test="proposer != null" >
+        proposer = #{proposer,jdbcType=VARCHAR},
+      </if>
+       <if test="applicationDate != null" >
+        application_time = #{applicationDate,jdbcType=DATE},
+      </if>
+      
+       <if test="returnPickingOrder != null" >
+        return_picking_order = #{returnPickingOrder,jdbcType=VARCHAR},
+      </if>
+      
+       <if test="returnPickingOrder != null" >
+        return_picking_id = #{returnPickingId,jdbcType=VARCHAR},
+      </if>
+      
+    </set>
+    where picking_id = #{pickingId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.material.entity.PickingRecord" >
+    update picking_record
+    set picking_order = #{pickingOrder,jdbcType=VARCHAR},
+      picking_type = #{pickingType,jdbcType=VARCHAR},
+      prcking_describe = #{prckingDescribe,jdbcType=VARCHAR},
+      work_order = #{workOrder,jdbcType=VARCHAR},
+      work_order_describe = #{workOrderDescribe,jdbcType=VARCHAR},
+      picker = #{picker,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      stock_add_id = #{stockAddId,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=VARCHAR},
+      approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      creater = #{creater,jdbcType=VARCHAR}
+    where picking_id = #{pickingId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getMaxPickingOrder" resultType="java.lang.String"  parameterType= "java.lang.String">
+   select max(picking_order) from picking_record 
+  </select>
+  
+ <delete id="deleteByPickingId" parameterType="java.util.List">
+         delete from picking_record where picking_id in
+         <foreach item="deleteByPickingId" collection="list" open="(" close=")" separator=",">
+             #{deleteByPickingId}
+         </foreach>
+ </delete>
+  
+</mapper>

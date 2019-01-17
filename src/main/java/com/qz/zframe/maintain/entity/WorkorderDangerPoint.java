@@ -1,28 +1,28 @@
 package com.qz.zframe.maintain.entity;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 public class WorkorderDangerPoint {
 
-    @ApiParam(name="dangerPointId",value="危险点id",required=false)
+    @ApiModelProperty(name="dangerPointId",value="危险点id",required=false)
     private String dangerPointId;
 
-    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    @ApiModelProperty(name="workorderId",value="缺陷工单id",required=false)
     private String workorderId;
 
-    @ApiParam(name="workorderId",value="故障知识id",required=false)
+    @ApiModelProperty(name="workorderId",value="故障知识id",required=false)
     private String knowledgeId;
 
-    @ApiParam(name="orderId",value="工单id",required=false)
+    @ApiModelProperty(name="orderId",value="工单id",required=false)
     private String orderId;
 
-    @ApiParam(name="dangerNumber",value="序号",required=false)
+    @ApiModelProperty(name="dangerNumber",value="编号",required=false)
     private String dangerNumber;
 
-    @ApiParam(name="dangerDangerSource",value="危险源",required=false)
+    @ApiModelProperty(name="dangerDangerSource",value="危险源",required=false)
     private String dangerDangerSource;
 
-    @ApiParam(name="dangerPreMeasures",value="危险点预控措施",required=false)
+    @ApiModelProperty(name="dangerPreMeasures",value="危险点预控措施",required=false)
     private String dangerPreMeasures;
 
     public String getDangerPointId() {

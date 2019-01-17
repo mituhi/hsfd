@@ -4,93 +4,83 @@ import java.util.Date;
 
 public class TallyRecord {
     //主键id
-    private String recordId;
+    private  String recordId;
+
     //路线id
-    private String routeId;
+    private  String routeId;
+
     //点检人姓名
-    private String practitionerName;
-    //开始时间
-    private Date startTime;
-    //结束时间
-    private Date endTime;
+    private  String practitionerName;
+
     //标准数量
-    private String StandardQuantity;
+    private  String standardQuantity;
+
     //记录数量
-    private String recordNumber;
+    private  String recordNumber;
+
     //报警数量
-    private String alarmNumber;
+    private  String alarmNumber;
+
     //已处理报警数量
-    private String processedAlerts;
+    private  String processedAlerts;
 
-    public String getRecordId() {
-        return recordId;
+    //点检结果
+    private  String checkResult;
+
+
+    public  String  getRecordId(){
+        return  this.recordId;
+    };
+    public  void  setRecordId(String recordId){
+        this.recordId=recordId;
     }
 
-    public void setRecordId(String recordId) {
-        this.recordId = recordId;
+    public  String  getRouteId(){
+        return  this.routeId;
+    };
+    public  void  setRouteId(String routeId){
+        this.routeId=routeId;
     }
 
-    public String getRouteId() {
-        return routeId;
+    public  String  getPractitionerName(){
+        return  this.practitionerName;
+    };
+    public  void  setPractitionerName(String practitionerName){
+        this.practitionerName=practitionerName;
     }
 
-    public void setRouteId(String routeId) {
-        this.routeId = routeId;
+    public  String  getStandardQuantity(){
+        return  this.standardQuantity;
+    };
+    public  void  setStandardQuantity(String standardQuantity){
+        this.standardQuantity=standardQuantity;
     }
 
-    public String getPractitionerName() {
-        return practitionerName;
+    public  String  getRecordNumber(){
+        return  this.recordNumber;
+    };
+    public  void  setRecordNumber(String recordNumber){
+        this.recordNumber=recordNumber;
     }
 
-    public void setPractitionerName(String practitionerName) {
-        this.practitionerName = practitionerName;
+    public  String  getAlarmNumber(){
+        return  this.alarmNumber;
+    };
+    public  void  setAlarmNumber(String alarmNumber){
+        this.alarmNumber=alarmNumber;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public  String  getProcessedAlerts(){
+        return  this.processedAlerts;
+    };
+    public  void  setProcessedAlerts(String processedAlerts){
+        this.processedAlerts=processedAlerts;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getStandardQuantity() {
-        return StandardQuantity;
-    }
-
-    public void setStandardQuantity(String standardQuantity) {
-        StandardQuantity = standardQuantity;
-    }
-
-    public String getRecordNumber() {
-        return recordNumber;
-    }
-
-    public void setRecordNumber(String recordNumber) {
-        this.recordNumber = recordNumber;
-    }
-
-    public String getAlarmNumber() {
-        return alarmNumber;
-    }
-
-    public void setAlarmNumber(String alarmNumber) {
-        this.alarmNumber = alarmNumber;
-    }
-
-    public String getProcessedAlerts() {
-        return processedAlerts;
-    }
-
-    public void setProcessedAlerts(String processedAlerts) {
-        this.processedAlerts = processedAlerts;
+    public  String  getCheckResult(){
+        return  this.checkResult;
+    };
+    public  void  setCheckResult(String checkResult){
+        this.checkResult=checkResult;
     }
 }

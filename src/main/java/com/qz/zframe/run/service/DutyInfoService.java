@@ -6,7 +6,7 @@ import com.qz.zframe.run.entity.DutyInfo;
 /**
  * <p>Title: DutyInfoService</p>
  * <p>@Description: 值班信息表接口声明 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月8日 下午3:43:19
  * @version:V1.0
  */
@@ -19,5 +19,14 @@ public interface DutyInfoService {
 	 * @return: ResultEntity
 	 */
 	ResultEntity saveDutyInfo(DutyInfo dutyInfo);
+	
+	
+	/**
+	 * @Description:删除
+	 * @param: @param dutyInfo   
+	 * @return: void
+	 */
+	void deleteDutyInfoById(String dutyInfoId);
+	
 	
 }

@@ -1,57 +1,60 @@
 package com.qz.zframe.tickets.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class TypicalOperateTicket {
 
-    @ApiParam(name="typicalTicketId",value="典型操作票id",required=false)
+    @ApiModelProperty(name="typicalTicketId",value="典型操作票id",required=false)
     private String typicalTicketId;
 
-    @ApiParam(name="serialNumber",value="典型操作票号(流水号)",required=false)
+    @ApiModelProperty(name="serialNumber",value="典型操作票号(流水号)",required=false)
     private String serialNumber;
 
-    @ApiParam(name="typicalTicketName",value="典型操作票名称",required=false)
+    @ApiModelProperty(name="typicalTicketName",value="典型操作票名称",required=false)
     private String typicalTicketName;
 
-    @ApiParam(name="operTicketTypeId",value="操作票类型id",required=true)
+    @ApiModelProperty(name="operTicketTypeId",value="操作票类型id",required=true)
     private String operTicketTypeId;
 
-    @ApiParam(name="maintainer",value="维护人",required=false)
+    @ApiModelProperty(name="maintainer",value="维护人id",required=false)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=false)
+    @ApiModelProperty(name="maintainDate",value="维护日期",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="status",value="状态",required=false)
+    @ApiModelProperty(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="windId",value="风电场id",required=true)
+    @ApiModelProperty(name="windId",value="风电场id",required=true)
     private String windId;
 
-    @ApiParam(name="workTeam",value="工作班组",required=true)
+    @ApiModelProperty(name="workTeam",value="工作班组id",required=true)
     private String workTeam;
 
-    @ApiParam(name="positionId",value="位置id",required=false)
+    @ApiModelProperty(name="positionId",value="位置id",required=false)
     private String positionId;
 
-    @ApiParam(name="positionDesc",value="位置描述",required=false)
+    @ApiModelProperty(name="positionDesc",value="位置描述",required=false)
     private String positionDesc;
 
-    @ApiParam(name="equipmentId",value="设备id",required=false)
+    @ApiModelProperty(name="equipmentId",value="设备id",required=false)
     private String equipmentId;
 
-    @ApiParam(name="equipmentDesc",value="设备描述",required=false)
+    @ApiModelProperty(name="equipmentDesc",value="设备描述",required=false)
     private String equipmentDesc;
 
-    @ApiParam(name="operateContent",value="操作内容",required=true)
+    @ApiModelProperty(name="operateContent",value="操作内容",required=true)
     private String operateContent;
 
-    @ApiParam(name="remark",value="备注",required=false)
+    @ApiModelProperty(name="remark",value="备注",required=false)
     private String remark;
+    @ApiModelProperty(name="updateTime",value="修改时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+    private Date updateTime;
 
     public String getTypicalTicketId() {
         return typicalTicketId;
@@ -172,4 +175,14 @@ public class TypicalOperateTicket {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+    
+    
 }

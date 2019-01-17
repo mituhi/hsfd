@@ -1,6 +1,9 @@
 package com.qz.zframe.run.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,21 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
 import com.qz.zframe.common.util.ErrorCode;
+import com.qz.zframe.common.util.ExcelUtil;
 import com.qz.zframe.common.util.ObjectIsBlankUtil;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.run.entity.Shift;
 import com.qz.zframe.run.entity.ShiftExample;
-import com.qz.zframe.run.entity.ValueTime;
+import com.qz.zframe.run.entity.ShiftExample.Criteria;
 import com.qz.zframe.run.service.ShiftService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * <p>Title: ShiftController</p>
  * <p>@Description: 班次表控制层</p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年10月31日 下午2:39:17
  * @version:V1.0
  */
@@ -45,7 +50,7 @@ public class ShiftController {
 	 * @param: @param
 	 *             shift
 	 * @param: @param
-	 *             pageNo
+	 *             pageNum
 	 * @param: @param
 	 *             pageSize
 	 * @param: @return
@@ -53,11 +58,58 @@ public class ShiftController {
 	 */
 	@RequestMapping(value = "/getShiftList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "批量获取班次表信息", notes = "批量获取班次表信息")
-	public PageResultEntity getShiftList(@RequestParam(required = false) String searchKey,@RequestParam(required = false) String status,
-			@RequestParam(required = false, defaultValue = "1") Integer pageNo,
+	public PageResultEntity getShiftList(@RequestParam(required = false) @ApiParam(name="searchKey",value="关键字查询")String searchKey,
+			@RequestParam(required = false) @ApiParam(name="status",value="状态") String status,
+			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
 			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
 
 		PageResultEntity pageResultEntity = new PageResultEntity();
+		
+		ShiftExample example = new ShiftExample();
+		
+		Criteria criteria = example.createCriteria();
+		
+		//如果状态值一栏选中
+		if(StringUtils.isNotBlank(status)){
+			//设置模糊查询
+			criteria.andStatusEqualTo(status);
+		}
+		
+		
+		// 一个 criteria 对应一个 or
+		
+		//模糊查询
+		if(StringUtils.isNotBlank(searchKey)){
+			//设置模糊查询
+			criteria.andShiftCodeLike(searchKey);
+			
+			Criteria criteria2 = example.createCriteria();
+			criteria2.andStatusEqualTo(status);
+			criteria2.andShiftNameLike(searchKey);
+			
+		    example.or(criteria2);
+		}
+		
+		example.setOrderByClause("sort asc");
+		//执行查询
+		List<Shift> list = shiftService.listShift(example, pageNum, pageSize);
+		//设置返回结果
+		PageInfo<Shift> pageInfo = new PageInfo<Shift>(list);
+
+		pageResultEntity.setRows(list);
+		pageResultEntity.setTotal((int) pageInfo.getTotal());
+		pageResultEntity.setCode(ErrorCode.SUCCESS);
+		pageResultEntity.setMsg("执行成功");
+		return pageResultEntity;
+		
+
+	}
+	
+	@RequestMapping(value="/toExcel",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "导出EXCEL", notes = "导出EXCEL")
+	public void toExcel(@RequestParam(required = false) @ApiParam(name="searchKey",value="关键字查询")String searchKey,
+			@RequestParam(required = false) @ApiParam(name="status",value="状态") String status,
+			HttpServletResponse response) {
 		
 		ShiftExample example = new ShiftExample();
 		
@@ -72,23 +124,31 @@ public class ShiftController {
 			//设置模糊查询
 			example.or().andShiftCodeLike(searchKey);
 			example.or().andShiftNameLike(searchKey);
-			example.or().andStatusLike(searchKey);
 		}
 		
+		example.setOrderByClause("sort");
 		
-		//执行查询
-		List<Shift> list = shiftService.listShift(example, pageNo, pageSize);
-		//设置返回结果
-		PageInfo<Shift> pageInfo = new PageInfo<Shift>(list);
-
-		pageResultEntity.setRows(list);
-		pageResultEntity.setTotal((int) pageInfo.getTotal());
-		pageResultEntity.setCode(ErrorCode.SUCCESS);
-		pageResultEntity.setMsg("执行成功");
-		return pageResultEntity;
 		
-
+		List<Shift> list = shiftService.listShift(example, 0, 0);
+		
+		LinkedHashMap<String, String> testMap = new LinkedHashMap<String, String>();
+		testMap.put("shiftCode", "班次编码");
+		testMap.put("shiftName", "班次名称");
+		testMap.put("startTime", "开始时间");
+		testMap.put("endTime", "结束时间");
+		testMap.put("status", "状态");
+		testMap.put("sort", "排序");
+		testMap.put("isMeterRead", "是否抄表");
+		
+		try {
+			String fileName = ExcelUtil.listToExcel2(list, testMap, "班次管理", 65535, response);
+			System.out.println(fileName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+	
+	
 	
 	
 
@@ -106,15 +166,32 @@ public class ShiftController {
 		ResultEntity resultEntity = new ResultEntity();
 
 		// 判断字段是否异常（为空）
-		if (StringUtils.isBlank(shift.getShiftCode()) || StringUtils.isBlank(shift.getShiftName())
-				|| shift.getSort() == null || StringUtils.isBlank(shift.getStatus())
-				|| StringUtils.isBlank(shift.getIsMeterRead())) {
+		if (StringUtils.isBlank(shift.getShiftCode())) {
 			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少字段");
-		} else {
-			// 调用接口保存信息
-			resultEntity = shiftService.saveShift(shift);
+			resultEntity.setMsg("缺少班次编码字段");
+			return resultEntity;
+		} 
+		if (StringUtils.isBlank(shift.getShiftName())) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("缺少班次名称字段");
+			return resultEntity;
 		}
+		if( shift.getSort() == null) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("缺少排序序号字段");
+			return resultEntity;
+		} 
+		if( StringUtils.isBlank(shift.getStatus())) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("缺少状态字段");
+			return resultEntity;	
+		}
+		if( StringUtils.isBlank(shift.getIsMeterRead())) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("缺少是否抄表字段");
+			return resultEntity;
+		} 
+		resultEntity = shiftService.saveShift(shift);
 		return resultEntity;
 
 	}
@@ -129,7 +206,7 @@ public class ShiftController {
 	 */
 	@RequestMapping(value = "/removeShift", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(notes = "批量班次表信息删除", value = "批量班次表信息删除")
-	public ResultEntity removeShift(@RequestParam List<String> shiftIds) {
+	public ResultEntity removeShift(@RequestParam @ApiParam(name="shiftIds",value="勾选的shiftIds") List<String> shiftIds) {
 
 		ResultEntity resultEntity = shiftService.removeShifts(shiftIds); 
 		return resultEntity;
@@ -189,7 +266,7 @@ public class ShiftController {
 	 /*************************    点击编辑：获取对应信息               ***************************/
 	@RequestMapping(value="/getShift" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value="点击编辑：获取对应信息 ", notes="点击编辑：获取对应信息")
-	public ResultEntity getShift(@RequestParam String shiftId){
+	public ResultEntity getShift(@RequestParam @ApiParam(name="shiftId",value="勾选的shiftId") String shiftId){
 		
 		ResultEntity resultEntity = new ResultEntity();
 
@@ -205,6 +282,66 @@ public class ShiftController {
 		resultEntity.setMsg("缺少字段");
 		return resultEntity;
 
+	}
+
+	/*************************    点击查看：获取对应信息               ***************************/
+	@RequestMapping(value="/viewShift" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value="点击查看：获取对应信息详情 ", notes="点击查看：获取对应信息详情")
+	public ResultEntity viewShift(@RequestParam @ApiParam(name="shiftId",value="勾选的shiftId") String shiftId){
+		
+		ResultEntity resultEntity = new ResultEntity();
+		
+		// 如果数据不为空
+		if (StringUtils.isNotBlank(shiftId)) {
+			Shift shift = shiftService.getShiftByShiftId(shiftId);
+			resultEntity.setCode(ErrorCode.SUCCESS);
+			resultEntity.setMsg("执行成功");
+			resultEntity.setData(shift);
+			return resultEntity;
+		}
+		resultEntity.setCode(ErrorCode.ERROR);
+		resultEntity.setMsg("缺少字段");
+		return resultEntity;
+		
+	}
+	
+	/************************   获取班次下拉框值           ************************************/
+	@RequestMapping(value="/getValueSelect" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value="获取班次下拉框值 ", notes="获取班次下拉框值")
+	public ResultEntity getValueSelect(){
+		ResultEntity resultEntity = new ResultEntity();
+		
+		ShiftExample example = new ShiftExample();
+		List<Shift> list = shiftService.listShift(example, 0, 0);
+		if(list!=null && !list.isEmpty()) {
+		 resultEntity.setCode(ErrorCode.SUCCESS);
+		 resultEntity.setMsg("查询成功");
+		 resultEntity.setData(list);
+	  }else {
+		resultEntity.setCode(ErrorCode.ERROR);
+		resultEntity.setMsg("查询失败");
+		resultEntity.setData(list);
+		}
+		return resultEntity;
+	}
+
+	
+	
+	
+	
+	/**********************************获取班次*************************************/
+	@RequestMapping(value="/getShiftName" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value="点击查看：获取班次对应信息 ", notes="点击查看：获取班次对应信息")
+	public ResultEntity getShiftName(){
+		ResultEntity resultEntity = new ResultEntity(); 
+		
+		ShiftExample example = new ShiftExample();
+		List<Shift> list = shiftService.listShift(example , 0, 0);
+		
+		resultEntity.setCode(ErrorCode.SUCCESS);
+		resultEntity.setMsg("执行成功");
+		resultEntity.setData(list);
+		return resultEntity;
 	}
 	
 

@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.material.dao.PickingRecordDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.material.entity.PickingRecordDetail" >
+    <id column="picking_detail_id" property="pickingDetailId" jdbcType="VARCHAR" />
+    <result column="picking_id" property="pickingId" jdbcType="VARCHAR" />
+    <result column="material_id" property="materialId" jdbcType="VARCHAR" />
+    <result column="return_picking_detail_id" property="returnPickingDetailId" jdbcType="VARCHAR" />
+    <result column="recipients_num" property="recipientsNum" jdbcType="INTEGER" />
+    <result column="return_num" property="returnNum" jdbcType="INTEGER" />
+    <result column="refundable_num" property="refundableNum" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="in_inventory_id" property="inInventoryId" jdbcType="VARCHAR" />
+    <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="workorder_material_id" property="workorderMaterialId" jdbcType="VARCHAR" />
+    <!-- 物资   -->
+    <result column="material_code" property="materialCode" jdbcType="VARCHAR" />
+    <result column="material_name" property="materialName" jdbcType="VARCHAR" />
+    <result column="specifications " property="specifications " jdbcType="VARCHAR" />
+    <result column="measuring_unit_name" property="measuringUnitName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  
+  <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</sql>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    picking_detail_id, picking_id, material_id, return_picking_detail_id, recipients_num, 
+    return_num, refundable_num, price, amount, in_inventory_id, purpose, remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.PickingRecordDetailExample" >
+    select a.*,c.material_code,c.material_name,c.specifications,c.measuring_unit,d.measuring_unit_name  from picking_record_detail a left join picking_record b on a.picking_id = b.picking_id
+    left join material c on a.material_id=c.material_id
+    left join material_unit  d on c.measuring_unit = d.measuring_unit_id
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     <include refid="Pagination_Sql" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from picking_record_detail
+    where picking_detail_id = #{pickingDetailId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from picking_record_detail
+    where picking_id = #{pickingId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.material.entity.PickingRecordDetailExample" >
+    delete from picking_record_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.material.entity.PickingRecordDetail" >
+    insert into picking_record_detail (picking_detail_id, picking_id, material_id, 
+      return_picking_detail_id, recipients_num, return_num, 
+      refundable_num, price, amount, 
+      in_inventory_id, purpose, remark
+      )
+    values (#{pickingDetailId,jdbcType=VARCHAR}, #{pickingId,jdbcType=VARCHAR}, #{materialId,jdbcType=VARCHAR}, 
+      #{returnPickingDetailId,jdbcType=VARCHAR}, #{recipientsNum,jdbcType=INTEGER}, #{returnNum,jdbcType=INTEGER}, 
+      #{refundableNum,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, 
+      #{inInventoryId,jdbcType=VARCHAR}, #{purpose,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  
+  <insert id="insertList" parameterType="java.util.List" >
+    insert into picking_record_detail (picking_detail_id, picking_id, material_id, 
+      return_picking_detail_id, recipients_num, return_num, 
+      refundable_num, price, amount, 
+      in_inventory_id, purpose, remark,workorder_material_id
+      )
+    values
+    <foreach collection="list" item="pickingRecordDetail" index="index" separator="," >
+     (#{pickingRecordDetail.pickingDetailId,jdbcType=VARCHAR}, #{pickingRecordDetail.pickingId,jdbcType=VARCHAR}, #{pickingRecordDetail.materialId,jdbcType=VARCHAR}, 
+      #{pickingRecordDetail.returnPickingDetailId,jdbcType=VARCHAR}, #{pickingRecordDetail.recipientsNum,jdbcType=INTEGER}, #{pickingRecordDetail.returnNum,jdbcType=INTEGER}, 
+      #{pickingRecordDetail.refundableNum,jdbcType=INTEGER}, #{pickingRecordDetail.price,jdbcType=DECIMAL}, #{pickingRecordDetail.amount,jdbcType=DECIMAL}, 
+      #{pickingRecordDetail.inInventoryId,jdbcType=VARCHAR}, #{pickingRecordDetail.purpose,jdbcType=VARCHAR}, #{pickingRecordDetail.remark,jdbcType=VARCHAR},#{pickingRecordDetail.workorderMaterialId,jdbcType=VARCHAR}
+      )
+     </foreach>
+  </insert>
+  
+  
+  
+  <insert id="insertSelective" parameterType="com.qz.zframe.material.entity.PickingRecordDetail" >
+    insert into picking_record_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pickingDetailId != null" >
+        picking_detail_id,
+      </if>
+      <if test="pickingId != null" >
+        picking_id,
+      </if>
+      <if test="materialId != null" >
+        material_id,
+      </if>
+      <if test="returnPickingDetailId != null" >
+        return_picking_detail_id,
+      </if>
+      <if test="recipientsNum != null" >
+        recipients_num,
+      </if>
+      <if test="returnNum != null" >
+        return_num,
+      </if>
+      <if test="refundableNum != null" >
+        refundable_num,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="inInventoryId != null" >
+        in_inventory_id,
+      </if>
+      <if test="purpose != null" >
+        purpose,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pickingDetailId != null" >
+        #{pickingDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="pickingId != null" >
+        #{pickingId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null" >
+        #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="returnPickingDetailId != null" >
+        #{returnPickingDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientsNum != null" >
+        #{recipientsNum,jdbcType=INTEGER},
+      </if>
+      <if test="returnNum != null" >
+        #{returnNum,jdbcType=INTEGER},
+      </if>
+      <if test="refundableNum != null" >
+        #{refundableNum,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="inInventoryId != null" >
+        #{inInventoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="purpose != null" >
+        #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.material.entity.PickingRecordDetailExample" resultType="java.lang.Integer" >
+    select count(*) from picking_record_detail a left join picking_record b on a.picking_id = b.picking_id
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update picking_record_detail
+    <set >
+      <if test="record.pickingDetailId != null" >
+        picking_detail_id = #{record.pickingDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pickingId != null" >
+        picking_id = #{record.pickingId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materialId != null" >
+        material_id = #{record.materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.returnPickingDetailId != null" >
+        return_picking_detail_id = #{record.returnPickingDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recipientsNum != null" >
+        recipients_num = #{record.recipientsNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.returnNum != null" >
+        return_num = #{record.returnNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.refundableNum != null" >
+        refundable_num = #{record.refundableNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inInventoryId != null" >
+        in_inventory_id = #{record.inInventoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purpose != null" >
+        purpose = #{record.purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update picking_record_detail
+    set picking_detail_id = #{record.pickingDetailId,jdbcType=VARCHAR},
+      picking_id = #{record.pickingId,jdbcType=VARCHAR},
+      material_id = #{record.materialId,jdbcType=VARCHAR},
+      return_picking_detail_id = #{record.returnPickingDetailId,jdbcType=VARCHAR},
+      recipients_num = #{record.recipientsNum,jdbcType=INTEGER},
+      return_num = #{record.returnNum,jdbcType=INTEGER},
+      refundable_num = #{record.refundableNum,jdbcType=INTEGER},
+      price = #{record.price,jdbcType=DECIMAL},
+      amount = #{record.amount,jdbcType=DECIMAL},
+      in_inventory_id = #{record.inInventoryId,jdbcType=VARCHAR},
+      purpose = #{record.purpose,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.material.entity.PickingRecordDetail" >
+    update picking_record_detail
+    <set >
+      <if test="pickingId != null" >
+        picking_id = #{pickingId,jdbcType=VARCHAR},
+      </if>
+      <if test="materialId != null" >
+        material_id = #{materialId,jdbcType=VARCHAR},
+      </if>
+      <if test="returnPickingDetailId != null" >
+        return_picking_detail_id = #{returnPickingDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="recipientsNum != null" >
+        recipients_num = #{recipientsNum,jdbcType=INTEGER},
+      </if>
+      <if test="returnNum != null" >
+        return_num = #{returnNum,jdbcType=INTEGER},
+      </if>
+      <if test="refundableNum != null" >
+        refundable_num = #{refundableNum,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="inInventoryId != null" >
+        in_inventory_id = #{inInventoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="purpose != null" >
+        purpose = #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where picking_detail_id = #{pickingDetailId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.material.entity.PickingRecordDetail" >
+    update picking_record_detail
+    set picking_id = #{pickingId,jdbcType=VARCHAR},
+      material_id = #{materialId,jdbcType=VARCHAR},
+      return_picking_detail_id = #{returnPickingDetailId,jdbcType=VARCHAR},
+      recipients_num = #{recipientsNum,jdbcType=INTEGER},
+      return_num = #{returnNum,jdbcType=INTEGER},
+      refundable_num = #{refundableNum,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      amount = #{amount,jdbcType=DECIMAL},
+      in_inventory_id = #{inInventoryId,jdbcType=VARCHAR},
+      purpose = #{purpose,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where picking_detail_id = #{pickingDetailId,jdbcType=VARCHAR}
+  </update>
+  
+   <delete id="delPickingIds" parameterType="java.util.List">
+         delete from picking_record_detail where picking_id in
+         <foreach item="delPickingIds" collection="list" open="(" close=")" separator=",">
+             #{delPickingIds}
+         </foreach>
+ </delete>
+ 
+ <delete id="deleteByPickingId" parameterType="java.util.List">
+         delete from picking_record_detail where picking_id in
+         <foreach item="deleteByPickingId" collection="list" open="(" close=")" separator=",">
+             #{deleteByPickingId}
+         </foreach>
+ </delete>
+ 
+   <!-- 批量更新 -->
+	<update id="updateBatchReturnNum" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			update picking_record_detail
+			<set>
+				return_num=#{item.returnNum,jdbcType=INTEGER},
+			</set>
+			where picking_detail_id = #{item.pickingDetailId,jdbcType=VARCHAR}
+		</foreach>
+	</update>
+ 
+</mapper>

@@ -1,5 +1,6 @@
 package com.qz.zframe.device.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import com.qz.zframe.device.dao.OutputParametersMapper;
 import com.qz.zframe.device.entity.Components;
 import com.qz.zframe.device.entity.ComponentsExample;
 import com.qz.zframe.device.entity.OutputParameters;
+import com.qz.zframe.device.entity.RunParameters;
 import com.qz.zframe.device.service.ComponentService;
 
 @Service
@@ -42,13 +44,20 @@ public class ComponentServiceImpl implements ComponentService {
 	@Override
 	public ResultEntity deleteComponent(List<String> componentsIds) {
 		ResultEntity resultEntity = new ResultEntity();
+		if(componentsIds!=null && !componentsIds.isEmpty()) {
 		int delete = componentsMapper.deleteByPrimaryKeyList(componentsIds);
 		if (delete < 0) {
 			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("删除失败");
+			return resultEntity;
 		} else {
 			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("删除成功");
+		}
+		}else {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("未选中数据进行删除");
+			return resultEntity;
 		}
 		return resultEntity;
 	}
@@ -61,6 +70,7 @@ public class ComponentServiceImpl implements ComponentService {
 		if (save == 0) {
 			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("新增失败");
+			return resultEntity;
 		} else {
 			resultEntity.setCode(ErrorCode.SUCCESS);
 			resultEntity.setMsg("新增成功");
@@ -80,10 +90,28 @@ public class ComponentServiceImpl implements ComponentService {
 			if (save == 0) {
 				resultEntity.setCode(ErrorCode.ERROR);
 				resultEntity.setMsg("修改失败");
+				return resultEntity;
 			} else {
 				resultEntity.setCode(ErrorCode.SUCCESS);
 				resultEntity.setMsg("修改成功");
 			}
+		}
+		return resultEntity;
+	}
+
+	@Override
+	public PageResultEntity findById(String componentId) {
+		PageResultEntity resultEntity = new PageResultEntity();
+		List<Components > list = new ArrayList<Components>();
+		Components com = componentsMapper.selectByPrimaryKey(componentId);
+		if (com == null) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("查询结果有误");
+			return resultEntity;
+		} else {
+			list.add(com);
+			resultEntity.setCode(ErrorCode.SUCCESS);
+			resultEntity.setRows(list);
 		}
 		return resultEntity;
 	}

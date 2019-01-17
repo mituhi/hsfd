@@ -3,7 +3,9 @@ package com.qz.zframe.run.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainEquipmentExample {
+import com.qz.zframe.common.util.PageExample;
+
+public class MainEquipmentExample extends PageExample{
     protected String orderByClause;
 
     protected boolean distinct;

@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/api/common/dataDict")
-@Api(tags = { "api-common-dataDict" }, description = "系统管理-编码管理")
+@Api(tags = { "api-common-dataDict" }, description = "系统管理-标准代码管理")
 public class DataDictController {
 	private static Logger logger = LoggerFactory.getLogger(DataDictController.class);
 	
@@ -37,9 +37,9 @@ public class DataDictController {
 	public PageResultEntity queryCodeType(
 			@RequestParam(required = false)
 			@ApiParam(name="codeType",value="分类编码",required=false) String codeType,
-			@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
+			@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
 		logger.info("===== 根据类型查询编码分类 DataDictController.queryCodeByCodeType ===== codeType:"+codeType);
-		return dataDictService.queryCodeType(codeType, page, size);
+		return dataDictService.queryCodeType(codeType, pageNum, pageSize);
 	}
 	
 	@ApiOperation(value = "根据id查询编码分类", notes = "根据id查询编码分类")
@@ -54,34 +54,40 @@ public class DataDictController {
 	
 	@ApiOperation(value = "新增编码分类", notes = "新增编码分类")
 	@RequestMapping(value = "addCodeType", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<DataDictType> addCodeType(@RequestBody DataDictType dataDictType)
+	public PageResultEntity addCodeType(@RequestBody DataDictType dataDictType)
 			throws Exception {
 		logger.info("===== 新增编码分类 DataDictController.addCodeType ===== dataDictType:"+dataDictType);
-		return new ResponseEntity<DataDictType>(dataDictService.addAndUpdateCodeType(dataDictType), HttpStatus.OK);
+		return dataDictService.addAndUpdateCodeType(dataDictType);
 	}
 	
 	@ApiOperation(value = "修改编码分类", notes = "修改编码分类")
 	@RequestMapping(value = "updateCodeType", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<DataDictType> updateCodeType(@RequestBody DataDictType dataDictType)
+	public PageResultEntity updateCodeType(@RequestBody DataDictType dataDictType)
 			throws Exception {
 		logger.info("===== 修改编码分类 DataDictController.updateCodeType ===== dataDictType:"+dataDictType);
-		return new ResponseEntity<DataDictType>(dataDictService.addAndUpdateCodeType(dataDictType),
-				HttpStatus.OK);
+		return dataDictService.addAndUpdateCodeType(dataDictType);
 	}
 	
 	@ApiOperation(value = "删除编码分类", notes = "删除编码分类")
 	@RequestMapping(value = "deleteCodeType", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Integer> deleteCodeType(@RequestParam(required = true) List<String> ids) throws Exception {
+	public PageResultEntity deleteCodeType(@RequestParam(required = true) List<String> ids) throws Exception {
 		logger.info("===== 删除编码分类 DataDictController.deleteCodeType ===== ids:"+ids);
-		return new ResponseEntity<Integer>(dataDictService.deleteCodeType(ids), HttpStatus.OK);
+		return dataDictService.deleteCodeType(ids);
 	}
 	
 	@ApiOperation(value = "根据类型查询编码", notes = "根据类型查询编码")
 	@RequestMapping(value = "queryCode", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public PageResultEntity queryCode(@RequestParam(required = false) String codeType,
-			@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer size) {
+			@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "10") Integer pageSize) {
 		logger.info("===== 根据类型查询编码 DataDictController.queryCode ===== codeType:"+codeType);
-		return dataDictService.queryCode(codeType, page, size);
+		return dataDictService.queryCode(codeType, pageNum, pageSize);
+	}
+	
+	@ApiOperation(value = "根据类型查询编码列表", notes = "根据类型查询编码列表")
+	@RequestMapping(value = "queryCodeList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<List<DataDict>> queryCodeList(@RequestParam(required = false) String codeType) {
+		logger.info("===== 根据类型查询编码列表 DataDictController.queryCodeList ===== codeType:"+codeType);
+		return new ResponseEntity<List<DataDict>>(dataDictService.queryCodeList(codeType), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "根据id查询编码", notes = "根据id查询编码")
@@ -96,26 +102,25 @@ public class DataDictController {
 	
 	@ApiOperation(value = "新增编码", notes = "新增编码")
 	@RequestMapping(value = "addCode", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<DataDict> addCode(@RequestBody DataDict dataDict)
+	public PageResultEntity addCode(@RequestBody DataDict dataDict)
 			throws Exception {
 		logger.info("===== 新增编码分类 DataDictController.addCode ===== dataDict:"+dataDict);
-		return new ResponseEntity<DataDict>(dataDictService.addAndUpdateCode(dataDict), HttpStatus.OK);
+		return dataDictService.addAndUpdateCode(dataDict);
 	}
 	
 	@ApiOperation(value = "修改编码", notes = "修改编码")
 	@RequestMapping(value = "updateCode", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<DataDict> updateCode(@RequestBody DataDict dataDict)
+	public PageResultEntity updateCode(@RequestBody DataDict dataDict)
 			throws Exception {
 		logger.info("===== 修改编码 DataDictController.updateCode ===== dataDict:"+dataDict);
-		return new ResponseEntity<DataDict>(dataDictService.addAndUpdateCode(dataDict),
-				HttpStatus.OK);
+		return dataDictService.addAndUpdateCode(dataDict);
 	}
 	
 	@ApiOperation(value = "删除编码", notes = "删除编码")
 	@RequestMapping(value = "deleteCode", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Integer> deleteCode(@RequestParam(required = true) List<String> ids) throws Exception {
+	public PageResultEntity deleteCode(@RequestParam(required = true) List<String> ids) throws Exception {
 		logger.info("===== 删除编码 DataDictController.deleteCode ===== ids:"+ids);
-		return new ResponseEntity<Integer>(dataDictService.deleteCode(ids), HttpStatus.OK);
+		return dataDictService.deleteCode(ids);
 	}
 		
 }

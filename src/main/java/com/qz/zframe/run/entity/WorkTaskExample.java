@@ -525,6 +525,76 @@ public class WorkTaskExample {
             return (Criteria) this;
         }
 
+        public Criteria andUsernameIsNull() {
+            addCriterion("username is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameIsNotNull() {
+            addCriterion("username is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameEqualTo(String value) {
+            addCriterion("username =", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameNotEqualTo(String value) {
+            addCriterion("username <>", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameGreaterThan(String value) {
+            addCriterion("username >", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameGreaterThanOrEqualTo(String value) {
+            addCriterion("username >=", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameLessThan(String value) {
+            addCriterion("username <", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameLessThanOrEqualTo(String value) {
+            addCriterion("username <=", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameLike(String value) {
+            addCriterion("username like",  "%"+value+"%", "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameNotLike(String value) {
+            addCriterion("username not like", value, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameIn(List<String> values) {
+            addCriterion("username in", values, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameNotIn(List<String> values) {
+            addCriterion("username not in", values, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameBetween(String value1, String value2) {
+            addCriterion("username between", value1, value2, "username");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsernameNotBetween(String value1, String value2) {
+            addCriterion("username not between", value1, value2, "username");
+            return (Criteria) this;
+        }
+
         public Criteria andWorkNameIsNull() {
             addCriterion("work_name is null");
             return (Criteria) this;
@@ -566,7 +636,7 @@ public class WorkTaskExample {
         }
 
         public Criteria andWorkNameLike(String value) {
-            addCriterion("work_name like","%"+ value +"%", "workName");
+            addCriterion("work_name like", "%"+value+"%", "workName");
             return (Criteria) this;
         }
 
@@ -636,7 +706,7 @@ public class WorkTaskExample {
         }
 
         public Criteria andWorkDescribeLike(String value) {
-            addCriterion("work_describe like","%"+ value +"%", "workDescribe");
+            addCriterion("work_describe like",  "%"+value+"%", "workDescribe");
             return (Criteria) this;
         }
 
@@ -945,52 +1015,62 @@ public class WorkTaskExample {
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeEqualTo(Date value) {
+        public Criteria andRateTimeEqualTo(String value) {
             addCriterion("rate_time =", value, "rateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeNotEqualTo(Date value) {
+        public Criteria andRateTimeNotEqualTo(String value) {
             addCriterion("rate_time <>", value, "rateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeGreaterThan(Date value) {
+        public Criteria andRateTimeGreaterThan(String value) {
             addCriterion("rate_time >", value, "rateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeGreaterThanOrEqualTo(Date value) {
+        public Criteria andRateTimeGreaterThanOrEqualTo(String value) {
             addCriterion("rate_time >=", value, "rateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeLessThan(Date value) {
+        public Criteria andRateTimeLessThan(String value) {
             addCriterion("rate_time <", value, "rateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeLessThanOrEqualTo(Date value) {
+        public Criteria andRateTimeLessThanOrEqualTo(String value) {
             addCriterion("rate_time <=", value, "rateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeIn(List<Date> values) {
+        public Criteria andRateTimeLike(String value) {
+            addCriterion("rate_time like", value, "rateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateTimeNotLike(String value) {
+            addCriterion("rate_time not like", value, "rateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateTimeIn(List<String> values) {
             addCriterion("rate_time in", values, "rateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeNotIn(List<Date> values) {
+        public Criteria andRateTimeNotIn(List<String> values) {
             addCriterion("rate_time not in", values, "rateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeBetween(Date value1, Date value2) {
+        public Criteria andRateTimeBetween(String value1, String value2) {
             addCriterion("rate_time between", value1, value2, "rateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRateTimeNotBetween(Date value1, Date value2) {
+        public Criteria andRateTimeNotBetween(String value1, String value2) {
             addCriterion("rate_time not between", value1, value2, "rateTime");
             return (Criteria) this;
         }
@@ -1315,76 +1395,6 @@ public class WorkTaskExample {
             return (Criteria) this;
         }
 
-        public Criteria andUsernameIsNull() {
-            addCriterion("username is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameIsNotNull() {
-            addCriterion("username is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameEqualTo(String value) {
-            addCriterion("username =", value, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameNotEqualTo(String value) {
-            addCriterion("username <>", value, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameGreaterThan(String value) {
-            addCriterion("username >", value, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameGreaterThanOrEqualTo(String value) {
-            addCriterion("username >=", value, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameLessThan(String value) {
-            addCriterion("username <", value, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameLessThanOrEqualTo(String value) {
-            addCriterion("username <=", value, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameLike(String value) {
-            addCriterion("username like", "%"+ value +"%", "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameNotLike(String value) {
-            addCriterion("username not like", value, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameIn(List<String> values) {
-            addCriterion("username in", values, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameNotIn(List<String> values) {
-            addCriterion("username not in", values, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameBetween(String value1, String value2) {
-            addCriterion("username between", value1, value2, "username");
-            return (Criteria) this;
-        }
-
-        public Criteria andUsernameNotBetween(String value1, String value2) {
-            addCriterion("username not between", value1, value2, "username");
-            return (Criteria) this;
-        }
-
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;
@@ -1486,7 +1496,7 @@ public class WorkTaskExample {
         }
 
         public Criteria andCreateUserLike(String value) {
-            addCriterion("create_user like", "%"+ value +"%", "createUser");
+            addCriterion("create_user like",  "%"+value+"%", "createUser");
             return (Criteria) this;
         }
 

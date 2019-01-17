@@ -4,11 +4,19 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.qz.zframe.common.util.BaseJsonView;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class InInventoryDetail implements Serializable{
    
 	private static final long serialVersionUID = -6662230637317648491L;
+	
+
+
+	public interface ListView extends BaseJsonView {};
 
 	@ApiModelProperty(name="inInventoryDetailId",value="入库单详情id",required=true)
 	private String inInventoryDetailId;
@@ -17,30 +25,36 @@ public class InInventoryDetail implements Serializable{
     private String inInventoryId;
 
 	@ApiModelProperty(name="materialId",value="物资id",required=true)
+	@JsonView({ ListView.class })
     private String materialId;
 
 	@ApiModelProperty(name="goodsNum",value="入库数量",required=true)
+	@JsonView({ ListView.class })
     private Integer goodsNum;
 
 	@ApiModelProperty(name="taxPrice",value="含税单价",required=false)
+	@JsonView({ ListView.class })
     private BigDecimal taxPrice;
 
 	@ApiModelProperty(name="taxAmount",value="含税金额",required=false)
     private BigDecimal taxAmount;
 
 	@ApiModelProperty(name="taxBill",value="税率",required=false)
+	@JsonView({ ListView.class })
     private String taxBill;
 
 	@ApiModelProperty(name="unTaxPrice",value="未税单价",required=false)
     private BigDecimal unTaxPrice;
 
-	@ApiModelProperty(name="checkResults",value="验证结果，01不合格，02不合格",required=true)
+	@ApiModelProperty(name="checkResults",value="验证结果，01合格，02不合格",required=true)
     private String checkResults;
 
 	@ApiModelProperty(name="remark",value="备注",required=false)
+	@JsonView({ ListView.class })
     private String remark;
 
 	@ApiModelProperty(name="manufactureDay",value="生产日期,展示用",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date manufactureDay;
 	
 	@ApiModelProperty(name="manufactureDate",value="生产日期,新增编辑时使用",required=false)
@@ -53,17 +67,24 @@ public class InInventoryDetail implements Serializable{
     private BigDecimal netWorth;
 	
 	@ApiModelProperty(name="materialCode",value="物资编码",required=false)
+	@JsonView({ ListView.class })
 	private String materialCode;
 	
 	@ApiModelProperty(name="materialName",value="物资名称",required=false)
+	@JsonView({ ListView.class })
 	private String materialName;
 	
 	
 	@ApiModelProperty(name="specifications",value="型号规格",required=false)
+	@JsonView({ ListView.class })
 	private String specifications;
 	
 	@ApiModelProperty(name="measuringUnit",value="计量单位",required=false)
 	private String measuringUnit;
+
+    @ApiModelProperty(name="measuringUnitName",value="计量单位名称",required=false)
+    @JsonView({ ListView.class })
+	private String measuringUnitName;
 	
 	
 
@@ -209,5 +230,13 @@ public class InInventoryDetail implements Serializable{
 
 	public void setMeasuringUnit(String measuringUnit) {
 		this.measuringUnit = measuringUnit;
-	}  
+	}
+
+    public String getMeasuringUnitName() {
+        return measuringUnitName;
+    }
+
+    public void setMeasuringUnitName(String measuringUnitName) {
+        this.measuringUnitName = measuringUnitName;
+    }
 }

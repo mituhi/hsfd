@@ -22,5 +22,14 @@ public interface InInventoryDetailMapper extends BaseMapper<InInventoryDetail, I
 	void delByInInventoryId(String inInventoryId);
 
 	void deleteByIds(List<String> inInventoryIds);
+
+	/**
+	 * 批量新增
+	 * 
+	 * @param @param lists    参数
+	 * @return void    返回类型
+	 * @throws
+	 */
+	void insertList(List<InInventoryDetail> lists);
    
 }

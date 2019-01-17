@@ -1,6 +1,6 @@
 package com.qz.zframe.run.entity;
 
-import java.util.Date;
+import javax.persistence.Transient;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,10 +16,10 @@ public class Shift {
     private String shiftName;
 
 	@ApiModelProperty(value="开始时间",name="startTime",required=true)
-    private Date startTime;
+    private String startTime;
 
 	@ApiModelProperty(value="结束时间",name="endTime",required=true)
-    private Date endTime;
+    private String endTime;
 
 	@ApiModelProperty(value="状态",name="status",required=true)
     private String status;
@@ -29,7 +29,12 @@ public class Shift {
 
 	@ApiModelProperty(value="是否抄表",name="isMeterRead",required=true)
     private String isMeterRead;
-
+ 
+	@Transient
+	private String statusName;
+	 
+	@Transient
+	private String isMeterReadName;
     public String getShiftId() {
         return shiftId;
     }
@@ -54,20 +59,20 @@ public class Shift {
         this.shiftName = shiftName == null ? null : shiftName.trim();
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime == null ? null : startTime.trim();
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime == null ? null : endTime.trim();
     }
 
     public String getStatus() {
@@ -93,4 +98,22 @@ public class Shift {
     public void setIsMeterRead(String isMeterRead) {
         this.isMeterRead = isMeterRead == null ? null : isMeterRead.trim();
     }
+    @Transient
+	public String getStatusName() {
+		return statusName;
+	}
+    @Transient
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+    @Transient
+	public String getIsMeterReadName() {
+		return isMeterReadName;
+	}
+    @Transient
+	public void setIsMeterReadName(String isMeterReadName) {
+		this.isMeterReadName = isMeterReadName;
+	}
+    
+    
 }

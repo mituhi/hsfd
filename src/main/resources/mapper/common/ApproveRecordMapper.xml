@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.common.dao.ApproveRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.common.entity.ApproveRecord" >
+    <id column="approve_id" property="approveId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="process_detail_id" property="processDetailId" jdbcType="VARCHAR" />
+    <result column="approve_result" property="approveResult" jdbcType="VARCHAR" />
+    <result column="approve_user" property="approveUser" jdbcType="VARCHAR" />
+    <result column="approve_time" property="approveTime" jdbcType="TIMESTAMP" />
+    <result column="approve_opinion" property="approveOpinion" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    approve_id, order_id, a.process_detail_id, approve_result, approve_user, approve_time,
+    approve_opinion
+  </sql>
+
+  <resultMap id="GetResultMap" type="com.qz.zframe.common.entity.ApproveRecord" >
+    <id column="approve_id" property="approveId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="process_detail_id" property="processDetailId" jdbcType="VARCHAR" />
+    <result column="process_detail_name" property="processDetailName" jdbcType="VARCHAR" />
+    <result column="approve_result" property="approveResult" jdbcType="VARCHAR" />
+    <result column="approve_user" property="approveUser" jdbcType="VARCHAR" />
+    <result column="approve_user_name" property="approveUserName" jdbcType="VARCHAR" />
+    <result column="approve_time" property="approveTime" jdbcType="TIMESTAMP" />
+    <result column="approve_opinion" property="approveOpinion" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.approve_id as approve_id, a.order_id as order_id, a.process_detail_id as process_detail_id,
+    a.approve_result as approve_result, a.approve_user as approve_user, a.approve_time as approve_time,
+    a.approve_opinion as approve_opinion,b.user_name as approve_user_name ,d.name as process_detail_name
+  </sql>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from approve_record
+    where approve_id = #{approveId,jdbcType=VARCHAR}
+  </select>
+  <select id="getApproveRecordListByOrderId" resultMap="GetResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Get_Column_List" />
+    from approve_record a
+    left join isc_user b on a.approve_user = b.user_id
+    left join process_detail d on a.process_detail_id = d.process_detail_id
+    where order_id = #{orderId,jdbcType=VARCHAR}
+    order by approve_time asc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from approve_record
+    where approve_id = #{approveId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.qz.zframe.common.entity.ApproveRecord" >
+    insert into approve_record (approve_id, order_id, process_detail_id, 
+      approve_result, approve_user, approve_time, 
+      approve_opinion)
+    values (#{approveId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{processDetailId,jdbcType=VARCHAR}, 
+      #{approveResult,jdbcType=VARCHAR}, #{approveUser,jdbcType=VARCHAR}, #{approveTime,jdbcType=TIMESTAMP}, 
+      #{approveOpinion,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.common.entity.ApproveRecord" >
+    insert into approve_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="approveId != null" >
+        approve_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="processDetailId != null" >
+        process_detail_id,
+      </if>
+      <if test="approveResult != null" >
+        approve_result,
+      </if>
+      <if test="approveUser != null" >
+        approve_user,
+      </if>
+      <if test="approveTime != null" >
+        approve_time,
+      </if>
+      <if test="approveOpinion != null" >
+        approve_opinion,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="approveId != null" >
+        #{approveId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="processDetailId != null" >
+        #{processDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="approveResult != null" >
+        #{approveResult,jdbcType=VARCHAR},
+      </if>
+      <if test="approveUser != null" >
+        #{approveUser,jdbcType=VARCHAR},
+      </if>
+      <if test="approveTime != null" >
+        #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approveOpinion != null" >
+        #{approveOpinion,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.common.entity.ApproveRecord" >
+    update approve_record
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="processDetailId != null" >
+        process_detail_id = #{processDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="approveResult != null" >
+        approve_result = #{approveResult,jdbcType=VARCHAR},
+      </if>
+      <if test="approveUser != null" >
+        approve_user = #{approveUser,jdbcType=VARCHAR},
+      </if>
+      <if test="approveTime != null" >
+        approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approveOpinion != null" >
+        approve_opinion = #{approveOpinion,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where approve_id = #{approveId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.common.entity.ApproveRecord" >
+    update approve_record
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      process_detail_id = #{processDetailId,jdbcType=VARCHAR},
+      approve_result = #{approveResult,jdbcType=VARCHAR},
+      approve_user = #{approveUser,jdbcType=VARCHAR},
+      approve_time = #{approveTime,jdbcType=TIMESTAMP},
+      approve_opinion = #{approveOpinion,jdbcType=VARCHAR}
+    where approve_id = #{approveId,jdbcType=VARCHAR}
+  </update>
+</mapper>

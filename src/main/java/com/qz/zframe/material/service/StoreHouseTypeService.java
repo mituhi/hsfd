@@ -1,9 +1,9 @@
 package com.qz.zframe.material.service;
 
 import java.util.List;
-
-import com.qz.zframe.common.util.PageResultEntity;
+import com.qz.zframe.common.util.NewPageResult;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.common.util.ResultEntityDetail;
 import com.qz.zframe.material.entity.StoreHouseType;
 import com.qz.zframe.material.entity.StoreHouseTypeExample;
 
@@ -17,7 +17,7 @@ public interface StoreHouseTypeService {
 	 * @return PageResultEntity    返回类型
 	 * @throws
 	 */
-	public PageResultEntity getStoreHouseTypeList(StoreHouseTypeExample example);
+	public NewPageResult<StoreHouseType> getStoreHouseTypeList(StoreHouseTypeExample example);
 
 	/**
 	 * 获取出库类型详情
@@ -27,7 +27,7 @@ public interface StoreHouseTypeService {
 	 * @return ResultEntity    返回类型
 	 * @throws
 	 */
-	public ResultEntity getStoreHouseTypeDetail(String typeId);
+	public ResultEntityDetail<StoreHouseType> getStoreHouseTypeDetail(String typeId);
 
 	/**
 	 * 新增出库类型

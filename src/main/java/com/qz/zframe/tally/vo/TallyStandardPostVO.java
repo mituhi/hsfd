@@ -1,17 +1,21 @@
 package com.qz.zframe.tally.vo;
 
+import com.qz.zframe.common.util.ResultEntity;
 import io.swagger.annotations.ApiModelProperty;
 
 public class TallyStandardPostVO {
 
+    @ApiModelProperty(value="标准Id",name="standardId",required=false)
+    private String standardId;
     //路线名称
     @ApiModelProperty(value="路线名称",name="routeName",required=false)
     private String routeName;
     //标准编码
     @ApiModelProperty(value="标准编码",name="standardCoding",required=false)
     private String standardCoding;
+
     //所属设备
-    @ApiModelProperty(value="所属设备",name="equipmentBelonging",required=false)
+    @ApiModelProperty(value="所属设备(前端用)",name="equipmentBelonging",required=false)
     private String equipmentBelonging;
     //所在部位
     @ApiModelProperty(value="所在部位",name="location",required=false)
@@ -65,17 +69,128 @@ public class TallyStandardPostVO {
     @ApiModelProperty(value="报警下限",name="alarmLowerlimit",required=false)
     private String alarmLowerlimit;
     //发射率
-    @ApiModelProperty(value="发射率",name="emissivity",required=false)
+    @ApiModelProperty(value="发射率(暂时没用)",name="emissivity",required=false)
     private String emissivity;
     //里程上限
-    @ApiModelProperty(value="里程上限",name="upperlimitMileage",required=false)
+    @ApiModelProperty(value="里程上限(暂时没用)",name="upperlimitMileage",required=false)
     private String upperlimitMileage;
     //里程下限
-    @ApiModelProperty(value="里程下限",name="lowerlimitMileage",required=false)
+    @ApiModelProperty(value="里程下限(暂时没用)",name="lowerlimitMileage",required=false)
     private String lowerlimitMileage;
 
     @ApiModelProperty(value="执行周期",name="cycleName",required=false)
     private String cycleName;
+
+    private String routeId;
+
+    //设备id
+    @ApiModelProperty(value="设备id(后台用)",name="equipmentBelonging",required=false)
+    private String equipmentId;
+
+    @ApiModelProperty(value="所属风场",name="windName",required=false)
+    private String windName;
+
+    private String standardTypeTitle;
+
+    private String dataTypeTitle;
+
+    private String signalTypeTitle;
+
+    private String resultOptionNames;
+
+    private String measurementUnitTitle;
+
+    private String equipmentStateTile;
+
+    private String alarmTypeTitle;
+
+    public String getAlarmTypeTitle() {
+        return alarmTypeTitle;
+    }
+
+    public void setAlarmTypeTitle(String alarmTypeTitle) {
+        this.alarmTypeTitle = alarmTypeTitle;
+    }
+
+    public String getEquipmentStateTile() {
+        return equipmentStateTile;
+    }
+
+    public void setEquipmentStateTile(String equipmentStateTile) {
+        this.equipmentStateTile = equipmentStateTile;
+    }
+
+    public String getMeasurementUnitTitle() {
+        return measurementUnitTitle;
+    }
+
+    public void setMeasurementUnitTitle(String measurementUnitTitle) {
+        this.measurementUnitTitle = measurementUnitTitle;
+    }
+
+    public String getResultOptionNames() {
+        return resultOptionNames;
+    }
+
+    public void setResultOptionNames(String resultOptionNames) {
+        this.resultOptionNames = resultOptionNames;
+    }
+
+    public String getSignalTypeTitle() {
+        return signalTypeTitle;
+    }
+
+    public void setSignalTypeTitle(String signalTypeTitle) {
+        this.signalTypeTitle = signalTypeTitle;
+    }
+
+    public String getDataTypeTitle() {
+        return dataTypeTitle;
+    }
+
+    public void setDataTypeTitle(String dataTypeTitle) {
+        this.dataTypeTitle = dataTypeTitle;
+    }
+
+    public String getStandardTypeTitle() {
+        return standardTypeTitle;
+    }
+
+    public void setStandardTypeTitle(String standardTypeTitle) {
+        this.standardTypeTitle = standardTypeTitle;
+    }
+
+    public String getWindName() {
+        return windName;
+    }
+
+    public void setWindName(String windName) {
+        this.windName = windName;
+    }
+
+    public String getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(String equipmentId) {
+        this.equipmentId = equipmentId;
+    }
+
+    public String getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(String routeId) {
+        this.routeId = routeId;
+    }
+
+    public String getStandardId() {
+        return standardId;
+    }
+
+    public void setStandardId(String standardId) {
+        this.standardId = standardId;
+    }
 
     public String getRouteName() {
         return routeName;
@@ -268,4 +383,6 @@ public class TallyStandardPostVO {
     public void setCycleName(String cycleName) {
         this.cycleName = cycleName;
     }
+
+
 }

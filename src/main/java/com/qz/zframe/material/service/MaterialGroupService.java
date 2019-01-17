@@ -2,8 +2,9 @@ package com.qz.zframe.material.service;
 
 import java.util.List;
 
-import com.qz.zframe.common.util.PageResultEntity;
+import com.qz.zframe.common.util.NewPageResult;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.common.util.ResultEntityDetail;
 import com.qz.zframe.material.entity.MaterialGroup;
 import com.qz.zframe.material.entity.MaterialGroupExample;
 
@@ -17,7 +18,7 @@ public interface MaterialGroupService {
 	 * @return PageResultEntity    返回类型
 	 * @throws
 	 */
-	public PageResultEntity getGroupList(MaterialGroupExample materialGroupExample);
+	public NewPageResult<MaterialGroup> getGroupList(MaterialGroupExample materialGroupExample)  throws Exception;
 
 	/**
 	 * 根据物资组id获取详情
@@ -27,7 +28,7 @@ public interface MaterialGroupService {
 	 * @return ResultEntity    返回类型
 	 * @throws
 	 */
-	public ResultEntity getGroupdetailById(String materialGroupId);
+	public ResultEntity getGroupdetailById(String materialGroupId)throws Exception;
 
 	/**
 	 * 新增物资组

@@ -84,14 +84,14 @@
 
 
 
-  <update id="batchDelete" parameterType="java.lang.String">
-    update maintain_week_plan set status = "0"
+  <delete id="batchDelete" parameterType="java.lang.String">
+    delete from maintain_week_plan
     where week_id in
     <foreach collection="array" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
-  </update>
+  </delete>
   <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.MaintainWeekPlanVo" >
     <id column="week_id" property="weekId" jdbcType="VARCHAR" />
     <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
@@ -106,49 +106,66 @@
     <result column="on_duty_person" property="onDutyPerson" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="VARCHAR" />
+    <result column="record_person_name" property="recordPersonName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Get_Column_List" >
     a.week_id as week_id, a.serial_number as serial_number, a.maintainer as maintainer, a.maintain_time as maintain_time,a.status as status,
     a.start_date as start_date, a.end_date as end_date, a.week_of_year as week_of_year,
     a.wind_id as wind_id, a.record_person as record_person, a.on_duty_person as on_duty_person, a.remark as remark,
-    b.architecture_name as wind_name
+    b.architecture_name as wind_name,d.user_name as maintainer_name,e.user_name as record_person_name
   </sql>
   <select id="getMaintainWeekPlanDetail" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from maintain_week_plan a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join isc_user d on a.maintainer = d.user_id
+    left join isc_user e on a.record_person = e.user_id
     where a.status != '0' and a.week_id = #{weekId}
   </select>
   <select id="getMaintainWeekPlanList" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from maintain_week_plan a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join isc_user d on a.maintainer = d.user_id
+    left join isc_user e on a.record_person = e.user_id
     where a.status != '0'
-    <if test="map.windId != null" >
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
       and a.wind_id = #{map.windId}
     </if>
-    <if test="map.startDate != null">
-      and a.start_date &lt;= #{map.startDate}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
     </if>
-    <if test="map.endDate != null">
-      and a.end_date &gt;= #{map.endDate}
+    <if test="map.startDate != null and map.startDate != '' and (map.endDate == null or map.endDate == '')">
+      and #{map.startDate} &gt; a.start_date  and #{map.startDate} #lt; a.endDate
     </if>
+    <if test="map.startDate != null and map.startDate != '' and map.endDate != null and map.endDate != ''">
+      and #{map.startDate} &lt; a.start_date and #{map.endDate} &gt; a.endDate;
+    </if>
+    order by a.serial_number is null desc,a.serial_number desc
+    limit ${map.start},${map.pageSize}
   </select>
   <select id="getTotal" resultType="java.lang.Integer">
     select
     count(*)
-    from maintain_week_plan
-    where status != '0'
-    <if test="map.windId != null" >
-      and wind_id = #{map.windId}
+    from maintain_week_plan a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join isc_user d on a.maintainer = d.user_id
+    left join isc_user e on a.record_person = e.user_id
+    where a.status != '0'
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.windId}
     </if>
-    <if test="map.startDate != null">
-      and start_date &lt;= #{map.startDate}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
     </if>
-    <if test="map.endDate != null">
-      and end_date &gt;= #{map.endDate}
+    <if test="map.startDate != null and map.startDate != '' and (map.endDate == null or map.endDate == '')">
+      and #{map.startDate} &gt; a.start_date  and #{map.startDate} #lt; a.endDate
+    </if>
+    <if test="map.startDate != null and map.startDate != '' and map.endDate != null and map.endDate != ''">
+      and #{map.startDate} &lt; a.start_date and #{map.endDate} &gt; a.endDate;
     </if>
   </select>
 

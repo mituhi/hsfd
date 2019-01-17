@@ -19,6 +19,12 @@ public interface OperateItemMapper {
 
     int insertSelective(OperateItem record);
 
+    //根据操作票ids删除操作项
+    int batchDeleteByTicketIds(@Param("list") List<String> ticketIdList);
+
+    //根据典型操作票ids删除操作项
+    int batchDeleteByTypicalTicketIds(@Param("array") String[] ids);
+
     List<OperateItem> selectByExample(OperateItemExample example);
 
     OperateItem selectByPrimaryKey(String itemId);

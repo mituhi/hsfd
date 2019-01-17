@@ -7,7 +7,9 @@
     <result column="knowledge_desc" property="knowledgeDesc" jdbcType="VARCHAR" />
     <result column="knowledge_name" property="knowledgeName" jdbcType="VARCHAR" />
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
-    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="maintain_date" property="maintainDate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="flow_status" property="flowStatus" jdbcType="VARCHAR" />
     <result column="breakdown_location" property="breakdownLocation" jdbcType="VARCHAR" />
     <result column="breakdown_attribute" property="breakdownAttribute" jdbcType="VARCHAR" />
     <result column="breakdown_code" property="breakdownCode" jdbcType="VARCHAR" />
@@ -15,7 +17,6 @@
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="applicant" property="applicant" jdbcType="VARCHAR" />
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="defect_phenomenon" property="defectPhenomenon" jdbcType="VARCHAR" />
     <result column="cause_analysis" property="causeAnalysis" jdbcType="VARCHAR" />
     <result column="repair_process_desc" property="repairProcessDesc" jdbcType="VARCHAR" />
@@ -82,18 +83,27 @@
   </sql>
   <sql id="Base_Column_List" >
     knowledge_id, serial_number, knowledge_desc, knowledge_name, maintainer, maintain_date, 
-    breakdown_location, breakdown_attribute, breakdown_code, breakdown_desc, wind_id, 
-    applicant, apply_time, status, defect_phenomenon, cause_analysis, repair_process_desc, 
+    status, flow_status, breakdown_location, breakdown_attribute, breakdown_code, breakdown_desc, 
+    wind_id, applicant, apply_time, defect_phenomenon, cause_analysis, repair_process_desc, 
     solution, remark
   </sql>
 
 
 
 
-  <update id="batchDelete" parameterType="java.lang.String">
-    update Breakdown_knowledge_base set status = "0"
+
+  <delete id="batchDeleteTrue" parameterType="java.lang.String">
+    delete from Breakdown_knowledge_base
     where knowledge_id in
-    <foreach collection="array" index="index" item="item"
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <update id="batchDeleteFalse" parameterType="java.lang.String">
+    update Breakdown_knowledge_base set status = '0'
+    where knowledge_id in
+    <foreach collection="list" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
@@ -104,7 +114,9 @@
     <result column="knowledge_desc" property="knowledgeDesc" jdbcType="VARCHAR" />
     <result column="knowledge_name" property="knowledgeName" jdbcType="VARCHAR" />
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
-    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="maintain_date" property="maintainDate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="flow_status" property="flowStatus" jdbcType="VARCHAR" />
     <result column="breakdown_location" property="breakdownLocation" jdbcType="VARCHAR" />
     <result column="breakdown_attribute" property="breakdownAttribute" jdbcType="VARCHAR" />
     <result column="breakdown_code" property="breakdownCode" jdbcType="VARCHAR" />
@@ -112,15 +124,17 @@
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="applicant" property="applicant" jdbcType="VARCHAR" />
     <result column="apply_time" property="applyTime" jdbcType="TIMESTAMP" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="defect_phenomenon" property="defectPhenomenon" jdbcType="VARCHAR" />
     <result column="cause_analysis" property="causeAnalysis" jdbcType="VARCHAR" />
     <result column="repair_process_desc" property="repairProcessDesc" jdbcType="VARCHAR" />
     <result column="solution" property="solution" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="wind_name" property="windName" jdbcType="VARCHAR" />
-    <result column="breakdown_location_name" property="breakdownLocationName" jdbcType="VARCHAR" />
-    <result column="breakdown_attribute_name" property="breakdownAttributeName" jdbcType="VARCHAR" />
+    <result column="breakdown_location_title" property="breakdownLocationTitle" jdbcType="VARCHAR" />
+    <result column="breakdown_attribute_title" property="breakdownAttributeTitle" jdbcType="VARCHAR" />
+    <result column="flow_status_name" property="flowStatusName" jdbcType="VARCHAR" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="VARCHAR" />
+    <result column="applicant_name" property="applicantName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Get_Column_List" >
     a.knowledge_id as knowledge_id, a.serial_number as serial_number, a.knowledge_desc as knowledge_desc, a.knowledge_name as knowledge_name,
@@ -128,64 +142,125 @@
     a.breakdown_code as breakdown_code, a.breakdown_desc as breakdown_desc, a.wind_id as wind_id,a.applicant as applicant, a.apply_time as apply_time,
     a.status as status, a.defect_phenomenon as defect_phenomenon, a.cause_analysis as cause_analysis, a.repair_process_desc as repair_process_desc,
     a.solution as solution, a.remark as remark,
-    b.architecture_name as wind_name,d.location_name as breakdown_location_name,e.attribute_name as breakdown_attribute_name
+    b.architecture_name as wind_name,d.title as breakdown_location_title,e.title as breakdown_attribute_title,
+    f.title as flow_status_name,g.user_name as maintainer_name,h.user_name as applicant_name
   </sql>
   <select id="getBreakdownKnowledgeDetail" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from breakdown_knowledge_base a
-    left join org_architecture b on a.wind_id = b.architecture_id and b.architecture_type = '02'
-    left join breakdown_location d on a.breakdown_location =d.location_id
-    left join breakdown_attribute e on a.breakdown_attribute =e.attribute_id
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join sp_code d on a.breakdown_location = d.id
+    left join sp_code e on a.breakdown_attribute = e.id
+    left join sp_code f on (a.flow_status = f.name and f.code_type_id = '1046')
+    left join isc_user g on a.maintainer = g.user_id
+    left join isc_user h on a.applicant = h.user_id
     where a.status != '0' and a.knowledge_id = #{knowledgeId}
   </select>
   <select id="getBreakdownKnowledgeListByPageAndCondition" resultMap="GetResultMap">
     select
+    distinct
     <include refid="Get_Column_List" />
     from breakdown_knowledge_base a
-    left join org_architecture b on a.wind_id = b.architecture_id and b.architecture_type = '02'
-    left join breakdown_location d on a.breakdown_location =d.location_id
-    left join breakdown_attribute e on a.breakdown_attribute =e.attribute_id
-    where a.status != '0'
-    <if test="map.windId != null" >
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join sp_code d on a.breakdown_location =d.id
+    left join sp_code e on a.breakdown_attribute =e.id
+    left join sp_code f on (a.flow_status = f.name and f.code_type_id = '1046')
+    left join isc_user g on a.maintainer = g.user_id
+    left join isc_user h on a.applicant = h.user_id
+    left join process i on a.knowledge_id = i.order_id
+    left join process_detail j on ((i.process_id = j.process_id and (i.process_sort+1) = j.sort) or (i.process_id = j.process_id and j.status = '02'))
+    left join process_detail_role_rela k on j.process_detail_id = k.process_detail_id
+    where 1=1
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
       and a.wind_id = #{map.windId}
     </if>
-    <if test="map.breakdownLocation != null" >
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+    and (a.wind_id between #{map.startWindId} and #{map.endWindId})
+    </if>
+    <if test="map.status == null or map.status == ''" >
+      and ((a.status = '01' or a.status = '02' or a.status = '04') and k.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>) or (a.status = '03' and a.maintainer = #{userId})
+    </if>
+    <if test="map.status == '01' or map.status =='02' or map.status == '04'" >
+      and (a.status = #{map.status} and k.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>)
+    </if>
+    <if test="map.status == '03'" >
+      and (a.status = #{map.status} and a.maintainer = #{userId})
+    </if>
+    <if test="map.breakdownLocation != null and map.breakdownLocation != ''" >
       and a.breakdown_location = #{map.breakdownLocation}
     </if>
-    <if test="map.breakdownAttribute != null" >
+    <if test="map.breakdownAttribute != null and map.breakdownAttribute != ''" >
       and a.breakdown_attribute = #{map.breakdownAttribute}
     </if>
-    <if test="map.breakdownDesc != null" >
+    <if test="map.breakdownDesc != null and map.breakdownDesc != ''" >
       and a.breakdown_desc like '%${map.breakdownDesc}%'
     </if>
-    <if test="map.breakdownCode != null" >
+    <if test="map.breakdownCode != null and map.breakdownCode != ''" >
       and a.breakdown_code = #{map.breakdownCode}
     </if>
-    order by a.serial_number desc
+    order by a.serial_number is null desc,a.serial_number desc,maintain_date desc
     limit ${map.start},${map.pageSize}
   </select>
   <select id="getTotal" resultType="java.lang.Integer">
     select
-    count(*)
-    from breakdown_knowledge_base
-    where status <![CDATA[ <> ]]> '0'
-    <if test="map.windId != null" >
-      and wind_id = #{map.windId}
+    count(distinct a.knowledge_id)
+    from breakdown_knowledge_base a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join sp_code d on a.breakdown_location =d.id
+    left join sp_code e on a.breakdown_attribute =e.id
+    left join sp_code f on (a.flow_status = f.name and f.code_type_id = '1046')
+    left join isc_user g on a.maintainer = g.user_id
+    left join isc_user h on a.applicant = h.user_id
+    left join process i on a.knowledge_id = i.order_id
+    left join process_detail j on (i.process_id = j.process_id and j.sort != 1 and (((i.process_sort+1) = j.sort) or (j.status = '02')))
+    left join process_detail_role_rela k on j.process_detail_id = k.process_detail_id
+    where 1=1
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.windId}
     </if>
-    <if test="map.breakdownLocation != null" >
-      and breakdown_location = #{map.breakdownLocation}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+    and (a.wind_id between #{map.startWindId} and #{map.endWindId})
     </if>
-    <if test="map.breakdownAttribute != null" >
-      and breakdown_attribute = #{map.breakdownAttribute}
+    <if test="map.status == null or map.status == ''" >
+      and ((a.status = '01' or a.status = '02' or a.status = '04') and k.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>) or (a.status = '03' and a.maintainer = #{userId})
     </if>
-    <if test="map.breakdownDesc != null" >
-      and breakdown_desc like '%${map.breakdownDesc}%'
+    <if test="map.status == '01' or map.status =='02' or map.status == '04'" >
+      and (a.status = #{map.status} and k.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>)
     </if>
-    <if test="map.breakdownCode != null" >
-      and breakdown_code = #{map.breakdownCode}
+    <if test="map.status == '03'" >
+      and (a.status = #{map.status} and a.maintainer = #{userId})
+    </if>
+    <if test="map.breakdownLocation != null and map.breakdownLocation != ''" >
+      and a.breakdown_location = #{map.breakdownLocation}
+    </if>
+    <if test="map.breakdownAttribute != null and map.breakdownAttribute != ''" >
+      and a.breakdown_attribute = #{map.breakdownAttribute}
+    </if>
+    <if test="map.breakdownDesc != null and map.breakdownDesc != ''" >
+      and a.breakdown_desc like '%${map.breakdownDesc}%'
+    </if>
+    <if test="map.breakdownCode != null and map.breakdownCode != ''" >
+      and a.breakdown_code = #{map.breakdownCode}
     </if>
   </select>
+
+
+
+
+
 
 
 
@@ -225,16 +300,16 @@
   <insert id="insert" parameterType="com.qz.zframe.maintain.entity.BreakdownKnowledgeBase" >
     insert into breakdown_knowledge_base (knowledge_id, serial_number, knowledge_desc, 
       knowledge_name, maintainer, maintain_date, 
-      breakdown_location, breakdown_attribute, 
-      breakdown_code, breakdown_desc, wind_id, 
-      applicant, apply_time, status, 
+      status, flow_status, breakdown_location, 
+      breakdown_attribute, breakdown_code, breakdown_desc, 
+      wind_id, applicant, apply_time, 
       defect_phenomenon, cause_analysis, repair_process_desc, 
       solution, remark)
     values (#{knowledgeId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{knowledgeDesc,jdbcType=VARCHAR}, 
-      #{knowledgeName,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, 
-      #{breakdownLocation,jdbcType=VARCHAR}, #{breakdownAttribute,jdbcType=VARCHAR}, 
-      #{breakdownCode,jdbcType=VARCHAR}, #{breakdownDesc,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, 
-      #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
+      #{knowledgeName,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=TIMESTAMP},
+      #{status,jdbcType=VARCHAR}, #{flowStatus,jdbcType=VARCHAR}, #{breakdownLocation,jdbcType=VARCHAR}, 
+      #{breakdownAttribute,jdbcType=VARCHAR}, #{breakdownCode,jdbcType=VARCHAR}, #{breakdownDesc,jdbcType=VARCHAR}, 
+      #{windId,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
       #{defectPhenomenon,jdbcType=VARCHAR}, #{causeAnalysis,jdbcType=VARCHAR}, #{repairProcessDesc,jdbcType=VARCHAR}, 
       #{solution,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
@@ -259,6 +334,12 @@
       <if test="maintainDate != null" >
         maintain_date,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="flowStatus != null" >
+        flow_status,
+      </if>
       <if test="breakdownLocation != null" >
         breakdown_location,
       </if>
@@ -279,9 +360,6 @@
       </if>
       <if test="applyTime != null" >
         apply_time,
-      </if>
-      <if test="status != null" >
-        status,
       </if>
       <if test="defectPhenomenon != null" >
         defect_phenomenon,
@@ -316,7 +394,13 @@
         #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="maintainDate != null" >
-        #{maintainDate,jdbcType=DATE},
+        #{maintainDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStatus != null" >
+        #{flowStatus,jdbcType=VARCHAR},
       </if>
       <if test="breakdownLocation != null" >
         #{breakdownLocation,jdbcType=VARCHAR},
@@ -338,9 +422,6 @@
       </if>
       <if test="applyTime != null" >
         #{applyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
       </if>
       <if test="defectPhenomenon != null" >
         #{defectPhenomenon,jdbcType=VARCHAR},
@@ -384,7 +465,13 @@
         maintainer = #{record.maintainer,jdbcType=VARCHAR},
       </if>
       <if test="record.maintainDate != null" >
-        maintain_date = #{record.maintainDate,jdbcType=DATE},
+        maintain_date = #{record.maintainDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flowStatus != null" >
+        flow_status = #{record.flowStatus,jdbcType=VARCHAR},
       </if>
       <if test="record.breakdownLocation != null" >
         breakdown_location = #{record.breakdownLocation,jdbcType=VARCHAR},
@@ -406,9 +493,6 @@
       </if>
       <if test="record.applyTime != null" >
         apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.status != null" >
-        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.defectPhenomenon != null" >
         defect_phenomenon = #{record.defectPhenomenon,jdbcType=VARCHAR},
@@ -437,7 +521,9 @@
       knowledge_desc = #{record.knowledgeDesc,jdbcType=VARCHAR},
       knowledge_name = #{record.knowledgeName,jdbcType=VARCHAR},
       maintainer = #{record.maintainer,jdbcType=VARCHAR},
-      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      maintain_date = #{record.maintainDate,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR},
+      flow_status = #{record.flowStatus,jdbcType=VARCHAR},
       breakdown_location = #{record.breakdownLocation,jdbcType=VARCHAR},
       breakdown_attribute = #{record.breakdownAttribute,jdbcType=VARCHAR},
       breakdown_code = #{record.breakdownCode,jdbcType=VARCHAR},
@@ -445,7 +531,6 @@
       wind_id = #{record.windId,jdbcType=VARCHAR},
       applicant = #{record.applicant,jdbcType=VARCHAR},
       apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=VARCHAR},
       defect_phenomenon = #{record.defectPhenomenon,jdbcType=VARCHAR},
       cause_analysis = #{record.causeAnalysis,jdbcType=VARCHAR},
       repair_process_desc = #{record.repairProcessDesc,jdbcType=VARCHAR},
@@ -471,7 +556,13 @@
         maintainer = #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="maintainDate != null" >
-        maintain_date = #{maintainDate,jdbcType=DATE},
+        maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStatus != null" >
+        flow_status = #{flowStatus,jdbcType=VARCHAR},
       </if>
       <if test="breakdownLocation != null" >
         breakdown_location = #{breakdownLocation,jdbcType=VARCHAR},
@@ -493,9 +584,6 @@
       </if>
       <if test="applyTime != null" >
         apply_time = #{applyTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="defectPhenomenon != null" >
         defect_phenomenon = #{defectPhenomenon,jdbcType=VARCHAR},
@@ -521,7 +609,9 @@
       knowledge_desc = #{knowledgeDesc,jdbcType=VARCHAR},
       knowledge_name = #{knowledgeName,jdbcType=VARCHAR},
       maintainer = #{maintainer,jdbcType=VARCHAR},
-      maintain_date = #{maintainDate,jdbcType=DATE},
+      maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR},
+      flow_status = #{flowStatus,jdbcType=VARCHAR},
       breakdown_location = #{breakdownLocation,jdbcType=VARCHAR},
       breakdown_attribute = #{breakdownAttribute,jdbcType=VARCHAR},
       breakdown_code = #{breakdownCode,jdbcType=VARCHAR},
@@ -529,7 +619,6 @@
       wind_id = #{windId,jdbcType=VARCHAR},
       applicant = #{applicant,jdbcType=VARCHAR},
       apply_time = #{applyTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR},
       defect_phenomenon = #{defectPhenomenon,jdbcType=VARCHAR},
       cause_analysis = #{causeAnalysis,jdbcType=VARCHAR},
       repair_process_desc = #{repairProcessDesc,jdbcType=VARCHAR},

@@ -22,6 +22,8 @@ public interface EquipmentClassificationMapper extends BaseMapper<EquipmentClass
 
     List<EquipmentClassification> selectByExample(EquipmentClassificationExample example);
 
+    EquipmentClassification selectByTypeName(String typeName);
+    
     EquipmentClassification selectByPrimaryKey(String equipmentId);
 
     int updateByExampleSelective(@Param("record") EquipmentClassification record, @Param("example") EquipmentClassificationExample example);
@@ -33,6 +35,8 @@ public interface EquipmentClassificationMapper extends BaseMapper<EquipmentClass
     int updateByPrimaryKey(EquipmentClassification record);
     
     List<EquipmentClassification> selectStructure();
+    
+    List<EquipmentClassification> selectStructures();
     
     List<EquipmentClassification> selectStructureList(String superiorEquipment);
 }

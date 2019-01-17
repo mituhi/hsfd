@@ -394,62 +394,52 @@ public class WorkTicketSafeMeasureExample {
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberEqualTo(String value) {
+        public Criteria andSafeNumberEqualTo(Integer value) {
             addCriterion("safe_number =", value, "safeNumber");
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberNotEqualTo(String value) {
+        public Criteria andSafeNumberNotEqualTo(Integer value) {
             addCriterion("safe_number <>", value, "safeNumber");
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberGreaterThan(String value) {
+        public Criteria andSafeNumberGreaterThan(Integer value) {
             addCriterion("safe_number >", value, "safeNumber");
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberGreaterThanOrEqualTo(String value) {
+        public Criteria andSafeNumberGreaterThanOrEqualTo(Integer value) {
             addCriterion("safe_number >=", value, "safeNumber");
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberLessThan(String value) {
+        public Criteria andSafeNumberLessThan(Integer value) {
             addCriterion("safe_number <", value, "safeNumber");
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberLessThanOrEqualTo(String value) {
+        public Criteria andSafeNumberLessThanOrEqualTo(Integer value) {
             addCriterion("safe_number <=", value, "safeNumber");
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberLike(String value) {
-            addCriterion("safe_number like", value, "safeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafeNumberNotLike(String value) {
-            addCriterion("safe_number not like", value, "safeNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andSafeNumberIn(List<String> values) {
+        public Criteria andSafeNumberIn(List<Integer> values) {
             addCriterion("safe_number in", values, "safeNumber");
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberNotIn(List<String> values) {
+        public Criteria andSafeNumberNotIn(List<Integer> values) {
             addCriterion("safe_number not in", values, "safeNumber");
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberBetween(String value1, String value2) {
+        public Criteria andSafeNumberBetween(Integer value1, Integer value2) {
             addCriterion("safe_number between", value1, value2, "safeNumber");
             return (Criteria) this;
         }
 
-        public Criteria andSafeNumberNotBetween(String value1, String value2) {
+        public Criteria andSafeNumberNotBetween(Integer value1, Integer value2) {
             addCriterion("safe_number not between", value1, value2, "safeNumber");
             return (Criteria) this;
         }
@@ -591,6 +581,706 @@ public class WorkTicketSafeMeasureExample {
 
         public Criteria andSafeContentNotBetween(String value1, String value2) {
             addCriterion("safe_content not between", value1, value2, "safeContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1IsNull() {
+            addCriterion("safe_content_1 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1IsNotNull() {
+            addCriterion("safe_content_1 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1EqualTo(String value) {
+            addCriterion("safe_content_1 =", value, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1NotEqualTo(String value) {
+            addCriterion("safe_content_1 <>", value, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1GreaterThan(String value) {
+            addCriterion("safe_content_1 >", value, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_1 >=", value, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1LessThan(String value) {
+            addCriterion("safe_content_1 <", value, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_1 <=", value, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1Like(String value) {
+            addCriterion("safe_content_1 like", value, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1NotLike(String value) {
+            addCriterion("safe_content_1 not like", value, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1In(List<String> values) {
+            addCriterion("safe_content_1 in", values, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1NotIn(List<String> values) {
+            addCriterion("safe_content_1 not in", values, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1Between(String value1, String value2) {
+            addCriterion("safe_content_1 between", value1, value2, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent1NotBetween(String value1, String value2) {
+            addCriterion("safe_content_1 not between", value1, value2, "safeContent1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2IsNull() {
+            addCriterion("safe_content_2 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2IsNotNull() {
+            addCriterion("safe_content_2 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2EqualTo(String value) {
+            addCriterion("safe_content_2 =", value, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2NotEqualTo(String value) {
+            addCriterion("safe_content_2 <>", value, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2GreaterThan(String value) {
+            addCriterion("safe_content_2 >", value, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_2 >=", value, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2LessThan(String value) {
+            addCriterion("safe_content_2 <", value, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_2 <=", value, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2Like(String value) {
+            addCriterion("safe_content_2 like", value, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2NotLike(String value) {
+            addCriterion("safe_content_2 not like", value, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2In(List<String> values) {
+            addCriterion("safe_content_2 in", values, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2NotIn(List<String> values) {
+            addCriterion("safe_content_2 not in", values, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2Between(String value1, String value2) {
+            addCriterion("safe_content_2 between", value1, value2, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent2NotBetween(String value1, String value2) {
+            addCriterion("safe_content_2 not between", value1, value2, "safeContent2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3IsNull() {
+            addCriterion("safe_content_3 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3IsNotNull() {
+            addCriterion("safe_content_3 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3EqualTo(String value) {
+            addCriterion("safe_content_3 =", value, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3NotEqualTo(String value) {
+            addCriterion("safe_content_3 <>", value, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3GreaterThan(String value) {
+            addCriterion("safe_content_3 >", value, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_3 >=", value, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3LessThan(String value) {
+            addCriterion("safe_content_3 <", value, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_3 <=", value, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3Like(String value) {
+            addCriterion("safe_content_3 like", value, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3NotLike(String value) {
+            addCriterion("safe_content_3 not like", value, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3In(List<String> values) {
+            addCriterion("safe_content_3 in", values, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3NotIn(List<String> values) {
+            addCriterion("safe_content_3 not in", values, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3Between(String value1, String value2) {
+            addCriterion("safe_content_3 between", value1, value2, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent3NotBetween(String value1, String value2) {
+            addCriterion("safe_content_3 not between", value1, value2, "safeContent3");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4IsNull() {
+            addCriterion("safe_content_4 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4IsNotNull() {
+            addCriterion("safe_content_4 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4EqualTo(String value) {
+            addCriterion("safe_content_4 =", value, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4NotEqualTo(String value) {
+            addCriterion("safe_content_4 <>", value, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4GreaterThan(String value) {
+            addCriterion("safe_content_4 >", value, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_4 >=", value, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4LessThan(String value) {
+            addCriterion("safe_content_4 <", value, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_4 <=", value, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4Like(String value) {
+            addCriterion("safe_content_4 like", value, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4NotLike(String value) {
+            addCriterion("safe_content_4 not like", value, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4In(List<String> values) {
+            addCriterion("safe_content_4 in", values, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4NotIn(List<String> values) {
+            addCriterion("safe_content_4 not in", values, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4Between(String value1, String value2) {
+            addCriterion("safe_content_4 between", value1, value2, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent4NotBetween(String value1, String value2) {
+            addCriterion("safe_content_4 not between", value1, value2, "safeContent4");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5IsNull() {
+            addCriterion("safe_content_5 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5IsNotNull() {
+            addCriterion("safe_content_5 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5EqualTo(String value) {
+            addCriterion("safe_content_5 =", value, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5NotEqualTo(String value) {
+            addCriterion("safe_content_5 <>", value, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5GreaterThan(String value) {
+            addCriterion("safe_content_5 >", value, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_5 >=", value, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5LessThan(String value) {
+            addCriterion("safe_content_5 <", value, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_5 <=", value, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5Like(String value) {
+            addCriterion("safe_content_5 like", value, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5NotLike(String value) {
+            addCriterion("safe_content_5 not like", value, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5In(List<String> values) {
+            addCriterion("safe_content_5 in", values, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5NotIn(List<String> values) {
+            addCriterion("safe_content_5 not in", values, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5Between(String value1, String value2) {
+            addCriterion("safe_content_5 between", value1, value2, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent5NotBetween(String value1, String value2) {
+            addCriterion("safe_content_5 not between", value1, value2, "safeContent5");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6IsNull() {
+            addCriterion("safe_content_6 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6IsNotNull() {
+            addCriterion("safe_content_6 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6EqualTo(String value) {
+            addCriterion("safe_content_6 =", value, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6NotEqualTo(String value) {
+            addCriterion("safe_content_6 <>", value, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6GreaterThan(String value) {
+            addCriterion("safe_content_6 >", value, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_6 >=", value, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6LessThan(String value) {
+            addCriterion("safe_content_6 <", value, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_6 <=", value, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6Like(String value) {
+            addCriterion("safe_content_6 like", value, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6NotLike(String value) {
+            addCriterion("safe_content_6 not like", value, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6In(List<String> values) {
+            addCriterion("safe_content_6 in", values, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6NotIn(List<String> values) {
+            addCriterion("safe_content_6 not in", values, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6Between(String value1, String value2) {
+            addCriterion("safe_content_6 between", value1, value2, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent6NotBetween(String value1, String value2) {
+            addCriterion("safe_content_6 not between", value1, value2, "safeContent6");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7IsNull() {
+            addCriterion("safe_content_7 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7IsNotNull() {
+            addCriterion("safe_content_7 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7EqualTo(String value) {
+            addCriterion("safe_content_7 =", value, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7NotEqualTo(String value) {
+            addCriterion("safe_content_7 <>", value, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7GreaterThan(String value) {
+            addCriterion("safe_content_7 >", value, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_7 >=", value, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7LessThan(String value) {
+            addCriterion("safe_content_7 <", value, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_7 <=", value, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7Like(String value) {
+            addCriterion("safe_content_7 like", value, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7NotLike(String value) {
+            addCriterion("safe_content_7 not like", value, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7In(List<String> values) {
+            addCriterion("safe_content_7 in", values, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7NotIn(List<String> values) {
+            addCriterion("safe_content_7 not in", values, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7Between(String value1, String value2) {
+            addCriterion("safe_content_7 between", value1, value2, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent7NotBetween(String value1, String value2) {
+            addCriterion("safe_content_7 not between", value1, value2, "safeContent7");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8IsNull() {
+            addCriterion("safe_content_8 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8IsNotNull() {
+            addCriterion("safe_content_8 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8EqualTo(String value) {
+            addCriterion("safe_content_8 =", value, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8NotEqualTo(String value) {
+            addCriterion("safe_content_8 <>", value, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8GreaterThan(String value) {
+            addCriterion("safe_content_8 >", value, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_8 >=", value, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8LessThan(String value) {
+            addCriterion("safe_content_8 <", value, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_8 <=", value, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8Like(String value) {
+            addCriterion("safe_content_8 like", value, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8NotLike(String value) {
+            addCriterion("safe_content_8 not like", value, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8In(List<String> values) {
+            addCriterion("safe_content_8 in", values, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8NotIn(List<String> values) {
+            addCriterion("safe_content_8 not in", values, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8Between(String value1, String value2) {
+            addCriterion("safe_content_8 between", value1, value2, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent8NotBetween(String value1, String value2) {
+            addCriterion("safe_content_8 not between", value1, value2, "safeContent8");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9IsNull() {
+            addCriterion("safe_content_9 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9IsNotNull() {
+            addCriterion("safe_content_9 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9EqualTo(String value) {
+            addCriterion("safe_content_9 =", value, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9NotEqualTo(String value) {
+            addCriterion("safe_content_9 <>", value, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9GreaterThan(String value) {
+            addCriterion("safe_content_9 >", value, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_9 >=", value, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9LessThan(String value) {
+            addCriterion("safe_content_9 <", value, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_9 <=", value, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9Like(String value) {
+            addCriterion("safe_content_9 like", value, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9NotLike(String value) {
+            addCriterion("safe_content_9 not like", value, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9In(List<String> values) {
+            addCriterion("safe_content_9 in", values, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9NotIn(List<String> values) {
+            addCriterion("safe_content_9 not in", values, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9Between(String value1, String value2) {
+            addCriterion("safe_content_9 between", value1, value2, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent9NotBetween(String value1, String value2) {
+            addCriterion("safe_content_9 not between", value1, value2, "safeContent9");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10IsNull() {
+            addCriterion("safe_content_10 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10IsNotNull() {
+            addCriterion("safe_content_10 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10EqualTo(String value) {
+            addCriterion("safe_content_10 =", value, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10NotEqualTo(String value) {
+            addCriterion("safe_content_10 <>", value, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10GreaterThan(String value) {
+            addCriterion("safe_content_10 >", value, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10GreaterThanOrEqualTo(String value) {
+            addCriterion("safe_content_10 >=", value, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10LessThan(String value) {
+            addCriterion("safe_content_10 <", value, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10LessThanOrEqualTo(String value) {
+            addCriterion("safe_content_10 <=", value, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10Like(String value) {
+            addCriterion("safe_content_10 like", value, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10NotLike(String value) {
+            addCriterion("safe_content_10 not like", value, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10In(List<String> values) {
+            addCriterion("safe_content_10 in", values, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10NotIn(List<String> values) {
+            addCriterion("safe_content_10 not in", values, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10Between(String value1, String value2) {
+            addCriterion("safe_content_10 between", value1, value2, "safeContent10");
+            return (Criteria) this;
+        }
+
+        public Criteria andSafeContent10NotBetween(String value1, String value2) {
+            addCriterion("safe_content_10 not between", value1, value2, "safeContent10");
             return (Criteria) this;
         }
     }

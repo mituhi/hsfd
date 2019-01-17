@@ -14,6 +14,12 @@ public class TallyRouterUserVO {
     @ApiModelProperty(value="申请人",name="userName",required=false)
     private String userName;
 
+    @ApiModelProperty(value="序号",name="cycleId",required=false)
+    private String cycleId;
+
+    @ApiModelProperty(value="路线人员关联id",name="routeUserId",required=false)
+    private String routeUserId;
+
     private String routeId;
 
     public int getSerialNum() {
@@ -46,5 +52,21 @@ public class TallyRouterUserVO {
 
     public void setRouteId(String routeId) {
         this.routeId = routeId;
+    }
+
+    public String getCycleId() {
+        return cycleId;
+    }
+
+    public void setCycleId(String cycleId) {
+        this.cycleId = cycleId;
+    }
+
+    public String getRouteUserId() {
+        return routeUserId;
+    }
+
+    public void setRouteUserId(String routeUserId) {
+        this.routeUserId = routeUserId;
     }
 }

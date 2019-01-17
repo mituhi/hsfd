@@ -1,62 +1,62 @@
 package com.qz.zframe.tickets.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class StandardWorkTicket {
 
-    @ApiParam(name="standardTicketId",value="标准工作票id",required=false)
+    @ApiModelProperty(name="standardTicketId",value="标准工作票id",required=false)
     private String standardTicketId;
 
-    @ApiParam(name="serialNumber",value="标准工作票号(流水号)",required=false)
+    @ApiModelProperty(name="serialNumber",value="标准工作票号(流水号)",required=false)
     private String serialNumber;
 
-    @ApiParam(name="standardTicketName",value="标准工作票名称",required=false)
+    @ApiModelProperty(name="standardTicketName",value="标准工作票名称",required=false)
     private String standardTicketName;
 
-    @ApiParam(name="ticketTypeId",value="工作票类型id",required=true)
+    @ApiModelProperty(name="ticketTypeId",value="工作票类型id",required=true)
     private String ticketTypeId;
 
-    @ApiParam(name="status",value="状态",required=false)
+    @ApiModelProperty(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="maintainer",value="维护人",required=true)
+    @ApiModelProperty(name="maintainer",value="维护人id",required=true)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=true)
+    @ApiModelProperty(name="maintainDate",value="维护日期",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="windId",value="风电场id",required=true)
+    @ApiModelProperty(name="windId",value="风电场id",required=true)
     private String windId;
 
-    @ApiParam(name="crewId",value="机组id",required=true)
+    @ApiModelProperty(name="crewId",value="机组id",required=true)
     private String crewId;
 
-    @ApiParam(name="workTeam",value="工作班组",required=true)
+    @ApiModelProperty(name="workTeam",value="工作班组id",required=true)
     private String workTeam;
 
-    @ApiParam(name="positionId",value="位置id",required=false)
+    @ApiModelProperty(name="positionId",value="位置id",required=false)
     private String positionId;
 
-    @ApiParam(name="positionDesc",value="位置描述",required=false)
+    @ApiModelProperty(name="positionDesc",value="位置描述",required=false)
     private String positionDesc;
 
-    @ApiParam(name="equipmentId",value="设备id",required=false)
+    @ApiModelProperty(name="equipmentId",value="设备id",required=false)
     private String equipmentId;
 
-    @ApiParam(name="equipmentDesc",value="设备描述",required=false)
+    @ApiModelProperty(name="equipmentDesc",value="设备描述",required=false)
     private String equipmentDesc;
 
-    @ApiParam(name="doubleName",value="工作的风电场、升压站名称及设备双重名称",required=true)
+    @ApiModelProperty(name="doubleName",value="工作的风电场、升压站名称及设备双重名称",required=true)
     private String doubleName;
 
-    @ApiParam(name="workPlace",value="工作地点或地段",required=true)
+    @ApiModelProperty(name="workPlace",value="工作地点或地段",required=true)
     private String workPlace;
 
-    @ApiParam(name="workContent",value="工作内容",required=true)
+    @ApiModelProperty(name="workContent",value="工作内容",required=true)
     private String workContent;
 
     public String getStandardTicketId() {

@@ -15,7 +15,16 @@
     <result column="run_id" jdbcType="VARCHAR" property="runId" />
     <result column="status_name" jdbcType="VARCHAR" property="statusName" />
     <result column="is_toplevel_name" jdbcType="VARCHAR" property="isToplevelName" />
+     <result column="create_time" jdbcType="DATE" property="createTime" />
+   <!--  <result column=" run_parameters" jdbcType="VARCHAR" property="runParameters" /> 
+    <result column=" output_parameters" jdbcType="VARCHAR" property="runParameters" />  -->
   </resultMap>
+    <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+		</sql>
+  
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -77,13 +86,13 @@
   <sql id="Base_Column_List">
     equipment_id, equipment_type, type_name, superior_equipment, superior_equipment_describe, 
     superior_equipment_name, status, is_toplevel, equipment_type_describe, output_id, 
-    run_id
+    run_id,create_time
   </sql>
   
   <sql id="Base_Column_Lists">
     equipment_id, equipment_type, type_name, superior_equipment, superior_equipment_describe, 
     superior_equipment_name, status, is_toplevel, equipment_type_describe, output_id, 
-    run_id, status_name,is_toplevel_name
+    run_id, status_name,is_toplevel_name,create_time
   </sql>
 <!--   <select id="selectByExample" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultMap="BaseResultMap">
    
@@ -121,6 +130,9 @@
    
 
    select 
+   <if test="distinct">
+      distinct
+    </if> 
     <include refid="Base_Column_Lists" /> 
     from (
     select  e.*, a.title as status_name,c.title as is_toplevel_name
@@ -129,7 +141,7 @@
 	left  join  sp_code_type  b on  a.code_type_id=b.id
 	left join sp_code c on  e.is_toplevel=c.name
 	left  join  sp_code_type  d on  c.code_type_id=d.id
-    where   b.name='EQUIPMENT_STATUS' and d.name='IS_TOPLEVEL')  h
+    where   b.name='EQUIPMENT_STATUS' and d.name='IS_TOPLEVEL') e
     
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -137,6 +149,7 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+     <include refid="Pagination_Sql" />
   </select>
   
      <select id="selectByExamples" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultMap="BaseResultMap">
@@ -146,36 +159,57 @@
     </if>
     <include refid="Base_Column_List" />
     from equipment_classification  where  type_name like  '%' #{typeName,jdbcType=VARCHAR} '%'
-    <!-- <if test="_parameter != null">
+    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
      <if test="orderByClause != null">
       order by ${orderByClause}
-    </if>  -->
+    </if>  
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select  *,a.title as status_name ,c.title as is_Toplevel_Name  
+    select  e.*,a.title as status_name ,c.title as is_Toplevel_Name  
     from equipment_classification  e 
     left join sp_code a on  e.status=a.name 
-	left  join  sp_code_type  b on  a.code_type_id=b.id 
-    left join sp_code c  on  e.is_toplevel=c.name 
+	left  join sp_code_type  b on  a.code_type_id=b.id 
+    left join  sp_code c  on  e.is_toplevel=c.name 
 	left  join  sp_code_type  d on  c.code_type_id=d.id 
+	left  join  run_parameters r  on  r.run_id=e.run_id
+	left  join  output_parameters p  on p.output_id=e.output_id
 	where  b.name='EQUIPMENT_STATUS' and d.name='IS_TOPLEVEL' 
     and  equipment_id = #{equipmentId,jdbcType=VARCHAR}
   </select>
   
+   <select id="selectByTypeName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select  e.*,a.title as status_name ,c.title as is_Toplevel_Name  
+    from equipment_classification  e 
+    left join sp_code a on  e.status=a.name 
+	left  join sp_code_type  b on  a.code_type_id=b.id 
+    left join  sp_code c  on  e.is_toplevel=c.name 
+	left  join  sp_code_type  d on  c.code_type_id=d.id 
+	left  join  run_parameters r  on  r.run_id=e.run_id
+	left  join  output_parameters p  on p.output_id=e.output_id
+	where  b.name='EQUIPMENT_STATUS' and d.name='IS_TOPLEVEL' 
+    and  type_name = #{typeName,jdbcType=VARCHAR}
+  </select>
+  
+  
   <select id="selectStructure" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from equipment_classification
-    where is_toplevel=0
+    from equipment_classification  where  status='01'
+  </select>
+  
+   <select id="selectStructures" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from equipment_classification where is_toplevel='01' and status='01'
   </select>
   
    <select id="selectStructureList" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
      from equipment_classification
-     where  superior_equipment=#{superiorEquipment,jdbcType=VARCHAR}
+     where  superior_equipment=#{equipmentId,jdbcType=VARCHAR}
   </select>
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
@@ -201,12 +235,12 @@
     insert into equipment_classification (equipment_id, equipment_type, type_name, 
       superior_equipment, superior_equipment_describe, 
       superior_equipment_name, status, is_toplevel, 
-      equipment_type_describe, output_id, run_id
+      equipment_type_describe, output_id, run_id,create_time
       )
     values (#{equipmentId,jdbcType=VARCHAR}, #{equipmentType,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, 
       #{superiorEquipment,jdbcType=VARCHAR}, #{superiorEquipmentDescribe,jdbcType=VARCHAR}, 
       #{superiorEquipmentName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{isToplevel,jdbcType=VARCHAR}, 
-      #{equipmentTypeDescribe,jdbcType=VARCHAR}, #{outputId,jdbcType=VARCHAR}, #{runId,jdbcType=VARCHAR}
+      #{equipmentTypeDescribe,jdbcType=VARCHAR}, #{outputId,jdbcType=VARCHAR}, #{runId,jdbcType=VARCHAR},#{createTime,jdbcType=DATE}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.EquipmentClassification">
@@ -245,6 +279,9 @@
       <if test="runId != null">
         run_id,
       </if>
+       <if test="createTime != null">
+        create_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="equipmentId != null">
@@ -280,12 +317,14 @@
       <if test="runId != null">
         #{runId,jdbcType=VARCHAR},
       </if>
+      <if test="createTime != null">
+       #{createTime,jdbcType=DATE}
+      </if>
     </trim>
   </insert>
   
   <select id="countByExample" parameterType="com.qz.zframe.device.entity.EquipmentClassificationExample" resultType="java.lang.Integer">
     select 
-    distinct
     count(*) from equipment_classification 
 	
     <if test="_parameter != null">
@@ -402,7 +441,8 @@
       is_toplevel = #{isToplevel,jdbcType=VARCHAR},
       equipment_type_describe = #{equipmentTypeDescribe,jdbcType=VARCHAR},
       output_id = #{outputId,jdbcType=VARCHAR},
-      run_id = #{runId,jdbcType=VARCHAR}
+      run_id = #{runId,jdbcType=VARCHAR},
+      create_time=#{createTime,jdbcType=DATE}
     where equipment_id = #{equipmentId,jdbcType=VARCHAR}
   </update>
 </mapper>

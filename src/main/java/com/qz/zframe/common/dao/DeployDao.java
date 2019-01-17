@@ -3,11 +3,12 @@ package com.qz.zframe.common.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.qz.zframe.common.entity.Deploy;
 import com.qz.zframe.common.entity.DeployMain;
 import com.qz.zframe.common.entity.DeployRole;
-import com.qz.zframe.isc.domain.IscRole;
+import com.qz.zframe.common.entity.Role;
 
 @Mapper
 public interface DeployDao {
@@ -22,19 +23,19 @@ public interface DeployDao {
 	 * 根据名称模糊查询流程主表信息
 	 * @return
 	 */
-	List<DeployMain> findDeployMainByName(String mainDeployName);
+	List<DeployMain> findDeployMainByName(@Param("mainDeployName") String mainDeployName);
 
 	/**
 	 * 根据mainId查询流程子表信息
 	 * @return
 	 */
-	List<Deploy> findDeployByMainId(String mainId);
+	List<Deploy> findDeployByMainId(@Param("mainId") String mainId);
 
 	/**
 	 * 根据id查询流程主表
 	 * @return
 	 */
-	DeployMain queryDeployMainById(String id);
+	DeployMain queryDeployMainById(@Param("id") String id);
 
 	/**
 	 * 根据流程编号或流程名称查询流程信息
@@ -42,7 +43,7 @@ public interface DeployDao {
 	 * @param mainDeployName
 	 * @return
 	 */
-	DeployMain findDeployMainByCodeOrName(String mainCode, String mainDeployName);
+	DeployMain findDeployMainByCodeOrName(@Param("mainCode") String mainCode, @Param("mainDeployName") String mainDeployName);
 
 	/**
 	 * 新增流程
@@ -61,14 +62,14 @@ public interface DeployDao {
 	 * @param deployId
 	 * @return
 	 */
-	Deploy queryDeployById(String deployId);
+	Deploy queryDeployById(@Param("deployId") String deployId);
 
 	/**
 	 * 根据流程步骤名称查询流程步骤
 	 * @param deployName
 	 * @return
 	 */
-	Deploy findDeployByDeployName(String deployName);
+	Deploy findDeployByDeployName(@Param("deployName") String deployName);
 
 	/**
 	 * 新增流程步骤
@@ -90,9 +91,9 @@ public interface DeployDao {
 
 	/**
 	 * 删除流程步骤角色关联关系
-	 * @param mainId
+	 * @param deployId
 	 */
-	void deleteDeployRole(String deployId);
+	void deleteDeployRole(@Param("deployId") String deployId);
 
 	/**
 	 * 删除流程步骤
@@ -103,7 +104,7 @@ public interface DeployDao {
 	
 	/**
 	 * 批量删除流程步骤角色关联关系
-	 * @param mainId
+	 * @param deployIds
 	 */
 	void deleteDeployRoles(List<String> deployIds);
 
@@ -112,6 +113,12 @@ public interface DeployDao {
 	 * @param deployId
 	 * @return
 	 */
-	List<IscRole> findRoleByDeployId(String deployId);
+	List<Role> findRoleByDeployId(@Param("deployId") String deployId);
 
+	/**
+	 * 根据流程编号查询流程信息
+	 * @param mainCode
+	 * @return
+	 */
+    DeployMain queryDeployMainByCode(String mainCode);
 }

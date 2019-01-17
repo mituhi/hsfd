@@ -542,6 +542,146 @@ public class BreakdownKnowledgeBaseExample {
             return (Criteria) this;
         }
 
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(String value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(String value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(String value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(String value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(String value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLike(String value) {
+            addCriterion("status like", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotLike(String value) {
+            addCriterion("status not like", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<String> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<String> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(String value1, String value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(String value1, String value2) {
+            addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusIsNull() {
+            addCriterion("flow_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusIsNotNull() {
+            addCriterion("flow_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusEqualTo(String value) {
+            addCriterion("flow_status =", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusNotEqualTo(String value) {
+            addCriterion("flow_status <>", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusGreaterThan(String value) {
+            addCriterion("flow_status >", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("flow_status >=", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusLessThan(String value) {
+            addCriterion("flow_status <", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusLessThanOrEqualTo(String value) {
+            addCriterion("flow_status <=", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusLike(String value) {
+            addCriterion("flow_status like", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusNotLike(String value) {
+            addCriterion("flow_status not like", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusIn(List<String> values) {
+            addCriterion("flow_status in", values, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusNotIn(List<String> values) {
+            addCriterion("flow_status not in", values, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusBetween(String value1, String value2) {
+            addCriterion("flow_status between", value1, value2, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusNotBetween(String value1, String value2) {
+            addCriterion("flow_status not between", value1, value2, "flowStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andBreakdownLocationIsNull() {
             addCriterion("breakdown_location is null");
             return (Criteria) this;
@@ -1019,76 +1159,6 @@ public class BreakdownKnowledgeBaseExample {
 
         public Criteria andApplyTimeNotBetween(Date value1, Date value2) {
             addCriterion("apply_time not between", value1, value2, "applyTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusIsNull() {
-            addCriterion("status is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusIsNotNull() {
-            addCriterion("status is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusEqualTo(String value) {
-            addCriterion("status =", value, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusNotEqualTo(String value) {
-            addCriterion("status <>", value, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusGreaterThan(String value) {
-            addCriterion("status >", value, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusGreaterThanOrEqualTo(String value) {
-            addCriterion("status >=", value, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusLessThan(String value) {
-            addCriterion("status <", value, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusLessThanOrEqualTo(String value) {
-            addCriterion("status <=", value, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusLike(String value) {
-            addCriterion("status like", value, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusNotLike(String value) {
-            addCriterion("status not like", value, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusIn(List<String> values) {
-            addCriterion("status in", values, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusNotIn(List<String> values) {
-            addCriterion("status not in", values, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusBetween(String value1, String value2) {
-            addCriterion("status between", value1, value2, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatusNotBetween(String value1, String value2) {
-            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
 

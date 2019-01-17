@@ -15,6 +15,11 @@ public interface UserValueTimeMapper {
 
     int deleteByPrimaryKey(String id);
 
+    /**
+     * 新增人员值次关联
+     * @param record
+     * @return
+     */
     int insert(UserValueTime record);
 
     int insertSelective(UserValueTime record);
@@ -32,4 +37,6 @@ public interface UserValueTimeMapper {
     int updateByPrimaryKey(UserValueTime record);
 
 	void deleteUserValueTimeByValueId(List<String> ids);
+
+    void deleteBySchedulingRuleId(String schedulingRuleId);
 }

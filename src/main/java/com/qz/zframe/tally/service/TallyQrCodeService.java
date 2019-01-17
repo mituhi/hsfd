@@ -1,57 +1,57 @@
 package com.qz.zframe.tally.service;
 
-import com.qz.zframe.tally.entity.QrCode;
+import java.io.InputStream;
+import java.util.List;
+
+import com.qz.zframe.device.entity.CrewInformationExample;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import com.qz.zframe.common.util.NewPageResult;
+import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.tally.entity.QrCode;
+import com.qz.zframe.tally.entity.QrCodeExample;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public interface TallyQrCodeService {
 
-    /**
-     * 查询二维码配置
-     * @return
-     */
-    List<QrCode> findAllQrCode();
+	/**
+	 * 获取二维码配置列表
+	 * 
+	 * @param @param example
+	 * @param @return    参数
+	 * @return NewPageResult<QrCode>    返回类型
+	 * @throws
+	 */
+	NewPageResult<QrCode> getlistQrCode(QrCodeExample example);
 
-    /**
-     * 根据编号插入二维码配置
-     * @param code1
-     * @param code2
-     * @param qrCode
-     */
-    int insertByCodes(String code1,String code2,QrCode qrCode);
+	/**
+	 * 新增二维码配置
+	 * 
+	 * @param @param qrCode
+	 * @param @return    参数
+	 * @return ResultEntity    返回类型
+	 * @throws
+	 */
+	ResultEntity insertByCodes(QrCode qrCode) throws Exception;
 
-    /**
-     * 根据编号统计插入字段是否有空缺
-     * @param code1
-     * @param code2
-     * @return
-     */
-    int countByCodes(String code1,String code2);
+	/**
+	 * 编辑二维码配置
+	 * 
+	 * @param @param qrCode
+	 * @param @return    参数
+	 * @return ResultEntity    返回类型
+	 * @throws
+	 */
+	ResultEntity updateQrCodeByCode(QrCode qrCode);
 
-    /**
-     *根据编号查显示信息
-     * @param code
-     * @return
-     */
-    QrCode findQrCodeByCode(String code);
+	ResultEntity deleteQrCodeByQrId(List<String> qrIds);
 
-    /**
-     *根据编号修改信息
-     * @param qrCode
-     * @return
-     */
-    void updateQrCodeByCode(QrCode qrCode);
 
-    /**
-     * 根据编号删除二维码配置 \
-     * @param code
-     */
-    void deleteQrCodeByCode(String code);
+    ResultEntity ExportExcl(QrCodeExample example, HttpServletResponse response, String positionCode,String sheetName,String noteSite,ResultEntity resultEntity) throws Exception;
 
-    /**
-     * 计算记录总数二维码配置
-     * @return
-     */
-    int countQrCode();
+    ResultEntity importQrCode(String originalFilename, InputStream inputStream,ResultEntity resultEntity);
+
+	ResultEntity ExportExclByIds(QrCodeExample example, HttpServletResponse response, String positionCode, String sheetName, String noteSite, ResultEntity resultEntity, HttpServletRequest request) throws Exception;
 }

@@ -2,10 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qz.zframe.run.dao.DutyLogTabMapper" >
   <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.DutyLogTab" >
-    <id column="TAB_id" property="tabId" jdbcType="VARCHAR" />
-    <result column="TAB_code" property="tabCode" jdbcType="VARCHAR" />
-    <result column="TAB_name" property="tabName" jdbcType="VARCHAR" />
+    <id column="tab_id" property="tabId" jdbcType="VARCHAR" />
+    <result column="tab_code" property="tabCode" jdbcType="VARCHAR" />
+    <result column="tab_name" property="tabName" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_time" property="maintainTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    TAB_id, TAB_code, TAB_name, url
+    tab_id, tab_code, tab_name, url, maintainer, maintain_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.DutyLogTabExample" >
     select
@@ -86,11 +88,11 @@
     select 
     <include refid="Base_Column_List" />
     from duty_log_tab
-    where TAB_id = #{tabId,jdbcType=VARCHAR}
+    where tab_id = #{tabId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from duty_log_tab
-    where TAB_id = #{tabId,jdbcType=VARCHAR}
+    where tab_id = #{tabId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.DutyLogTabExample" >
     delete from duty_log_tab
@@ -99,25 +101,33 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.run.entity.DutyLogTab" >
-    insert into duty_log_tab (TAB_id, TAB_code, TAB_name, 
-      url)
+    insert into duty_log_tab (tab_id, tab_code, tab_name, 
+      url, maintainer, maintain_time
+      )
     values (#{tabId,jdbcType=VARCHAR}, #{tabCode,jdbcType=VARCHAR}, #{tabName,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR})
+      #{url,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.DutyLogTab" >
     insert into duty_log_tab
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="tabId != null" >
-        TAB_id,
+        tab_id,
       </if>
       <if test="tabCode != null" >
-        TAB_code,
+        tab_code,
       </if>
       <if test="tabName != null" >
-        TAB_name,
+        tab_name,
       </if>
       <if test="url != null" >
         url,
+      </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -133,6 +143,12 @@
       <if test="url != null" >
         #{url,jdbcType=VARCHAR},
       </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        #{maintainTime,jdbcType=TIMESTAMP},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qz.zframe.run.entity.DutyLogTabExample" resultType="java.lang.Integer" >
@@ -145,16 +161,22 @@
     update duty_log_tab
     <set >
       <if test="record.tabId != null" >
-        TAB_id = #{record.tabId,jdbcType=VARCHAR},
+        tab_id = #{record.tabId,jdbcType=VARCHAR},
       </if>
       <if test="record.tabCode != null" >
-        TAB_code = #{record.tabCode,jdbcType=VARCHAR},
+        tab_code = #{record.tabCode,jdbcType=VARCHAR},
       </if>
       <if test="record.tabName != null" >
-        TAB_name = #{record.tabName,jdbcType=VARCHAR},
+        tab_name = #{record.tabName,jdbcType=VARCHAR},
       </if>
       <if test="record.url != null" >
         url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainTime != null" >
+        maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -163,10 +185,12 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update duty_log_tab
-    set TAB_id = #{record.tabId,jdbcType=VARCHAR},
-      TAB_code = #{record.tabCode,jdbcType=VARCHAR},
-      TAB_name = #{record.tabName,jdbcType=VARCHAR},
-      url = #{record.url,jdbcType=VARCHAR}
+    set tab_id = #{record.tabId,jdbcType=VARCHAR},
+      tab_code = #{record.tabCode,jdbcType=VARCHAR},
+      tab_name = #{record.tabName,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -175,22 +199,30 @@
     update duty_log_tab
     <set >
       <if test="tabCode != null" >
-        TAB_code = #{tabCode,jdbcType=VARCHAR},
+        tab_code = #{tabCode,jdbcType=VARCHAR},
       </if>
       <if test="tabName != null" >
-        TAB_name = #{tabName,jdbcType=VARCHAR},
+        tab_name = #{tabName,jdbcType=VARCHAR},
       </if>
       <if test="url != null" >
         url = #{url,jdbcType=VARCHAR},
       </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time = #{maintainTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
-    where TAB_id = #{tabId,jdbcType=VARCHAR}
+    where tab_id = #{tabId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.DutyLogTab" >
     update duty_log_tab
-    set TAB_code = #{tabCode,jdbcType=VARCHAR},
-      TAB_name = #{tabName,jdbcType=VARCHAR},
-      url = #{url,jdbcType=VARCHAR}
-    where TAB_id = #{tabId,jdbcType=VARCHAR}
+    set tab_code = #{tabCode,jdbcType=VARCHAR},
+      tab_name = #{tabName,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_time = #{maintainTime,jdbcType=TIMESTAMP}
+    where tab_id = #{tabId,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -11,6 +11,11 @@
     <result column="company" property="company" jdbcType="VARCHAR" />
     <result column="remarks" property="remarks" jdbcType="VARCHAR" />
   </resultMap>
+  <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+</sql>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -79,13 +84,14 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from components
+    from components 
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <include refid="Pagination_Sql" />
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -93,6 +99,17 @@
     from components
     where component_id = #{componentId,jdbcType=VARCHAR}
   </select>
+  
+   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+     c.*
+    from components  c
+    left join   equipment_asset_ledger   l   on l.equipment_asset_id=c.equipment_asset_id
+    where l.equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
+  </select>
+  
+  
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from components
     where component_id = #{componentId,jdbcType=VARCHAR}

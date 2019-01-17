@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.QualificationCertificateDao">
+
+    <resultMap id="certificateMap" type="com.qz.zframe.common.entity.QualificationCertificate">
+        <id column="certificate_id" property="certificateId"/>
+        <result column="certificate_code" property="certificateCode"/>
+        <result column="certificate_name" property="certificateName"/>
+        <result column="certificate_describe" property="certificateDescribe"/>
+        <result column="creater" property="creater"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 分页查询资质证书信息 -->
+    <select id="queryQualificationPage" resultMap="certificateMap">
+        SELECT
+            certificate_id,
+            certificate_code,
+            certificate_name,
+            certificate_describe,
+            creater,
+            create_time
+        FROM
+          qualification_certificate
+        WHERE
+        <if test="certificateCode != null and certificateCode != ''">
+            AND certificate_code = #{certificateCode}
+        </if>
+        <if test="certificateName != null and certificateName != ''">
+            AND certificate_name = #{certificateName}
+        </if>
+        ORDER BY create_time
+        limit #{firstIndex},#{lastIndex}
+    </select>
+
+    <!-- 分页查询资质证书信息条数 -->
+    <select id="queryQualificationNum" resultType="Integer">
+        SELECT
+            count(certificate_id)
+        FROM
+            qualification_certificate
+        WHERE
+        <if test="certificateCode != null and certificateCode != ''">
+            AND certificate_code = #{certificateCode}
+        </if>
+        <if test="certificateName != null and certificateName != ''">
+            AND certificate_name = #{certificateName}
+        </if>
+    </select>
+
+    <!-- 根据id查询资质证书信息 -->
+    <select id="queryQualificationById" parameterType="string" resultMap="certificateMap">
+        SELECT
+            certificate_id,
+            certificate_code,
+            certificate_name,
+            certificate_describe,
+            creater,
+            create_time
+        FROM
+            qualification_certificate
+        WHERE
+            certificate_id = #{certificateId}
+    </select>
+
+    <!-- 新增资质证书信息 -->
+    <insert id="addQualification" parameterType="com.qz.zframe.common.entity.QualificationCertificate">
+        INSERT INTO qualification_certificate (certificate_id, certificate_code, certificate_name, certificate_describe, creater, create_time)
+        VALUES(#{certificateId}, #{certificateCode}, #{certificateName}, #{certificateDescribe}, #{creater}, #{createTime})
+    </insert>
+
+    <!-- 修改资质证书信息 -->
+    <update id="updateQualification" parameterType="com.qz.zframe.common.entity.QualificationCertificate">
+        UPDATE
+            qualification_certificate
+        SET
+            certificate_code = #{certificateCode},
+            certificate_name = #{certificateName},
+            certificate_describe = #{certificateDescribe}
+        WHERE
+            certificate_id = #{certificateId}
+    </update>
+
+    <!-- 删除资质证书信息 -->
+    <delete id="deleteQualification" parameterType="com.qz.zframe.common.entity.QualificationCertificate" >
+        delete from qualification_certificate
+        where certificate_id in
+        <foreach item="item" index="index" collection="certificateIds" open="(" separator="," close=")">
+            #{item.certificateId}
+        </foreach>
+    </delete>
+
+    <!-- 根据条件查询编码配置信息 -->
+    <select id="findQualificationByMsg" parameterType="string" resultMap="certificateMap">
+        SELECT
+            certificate_id,
+            certificate_code,
+            certificate_name,
+            certificate_describe,
+            creater,
+            create_time
+        FROM
+            qualification_certificate
+        <where>
+            <if test="certificateCode != null and certificateCode !=''">
+                AND certificate_code = #{certificateCode}
+            </if>
+        </where>
+    </select>
+</mapper>

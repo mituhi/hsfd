@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.production.dao.ProductionReportsMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.production.entity.ProductionReports" >
+    <result column="reports_id" property="reportsId" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="project" property="project" jdbcType="VARCHAR" />
+    <result column="plan_finish" property="planFinish" jdbcType="VARCHAR" />
+    <result column="actual_finish" property="actualFinish" jdbcType="VARCHAR" />
+    <result column="last_year" property="lastYear" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="completion" property="completion" jdbcType="VARCHAR" />
+    <result column="wind_code" property="windCode" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    reports_id, time, wind_id, project, plan_finish, actual_finish, last_year, year, 
+    wind_code, wind_name
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.production.entity.ProductionReportsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from production_reports
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.production.entity.ProductionReportsExample" >
+    delete from production_reports
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.production.entity.ProductionReports" >
+    insert into production_reports (reports_id, time, wind_id, 
+      project, plan_finish, actual_finish, 
+      last_year, year, completion,wind_name,wind_code
+      )
+    values (#{reportsId,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, 
+      #{project,jdbcType=VARCHAR}, #{planFinish,jdbcType=VARCHAR}, #{actualFinish,jdbcType=VARCHAR}, 
+      #{lastYear,jdbcType=VARCHAR}, #{year,jdbcType=VARCHAR}, #{completion,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.production.entity.ProductionReports" >
+    insert into production_reports
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reportsId != null" >
+        reports_id,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="project != null" >
+        project,
+      </if>
+      <if test="planFinish != null" >
+        plan_finish,
+      </if>
+      <if test="actualFinish != null" >
+        actual_finish,
+      </if>
+      <if test="lastYear != null" >
+        last_year,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="windCode != null" >
+        wind_code,
+      </if>
+      <if test="windName != null" >
+        wind_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reportsId != null" >
+        #{reportsId,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="project != null" >
+        #{project,jdbcType=VARCHAR},
+      </if>
+      <if test="planFinish != null" >
+        #{planFinish,jdbcType=VARCHAR},
+      </if>
+      <if test="actualFinish != null" >
+        #{actualFinish,jdbcType=VARCHAR},
+      </if>
+      <if test="lastYear != null" >
+        #{lastYear,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="windCode != null" >
+        #{windCode,jdbcType=VARCHAR},
+      </if>
+      <if test="windName != null" >
+        #{windName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.production.entity.ProductionReportsExample" resultType="java.lang.Integer" >
+    select count(*) from production_reports
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update production_reports
+    <set >
+      <if test="record.reportsId != null" >
+        reports_id = #{record.reportsId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.time != null" >
+        time = #{record.time,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.project != null" >
+        project = #{record.project,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planFinish != null" >
+        plan_finish = #{record.planFinish,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualFinish != null" >
+        actual_finish = #{record.actualFinish,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastYear != null" >
+        last_year = #{record.lastYear,jdbcType=VARCHAR},
+      </if>
+      <if test="record.year != null" >
+        year = #{record.year,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windCode != null" >
+        wind_code = #{record.windCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windName != null" >
+        wind_name = #{record.windName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update production_reports
+    set reports_id = #{record.reportsId,jdbcType=VARCHAR},
+      time = #{record.time,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      project = #{record.project,jdbcType=VARCHAR},
+      plan_finish = #{record.planFinish,jdbcType=VARCHAR},
+      actual_finish = #{record.actualFinish,jdbcType=VARCHAR},
+      last_year = #{record.lastYear,jdbcType=VARCHAR},
+      year = #{record.year,jdbcType=VARCHAR},
+      wind_code = #{record.windCode,jdbcType=VARCHAR},
+      wind_name = #{record.windName,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

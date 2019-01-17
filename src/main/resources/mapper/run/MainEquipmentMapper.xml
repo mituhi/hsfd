@@ -7,7 +7,15 @@
     <result column="log_type" property="logType" jdbcType="VARCHAR" />
     <result column="log_type_id" property="logTypeId" jdbcType="VARCHAR" />
     <result column="log_name" property="logName" jdbcType="VARCHAR" />
+    <result column="count" property="count" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
   </resultMap>
+  
+    <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+		</sql>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -67,31 +75,41 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    main_equipment_id, department, log_type, log_type_id, log_name
+    main_equipment_id, department, log_type, log_type_id, log_name,count,wind_name
   </sql>
+  <!--   查询主设备的数据 -->
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.MainEquipmentExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from main_equipment
-    <if test="_parameter != null" >
+ SELECT
+	me.*,
+	org_architecture.architecture_name AS wind_name 
+FROM
+	main_equipment me
+	LEFT JOIN device_type dt ON me.log_type_id = dt.type_id
+	LEFT JOIN ( SELECT * FROM org_architecture WHERE architecture_type = '02' ) org_architecture ON org_architecture.architecture_code = me.department 
+   <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
+    </if> 
+    <include refid="Pagination_Sql" />
   </select>
+  <!--   根据id查询主设备 -->
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from main_equipment
-    where main_equipment_id = #{mainEquipmentId,jdbcType=VARCHAR}
+   SELECT
+	me.*,
+	org_architecture.architecture_name AS wind_name 
+FROM
+	main_equipment me
+	LEFT JOIN device_type dt ON me.log_type_id = dt.type_id
+	LEFT JOIN ( SELECT * FROM org_architecture WHERE architecture_type = '02' ) org_architecture ON org_architecture.architecture_code = me.department 
+   where  me.main_equipment_id = #{mainEquipmentId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from main_equipment
-    where main_equipment_id = #{mainEquipmentId,jdbcType=VARCHAR}
+      <where>
+    main_equipment_id  in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>   
+      </where>    
   </delete>
   <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.MainEquipmentExample" >
     delete from main_equipment
@@ -99,6 +117,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+  <!--   添加主设备 -->
   <insert id="insert" parameterType="com.qz.zframe.run.entity.MainEquipment" >
     insert into main_equipment (main_equipment_id, department, log_type, 
       log_type_id, log_name)
@@ -142,8 +161,12 @@
       </if>
     </trim>
   </insert>
+  
+<!--   查询主设备的数量 -->
   <select id="countByExample" parameterType="com.qz.zframe.run.entity.MainEquipmentExample" resultType="java.lang.Integer" >
-    select count(*) from main_equipment
+    select count(*) from main_equipment me
+    LEFT JOIN device_type dt ON me.log_type_id = dt.type_id
+	LEFT JOIN ( SELECT * FROM org_architecture WHERE architecture_type = '02' ) org_architecture ON org_architecture.architecture_code = me.department 
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -200,12 +223,13 @@
     </set>
     where main_equipment_id = #{mainEquipmentId,jdbcType=VARCHAR}
   </update>
+  <!--   编辑主设备 -->
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.MainEquipment" >
     update main_equipment
     set department = #{department,jdbcType=VARCHAR},
       log_type = #{logType,jdbcType=VARCHAR},
       log_type_id = #{logTypeId,jdbcType=VARCHAR},
-      log_name = #{logName,jdbcType=VARCHAR}
+      log_name = #{logName,jdbcType=VARCHAR},
     where main_equipment_id = #{mainEquipmentId,jdbcType=VARCHAR}
   </update>
 </mapper>

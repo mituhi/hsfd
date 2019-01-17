@@ -225,7 +225,9 @@
   <!-- 获取排班查询字段 -->
  <select id="selectSchedulingQuery" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.SchedulingQuery">
   	SELECT 
-		scheduling_associated.start_time,scheduling_associated.end_time , shift_name , user_id 
+		scheduling_associated.start_time,scheduling_associated.end_time , shift_name , user_id, value_time.value_name,
+		scheduling_management.department ,
+		scheduling_code, scheduling_name
 		FROM 
 		value_time,shift,scheduling_rule,scheduling_management,
 		user_value_time,rule_shift_value,scheduling_associated
@@ -245,13 +247,81 @@
 			and
 			rule_shift_value.scheduling_rule_id = scheduling_rule.scheduling_rule_id
 			
+			<!-- 用startTime来查询 -->
 			<if test="startTime != null">
-                and scheduling_associated.start_time >= #{startTime}
+				and scheduling_associated.start_time &lt;= #{startTime} and scheduling_associated.end_time >= #{startTime}
+                <!-- and scheduling_associated.start_time >= #{startTime} -->
             </if>
             
+            <!-- 
             <if test="endTime != null">
                 and scheduling_associated.end_time  &lt;=  #{endTime}
+            </if> -->
+            
+			<if test="department != null and department != ''">
+                and scheduling_management.department = #{department}
             </if>
+
+			<if test="schedulingName != null and schedulingName != ''">
+              and  scheduling_management.scheduling_name = #{schedulingName}
+            </if>
+            
+		</where>
+    </select>
+  
+
+
+ <resultMap id="myResultMap" type="com.qz.zframe.run.entity.SchedulingQuery" >
+    <result column="start_time" property="startTime" jdbcType="DATE" />
+    <result column="end_time" property="endTime" jdbcType="DATE" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="scheduling_code" property="schedulingCode" jdbcType="VARCHAR" />
+    <result column="scheduling_name" property="schedulingName" jdbcType="VARCHAR" />
+    <result column="value_name" property="valueName" jdbcType="VARCHAR" />
+    <result column="shift_name" property="shiftName" jdbcType="VARCHAR" />
+    <result column="user_name" property="userId" jdbcType="VARCHAR" />
+    <result column="scheduling_rule_id" property="schedulingRuleId" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+  <!-- 获取排班查询字段：带有名字 -->
+ <select id="selectSchedulingQueryWithUserName" resultMap="myResultMap" parameterType="com.qz.zframe.run.entity.SchedulingQuery">
+  	SELECT 
+		scheduling_associated.start_time,scheduling_associated.end_time , shift_name , user_name, value_time.value_name,
+		scheduling_management.department ,
+		scheduling_code, scheduling_name
+		FROM 
+		value_time,shift,scheduling_rule,scheduling_management,
+		user_value_time,rule_shift_value,scheduling_associated,isc_user
+		
+		<where>
+			user_value_time.value_id = value_time.value_id
+			and
+			user_value_time.scheduling_rule_id = scheduling_rule.scheduling_rule_id
+			and
+			user_value_time.user_id = isc_user.user_id
+			and
+			scheduling_associated.scheduling_management_id =scheduling_management.scheduling_management_id
+			and
+			scheduling_associated.scheduling_rule_id = scheduling_rule.scheduling_rule_id
+			and
+			rule_shift_value.value_id = value_time.value_id
+			and
+			rule_shift_value.shift_id = shift.shift_id
+			and
+			rule_shift_value.scheduling_rule_id = scheduling_rule.scheduling_rule_id
+			
+			<!-- 用startTime来查询 -->
+			<if test="startTime != null">
+				and scheduling_associated.start_time &lt;= #{startTime} and scheduling_associated.end_time >= #{startTime}
+                <!-- and scheduling_associated.start_time >= #{startTime} -->
+            </if>
+            
+            <!-- 
+            <if test="endTime != null">
+                and scheduling_associated.end_time  &lt;=  #{endTime}
+            </if> -->
             
 			<if test="department != null and department != ''">
                 and scheduling_management.department = #{department}

@@ -1,5 +1,7 @@
 package com.qz.zframe.run.entity;
 
+import javax.persistence.Transient;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class ValueTime {
@@ -18,6 +20,8 @@ public class ValueTime {
 
     @ApiModelProperty(value="值次排序",name="sort",required=true)
     private Integer sort;
+    @Transient
+    private String statusName;
 
     public String getValueId() {
         return valueId;
@@ -58,4 +62,14 @@ public class ValueTime {
     public void setSort(Integer sort) {
         this.sort = sort;
     }
+    @Transient
+	public String getStatusName() {
+		return statusName;
+	}
+    @Transient
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+    
+    
 }

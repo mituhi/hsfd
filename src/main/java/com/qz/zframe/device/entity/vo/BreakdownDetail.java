@@ -3,19 +3,19 @@ package com.qz.zframe.device.entity.vo;
 public class BreakdownDetail {
 	private  String windId;//风电场id
 	private  String windName;//风电场名称
-	private  String A ; //主控系统//机械类//故障激活数量
-	private  String B; //变频器系统//电气类//故障恢复数量
-	private  String C;//机舱内//自控类//故障未恢复数量
-	private  String D;//机舱外//通讯类//完成率
-	private  String E;//偏航系统//超温类//
-	private  String F;//变桨系统//液压类//
-	private  String G;//其他设备//
-    private  String H;//机械类
-    private  String I;//电气类
-    private  String J;//自控类/
-    private  String K;//通讯类
-    private  String L;//超温类
-    private  String M;//液压类
+	private  String masterControlSystem  ; //主控系统//机械类//故障激活数量
+	private  String frequencyConverterSystem ; //变频器系统//电气类//故障恢复数量
+	private  String cabin ;//机舱内//自控类//故障未恢复数量
+	private  String outsideTheCabin ;//机舱外//通讯类//完成率
+	private  String yawSystem ;//偏航系统//超温类//
+	private  String paddleSystem ;//变桨系统//液压类//
+	private  String otherEquipment ;//其他设备//
+	private  String mechanicalClass   ; //主控系统//机械类//故障激活数量
+	private  String electricClass ; //变频器系统//电气类//故障恢复数量
+	private  String autoControlClass   ;//机舱内//自控类//故障未恢复数量
+	private  String communicationClass  ;//机舱外//通讯类//完成率
+	private  String supertemperatureClass  ;//偏航系统//超温类//
+	private  String hydraulicType  ;//变桨系统//液压类//
 	public String getWindId() {
 		return windId;
 	}
@@ -28,85 +28,82 @@ public class BreakdownDetail {
 	public void setWindName(String windName) {
 		this.windName = windName;
 	}
-	public String getA() {
-		return A;
+	public String getMasterControlSystem() {
+		return masterControlSystem;
 	}
-	public void setA(String a) {
-		A = a;
+	public void setMasterControlSystem(String masterControlSystem) {
+		this.masterControlSystem = masterControlSystem;
 	}
-	public String getB() {
-		return B;
+	public String getFrequencyConverterSystem() {
+		return frequencyConverterSystem;
 	}
-	public void setB(String b) {
-		B = b;
+	public void setFrequencyConverterSystem(String frequencyConverterSystem) {
+		this.frequencyConverterSystem = frequencyConverterSystem;
 	}
-	public String getC() {
-		return C;
+	public String getCabin() {
+		return cabin;
 	}
-	public void setC(String c) {
-		C = c;
+	public void setCabin(String cabin) {
+		this.cabin = cabin;
 	}
-	public String getD() {
-		return D;
+	public String getOutsideTheCabin() {
+		return outsideTheCabin;
 	}
-	public void setD(String d) {
-		D = d;
+	public void setOutsideTheCabin(String outsideTheCabin) {
+		this.outsideTheCabin = outsideTheCabin;
 	}
-	public String getE() {
-		return E;
+	public String getYawSystem() {
+		return yawSystem;
 	}
-	public void setE(String e) {
-		E = e;
+	public void setYawSystem(String yawSystem) {
+		this.yawSystem = yawSystem;
 	}
-	public String getF() {
-		return F;
+	public String getPaddleSystem() {
+		return paddleSystem;
 	}
-	public void setF(String f) {
-		F = f;
+	public void setPaddleSystem(String paddleSystem) {
+		this.paddleSystem = paddleSystem;
 	}
-	public String getG() {
-		return G;
+	public String getOtherEquipment() {
+		return otherEquipment;
 	}
-	public void setG(String g) {
-		G = g;
+	public void setOtherEquipment(String otherEquipment) {
+		this.otherEquipment = otherEquipment;
 	}
-	public String getH() {
-		return H;
+	public String getMechanicalClass() {
+		return mechanicalClass;
 	}
-	public void setH(String h) {
-		H = h;
+	public void setMechanicalClass(String mechanicalClass) {
+		this.mechanicalClass = mechanicalClass;
 	}
-	public String getI() {
-		return I;
+	public String getElectricClass() {
+		return electricClass;
 	}
-	public void setI(String i) {
-		I = i;
+	public void setElectricClass(String electricClass) {
+		this.electricClass = electricClass;
 	}
-	public String getJ() {
-		return J;
+	public String getAutoControlClass() {
+		return autoControlClass;
 	}
-	public void setJ(String j) {
-		J = j;
+	public void setAutoControlClass(String autoControlClass) {
+		this.autoControlClass = autoControlClass;
 	}
-	public String getK() {
-		return K;
+	public String getCommunicationClass() {
+		return communicationClass;
 	}
-	public void setK(String k) {
-		K = k;
+	public void setCommunicationClass(String communicationClass) {
+		this.communicationClass = communicationClass;
 	}
-	public String getL() {
-		return L;
+	public String getSupertemperatureClass() {
+		return supertemperatureClass;
 	}
-	public void setL(String l) {
-		L = l;
+	public void setSupertemperatureClass(String supertemperatureClass) {
+		this.supertemperatureClass = supertemperatureClass;
 	}
-	public String getM() {
-		return M;
+	public String getHydraulicType() {
+		return hydraulicType;
 	}
-	public void setM(String m) {
-		M = m;
+	public void setHydraulicType(String hydraulicType) {
+		this.hydraulicType = hydraulicType;
 	}
-    
-    
-    
 }

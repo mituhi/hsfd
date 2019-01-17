@@ -1,108 +1,114 @@
 package com.qz.zframe.maintain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class WorkorderInfo {
 
-    @ApiParam(name="orderId",value="工单id",required=false)
+    @ApiModelProperty(name="orderId",value="工单id",required=false)
     private String orderId;
 
-    @ApiParam(name="serialNumber",value="工单号(流水号)",required=false)
+    @ApiModelProperty(name="serialNumber",value="工单号(流水号)",required=false)
     private String serialNumber;
 
-    @ApiParam(name="workorderCode",value="工单代码",required=false)
+    @ApiModelProperty(name="workorderCode",value="工单代码",required=false)
     private String workorderCode;
 
-    @ApiParam(name="workorderTypeId",value="工单类型",required=false)
+    @ApiModelProperty(name="workorderTypeId",value="工单类型id",required=false)
     private String workorderTypeId;
 
-    @ApiParam(name="workorderDesc",value="工单描述",required=false)
+    @ApiModelProperty(name="workorderDesc",value="工单描述",required=false)
     private String workorderDesc;
 
-    @ApiParam(name="maintainer",value="维护人",required=false)
+    @ApiModelProperty(name="maintainer",value="维护人id",required=false)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=false)
+    @ApiModelProperty(name="maintainDate",value="维护日期",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="status",value="状态",required=false)
+    @ApiModelProperty(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="windId",value="风电场",required=false)
+    @ApiModelProperty(name="flowStatus",value="流程节点id",required=false)
+    private String flowStatus;
+
+    @ApiModelProperty(name="windId",value="风电场id",required=false)
     private String windId;
 
-    @ApiParam(name="company",value="公司",required=false)
+    @ApiModelProperty(name="company",value="公司id",required=false)
     private String company;
 
-    @ApiParam(name="crewId",value="机组",required=false)
+    @ApiModelProperty(name="department",value="部门id",required=false)
+    private String department;
+
+    @ApiModelProperty(name="crewId",value="机组id",required=false)
     private String crewId;
 
-    @ApiParam(name="dutyTeam",value="负责班组",required=false)
+    @ApiModelProperty(name="dutyTeam",value="负责班组id",required=false)
     private String dutyTeam;
 
-    @ApiParam(name="dutyHead",value="负责人",required=false)
+    @ApiModelProperty(name="dutyHead",value="负责人id",required=false)
     private String dutyHead;
 
-    @ApiParam(name="fillPerson",value="填报人",required=false)
+    @ApiModelProperty(name="fillPerson",value="填报人id",required=false)
     private String fillPerson;
 
-    @ApiParam(name="schemeTime",value="策划时间",required=false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    @ApiModelProperty(name="schemeTime",value="策划时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date schemeTime;
 
-    @ApiParam(name="unitMember",value="本单位人员",required=false)
+    @ApiModelProperty(name="unitMember",value="本单位人员ids,逗号隔开",required=false)
     private String unitMember;
 
-    @ApiParam(name="otherUnitMember",value="外单位人员",required=false)
+    @ApiModelProperty(name="otherUnitMember",value="外单位人员姓名,逗号隔开",required=false)
     private String otherUnitMember;
 
-    @ApiParam(name="positionId",value="位置id",required=false)
+    @ApiModelProperty(name="positionId",value="位置id",required=false)
     private String positionId;
 
-    @ApiParam(name="positionDesc",value="位置描述",required=false)
+    @ApiModelProperty(name="positionDesc",value="位置描述",required=false)
     private String positionDesc;
 
-    @ApiParam(name="equipmentId",value="设备id",required=false)
+    @ApiModelProperty(name="equipmentId",value="设备id",required=false)
     private String equipmentId;
 
-    @ApiParam(name="equipmentDesc",value="设备描述",required=false)
+    @ApiModelProperty(name="equipmentDesc",value="设备描述",required=false)
     private String equipmentDesc;
 
-    @ApiParam(name="planStartTime",value="计划开始时间",required=false)
+    @ApiModelProperty(name="planStartTime",value="计划开始时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date planStartTime;
 
-    @ApiParam(name="planEndTime",value="计划结束时间",required=false)
+    @ApiModelProperty(name="planEndTime",value="计划结束时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date planEndTime;
 
-    @ApiParam(name="planWorkHour",value="计划工时",required=false)
+    @ApiModelProperty(name="planWorkHour",value="计划工时",required=false)
     private String planWorkHour;
 
-    @ApiParam(name="planMaterialFee",value="计划材料费",required=false)
+    @ApiModelProperty(name="planMaterialFee",value="计划材料费",required=false)
     private String planMaterialFee;
 
-    @ApiParam(name="planServiceFee",value="计划服务费",required=false)
+    @ApiModelProperty(name="planServiceFee",value="计划服务费",required=false)
     private String planServiceFee;
 
-    @ApiParam(name="actualCompleteTime",value="实际完成时间",required=false)
+    @ApiModelProperty(name="actualCompleteTime",value="实际完成时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date actualCompleteTime;
 
-    @ApiParam(name="attachment",value="附件",required=false)
+    @ApiModelProperty(name="attachment",value="附件",required=false)
     private String attachment;
 
-    @ApiParam(name="equipmentStatusRequirement1",value="一次设备状态要求",required=false)
+    @ApiModelProperty(name="equipmentStatusRequirement1",value="一次设备状态要求",required=false)
     private String equipmentStatusRequirement1;
 
-    @ApiParam(name="equipmentStatusRequirement2",value="二次设备状态要求",required=false)
+    @ApiModelProperty(name="equipmentStatusRequirement2",value="二次设备状态要求",required=false)
     private String equipmentStatusRequirement2;
 
-    @ApiParam(name="otherRequirement",value="其他要求",required=false)
+    @ApiModelProperty(name="otherRequirement",value="其他要求",required=false)
     private String otherRequirement;
 
     public String getOrderId() {
@@ -169,6 +175,14 @@ public class WorkorderInfo {
         this.status = status == null ? null : status.trim();
     }
 
+    public String getFlowStatus() {
+        return flowStatus;
+    }
+
+    public void setFlowStatus(String flowStatus) {
+        this.flowStatus = flowStatus;
+    }
+
     public String getWindId() {
         return windId;
     }
@@ -183,6 +197,14 @@ public class WorkorderInfo {
 
     public void setCompany(String company) {
         this.company = company == null ? null : company.trim();
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public String getCrewId() {
@@ -352,4 +374,5 @@ public class WorkorderInfo {
     public void setOtherRequirement(String otherRequirement) {
         this.otherRequirement = otherRequirement == null ? null : otherRequirement.trim();
     }
+
 }

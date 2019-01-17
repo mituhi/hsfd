@@ -19,8 +19,16 @@
 	<result column="material_name" property="materialName" jdbcType="VARCHAR" />
 	<result column="specifications" property="specifications" jdbcType="VARCHAR" />
 	<result column="measuring_unit" property="measuringUnit"  jdbcType="VARCHAR" />
-    
+	<result column="measuring_unit_name" property="measuringUnitName"  jdbcType="VARCHAR" />
   </resultMap>
+  
+  <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit
+			#{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</sql>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -84,13 +92,19 @@
     tax_bill, un_tax_price, check_results, remark, manufacture_day, net_price, net_worth
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.InInventoryDetailExample" >
-    select a.*,b.material_code,b.material_name,b.specifications,b.measuring_unit  from in_inventory_detail a left join material b on a.material_id=b.material_id 
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+    select z.*,d.measuring_unit_name
+    from
+    (select a.*,b.material_code as material_code,b.material_name as material_name,
+    b.specifications as specifications,b.measuring_unit as measuring_unit
+    from in_inventory_detail a left join material b on a.material_id=b.material_id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <include refid="Pagination_Sql" />) z
+    left join material_unit d on z.measuring_unit = d.measuring_unit_id
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
      select a.*,b.material_code,b.material_name,b.specifications,b.measuring_unit  from in_inventory_detail a left join material b on a.material_id=b.material_id 
@@ -118,6 +132,25 @@
       #{checkResults,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{manufactureDay,jdbcType=DATE}, 
       #{netPrice,jdbcType=DECIMAL}, #{netWorth,jdbcType=DECIMAL})
   </insert>
+  
+  
+  
+    <insert id="insertList" parameterType="java.util.List" >
+    insert into in_inventory_detail (in_inventory_detail_id, in_inventory_id, 
+      material_id, goods_num, tax_price, 
+      tax_amount, tax_bill, un_tax_price, 
+      check_results, remark, manufacture_day, 
+      net_price, net_worth)
+    values 
+     <foreach collection="list" item="inInventoryDetail" index="index" separator="," >
+    (#{inInventoryDetail.inInventoryDetailId,jdbcType=VARCHAR}, #{inInventoryDetail.inInventoryId,jdbcType=VARCHAR}, 
+      #{inInventoryDetail.materialId,jdbcType=VARCHAR}, #{inInventoryDetail.goodsNum,jdbcType=INTEGER}, #{inInventoryDetail.taxPrice,jdbcType=DECIMAL}, 
+      #{inInventoryDetail.taxAmount,jdbcType=DECIMAL}, #{inInventoryDetail.taxBill,jdbcType=VARCHAR}, #{inInventoryDetail.unTaxPrice,jdbcType=DECIMAL}, 
+      #{inInventoryDetail.checkResults,jdbcType=VARCHAR}, #{inInventoryDetail.remark,jdbcType=VARCHAR}, #{inInventoryDetail.manufactureDay,jdbcType=DATE}, 
+      #{inInventoryDetail.netPrice,jdbcType=DECIMAL}, #{inInventoryDetail.netWorth,jdbcType=DECIMAL})
+  </foreach>
+  </insert>
+  
   <insert id="insertSelective" parameterType="com.qz.zframe.material.entity.InInventoryDetail" >
     insert into in_inventory_detail
     <trim prefix="(" suffix=")" suffixOverrides="," >

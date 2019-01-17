@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.common.dao.ProcessDetailRoleRelaMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.common.entity.ProcessDetailRoleRela" >
+    <id column="rela_id" property="relaId" jdbcType="VARCHAR" />
+    <result column="process_detail_id" property="processDetailId" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    rela_id, process_detail_id, role_id
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from process_detail_role_rela
+    where rela_id = #{relaId,jdbcType=VARCHAR}
+  </select>
+  <select id="getProcessDetailRoleRelaByprocessDetailId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from process_detail_role_rela
+    where process_detail_id = #{processDetailId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from process_detail_role_rela
+    where rela_id = #{relaId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.qz.zframe.common.entity.ProcessDetailRoleRela" >
+    insert into process_detail_role_rela (rela_id, process_detail_id, role_id
+      )
+    values (#{relaId,jdbcType=VARCHAR}, #{processDetailId,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.common.entity.ProcessDetailRoleRela" >
+    insert into process_detail_role_rela
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="relaId != null" >
+        rela_id,
+      </if>
+      <if test="processDetailId != null" >
+        process_detail_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="relaId != null" >
+        #{relaId,jdbcType=VARCHAR},
+      </if>
+      <if test="processDetailId != null" >
+        #{processDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertList" >
+    insert into process_detail_role_rela (rela_id, process_detail_id, role_id
+      )
+    values
+    <foreach collection ="list" item="item" separator=",">
+      (#{item.relaId,jdbcType=VARCHAR}, #{item.processDetailId,jdbcType=VARCHAR}, #{item.roleId,jdbcType=VARCHAR})
+    </foreach >
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.common.entity.ProcessDetailRoleRela" >
+    update process_detail_role_rela
+    <set >
+      <if test="processDetailId != null" >
+        process_detail_id = #{processDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rela_id = #{relaId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.common.entity.ProcessDetailRoleRela" >
+    update process_detail_role_rela
+    set process_detail_id = #{processDetailId,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=VARCHAR}
+    where rela_id = #{relaId,jdbcType=VARCHAR}
+  </update>
+</mapper>

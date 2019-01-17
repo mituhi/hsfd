@@ -1,28 +1,28 @@
 package com.qz.zframe.tickets.entity;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 public class WorkTicketRiskControl {
 
-    @ApiParam(name="measureId",value="危险因素控制措施id",required=false)
+    @ApiModelProperty(name="measureId",value="危险因素控制措施id",required=false)
     private String measureId;
 
-    @ApiParam(name="ticketId",value="工作票id",required=false)
+    @ApiModelProperty(name="ticketId",value="工作票id",required=false)
     private String ticketId;
 
-    @ApiParam(name="standardTicketId",value="标准工作票id",required=false)
+    @ApiModelProperty(name="standardTicketId",value="标准工作票id",required=false)
     private String standardTicketId;
 
-    @ApiParam(name="measureNumber",value="编号",required=false)
+    @ApiModelProperty(name="measureNumber",value="编号",required=false)
     private String measureNumber;
 
-    @ApiParam(name="dangerPoint",value="危险点",required=false)
+    @ApiModelProperty(name="dangerPoint",value="危险点",required=false)
     private String dangerPoint;
 
-    @ApiParam(name="workCondition",value="危险因素控制措施",required=false)
+    @ApiModelProperty(name="workCondition",value="危险因素控制措施",required=false)
     private String measure;
 
-    @ApiParam(name="measureExecutor",value="落实人",required=false)
+    @ApiModelProperty(name="measureExecutor",value="落实人",required=false)
     private String measureExecutor;
 
     public String getMeasureId() {

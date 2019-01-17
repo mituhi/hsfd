@@ -145,7 +145,7 @@ public class InInventoryExample extends PageExample{
         }
 
         public Criteria andInInventoryIdEqualTo(String value) {
-            addCriterion("in_inventory_id =", value, "inInventoryId");
+            addCriterion("a.in_inventory_id =", value, "inInventoryId");
             return (Criteria) this;
         }
 
@@ -185,7 +185,7 @@ public class InInventoryExample extends PageExample{
         }
 
         public Criteria andInInventoryIdIn(List<String> values) {
-            addCriterion("in_inventory_id in", values, "inInventoryId");
+            addCriterion("a.in_inventory_id in", values, "inInventoryId");
             return (Criteria) this;
         }
 
@@ -215,7 +215,7 @@ public class InInventoryExample extends PageExample{
         }
 
         public Criteria andInInventoryOrderEqualTo(String value) {
-            addCriterion("in_inventory_order =", value, "inInventoryOrder");
+            addCriterion("a.in_inventory_order =", value, "inInventoryOrder");
             return (Criteria) this;
         }
 
@@ -245,7 +245,7 @@ public class InInventoryExample extends PageExample{
         }
 
         public Criteria andInInventoryOrderLike(String value) {
-            addCriterion("in_inventory_order like", value, "inInventoryOrder");
+            addCriterion("a.in_inventory_order like", "%"+value+"%", "inInventoryOrder");
             return (Criteria) this;
         }
 
@@ -363,6 +363,35 @@ public class InInventoryExample extends PageExample{
             addCriterion("a.supplier_id =", value, "stockAddId");
             return (Criteria) this;
         }
+        
+        public Criteria andSupplierNameLikeTo(String value) {
+            addCriterion("d.supplier_name like","%"+ value+"%", "stockAddId");
+            return (Criteria) this;
+        }
+        public Criteria andStockNameLikeTo(String value) {
+            addCriterion("c.stock_add_name like","%"+ value+"%", "stockAddId");
+            return (Criteria) this;
+        }
+        
+        public Criteria andCreaterIdEqualTo(String value) {
+        	addCriterion("case when a.creater="+value, " then  1=1 else a.in_inventory_order is not null end","creater");
+            return (Criteria) this;
+        }
+        
+        public Criteria andCreaterIdEqualTos(String value) {
+            addCriterion("case when a.creater="+value+ " then  1=1 else a.in_inventory_order is not null end");
+            return (Criteria) this;
+        }
+      
+
+		protected void addCriterions(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            criteria.add(new Criterion(condition, value));
+        }
+        
+        
 
         public Criteria andStockAddIdNotEqualTo(String value) {
             addCriterion("stock_add_id <>", value, "stockAddId");
@@ -559,8 +588,18 @@ public class InInventoryExample extends PageExample{
             return (Criteria) this;
         }
 
+        public Criteria andarchitectureCodeEqualTo(String value) {
+            addCriterion("b.architecture_code =", value, "windId");
+            return (Criteria) this;
+        }
+        
         public Criteria andWindIdEqualTo(String value) {
-            addCriterion("a.wind_id =", value, "windId");
+            addCriterion("b.architecture_code =", value, "windId");
+            return (Criteria) this;
+        }
+        
+        public Criteria andArchitectureIdEqualTo(String value) {
+            addCriterion("a.architecture_id =", value, "windId");
             return (Criteria) this;
         }
 
@@ -599,8 +638,8 @@ public class InInventoryExample extends PageExample{
             return (Criteria) this;
         }
 
-        public Criteria andWindIdBetween(Integer value1, Integer value2) {
-            addCriterion("wind_id between", value1, value2, "windId");
+        public Criteria andarchitectureCodeBetween(String  value1, String value2) {
+            addCriterion("b.architecture_id between", value1, value2, "windId");
             return (Criteria) this;
         }
 
@@ -763,6 +802,10 @@ public class InInventoryExample extends PageExample{
             addCriterion("a.in_inventory_type =", value, "inInventoryType");
             return (Criteria) this;
         }
+        
+        
+        
+        
 
         public Criteria andInInventoryTypeNotEqualTo(String value) {
             addCriterion("in_inventory_type <>", value, "inInventoryType");
@@ -1030,7 +1073,7 @@ public class InInventoryExample extends PageExample{
         }
 
         public Criteria andStatusEqualTo(String value) {
-            addCriterion("status =", value, "status");
+            addCriterion("a.status =", value, "status");
             return (Criteria) this;
         }
 

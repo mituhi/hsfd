@@ -23,6 +23,8 @@ public interface ComponentsMapper extends BaseMapper<Components, ComponentsExamp
     List<Components> selectByExample(ComponentsExample example);
 
     Components selectByPrimaryKey(String componentId);
+    
+    List<Components>  selectById(String equipmentAssetId);
 
     int updateByExampleSelective(@Param("record") Components record, @Param("example") ComponentsExample example);
 

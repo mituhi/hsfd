@@ -28,5 +28,6 @@ public interface SchedulingQueryMapper {
 	
 	int updateOperator(SchedulingQuery schedulingQuery);
 	
+	List<SchedulingQuery> selectSchedulingQueryWithUserName(SchedulingQuery schedulingQuery);
 	
 }

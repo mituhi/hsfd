@@ -2,10 +2,12 @@ package com.qz.zframe.device.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
+import java.util.List;
 import javax.persistence.Transient;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.qz.zframe.common.entity.SpFileUpload;
+import com.qz.zframe.material.entity.Material;
+
 import io.swagger.annotations.ApiModelProperty;
 
 
@@ -76,19 +78,19 @@ public class EquipmentAssetLedger {
 	
 	@ApiModelProperty(name = "dateManufacture", value = "生产日期", required = false)
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@JsonFormat(pattern = "yyyy-MM-dd ", timezone = "GMT+08:00")
 	
     private Date dateManufacture;
 	
 	@ApiModelProperty(name = "installDate", value = "安装日期", required = false)
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@JsonFormat(pattern = "yyyy-MM-dd ", timezone = "GMT+08:00")
 	
     private Date installDate;
 	
 	@ApiModelProperty(name = "dateDelivery", value = "投运日期", required = false)
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@JsonFormat(pattern = "yyyy-MM-dd ", timezone = "GMT+08:00")
 
     private Date dateDelivery;
 	
@@ -106,7 +108,7 @@ public class EquipmentAssetLedger {
 	
 	@ApiModelProperty(name = "assetStatusDate", value = "资产状态变更日期", required = false)
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	@JsonFormat(pattern = "yyyy-MM-dd ", timezone = "GMT+08:00")
 
     private Date assetStatusDate;
 	
@@ -139,7 +141,7 @@ public class EquipmentAssetLedger {
 	private  String equipmentId;
 	
 	@ApiModelProperty(name = "positionId", value = "位置id", required = false)
-	
+
 	private  String positionId;
 	
 	@ApiModelProperty(name = "enclosure", value = "附件", required = false)
@@ -153,20 +155,57 @@ public class EquipmentAssetLedger {
 	@ApiModelProperty(name = "crewName", value = "机组名称", required = false)
 	@Transient
 	private  String crewName;
-	
+    @Transient
+    private String assetStatusDates;
+    @Transient
+    private String dateDeliverys;
 	@ApiModelProperty(name = "typeName", value = "设备分类名称", required = false)
 	@Transient
 	private  String typeName;
-	@ApiModelProperty(name = "equipmentType", value = "设备分类", required = false)
-	@Transient
-	private  String equipmentType;
 	@ApiModelProperty(name = "supplierName", value = "供应商名称", required = false)
 	@Transient
 	private  String supplierName;
 	
     @ApiModelProperty(name = "assetStatusName", value = "资产状态名称", required = false)
     @Transient
-    private String assetStatusName;
+    private String assetStatusName;//equipmentType
+    
+   @ApiModelProperty(name = "companyCodeName", value = "公司代码名称", required = false)
+	@Transient
+	private String companyCodeName;
+	
+	@ApiModelProperty(name = "maintenanceTeamName", value = "维护班组名称", required = false)
+	@Transient
+	private String maintenanceTeamName;
+	
+	@ApiModelProperty(name = "costCenterName", value = "成本中心名称", required = false)
+	@Transient
+	private String costCenterName;
+	
+	@ApiModelProperty(name = "departmentName", value = "部门", required = false)
+	@Transient
+	private String departmentName;
+	
+	@ApiModelProperty(name = "hierarchyName", value = "层级名称", required = false)
+	@Transient
+	private String hierarchyName;
+  
+    @Transient
+    private List<String> componentIds;
+    @Transient
+    //出入的设备参数
+    private  List<Components> components;
+/*    @Transient
+    //接受的物资数据
+    private List<Material>  material;*/
+    @Transient
+	private  Parameters  runParameters;
+	@Transient
+	private  Parameters  outputParameters;
+	@Transient
+	private  List<String>  files;
+	@Transient
+	private List<SpFileUpload>  route;
     public String getEquipmentAssetId() {
         return equipmentAssetId;
     }
@@ -207,199 +246,201 @@ public class EquipmentAssetLedger {
         this.positionName = positionName == null ? null : positionName.trim();
     }
 
+
+
     public String getWindId() {
-        return windId;
-    }
+		return windId;
+	}
 
-    public void setWindId(String windId) {
-        this.windId = windId == null ? null : windId.trim();
-    }
+	public void setWindId(String windId) {
+		this.windId = windId;
+	}
 
-    public String getDepartment() {
-        return department;
-    }
+	public String getDepartment() {
+		return department;
+	}
 
-    public void setDepartment(String department) {
-        this.department = department == null ? null : department.trim();
-    }
+	public void setDepartment(String department) {
+		this.department = department;
+	}
 
-    public String getHierarchy() {
-        return hierarchy;
-    }
+	public String getHierarchy() {
+		return hierarchy;
+	}
 
-    public void setHierarchy(String hierarchy) {
-        this.hierarchy = hierarchy == null ? null : hierarchy.trim();
-    }
+	public void setHierarchy(String hierarchy) {
+		this.hierarchy = hierarchy;
+	}
 
-    public String getCrew() {
-        return crew;
-    }
+	public String getCrew() {
+		return crew;
+	}
 
-    public void setCrew(String crew) {
-        this.crew = crew == null ? null : crew.trim();
-    }
+	public void setCrew(String crew) {
+		this.crew = crew;
+	}
 
-    public String getCompanyCode() {
-        return companyCode;
-    }
+	public String getCompanyCode() {
+		return companyCode;
+	}
 
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode == null ? null : companyCode.trim();
-    }
+	public void setCompanyCode(String companyCode) {
+		this.companyCode = companyCode;
+	}
 
-    public String getCostCenter() {
-        return costCenter;
-    }
+	public String getCostCenter() {
+		return costCenter;
+	}
 
-    public void setCostCenter(String costCenter) {
-        this.costCenter = costCenter == null ? null : costCenter.trim();
-    }
+	public void setCostCenter(String costCenter) {
+		this.costCenter = costCenter;
+	}
 
-    public String getMaintenanceTeam() {
-        return maintenanceTeam;
-    }
+	public String getMaintenanceTeam() {
+		return maintenanceTeam;
+	}
 
-    public void setMaintenanceTeam(String maintenanceTeam) {
-        this.maintenanceTeam = maintenanceTeam == null ? null : maintenanceTeam.trim();
-    }
+	public void setMaintenanceTeam(String maintenanceTeam) {
+		this.maintenanceTeam = maintenanceTeam;
+	}
 
-    public BigDecimal getAddress() {
-        return address;
-    }
+	public BigDecimal getAddress() {
+		return address;
+	}
 
-    public void setAddress(BigDecimal address) {
-        this.address = address;
-    }
+	public void setAddress(BigDecimal address) {
+		this.address = address;
+	}
 
-    public String getManufacturer() {
-        return manufacturer;
-    }
+	public String getManufacturer() {
+		return manufacturer;
+	}
 
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer == null ? null : manufacturer.trim();
-    }
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
 
-    public String getEquipmentNumber() {
-        return equipmentNumber;
-    }
+	public String getEquipmentNumber() {
+		return equipmentNumber;
+	}
 
-    public void setEquipmentNumber(String equipmentNumber) {
-        this.equipmentNumber = equipmentNumber == null ? null : equipmentNumber.trim();
-    }
+	public void setEquipmentNumber(String equipmentNumber) {
+		this.equipmentNumber = equipmentNumber;
+	}
 
-    public String getFixedAssets() {
-        return fixedAssets;
-    }
+	public String getFixedAssets() {
+		return fixedAssets;
+	}
 
-    public void setFixedAssets(String fixedAssets) {
-        this.fixedAssets = fixedAssets == null ? null : fixedAssets.trim();
-    }
+	public void setFixedAssets(String fixedAssets) {
+		this.fixedAssets = fixedAssets;
+	}
 
-    public Date getDateManufacture() {
-        return dateManufacture;
-    }
+	public Date getDateManufacture() {
+		return dateManufacture;
+	}
 
-    public void setDateManufacture(Date dateManufacture) {
-        this.dateManufacture = dateManufacture;
-    }
+	public void setDateManufacture(Date dateManufacture) {
+		this.dateManufacture = dateManufacture;
+	}
 
-    public Date getInstallDate() {
-        return installDate;
-    }
+	public Date getInstallDate() {
+		return installDate;
+	}
 
-    public void setInstallDate(Date installDate) {
-        this.installDate = installDate;
-    }
+	public void setInstallDate(Date installDate) {
+		this.installDate = installDate;
+	}
 
-    public Date getDateDelivery() {
-        return dateDelivery;
-    }
+	public Date getDateDelivery() {
+		return dateDelivery;
+	}
 
-    public void setDateDelivery(Date dateDelivery) {
-        this.dateDelivery = dateDelivery;
-    }
+	public void setDateDelivery(Date dateDelivery) {
+		this.dateDelivery = dateDelivery;
+	}
 
-    public String getEquipmentInformation() {
-        return equipmentInformation;
-    }
+	public String getEquipmentInformation() {
+		return equipmentInformation;
+	}
 
-    public void setEquipmentInformation(String equipmentInformation) {
-        this.equipmentInformation = equipmentInformation == null ? null : equipmentInformation.trim();
-    }
+	public void setEquipmentInformation(String equipmentInformation) {
+		this.equipmentInformation = equipmentInformation;
+	}
 
-    public String getSupplier() {
-        return supplier;
-    }
+	public String getSupplier() {
+		return supplier;
+	}
 
-    public void setSupplier(String supplier) {
-        this.supplier = supplier == null ? null : supplier.trim();
-    }
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
+	}
 
-    public String getAssetStatus() {
-        return assetStatus;
-    }
+	public String getAssetStatus() {
+		return assetStatus;
+	}
 
-    public void setAssetStatus(String assetStatus) {
-        this.assetStatus = assetStatus == null ? null : assetStatus.trim();
-    }
+	public void setAssetStatus(String assetStatus) {
+		this.assetStatus = assetStatus;
+	}
 
-    public Date getAssetStatusDate() {
-        return assetStatusDate;
-    }
+	public Date getAssetStatusDate() {
+		return assetStatusDate;
+	}
 
-    public void setAssetStatusDate(Date assetStatusDate) {
-        this.assetStatusDate = assetStatusDate;
-    }
+	public void setAssetStatusDate(Date assetStatusDate) {
+		this.assetStatusDate = assetStatusDate;
+	}
 
-    public String getAssetCode() {
-        return assetCode;
-    }
+	public String getAssetCode() {
+		return assetCode;
+	}
 
-    public void setAssetCode(String assetCode) {
-        this.assetCode = assetCode == null ? null : assetCode.trim();
-    }
+	public void setAssetCode(String assetCode) {
+		this.assetCode = assetCode;
+	}
 
-    public BigDecimal getAssetValue() {
-        return assetValue;
-    }
+	public BigDecimal getAssetValue() {
+		return assetValue;
+	}
 
-    public void setAssetValue(BigDecimal assetValue) {
-        this.assetValue = assetValue;
-    }
+	public void setAssetValue(BigDecimal assetValue) {
+		this.assetValue = assetValue;
+	}
 
-    public BigDecimal getMonthlyDepreciationRate() {
-        return monthlyDepreciationRate;
-    }
+	public BigDecimal getMonthlyDepreciationRate() {
+		return monthlyDepreciationRate;
+	}
 
-    public void setMonthlyDepreciationRate(BigDecimal monthlyDepreciationRate) {
-        this.monthlyDepreciationRate = monthlyDepreciationRate;
-    }
+	public void setMonthlyDepreciationRate(BigDecimal monthlyDepreciationRate) {
+		this.monthlyDepreciationRate = monthlyDepreciationRate;
+	}
 
-    public String getComponentId() {
-        return componentId;
-    }
+	public String getComponentId() {
+		return componentId;
+	}
 
-    public void setComponentId(String componentId) {
-        this.componentId = componentId == null ? null : componentId.trim();
-    }
+	public void setComponentId(String componentId) {
+		this.componentId = componentId;
+	}
 
-    public String getOutputId() {
-        return outputId;
-    }
+	public String getOutputId() {
+		return outputId;
+	}
 
-    public void setOutputId(String outputId) {
-        this.outputId = outputId == null ? null : outputId.trim();
-    }
+	public void setOutputId(String outputId) {
+		this.outputId = outputId;
+	}
 
-    public String getRunId() {
-        return runId;
-    }
+	public String getRunId() {
+		return runId;
+	}
 
-    public void setRunId(String runId) {
-        this.runId = runId == null ? null : runId.trim();
-    }
+	public void setRunId(String runId) {
+		this.runId = runId;
+	}
 
-    public byte[] getEnclosure() {
+	public byte[] getEnclosure() {
         return enclosure;
     }
 
@@ -407,10 +448,17 @@ public class EquipmentAssetLedger {
         this.enclosure = enclosure;
     }
 
+	/*public List<String> getEnclosure() {
+		return enclosure;
+	}
+
+	public void setEnclosure(List<String> enclosure) {
+		this.enclosure = enclosure;
+	}*/
+	
 	public String getEquipmentId() {
 		return equipmentId;
 	}
-
 	public void setEquipmentId(String equipmentId) {
 		this.equipmentId = equipmentId;
 	}
@@ -420,7 +468,7 @@ public class EquipmentAssetLedger {
 	}
 
 	public void setPositionId(String positionId) {
-		this.positionId = positionId  == null ? null : runId.trim();
+		this.positionId = positionId  == null ? null : positionId.trim();
 	}
 	@Transient
 	public String getWindName() {
@@ -462,13 +510,135 @@ public class EquipmentAssetLedger {
 	public void setAssetStatusName(String assetStatusName) {
 		this.assetStatusName = assetStatusName;
 	}
-	 @Transient
+/*	 @Transient
 	public String getEquipmentType() {
 		return equipmentType;
 	}
 	@Transient
 	public void setEquipmentType(String equipmentType) {
 		this.equipmentType = equipmentType;
+	}*/
+	@Transient
+	public List<String> getComponentIds() {
+		return componentIds;
 	}
+	@Transient
+	public void setComponentIds(List<String> componentIds) {
+		this.componentIds = componentIds;
+	}
+	@Transient
+	public String getAssetStatusDates() {
+		return assetStatusDates;
+	}
+	@Transient
+	public void setAssetStatusDates(String assetStatusDates) {
+		this.assetStatusDates = assetStatusDates;
+	}
+	@Transient
+	public String getDateDeliverys() {
+		return dateDeliverys;
+	}
+	@Transient
+	public void setDateDeliverys(String dateDeliverys) {
+		this.dateDeliverys = dateDeliverys;
+	}
+
+	
+	@Transient
+	public Parameters getRunParameters() {
+		return runParameters;
+	}
+	/*
+	@Transient
+	public List<Material> getMaterial() {
+		return material;
+	}
+	@Transient
+	public void setMaterial(List<Material> material) {
+		this.material = material;
+	}*/
+
+	@Transient
+	public void setRunParameters(Parameters runParameters) {
+		this.runParameters = runParameters;
+	}
+	@Transient
+	public Parameters getOutputParameters() {
+		return outputParameters;
+	}
+	@Transient
+	public void setOutputParameters(Parameters outputParameters) {
+		this.outputParameters = outputParameters;
+	}
+	@Transient
+	public List<Components> getComponents() {
+		return components;
+	}
+	@Transient
+	public void setComponents(List<Components> components) {
+		this.components = components;
+	}
+
+	
+	@Transient
+	public String getCompanyCodeName() {
+		return companyCodeName;
+	}
+	@Transient
+	public void setCompanyCodeName(String companyCodeName) {
+		this.companyCodeName = companyCodeName;
+	}
+	@Transient
+	public String getMaintenanceTeamName() {
+		return maintenanceTeamName;
+	}
+	@Transient
+	public void setMaintenanceTeamName(String maintenanceTeamName) {
+		this.maintenanceTeamName = maintenanceTeamName;
+	}
+	@Transient
+	public String getCostCenterName() {
+		return costCenterName;
+	}
+	@Transient
+	public void setCostCenterName(String costCenterName) {
+		this.costCenterName = costCenterName;
+	}
+	@Transient
+	public String getDepartmentName() {
+		return departmentName;
+	}
+	@Transient
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+	@Transient
+	public String getHierarchyName() {
+		return hierarchyName;
+	}
+	@Transient
+	public void setHierarchyName(String hierarchyName) {
+		this.hierarchyName = hierarchyName;
+	}
+	@Transient
+	public List<String> getFiles() {
+		return files;
+	}
+	@Transient
+	public void setFiles(List<String> files) {
+		this.files = files;
+	}
+	@Transient
+	public List<SpFileUpload> getRoute() {
+		return route;
+	}
+	@Transient
+	public void setRoute(List<SpFileUpload> route) {
+		this.route = route;
+	}
+
+	
+	
+	
     
 }

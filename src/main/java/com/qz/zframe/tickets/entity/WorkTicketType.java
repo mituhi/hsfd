@@ -1,39 +1,43 @@
 package com.qz.zframe.tickets.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class WorkTicketType {
 
-    @ApiParam(name="workTicketTypeId",value="工作票类型id",required=false)
+    @ApiModelProperty(name="workTicketTypeId",value="工作票类型id",required=false)
     private String workTicketTypeId;
 
-    @ApiParam(name="ticketTypeNumber",value="工作票类型编号",required=false)
+    @ApiModelProperty(name="ticketTypeNumber",value="工作票类型编号",required=false)
     private String ticketTypeNumber;
 
-    @ApiParam(name="ticketTypeDesc",value="工作票类型描述",required=false)
+    @ApiModelProperty(name="ticketTypeDesc",value="工作票类型描述",required=false)
     private String ticketTypeDesc;
 
-    @ApiParam(name="ticketTypeName",value="工作票类型名称",required=false)
+    @ApiModelProperty(name="ticketTypeName",value="工作票类型名称",required=false)
     private String ticketTypeName;
 
-    @ApiParam(name="maintainer",value="维护人",required=false)
+    @ApiModelProperty(name="maintainer",value="维护人id",required=false)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=false)
+    @ApiModelProperty(name="maintainDate",value="维护日期",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="status",value="状态",required=false)
+    @ApiModelProperty(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="windId",value="风电场id",required=true)
+    @ApiModelProperty(name="windId",value="风电场id",required=true)
     private String windId;
 
-    @ApiParam(name="remark",value="备注",required=false)
+    @ApiModelProperty(name="remark",value="备注",required=false)
     private String remark;
+
+    @ApiModelProperty(name="createTime",value="创建时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    private Date createTime;
 
     public String getWorkTicketTypeId() {
         return workTicketTypeId;
@@ -105,5 +109,13 @@ public class WorkTicketType {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

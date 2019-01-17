@@ -20,6 +20,10 @@ public interface OutputRunService {
 	public ResultEntity deleteRun(List<String> runIds);
 	//删除出场技术参数信息
 	public ResultEntity deleteOutput(List<String> outputIds);
+	
+	
+	
+	
 	//添加出场技术参数信息
 	public ResultEntity  addOutput(OutputParameters output);
 	//添加运行技术参数信息
@@ -28,4 +32,9 @@ public interface OutputRunService {
 	public ResultEntity  updateOutput(OutputParameters output);
 	//修改运行技术参数信息
     public ResultEntity  updateRun(RunParameters run);
+    //查询运行技术参数详情
+    public PageResultEntity findRunById(String  runId);
+    
+    //查询出场技术参数详情
+    public PageResultEntity findOutputById(String  outputId);
 }

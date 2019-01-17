@@ -1,5 +1,9 @@
 package com.qz.zframe.run.entity;
 
+import java.util.List;
+
+import javax.persistence.Transient;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class MainEquipment {
@@ -18,7 +22,13 @@ public class MainEquipment {
 
 	@ApiModelProperty(value="日志名称",name="logName")
     private String logName;
-
+	@Transient
+	@ApiModelProperty(value = "设备数量", name = "count",required=true)
+	private Integer count;
+	@Transient
+	private String windName;
+	@Transient
+	private List<MainEquipmentInfo>  mainEquipmentInfo;
     public String getMainEquipmentId() {
         return mainEquipmentId;
     }
@@ -58,4 +68,29 @@ public class MainEquipment {
     public void setLogName(String logName) {
         this.logName = logName == null ? null : logName.trim();
     }
+    @Transient
+	public Integer getCount() {
+		return count;
+	}
+	@Transient
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+	@Transient
+	public String getWindName() {
+		return windName;
+	}
+	@Transient
+	public void setWindName(String windName) {
+		this.windName = windName;
+	}
+	@Transient
+	public List<MainEquipmentInfo> getMainEquipmentInfo() {
+		return mainEquipmentInfo;
+	}
+	@Transient
+	public void setMainEquipmentInfo(List<MainEquipmentInfo> mainEquipmentInfo) {
+		this.mainEquipmentInfo = mainEquipmentInfo;
+	}
+    
 }

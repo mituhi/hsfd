@@ -11,6 +11,7 @@
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="DATE"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -80,14 +81,14 @@
 
 
 
-  <update id="batchDelete" parameterType="java.lang.String">
-    update work_ticket_type set status = "0"
+  <delete id="batchDelete" parameterType="java.lang.String">
+    delete from work_ticket_type
     where work_ticket_type_id in
     <foreach collection="array" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
-  </update>
+  </delete>
   <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.WorkTicketTypeVo" >
     <id column="work_ticket_type_id" property="workTicketTypeId" jdbcType="VARCHAR" />
     <result column="ticket_type_number" property="ticketTypeNumber" jdbcType="VARCHAR" />
@@ -100,34 +101,70 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime"/>
   </resultMap>
   <sql id="Get_Column_List" >
     a.work_ticket_type_id as work_ticket_type_id, a.ticket_type_number as ticket_type_number, a.ticket_type_desc as ticket_type_desc,
     a.ticket_type_name as ticket_type_name, a.maintainer as maintainer,a.maintain_date as maintain_date, a.status as status,
     a.wind_id as wind_id, a.remark as remark,
-    b.architecture_name as wind_name
+    b.architecture_name as wind_name,d.user_name as maintainer_name
   </sql>
+  <select id="getNameById" resultType="java.lang.String">
+    select
+    ticket_type_name
+    from work_ticket_type
+    where work_ticket_type_id = #{workTicketTypeId}
+  </select>
   <select id="getWorkTicketTypeDetail" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from work_ticket_type a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
-    where a.status != '0' and a.work_ticket_type_id = #{workTicketTypeId}
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join isc_user d on a.maintainer = d.user_id
+    where a.work_ticket_type_id = #{workTicketTypeId}
   </select>
   <select id="getWorkTicketTypeList" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from work_ticket_type a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
-    where a.status != '0'
-    order by a.ticket_type_number desc
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join isc_user d on a.maintainer = d.user_id
+    where 1=1
+    <choose>
+      <when test="map != null and map.startArchitectureCode != null and map.endArchitectureCode !=null and map.startArchitectureCode != '' and map.endArchitectureCode !=''">
+        and a.wind_id between #{map.startArchitectureCode,jdbcType=VARCHAR} and #{map.endArchitectureCode,jdbcType=VARCHAR}
+      </when>
+      <otherwise>
+        <choose>
+          <when test="map != null and map.startArchitectureCode != null and map.startArchitectureCode != ''">
+            and a.wind_id = #{map.startArchitectureCode,jdbcType=VARCHAR}
+          </when>
+        </choose>
+      </otherwise>
+    </choose>
+    order by a.ticket_type_number
     limit ${map.start},${map.pageSize}
   </select>
   <select id="getTotal" resultType="java.lang.Integer">
     select
     count(*)
-    from work_ticket_type
-    where status != 0
+    from work_ticket_type a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join isc_user d on a.maintainer = d.user_id
+    where 1=1
+    <choose>
+      <when test="map != null and map.startArchitectureCode != null and map.endArchitectureCode !=null and map.startArchitectureCode != '' and map.endArchitectureCode !=''">
+        and a.wind_id between #{map.startArchitectureCode,jdbcType=VARCHAR} and #{map.endArchitectureCode,jdbcType=VARCHAR}
+      </when>
+      <otherwise>
+        <choose>
+          <when test="map != null and map.startArchitectureCode != null and map.startArchitectureCode != ''">
+            and a.wind_id = #{map.startArchitectureCode,jdbcType=VARCHAR}
+          </when>
+        </choose>
+      </otherwise>
+    </choose>
   </select>
 
 
@@ -169,11 +206,11 @@
   <insert id="insert" parameterType="com.qz.zframe.tickets.entity.WorkTicketType" >
     insert into work_ticket_type (work_ticket_type_id, ticket_type_number, ticket_type_desc, 
       ticket_type_name, maintainer, maintain_date, 
-      status, wind_id, remark
+      status, wind_id, remark,create_time
       )
     values (#{workTicketTypeId,jdbcType=VARCHAR}, #{ticketTypeNumber,jdbcType=VARCHAR}, #{ticketTypeDesc,jdbcType=VARCHAR}, 
       #{ticketTypeName,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, 
-      #{status,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      #{status,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{createTime,jdbcType=DATE}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.WorkTicketType" >
@@ -206,6 +243,9 @@
       <if test="remark != null" >
         remark,
       </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="workTicketTypeId != null" >
@@ -234,6 +274,9 @@
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
       </if>
     </trim>
   </insert>
@@ -335,4 +378,16 @@
       remark = #{remark,jdbcType=VARCHAR}
     where work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR}
   </update>
+
+  <!-- 根据工作票id删除子表信息 -->
+  <delete id="deleteChildMsgByWorkTicketTypeId" parameterType="java.lang.String" >
+    delete from user_asso_info
+    where work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR}
+  </delete>
+
+  <!-- 根据工作票id删除措施表信息 -->
+  <delete id="deleteWorkSafeByWorkTicketTypeId" parameterType="string" >
+    delete from work_ticket_safe_measure
+    where ticket_id = #{workTicketTypeId,jdbcType=VARCHAR}
+  </delete>
 </mapper>

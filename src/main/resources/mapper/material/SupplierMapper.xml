@@ -105,6 +105,15 @@
     </if>
       <include refid="Pagination_Sql" />
   </select>
+  
+  
+  <select id="selectSupplier" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.SupplierExample" >
+    select
+     s.supplier_id,s.supplier_code, s.supplier_name
+    from supplier s
+  </select>
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

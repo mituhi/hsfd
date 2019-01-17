@@ -29,6 +29,12 @@ public class TallyRoute {
     //流水号
     private int serialNum;
 
+    private String windName;
+
+    private String trueId;
+
+    private String cycleName;
+
     public TallyRoute() {
     }
 
@@ -42,6 +48,14 @@ public class TallyRoute {
         this.maintenancer = maintenancer;
         this.maintenanceTime = maintenanceTime;
         this.serialNum = serialNum;
+    }
+
+    public String getCycleName() {
+        return cycleName;
+    }
+
+    public void setCycleName(String cycleName) {
+        this.cycleName = cycleName;
     }
 
     public String getRouteId() {
@@ -114,6 +128,22 @@ public class TallyRoute {
 
     public void setSerialNum(int serialNum) {
         this.serialNum = serialNum;
+    }
+
+    public String getWindName() {
+        return windName;
+    }
+
+    public void setWindName(String windName) {
+        this.windName = windName;
+    }
+
+    public String getTrueId() {
+        return trueId;
+    }
+
+    public void setTrueId(String trueId) {
+        this.trueId = trueId;
     }
 
     @Override

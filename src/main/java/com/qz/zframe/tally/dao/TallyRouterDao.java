@@ -4,8 +4,7 @@ import com.qz.zframe.tally.dto.PostDto;
 import com.qz.zframe.tally.dto.TallyRouterDto;
 import com.qz.zframe.tally.dto.UserDto;
 import com.qz.zframe.tally.entity.*;
-import com.qz.zframe.tally.vo.TallyPlanVO;
-import com.qz.zframe.tally.vo.TallyRouterVO;
+import com.qz.zframe.tally.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -65,7 +64,7 @@ public interface TallyRouterDao {
      * 通过路线id数组删除点检路线
      * @param routeIds
      */
-    void deleteTallyRouteByRouteId(@Param("routeIds") String[] routeIds);
+    void deleteTallyRouteByRouteId(List<String> routeIds);
 
     /**
      * 查找目前最大流水号
@@ -300,10 +299,9 @@ public interface TallyRouterDao {
      * 查询周期id最大值
      * @return
      */
-    String findCycleId();
+    List<String> findCycleId();
 
     String findDepartmentByUserName(String userName);
-
 
     /**
      * 查巡检路线添加的用户信息相关
@@ -311,8 +309,61 @@ public interface TallyRouterDao {
      */
     List<UserDto> findAllUserDto();
 
+    /**
+     * 先删除时间段表
+     * @param cycleId
+     */
+    void deletePeriodTimeByCycleId(String cycleId);
+
+    /**
+     *
+     * 根据id查询巡检路线
+     * @param routeId
+     * @return
+     */
+    TallyRoute findTallyRouteByRouteId(String routeId);
+
+    /**
+     * 根据路线id查周期
+     * @param routeId
+     * @return
+     */
+    Cycle findCycleByRouteId(String routeId);
+
+    /**
+     *查时间段
+     * @param cycleId
+     * @return
+     */
+    List<PeriodTimeVO> findPeriodTimeVOByCycleId(String cycleId);
+
+    /**
+     * 路线人员关联表的序号
+     * @return
+     */
+    int findRouteUserId();
+
+    /**
+     * 根据路线id查相关人员
+     * @param routeId
+     * @return
+     */
+    List<RouteUserVO> findRouteUserByrouteId(String routeId);
+
+
+    int findRouterUserId();
+
+    /**
+     * 根据路线名称和风电场名称查巡检路线
+     *
+     */
+    List<TallyRoute> findTallyRouteByWindIdAndRouteName2(@Param("routeName")String routeName,@Param("windId11") String windId11,@Param("windId22") String windId22);
 
 
 
+    String findWindIdByCode(String windId1);
+    
+	void deleteUserByRouteId(String id);
 
+    List<TallyRoute> findAllTallyRouteName();
 }

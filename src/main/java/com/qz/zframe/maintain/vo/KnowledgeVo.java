@@ -1,38 +1,53 @@
 package com.qz.zframe.maintain.vo;
 
 import com.qz.zframe.maintain.entity.*;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class KnowledgeVo extends BreakdownKnowledgeBase {
 
-    @ApiParam(name = "windName", value = "风电场名称", required = false)
+    @ApiModelProperty(name = "windName", value = "风电场名称", required = false)
     private String windName;
 
-    @ApiParam(name = "breakdownLocationName", value = "故障位置名称", required = false)
-    private String breakdownLocationName;
+    @ApiModelProperty(name = "breakdownLocationTitle", value = "故障位置名称", required = false)
+    private String breakdownLocationTitle;
 
-    @ApiParam(name = "breakdownAttributeName", value = "故障属性名称", required = false)
-    private String breakdownAttributeName;
+    @ApiModelProperty(name = "breakdownAttributeTitle", value = "故障属性名称", required = false)
+    private String breakdownAttributeTitle;
 
-    @ApiParam(name = "workorderProcessList", value = "工序List", required = true)
+    @ApiModelProperty(name = "statusName", value = "状态名称", required = false)
+    private String statusName;
+
+    @ApiModelProperty(name = "flowStatusName", value = "流程状态名称", required = false)
+    private String flowStatusName;
+
+    @ApiModelProperty(name = "examAndApprOpinion", value = "审批意见", required = false)
+    private String examAndApprOpinion;
+
+    @ApiModelProperty(name = "maintainerName", value = "维护人姓名", required = false)
+    private String maintainerName;
+
+    @ApiModelProperty(name = "applicantName", value = "维护人姓名", required = false)
+    private String applicantName;
+
+    @ApiModelProperty(name = "workorderProcessList", value = "工序List", required = true)
     private List<WorkorderProcess> workorderProcessList = new ArrayList<>();
 
-    @ApiParam(name = "workorderMaterialList", value = "物资List", required = false)
+    @ApiModelProperty(name = "workorderMaterialList", value = "物资List", required = false)
     private List<WorkorderMaterial> workorderMaterialList = new ArrayList<>();
 
-    @ApiParam(name = "workorderServiceList", value = "服务List", required = false)
+    @ApiModelProperty(name = "workorderServiceList", value = "服务List", required = false)
     private List<WorkorderService> workorderServiceList = new ArrayList<>();
 
-    @ApiParam(name = "workorderToolList", value = "工器具List", required = false)
+    @ApiModelProperty(name = "workorderToolList", value = "工器具List", required = false)
     private List<WorkorderTool> workorderToolList = new ArrayList<>();
 
-    @ApiParam(name = "workorderWorktypeList", value = "工种List", required = false)
+    @ApiModelProperty(name = "workorderWorktypeList", value = "工种List", required = false)
     private List<WorkorderWorktype> workorderWorktypeList = new ArrayList<>();
 
-    @ApiParam(name = "workorderDangerPointList", value = "危险点控制List", required = false)
+    @ApiModelProperty(name = "workorderDangerPointList", value = "危险点控制List", required = false)
     private List<WorkorderDangerPoint> workorderDangerPointList = new ArrayList<>();
 
     public String getWindName() {
@@ -43,20 +58,60 @@ public class KnowledgeVo extends BreakdownKnowledgeBase {
         this.windName = windName;
     }
 
-    public String getBreakdownLocationName() {
-        return breakdownLocationName;
+    public String getBreakdownLocationTitle() {
+        return breakdownLocationTitle;
     }
 
-    public void setBreakdownLocationName(String breakdownLocationName) {
-        this.breakdownLocationName = breakdownLocationName;
+    public void setBreakdownLocationTitle(String breakdownLocationTitle) {
+        this.breakdownLocationTitle = breakdownLocationTitle;
     }
 
-    public String getBreakdownAttributeName() {
-        return breakdownAttributeName;
+    public String getBreakdownAttributeTitle() {
+        return breakdownAttributeTitle;
     }
 
-    public void setBreakdownAttributeName(String breakdownAttributeName) {
-        this.breakdownAttributeName = breakdownAttributeName;
+    public void setBreakdownAttributeTitle(String breakdownAttributeTitle) {
+        this.breakdownAttributeTitle = breakdownAttributeTitle;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public String getFlowStatusName() {
+        return flowStatusName;
+    }
+
+    public void setFlowStatusName(String flowStatusName) {
+        this.flowStatusName = flowStatusName;
+    }
+
+    public String getExamAndApprOpinion() {
+        return examAndApprOpinion;
+    }
+
+    public void setExamAndApprOpinion(String examAndApprOpinion) {
+        this.examAndApprOpinion = examAndApprOpinion;
+    }
+
+    public String getMaintainerName() {
+        return maintainerName;
+    }
+
+    public void setMaintainerName(String maintainerName) {
+        this.maintainerName = maintainerName;
+    }
+
+    public String getApplicantName() {
+        return applicantName;
+    }
+
+    public void setApplicantName(String applicantName) {
+        this.applicantName = applicantName;
     }
 
     public List<WorkorderProcess> getWorkorderProcessList() {

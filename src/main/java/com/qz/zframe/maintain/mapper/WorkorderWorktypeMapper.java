@@ -19,6 +19,15 @@ public interface WorkorderWorktypeMapper {
 
     int insertSelective(WorkorderWorktype record);
 
+    //根据缺陷工单ids批量删除
+    int batchDeleteByWorkOrderIds(@Param("list") List<String> workorderIdList);
+
+    //根据工单ids批量删除
+    int batchDeleteByOrderIds(@Param("list") List<String> orderIdList);
+
+    //根据故障知识ids批量删除
+    int batchDeleteByKnowledgeIds(@Param("list") List<String> knowledgeIdList);
+
     List<WorkorderWorktype> selectByExample(WorkorderWorktypeExample example);
 
     WorkorderWorktype selectByPrimaryKey(String worktypeId);

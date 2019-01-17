@@ -3,8 +3,10 @@ package com.qz.zframe.material.service;
 import java.text.ParseException;
 import java.util.List;
 
+import com.qz.zframe.common.util.NewPageResult;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.common.util.ResultEntityDetail;
 import com.qz.zframe.material.entity.DamagedParts;
 import com.qz.zframe.material.entity.DamagedPartsExample;
 
@@ -18,7 +20,7 @@ public interface DamagedPartsService {
 	 * @return PageResultEntity    返回类型
 	 * @throws
 	 */
-	public PageResultEntity getDamagedPartsList(DamagedPartsExample example);
+	public NewPageResult<DamagedParts> getDamagedPartsList(DamagedPartsExample example);
 
 	/**
 	 * 获取损坏件入库详情
@@ -28,7 +30,7 @@ public interface DamagedPartsService {
 	 * @return ResultEntity    返回类型
 	 * @throws
 	 */
-	public ResultEntity getDamagedPartsDetails(String damagedPartsId);
+	public ResultEntityDetail<DamagedParts> getDamagedPartsDetails(String damagedPartsId);
 
 	/**
 	 * 新增损坏件

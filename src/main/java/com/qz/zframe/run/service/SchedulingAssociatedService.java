@@ -9,7 +9,7 @@ import com.qz.zframe.run.entity.SchedulingAssociatedExample;
 /**
  * <p>Title: SchedulingAssociatedService</p>
  * <p>@Description:排班关联表接口声明  </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月2日 下午5:21:33
  * @version:V1.0
  */
@@ -74,6 +74,16 @@ public interface SchedulingAssociatedService {
 	 * @return: ResultEntity
 	 */
 	ResultEntity updateSchedulingAssociated(SchedulingAssociated schedulingAssociated);
+	
+	
+	
+	/**
+	 * @Description:直接删除
+	 * @param: @param schedulingAssociated
+	 * @param: @return   
+	 * @return: ResultEntity
+	 */
+	ResultEntity deleteScheduling(String schedulingAssociated);
 	
 	
 	

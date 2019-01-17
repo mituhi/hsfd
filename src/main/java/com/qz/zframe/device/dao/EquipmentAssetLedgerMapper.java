@@ -12,7 +12,7 @@ public interface EquipmentAssetLedgerMapper extends BaseMapper<EquipmentAssetLed
     int countByExample(EquipmentAssetLedgerExample example);
 
     int countByExamples(EquipmentAssetLedgerExample example);
-    
+    int selectByWindIdCount(EquipmentAssetLedgerExample example);
     int deleteByExample(EquipmentAssetLedgerExample example);
 
     int deleteByPrimaryKey(String equipmentAssetId);
@@ -22,17 +22,23 @@ public interface EquipmentAssetLedgerMapper extends BaseMapper<EquipmentAssetLed
     int insert(EquipmentAssetLedger record);
 
     int insertSelective(EquipmentAssetLedger record);
-
+    
+    List<EquipmentAssetLedger> selectByWindAndPosition(@Param("positionId")String positionId);
+    
     List<EquipmentAssetLedger> selectByExampleWithBLOBs(EquipmentAssetLedgerExample example);
 
     List<EquipmentAssetLedger> selectByExample(EquipmentAssetLedgerExample example);
 
     List<EquipmentAssetLedger> selectByExamples(EquipmentAssetLedgerExample example);
     
+    List<EquipmentAssetLedger> select(EquipmentAssetLedgerExample example);
+    
     EquipmentAssetLedger selectByPrimaryKey(String equipmentAssetId);
     
     EquipmentAssetLedger selectByPrimaryKeys(String equipmentAssetId);
-
+    
+    List<EquipmentAssetLedger>  selectByEquipmentCode(String equipmentCode);
+    
     int updateByExampleSelective(@Param("record") EquipmentAssetLedger record, @Param("example") EquipmentAssetLedgerExample example);
 
     int updateByExampleWithBLOBs(@Param("record") EquipmentAssetLedger record, @Param("example") EquipmentAssetLedgerExample example);
@@ -44,4 +50,6 @@ public interface EquipmentAssetLedgerMapper extends BaseMapper<EquipmentAssetLed
     int updateByPrimaryKeyWithBLOBs(EquipmentAssetLedger record);
 
     int updateByPrimaryKey(EquipmentAssetLedger record);
+    
+    List<EquipmentAssetLedger> selectByWindId(EquipmentAssetLedgerExample example);
 }

@@ -16,7 +16,7 @@ public interface DeviceAssociationMapper {
 
     int deleteByExample(DeviceAssociationExample example);
 
-    int deleteByPrimaryKey(String deviceAssociationId);
+    int deleteByPrimaryKey(List<String> deviceAssociationId);
 
     int insert(DeviceAssociation record);
 
@@ -35,4 +35,6 @@ public interface DeviceAssociationMapper {
     int updateByPrimaryKey(DeviceAssociation record);
     
     List<DeviceAssociationResult> listDeviceAssociationResult(MainEquipment mainEquipment);
+    
+    List<DeviceAssociation> selectByMainEquipmentId(String mainEquipmentId);
 }

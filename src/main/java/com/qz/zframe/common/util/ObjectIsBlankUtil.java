@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 /**
  * <p>Title: ObjectIsBlankUtil</p>
  * <p>@Description: 判断一个对象中的属性值是否为null或者为'' </p>
- * @author 陈汇奇
  * @date 2018年11月1日 下午2:56:19
  * @version:V1.0
  */

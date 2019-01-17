@@ -11,25 +11,25 @@ public interface MaintainLogInfoService {
     /**
      * 添加维护日志
      */
-    public ResultEntity addMaintainLog(MaintainLogVo maintainLogVo);
-
-    /**
-     * 批量删除维护日志
-     */
-    public ResultEntity deleteMaintainLog(String dayIds);
+    ResultEntity addMaintainLog(MaintainLogVo maintainLogVo);
 
     /**
      * 修改维护日志
      */
-    public ResultEntity updateMaintainLog(MaintainLogVo maintainLogVo);
+    ResultEntity updateMaintainLog(MaintainLogVo maintainLogVo);
+
+    /**
+     * 批量删除维护日志
+     */
+    ResultEntity deleteMaintainLog(String[] dayIds);
 
     /**
      * 浏览维护日志
      */
-    public ResultEntity getMaintainLogDetail(String dayId);
+    ResultEntity getMaintainLogDetail(String dayId);
 
     /**
      * 维护日志列表分页+条件查询
      */
-    public PageResultEntity getMaintainLogList(Map<String,String> pageAndCondition);
+    PageResultEntity getMaintainLogList(Map<String,String> pageAndCondition);
 }

@@ -58,7 +58,7 @@ public class TallyPostVO {
     @ApiModelProperty(value="人员",name="userNames",required=true)
     private String userNames;
     //人员
-    @ApiModelProperty(value="用户id",name="userId",required=true)
+    @ApiModelProperty(value="用户id(人员编号)",name="userId",required=true)
     private String userId;
 
     //身份
@@ -69,7 +69,15 @@ public class TallyPostVO {
     @ApiModelProperty(value="部门",name="department",required=true)
     private String department;
 
+    //路线id
+    @ApiModelProperty(value="路线id（新增时不用填，修改时必填）",name="department",required=false)
+    private String routeId;
 
+    @ApiModelProperty(value="周期序号（不要填，自动生成）",name="cycleId",required=false)
+    private String cycleId;
+
+    @ApiModelProperty(value="人员序号（不要填，自动生成）",name="routeUserId",required=false)
+    private String routeUserId;
 
     public int getSerialNum() {
         return serialNum;
@@ -216,5 +224,29 @@ public class TallyPostVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(String routeId) {
+        this.routeId = routeId;
+    }
+
+    public String getCycleId() {
+        return cycleId;
+    }
+
+    public void setCycleId(String cycleId) {
+        this.cycleId = cycleId;
+    }
+
+    public String getRouteUserId() {
+        return routeUserId;
+    }
+
+    public void setRouteUserId(String routeUserId) {
+        this.routeUserId = routeUserId;
     }
 }

@@ -13,7 +13,7 @@ public interface MainEquipmentInfoMapper {
 
     int deleteByExample(MainEquipmentInfoExample example);
 
-    int deleteByPrimaryKey(String mainEquipmentInfoId);
+    int deleteByPrimaryKey(List<String> mainEquipmentInfoId);
 
     int insert(MainEquipmentInfo record);
 

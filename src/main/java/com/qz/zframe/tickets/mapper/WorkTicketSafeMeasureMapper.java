@@ -19,6 +19,15 @@ public interface WorkTicketSafeMeasureMapper {
 
     int insertSelective(WorkTicketSafeMeasure record);
 
+    //根据工作票类型id删除安全措施
+    int batchDeleteByWorkTicketTypeIds(@Param("array") String[] ids);
+
+    //根据标准工作票id删除安全措施
+    int batchDeleteByStandardTicketIds(@Param("array") String[] ids);
+
+    //根据工作票id删除安全措施
+    int batchDeleteByTicketIds(@Param("list") List<String> ticketIdList);
+
     List<WorkTicketSafeMeasure> selectByExample(WorkTicketSafeMeasureExample example);
 
     WorkTicketSafeMeasure selectByPrimaryKey(String safeId);

@@ -5,7 +5,7 @@
     <id column="item_id" property="itemId" jdbcType="VARCHAR" />
     <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
     <result column="typical_ticket_id" property="typicalTicketId" jdbcType="VARCHAR" />
-    <result column="item_number" property="itemNumber" jdbcType="VARCHAR" />
+    <result column="item_number" property="itemNumber" jdbcType="INTEGER" />
     <result column="item_content" property="itemContent" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -69,6 +69,31 @@
   <sql id="Base_Column_List" >
     item_id, ticket_id, typical_ticket_id, item_number, item_content
   </sql>
+
+
+
+  <delete id="batchDeleteByTicketIds" parameterType="java.lang.String">
+    delete from operate_item
+    where ticket_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByTypicalTicketIds" parameterType="java.lang.String">
+    delete from operate_item
+    where ticket_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.OperateItemExample" >
     select
     <if test="distinct" >
@@ -103,7 +128,7 @@
     insert into operate_item (item_id, ticket_id, typical_ticket_id, 
       item_number, item_content)
     values (#{itemId,jdbcType=VARCHAR}, #{ticketId,jdbcType=VARCHAR}, #{typicalTicketId,jdbcType=VARCHAR}, 
-      #{itemNumber,jdbcType=VARCHAR}, #{itemContent,jdbcType=VARCHAR})
+      #{itemNumber,jdbcType=INTEGER}, #{itemContent,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.OperateItem" >
     insert into operate_item
@@ -135,7 +160,7 @@
         #{typicalTicketId,jdbcType=VARCHAR},
       </if>
       <if test="itemNumber != null" >
-        #{itemNumber,jdbcType=VARCHAR},
+        #{itemNumber,jdbcType=INTEGER},
       </if>
       <if test="itemContent != null" >
         #{itemContent,jdbcType=VARCHAR},
@@ -161,7 +186,7 @@
         typical_ticket_id = #{record.typicalTicketId,jdbcType=VARCHAR},
       </if>
       <if test="record.itemNumber != null" >
-        item_number = #{record.itemNumber,jdbcType=VARCHAR},
+        item_number = #{record.itemNumber,jdbcType=INTEGER},
       </if>
       <if test="record.itemContent != null" >
         item_content = #{record.itemContent,jdbcType=VARCHAR},
@@ -176,7 +201,7 @@
     set item_id = #{record.itemId,jdbcType=VARCHAR},
       ticket_id = #{record.ticketId,jdbcType=VARCHAR},
       typical_ticket_id = #{record.typicalTicketId,jdbcType=VARCHAR},
-      item_number = #{record.itemNumber,jdbcType=VARCHAR},
+      item_number = #{record.INTEGER,jdbcType=VARCHAR},
       item_content = #{record.itemContent,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -192,7 +217,7 @@
         typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR},
       </if>
       <if test="itemNumber != null" >
-        item_number = #{itemNumber,jdbcType=VARCHAR},
+        item_number = #{itemNumber,jdbcType=INTEGER},
       </if>
       <if test="itemContent != null" >
         item_content = #{itemContent,jdbcType=VARCHAR},
@@ -204,7 +229,7 @@
     update operate_item
     set ticket_id = #{ticketId,jdbcType=VARCHAR},
       typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR},
-      item_number = #{itemNumber,jdbcType=VARCHAR},
+      item_number = #{itemNumber,jdbcType=INTEGER},
       item_content = #{itemContent,jdbcType=VARCHAR}
     where item_id = #{itemId,jdbcType=VARCHAR}
   </update>

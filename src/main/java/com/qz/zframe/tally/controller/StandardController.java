@@ -1,18 +1,18 @@
 package com.qz.zframe.tally.controller;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.qz.zframe.authentication.CurrentUserService;
 import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.PageBean;
+import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.tally.entity.TallyRoute;
 import com.qz.zframe.tally.entity.TallyRouteStandard;
 import com.qz.zframe.tally.entity.TallyStandard;
 import com.qz.zframe.tally.service.TallyRouterService;
 import com.qz.zframe.tally.service.TallyStandardService;
-import com.qz.zframe.tally.vo.TallyRouterUserVO;
-import com.qz.zframe.tally.vo.TallyStandardPostVO;
-import com.qz.zframe.tally.vo.TallyStandardVO;
-import com.qz.zframe.tally.vo.WindIdCycleNameVO;
+import com.qz.zframe.tally.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -49,83 +49,50 @@ public class StandardController {
     @Autowired
     TallyRouterService tallyRouterService;
 
-    @ApiOperation(value="查询点检标准", notes="根据所属设备，状态，所属路线，报警类型，标准编码，点检内容进行查询" ,httpMethod="GET")
 
+
+    @ApiOperation(value="查询点检标准", notes="根据所属设备，所属路线，标准类型，点检内容进行查询" ,httpMethod="GET")
     @RequestMapping("list")
     @ResponseBody
-    public ResultEntity listStandard(String equipmentBelonging,
-                                     String routeId,
-                                     String equipmentState,
-                                     String alarmType,
-                                     String standardCoding,
+    public PageResultEntity listStandard(String equipmentBelonging,
+                                     String routeName,
+                                     String standardType,
                                      String checkContent,
-                                     @RequestParam(value = "currentPage",defaultValue = "1")int currentPage,
-                                     @RequestParam(value = "pageSize",defaultValue = "2")  int pageSize) {
-        ResultEntity resultEntity=new ResultEntity();
+                                     @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+                                     @RequestParam(value = "pageSize",defaultValue = "10")  int pageSize) {
 
-        //获取记录总数
-        int n=tallyStandardService.countStandard(equipmentBelonging, routeId, equipmentState, alarmType, standardCoding, checkContent);
+        PageResultEntity resultEntity=new PageResultEntity();
 
-        PageHelper.startPage(currentPage,pageSize);
+        PageHelper.startPage(pageNum,pageSize);
 
-        //1.先查询所有点检标准表需要的字段
-        List<TallyStandard> tallyStandardList=tallyStandardService.findAllTallyStandard(equipmentBelonging,routeId,equipmentState,alarmType,standardCoding,checkContent);
+        List<TallyStandardVO2> tallyStandardVO2s=tallyStandardService.findAllTallyStandardVO2(equipmentBelonging, routeName, standardType, checkContent);
 
-        List<TallyStandardVO> tallyStandardVOList=new ArrayList<TallyStandardVO>();
-
-        for (TallyStandard tallyStandard:tallyStandardList){
-            TallyStandardVO tallyStandardVO=new TallyStandardVO();
-            tallyStandardVO.setAlarmType(tallyStandard.getAlarmType());
-            tallyStandardVO.setCheckContent(tallyStandard.getCheckContent());
-            tallyStandardVO.setEquipmentBelonging(tallyStandard.getEquipmentBelonging());
-
-            //获取RouteName 根据routeid
-            tallyStandardVO.setRouteName(tallyStandardService.findRouteNameByRouteId(tallyStandard.getRouteId()));
-            tallyStandardVO.setWindId(tallyStandardService.findWindIdByRouteId(tallyStandard.getRouteId()));
-            tallyStandardVO.setStandardCoding(tallyStandard.getStandardCoding());
-            tallyStandardVOList.add(tallyStandardVO);
-
-        }
-        PageBean<TallyStandardVO> pageDate=new PageBean<TallyStandardVO>(currentPage,pageSize,n);
-        pageDate.setItems(tallyStandardVOList);
-
+        PageInfo<TallyStandardVO2> pageData=new PageInfo<TallyStandardVO2>(tallyStandardVO2s);
 
         resultEntity.setCode(ErrorCode.SUCCESS);
         resultEntity.setMsg("点检标准查询成功");
-        resultEntity.setData(pageDate);
+        resultEntity.setRows(tallyStandardVO2s);
+        resultEntity.setTotal((int) pageData.getTotal());
         return resultEntity;
     }
 
 
-    @ApiOperation(value="删除点检标准", notes="根据传入的所属路线数组进行删除" ,httpMethod="DELETE")
+    @ApiOperation(value="删除点检标准", notes="根据传入的所属巡检id数组进行删除" ,httpMethod="DELETE")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "routeNames", value = "所属路线数组", required = false),
+            @ApiImplicitParam(name = "standardIds", value = "巡检标准Id", required = false),
     })
     @RequestMapping("delete")
     @ResponseBody
-    public ResultEntity deleteStandard(String[] routeNames) {
+    public ResultEntity deleteStandard(String[] standardIds) {
         ResultEntity resultEntity=new ResultEntity();
-
-        if (routeNames==null){
+        if (standardIds==null){
             resultEntity.setCode(ErrorCode.ERROR);
             resultEntity.setMsg("请选择要删除的标准!");
-
             return resultEntity;
         }
-        //1.删除关联
-        //tallyRouterService.deleteByRouteId(routeIds);
-        //tallyStandardService.deletetallyRouteStandardByPeriodTimeIds(periodTimeIds);
-         tallyStandardService.deletetallyRouteStandardByRouteNames(routeNames);
-        //2.删除标准表
-        //tallyRouterService.deleteRouteUserByRouteId(routeIds);
-        //tallyStandardService.deleteTallyStandardByPeriodTimeIds(periodTimeIds);
-        tallyStandardService.deleteTallyStandardByRouteNames(routeNames);
-
-
-
+        tallyStandardService.deleteTallyStandardByRouteNames(standardIds);
         resultEntity.setCode(ErrorCode.SUCCESS);
         resultEntity.setMsg("删除成功!");
-
         return resultEntity;
     }
 
@@ -134,79 +101,54 @@ public class StandardController {
     @ResponseBody
     public ResultEntity postStandard(@RequestBody TallyStandardPostVO tallyStandardPostVO) {
         ResultEntity resultEntity=new ResultEntity();
-        //1.是否缺少必填的字段
-        if (StringUtils.isBlank(tallyStandardPostVO.getEquipmentBelonging()) || StringUtils.isBlank(tallyStandardPostVO.getLocation())
-                || StringUtils.isBlank(tallyStandardPostVO.getStandardCoding())
-                || StringUtils.isBlank(tallyStandardPostVO.getStandardType())
-                ||StringUtils.isBlank(tallyStandardPostVO.getDataType())
-                ||StringUtils.isBlank(tallyStandardPostVO.getSignalType())
-                ||StringUtils.isBlank(tallyStandardPostVO.getCheckContent())
-                ||StringUtils.isBlank(tallyStandardPostVO.getCheckMethod())
-                ||StringUtils.isBlank(tallyStandardPostVO.getStandardJudgment())
-                ||StringUtils.isBlank(tallyStandardPostVO.getResultOptions())
-                ||StringUtils.isBlank(tallyStandardPostVO.getMeasurementUnit())
-                ||StringUtils.isBlank(tallyStandardPostVO.getTypicalValue())
-                ||StringUtils.isBlank(tallyStandardPostVO.getTwodimensionalcodeLocation())
-                ||StringUtils.isBlank(tallyStandardPostVO.getEquipmentState())
-                ||StringUtils.isBlank(tallyStandardPostVO.getStartandstopPoint())
-                ||StringUtils.isBlank(tallyStandardPostVO.getMaincontrolPoint())
-                ||StringUtils.isBlank(tallyStandardPostVO.getAlarmType())
-                ||StringUtils.isBlank(tallyStandardPostVO.getAlarmCeiling())
-                ||StringUtils.isBlank(tallyStandardPostVO.getAlarmLowerlimit())
-                ||StringUtils.isBlank(tallyStandardPostVO.getEmissivity())
-                ||StringUtils.isBlank(tallyStandardPostVO.getUpperlimitMileage())
-                ||StringUtils.isBlank(tallyStandardPostVO.getLowerlimitMileage())
-                ) {
+        if (tallyStandardPostVO==null){
             resultEntity.setCode(ErrorCode.ERROR);
-            resultEntity.setMsg("缺少必填字段!");
+            resultEntity.setMsg("新增数据为空!");
+            return resultEntity;
+        }
+        //1.是否缺少必填的字段
+        if (StringUtils.isBlank(tallyStandardPostVO.getEquipmentId())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少所属设备!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getStandardType())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少标准类型!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getDataType())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少数据类型!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getSignalType())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少信号类型!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getCheckContent())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少点检内容!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getStandardJudgment())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少判断标准!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getResultOptions())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少结果选项!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getEquipmentState())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少设备状态!");
             return resultEntity;
         }
 
-        TallyStandard tallyStandard=new TallyStandard();
-        tallyStandard.setStandardId(UUID.randomUUID()+"");//还是看具体要求吧。。。。
-        //根据路线名称获取路线id
-        // 线路名称要不一致判断
-        //todo 前端校验
-        String s=tallyStandardService.findRouteIdByRouteName(tallyStandardPostVO.getRouteName());
-        tallyStandard.setRouteId(s);
-        tallyStandard.setEquipmentId(UUID.randomUUID()+"");//设备id 应该是有专门导入设备 然后可以查的吧 晚点再说
-        tallyStandard.setStandardCoding(tallyStandardPostVO.getStandardCoding());//估计有一定规范
-        tallyStandard.setEquipmentBelonging(tallyStandardPostVO.getEquipmentBelonging());
-        tallyStandard.setLocation(tallyStandardPostVO.getLocation());
-        tallyStandard.setCheckContent(tallyStandardPostVO.getCheckContent());
-        tallyStandard.setStandardType(tallyStandardPostVO.getStandardType());
-        tallyStandard.setDataType(tallyStandardPostVO.getDataType());
-        tallyStandard.setSignalType(tallyStandardPostVO.getSignalType());
-        tallyStandard.setCheckMethod(tallyStandardPostVO.getCheckMethod());
-        tallyStandard.setStandardJudgment(tallyStandardPostVO.getStandardJudgment());
-        tallyStandard.setResultOptions(tallyStandardPostVO.getResultOptions());
-        tallyStandard.setMeasurementUnit(tallyStandardPostVO.getMeasurementUnit());
-        tallyStandard.setTypicalValue(tallyStandardPostVO.getTypicalValue());
-        tallyStandard.setEquipmentState(tallyStandardPostVO.getEquipmentState());
-        tallyStandard.setTwodimensionalcodeLocation(tallyStandardPostVO.getTwodimensionalcodeLocation());
-        tallyStandard.setStartandstopPoint(tallyStandardPostVO.getStartandstopPoint());
-        tallyStandard.setMaincontrolPoint(tallyStandardPostVO.getMaincontrolPoint());
-        tallyStandard.setAlarmType(tallyStandardPostVO.getAlarmType());
-        tallyStandard.setAlarmCeiling(tallyStandardPostVO.getAlarmCeiling());
-        tallyStandard.setAlarmLowerlimit(tallyStandardPostVO.getAlarmLowerlimit());
-        tallyStandard.setEmissivity(tallyStandardPostVO.getEmissivity());
-        tallyStandard.setUpperlimitMileage(tallyStandardPostVO.getUpperlimitMileage());
-        tallyStandard.setLowerlimitMileage(tallyStandardPostVO.getLowerlimitMileage());
-
-        tallyStandardService.addTallyStandard(tallyStandard);
-
-        //完成关系表更新路线标准
-        TallyRouteStandard tallyRouteStandard=new TallyRouteStandard();
-        tallyRouteStandard.setId(""+UUID.randomUUID()); //以后看具体标准
-        tallyRouteStandard.setStandardId(tallyStandard.getStandardId());
-        tallyRouteStandard.setRouteId(tallyStandard.getRouteId());
-        tallyRouteStandard.setCycleId(tallyStandardService.findCycleIdByCycleNameAndRouteId(tallyStandardPostVO.getCycleName(),s));
-
-        tallyStandardService.addTallyRouteStandard(tallyRouteStandard);
-
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("添加点检标准相关信息成功!");
-
+        resultEntity=tallyStandardService.addTallyStandardNew(tallyStandardPostVO,resultEntity);
         return resultEntity;
     }
 
@@ -215,93 +157,79 @@ public class StandardController {
     @ResponseBody
     public ResultEntity updateStandard(@RequestBody TallyStandardPostVO tallyStandardPostVO) {
         ResultEntity resultEntity=new ResultEntity();
-
-        TallyStandard tallyStandard=new TallyStandard();
-        tallyStandard.setStandardId(tallyStandardService.findStandardIdByRouteName(tallyStandardPostVO.getRouteName()));//还是看具体要求吧。。。。
-
-        tallyStandard.setRouteId(tallyStandardService.findRouteIdByRouteName(tallyStandardPostVO.getRouteName()));
-        tallyStandard.setEquipmentId(tallyStandardService.findEquipmentIdByRouteName(tallyStandardPostVO.getRouteName()));
-        tallyStandard.setStandardCoding(tallyStandardPostVO.getStandardCoding());
-        tallyStandard.setEquipmentBelonging(tallyStandardPostVO.getEquipmentBelonging());
-        tallyStandard.setLocation(tallyStandardPostVO.getLocation());
-        tallyStandard.setCheckContent(tallyStandardPostVO.getCheckContent());
-        tallyStandard.setStandardType(tallyStandardPostVO.getStandardType());
-        tallyStandard.setDataType(tallyStandardPostVO.getDataType());
-        tallyStandard.setSignalType(tallyStandardPostVO.getSignalType());
-        tallyStandard.setCheckMethod(tallyStandardPostVO.getCheckMethod());
-        tallyStandard.setStandardJudgment(tallyStandardPostVO.getStandardJudgment());
-        tallyStandard.setResultOptions(tallyStandardPostVO.getResultOptions());
-        tallyStandard.setMeasurementUnit(tallyStandardPostVO.getMeasurementUnit());
-        tallyStandard.setTypicalValue(tallyStandardPostVO.getTypicalValue());
-        tallyStandard.setEquipmentState(tallyStandardPostVO.getEquipmentState());
-        tallyStandard.setTwodimensionalcodeLocation(tallyStandardPostVO.getTwodimensionalcodeLocation());
-        tallyStandard.setStartandstopPoint(tallyStandardPostVO.getStartandstopPoint());
-        tallyStandard.setMaincontrolPoint(tallyStandardPostVO.getMaincontrolPoint());
-        tallyStandard.setAlarmType(tallyStandardPostVO.getAlarmType());
-        tallyStandard.setAlarmCeiling(tallyStandardPostVO.getAlarmCeiling());
-        tallyStandard.setAlarmLowerlimit(tallyStandardPostVO.getAlarmLowerlimit());
-        tallyStandard.setEmissivity(tallyStandardPostVO.getEmissivity());
-        tallyStandard.setUpperlimitMileage(tallyStandardPostVO.getUpperlimitMileage());
-        tallyStandard.setLowerlimitMileage(tallyStandardPostVO.getLowerlimitMileage());
-
-        tallyStandardService.updateTallyStandard(tallyStandard);//更新
-
-        //完成关系表更新路线标准
-        TallyRouteStandard tallyRouteStandard=new TallyRouteStandard();
-        tallyRouteStandard.setId(tallyStandardService.findIdByRouteName(tallyStandardPostVO.getRouteName())); //以后看具体标准
-        tallyRouteStandard.setStandardId(tallyStandard.getStandardId());
-        tallyRouteStandard.setRouteId(tallyStandard.getRouteId());
-        tallyRouteStandard.setCycleId(tallyStandardService.findCycleIdByCycleNameAndRouteId(tallyStandardPostVO.getCycleName(),tallyStandardService.findRouteIdByRouteName(tallyStandardPostVO.getRouteName())));
-
-        // tallyStandardService.addTallyRouteStandard(tallyRouteStandard);
-        tallyStandardService.updateTallyRouteStandard(tallyRouteStandard);
-
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("更新点检标准相关信息成功!");
-
+        if (tallyStandardPostVO==null){
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("修改标准对象为空!");
+            return resultEntity;
+        }
+        //1.是否缺少必填的字段
+        if (StringUtils.isBlank(tallyStandardPostVO.getStandardId())){
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("巡检标准id为空!");
+            return resultEntity;
+        }
+        //1.是否缺少必填的字段
+        if (StringUtils.isBlank(tallyStandardPostVO.getEquipmentId())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少所属设备!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getStandardType())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少标准类型!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getDataType())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少数据类型!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getSignalType())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少信号类型!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getCheckContent())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少点检内容!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getStandardJudgment())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少判断标准!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getResultOptions())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少结果选项!");
+            return resultEntity;
+        }
+        if (StringUtils.isBlank(tallyStandardPostVO.getEquipmentState())) {
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("缺少设备状态!");
+            return resultEntity;
+        }
+        resultEntity=tallyStandardService.updateTallyStandardByStandardId(tallyStandardPostVO,resultEntity);
         return resultEntity;
     }
 
-    @ApiOperation(value="获取修改点击标准页面信息", notes="根据路线名称查更新页面信息" ,httpMethod="GET")
+    @ApiOperation(value="浏览标准页面信息", notes="根据标准id查更新页面信息" ,httpMethod="GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "routeName", value = "所属路线", required = false),
+            @ApiImplicitParam(name = "standardId", value = "标准id", required = false),
     })
     @RequestMapping("updateDetail")
     @ResponseBody
-    public ResultEntity updateDetail(String routeName) {
+    public ResultEntity updateDetail(String standardId) {
         ResultEntity resultEntity=new ResultEntity();
+        //1.是否缺少必填的字段
+        if (StringUtils.isBlank(standardId)){
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("巡检标准id为空!");
+            return resultEntity;
+        }
 
-        TallyStandardPostVO tallyStandardPostVO=new TallyStandardPostVO();
+       resultEntity=tallyStandardService.updateDetail(resultEntity,standardId);
 
-        TallyStandard tallyStandard=tallyStandardService.findTallyStandardByRouteName(routeName);
-        tallyStandardPostVO.setAlarmCeiling(tallyStandard.getAlarmCeiling());
-        tallyStandardPostVO.setAlarmLowerlimit(tallyStandard.getAlarmLowerlimit());
-        tallyStandardPostVO.setAlarmType(tallyStandard.getAlarmType());
-        tallyStandardPostVO.setCheckContent(tallyStandard.getCheckContent());
-        tallyStandardPostVO.setCheckMethod(tallyStandard.getCheckMethod());
-        tallyStandardPostVO.setDataType(tallyStandard.getDataType());
-        tallyStandardPostVO.setEmissivity(tallyStandard.getEmissivity());
-        tallyStandardPostVO.setEquipmentBelonging(tallyStandard.getEquipmentBelonging());
-        tallyStandardPostVO.setEquipmentState(tallyStandard.getEquipmentState());
-        tallyStandardPostVO.setLocation(tallyStandard.getLocation());
-        tallyStandardPostVO.setLowerlimitMileage(tallyStandard.getLowerlimitMileage());
-        tallyStandardPostVO.setMaincontrolPoint(tallyStandard.getMaincontrolPoint());
-        tallyStandardPostVO.setMeasurementUnit(tallyStandard.getMeasurementUnit());
-        tallyStandardPostVO.setResultOptions(tallyStandard.getResultOptions());
-        tallyStandardPostVO.setRouteName(routeName);
-        tallyStandardPostVO.setSignalType(tallyStandard.getSignalType());
-        tallyStandardPostVO.setStandardCoding(tallyStandard.getStandardCoding());
-        tallyStandardPostVO.setStandardJudgment(tallyStandard.getStandardJudgment());
-        tallyStandardPostVO.setStandardType(tallyStandard.getStandardType());
-        tallyStandardPostVO.setStartandstopPoint(tallyStandard.getStartandstopPoint());
-        tallyStandardPostVO.setTwodimensionalcodeLocation(tallyStandard.getTwodimensionalcodeLocation());
-        tallyStandardPostVO.setTypicalValue(tallyStandard.getTypicalValue());
-        tallyStandardPostVO.setUpperlimitMileage(tallyStandard.getUpperlimitMileage());
-        tallyStandardPostVO.setCycleName(tallyStandardService.findCycleNameByStandardIdAndRouteId(tallyStandard.getStandardId(),tallyStandard.getRouteId()));
-
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("更新信息查询成功");
-        resultEntity.setData(tallyStandardPostVO);
         return resultEntity;
     }
 
@@ -328,57 +256,146 @@ public class StandardController {
         return resultEntity;
     }
 
-    @ApiOperation(value="获取所属路线后匹配风电场和执行周期", notes="自动匹配所属路线对应的风电场和执行周期" ,httpMethod="GET")
-    @RequestMapping("wind")
+    @ApiOperation(value="获取路线名称下拉框", notes="获取巡检路线名称" ,httpMethod="GET")
+    @RequestMapping("getTallyRouteNames")
     @ResponseBody
-    public ResultEntity wind(String routeName) {
+    public ResultEntity getTallyRouteNames() {
         ResultEntity resultEntity=new ResultEntity();
-        WindIdCycleNameVO windIdCycleNameVO=new WindIdCycleNameVO();
-        List<String> list=tallyStandardService.findCycleNameByRouteName(routeName);
 
-        windIdCycleNameVO.setWindId(tallyStandardService.findWindIdByRouteName(routeName));
-        windIdCycleNameVO.setCycleName(list);
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("匹配风电场成功!");
-        resultEntity.setData(windIdCycleNameVO);
+        resultEntity=tallyRouterService.findAllTallyRouteName(resultEntity);
+
         return resultEntity;
     }
 
-    @ApiOperation(value="获取风电场后匹配风电场所属路线", notes="自动匹配所属风电场所属的路线" ,httpMethod="GET")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "windId", value = "所属风电场", required = false),
-    })
-    @RequestMapping("routeName")
+    @ApiOperation(value="获取所属设备或者二维码位置带上风电场下拉框", notes="获取所属设备或者二维码位置下拉框" ,httpMethod="GET")
+    @RequestMapping("GetEquipmentOrQrCode")
     @ResponseBody
-    public ResultEntity routeName(String windId) {
+    public ResultEntity GetEquipmentOrQrCode(String windCode,String qrId,String equipmentId) {
+        ResultEntity resultEntity=new ResultEntity();
+        if (StringUtils.isBlank(windCode)){
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("没有获取风电场编码");
+            return resultEntity;
+        }
+
+        resultEntity=tallyStandardService.findEquipmentOrQrCode(resultEntity,windCode,qrId,equipmentId);
+
+        return resultEntity;
+    }
+
+    @ApiOperation(value="获取结果选项下拉框", notes="结果选项下拉框" ,httpMethod="GET")
+    @RequestMapping("GetResult")
+    @ResponseBody
+    public ResultEntity GetResult() {
         ResultEntity resultEntity=new ResultEntity();
 
+        resultEntity=tallyStandardService.findAllResult(resultEntity);
+
+        return resultEntity;
+    }
+
+    @ApiOperation(value="获取计量单位下拉框", notes="计量单位下拉框" ,httpMethod="GET")
+    @RequestMapping("GetUnit")
+    @ResponseBody
+    public ResultEntity GetUnit(String name) {
+        ResultEntity resultEntity=new ResultEntity();
+        if (StringUtils.isBlank(name)){
+                resultEntity.setCode(ErrorCode.ERROR);
+                resultEntity.setMsg("请先选择信号类型!");
+                return resultEntity;
+        }
+
+        resultEntity=tallyStandardService.findAllUnit(resultEntity,name);
+
+        return resultEntity;
+    }
+
+    @ApiOperation(value="查询点检标准详情", notes="查询点检标准详情" ,httpMethod="GET")
+    @RequestMapping("listStandardDetail")
+    @ResponseBody
+    public ResultEntity listStandardDetail(String qrId) {
+        ResultEntity resultEntity=new ResultEntity();
+        if (StringUtils.isBlank(qrId)){
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("二维码id为空!");
+            return resultEntity;
+        }
+        String currentUser=currentUserService.getUsername();
+        if (StringUtils.isBlank(currentUser)){
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("请先登录!");
+            return resultEntity;
+        }
+
+        List<TallyStandardPostVO> tallyStandardPostVOList=new ArrayList<TallyStandardPostVO>();
+
+        List<TallyStandard> tallyStandardList=tallyStandardService.findAllTallyStandardForDetail(qrId);
+        if (tallyStandardList==null||tallyStandardList.isEmpty()){
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("二维码下没有设备!");
+            return resultEntity;
+        }
+        for (TallyStandard tallyStandard:tallyStandardList){
+            TallyStandardPostVO tallyStandardPostVO=new TallyStandardPostVO();
+            tallyStandardPostVO.setStandardId(tallyStandard.getStandardId());
+            tallyStandardPostVO.setEquipmentBelonging(tallyStandardService.findEquipmentNameByEquipmentId(tallyStandard.getEquipmentId()));//所属设备
+            tallyStandardPostVO.setEquipmentId(tallyStandard.getEquipmentId());//设备id
+            tallyStandardPostVO.setLocation(tallyStandard.getLocation());//所在部位
+            tallyStandardPostVO.setStandardCoding(tallyStandard.getStandardCoding());//标准编码
+            tallyStandardPostVO.setCheckContent(tallyStandard.getCheckContent());//点检内容
+            tallyStandardPostVO.setStandardType(tallyStandard.getStandardType());//标准类型
+            tallyStandardPostVO.setStandardTypeTitle(tallyStandardService.findTitleByName("STANDARD_TYPE",tallyStandard.getStandardType()));
+            tallyStandardPostVO.setDataType(tallyStandard.getDataType());//数据类型
+            tallyStandardPostVO.setDataTypeTitle(tallyStandardService.findTitleByName("DATA_TYPE",tallyStandard.getDataType()));
+            tallyStandardPostVO.setSignalType(tallyStandard.getSignalType());//信号类型
+            tallyStandardPostVO.setSignalTypeTitle(tallyStandardService.findTitleByName("SIGNAL_TYPE",tallyStandard.getSignalType()));
+            tallyStandardPostVO.setCheckMethod(tallyStandard.getCheckMethod());//点检方法
+            tallyStandardPostVO.setStandardJudgment(tallyStandard.getStandardJudgment());//判断标准
+            tallyStandardPostVO.setResultOptions(tallyStandard.getResultOptions());//结果选项
+            tallyStandardPostVO.setResultOptionNames(tallyStandardService.findResultChooseByResultId(tallyStandard.getResultOptions()));
+            tallyStandardPostVO.setMeasurementUnit(tallyStandard.getMeasurementUnit());//计量单位
+            tallyStandardPostVO.setMeasurementUnitTitle(tallyStandardService.findTitleByName("MEASUREMENT_UNIT"+tallyStandard.getSignalType(),tallyStandard.getMeasurementUnit()));
+            tallyStandardPostVO.setTypicalValue(tallyStandard.getTypicalValue());//典型值
+            tallyStandardPostVO.setEquipmentState(tallyStandard.getEquipmentState());//设备状态
+            tallyStandardPostVO.setEquipmentStateTile(tallyStandardService.findTitleByName("EQUIPMENT_STATUS2",tallyStandard.getEquipmentState()));
+            tallyStandardPostVO.setTwodimensionalcodeLocation(tallyStandardService.findPositonNameByQrId(tallyStandard.getTwodimensionalcodeLocation()));
+
+            //路线配置
+            tallyStandardPostVO.setRouteId(tallyStandard.getRouteId());
+            tallyStandardPostVO.setRouteName(tallyStandardService.findRouteNameByRouteId(tallyStandard.getRouteId()));//所属路线
+            tallyStandardPostVO.setWindName(tallyStandardService.findWindNameByRouteId(tallyStandard.getRouteId()));//所属风场
+            tallyStandardPostVO.setCycleName(tallyStandardService.findCycleNameByRouteId(tallyStandard.getRouteId()));//执行周期
+            tallyStandardPostVO.setMaincontrolPoint(tallyStandard.getMaincontrolPoint());//主控点
+            tallyStandardPostVO.setStartandstopPoint(tallyStandard.getStartandstopPoint());//启停点
+            //报警类型
+            tallyStandardPostVO.setAlarmType(tallyStandard.getAlarmType());
+            tallyStandardPostVO.setAlarmTypeTitle(tallyStandardService.findTitleByName("ALARM_TYPE",tallyStandard.getAlarmType()));
+            tallyStandardPostVO.setAlarmCeiling(tallyStandard.getAlarmCeiling());//报警上限
+            tallyStandardPostVO.setAlarmLowerlimit(tallyStandard.getAlarmLowerlimit());//报警下限
+
+            tallyStandardPostVOList.add(tallyStandardPostVO);
+        }
+
+
         resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("匹配所属路线成功!");
-        resultEntity.setData(tallyStandardService.findRouteNameByWindId(windId));
+        resultEntity.setMsg("点检标准查询成功");
+        resultEntity.setData(tallyStandardPostVOList);
         return resultEntity;
     }
 
 
-
-
-    //todo 一堆下拉
-
-    //todo 下拉获取所属设备
-
-    //todo 下拉获取标准类型
-
-    //todo 下拉获取数据类型
-
-    //todo 下拉获取信号类型
-
-    //todo 下拉获取结果选项
-
-    //todo 下拉获取计量单位
-
-    //todo 下拉获取二维码位置
-
-    //todo 设备状态
-
+    @ApiOperation(value="获取二维码相关信息", notes="查询路线下的二维码们" ,httpMethod="GET")
+    @RequestMapping("GetQrCode")
+    @ResponseBody
+    public ResultEntity GetQrCode(String routeId) {
+        ResultEntity resultEntity=new ResultEntity();
+        if (StringUtils.isBlank(routeId)){
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("路线id传递失败!");
+            return resultEntity;
+        }
+        resultEntity=tallyStandardService.findQrCodeByRouteId(resultEntity,routeId);
+        return resultEntity;
+    }
 
 }

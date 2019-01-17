@@ -13,7 +13,7 @@ import com.qz.zframe.run.service.MaintainLogService;
 /**
  * <p>Title: MaintainLogServiceImpl</p>
  * <p>@Description: 维护日志表接口实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月6日 上午11:24:26
  * @version:V1.0
  */

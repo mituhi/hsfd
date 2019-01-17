@@ -1,8 +1,10 @@
 package com.qz.zframe.run.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.qz.zframe.authentication.CurrentUserService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class LogTypeServiceImpl implements LogTypeService {
 
 	@Autowired
 	private LogTypeMapper logTypeMapper;
+
+	@Autowired
+	private CurrentUserService currentUserService;
 	
 	
 	/**
@@ -33,10 +38,21 @@ public class LogTypeServiceImpl implements LogTypeService {
 		
 		//生成id
 		logType.setLogTypeId(UUID.randomUUID().toString());
-		
+		//设置维护人
+		logType.setMaintainer(currentUserService.getId());
+		//设置维护日期
+		logType.setMaintainTime(new Date());
+
+		//设置编码
+		LogTypeExample logTypeExample = new LogTypeExample();
+		logTypeExample.createCriteria().andLogCodeIsNotNull();
+		int i = logTypeMapper.countByExample(logTypeExample);
+		String logCode = String.valueOf(10001 + i);
+		logType.setLogCode(logCode);
+
 		/*需要判断一下字段是否可以重复*/
 		
-		logTypeMapper.insert(logType);
+		logTypeMapper.insertSelective(logType);
 		
 		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("执行成功");
@@ -51,9 +67,9 @@ public class LogTypeServiceImpl implements LogTypeService {
 	public void removeLogType(List<String> logTypeIds) {
 		//是否为空
 		if(CollectionUtils.isNotEmpty(logTypeIds)){
-			for (String logTypeId : logTypeIds) {
-				logTypeMapper.deleteByPrimaryKey(logTypeId);
-			}
+			LogTypeExample logTypeExample = new LogTypeExample();
+			logTypeExample.createCriteria().andLogTypeIdIn(logTypeIds);
+			logTypeMapper.deleteByExample(logTypeExample);
 		}
 	}
 
@@ -93,9 +109,9 @@ public class LogTypeServiceImpl implements LogTypeService {
 		List<LogType> list = logTypeMapper.selectByExample(example);
 		if(list!=null && list.size() >0){
 			return list.get(0);
+		}else {
+			return null;	
 		}
-		
-		return null;
 	}
 
 }

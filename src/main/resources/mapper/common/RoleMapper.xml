@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.RoleDao">
+	
+	<resultMap id="roleMap" type="com.qz.zframe.common.entity.Role">
+        <id column="role_id" property="roleId"/>
+        <result column="role_pid" property="rolePid"/>
+        <result column="role_name" property="roleName"/>
+        <result column="role_code" property="roleCode"/>
+        <result column="create_time" property="createTime"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="role_type" property="roleType"/>
+    </resultMap>
+    
+    <!-- 新增角色信息 -->
+    <insert id="addRole" parameterType="com.qz.zframe.common.entity.Role">
+        insert into isc_role (role_id, role_pid, role_name, role_code, create_time, order_no, role_type)
+        values (#{roleId}, #{rolePid}, #{roleName}, #{roleCode}, #{createTime}, #{orderNo}, #{roleType})
+    </insert>
+    
+    <!-- 批量删除角色信息 -->
+    <delete id="deleteRoles" parameterType="java.util.List">
+        delete from isc_role where role_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <!-- 更新角色信息 -->
+    <update id="updateRoleMsg" parameterType="com.qz.zframe.common.entity.Role">
+        update isc_role
+        <set>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                role_code = #{roleCode},
+            </if>
+            <if test="roleType != null and roleType != ''">
+                role_type = #{roleType},
+            </if>
+        </set>
+        where role_id = #{roleId}
+    </update>
+    
+    <!-- 批量获取角色信息 -->
+    <select id="findRole" parameterType="com.qz.zframe.common.entity.Role" resultMap="roleMap">
+        select
+        role_id,
+        role_pid,
+        role_name,
+        role_code,
+        create_time,
+        order_no,
+        role_type
+        from isc_role
+        <where>
+            <if test="roleName != null and roleName != ''">
+                and role_name like concat('%', #{roleName}, '%')
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                and role_code like concat('%', #{roleCode}, '%')
+            </if>
+        </where>
+        order by order_no
+        limit #{firstIndex}, #{lastIndex}
+    </select>
+    
+    <!-- 批量获取角色信息 -->
+    <select id="findRoleList" parameterType="com.qz.zframe.common.entity.Role" resultMap="roleMap">
+        select
+        role_id,
+        role_pid,
+        role_name,
+        role_code,
+        create_time,
+        order_no,
+        role_type
+        from isc_role
+        <where>
+            <if test="roleId != null and roleId != ''">
+                and role_id = #{roleId}
+            </if>
+            <if test="rolePid != null and rolePid != ''">
+                and role_pid = #{rolePid}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name like concat('%', #{roleName}, '%')
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                and role_code = #{roleCode}
+            </if>
+            <if test="roleType != null and roleType != ''">
+                and role_type = #{roleType}
+            </if>
+        </where>
+        order by order_no
+    </select>
+    
+    <!-- 获取角色信息 -->
+    <select id="findRolePage" parameterType="com.qz.zframe.common.entity.Role" resultMap="roleMap">
+        select
+        role_id,
+        role_pid,
+        role_name,
+        role_code,
+        create_time,
+        order_no,
+        role_type
+        from isc_role
+        <where>
+            <if test="roleName != null and roleName != ''">
+                and role_name like concat('%', #{roleName}, '%')
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                and role_code like concat('%', #{roleCode}, '%')
+            </if>
+        </where>
+        order by order_no
+        limit #{firstIndex}, #{lastIndex}
+    </select>
+    
+    <!-- 获取角色数量 -->
+    <select id="findCountRole" resultType="Integer">
+        select count(role_id) from isc_role
+        <where>
+            <if test="roleName != null and roleName != ''">
+                and role_name like concat('%', #{roleName}, '%')
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                and role_code like concat('%', #{roleCode}, '%')
+            </if>
+        </where>
+    </select>
+    
+    <!-- 批量获取用户的角色信息 -->
+    <select id="findUserRoleList" parameterType="java.lang.String" resultMap="roleMap">
+        select
+          ir.role_id,
+          ir.role_pid,
+          ir.role_name,
+          ir.role_code,
+          ir.create_time,
+          ir.order_no,
+          ir.role_type
+        from isc_role ir, isc_role_user_rela irur
+        where ir.role_id = irur.role_id
+              and irur.user_id = #{userId}
+    </select>
+    
+    <!-- 批量获取用户未分配的角色信息 -->
+    <select id="findUserNoOwnedRoleList" parameterType="java.lang.String" resultMap="roleMap">
+        select
+          ir.role_id,
+          ir.role_pid,
+          ir.role_name,
+          ir.role_code,
+          ir.create_time,
+          ir.order_no,
+          ir.role_type
+        from isc_role ir
+        where not exists(
+            select irur.role_id
+            from isc_role_user_rela irur
+            where irur.user_id = #{userId})
+    </select>
+
+    <!-- 清空用户角色 -->
+    <delete id="clearUserRole" parameterType="java.lang.String">
+        delete from isc_role_user_rela where user_id = #{userId}
+    </delete>
+    
+    <!-- 根据id查询角色信息 -->
+    <select id="queryRoleInfo" resultMap="roleMap">
+        select
+        role_id,
+        role_pid,
+        role_name,
+        role_code,
+        create_time,
+        order_no,
+        role_type
+        from isc_role
+        where role_id = #{roleId}
+    </select>
+    
+</mapper>

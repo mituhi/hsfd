@@ -1,9 +1,11 @@
 package com.qz.zframe.material.dao;
 
 import com.qz.zframe.common.util.BaseMapper;
+import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.material.entity.Supplier;
 import com.qz.zframe.material.entity.SupplierExample;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -20,5 +22,7 @@ public interface SupplierMapper extends BaseMapper<Supplier, SupplierExample, Lo
 	 * @throws
 	 */
 	public int updateIsdete(Map<String, Object> params);
+	
+	public List<Supplier> selectSupplier();
 
 }

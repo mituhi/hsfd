@@ -6,6 +6,7 @@
     <result column="position_code" property="positionCode" jdbcType="VARCHAR" />
     <result column="position_name" property="positionName" jdbcType="VARCHAR" />
     <result column="superior_position" property="superiorPosition" jdbcType="VARCHAR" />
+     <result column="superior_position_name" property="superiorPositionName" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="department" property="department" jdbcType="VARCHAR" />
     <result column="hierarchy" property="hierarchy" jdbcType="VARCHAR" />
@@ -19,7 +20,20 @@
     <result column="crew_name" property="crewName" jdbcType="VARCHAR" />
     <result column="status_name" jdbcType="VARCHAR" property="statusName" />
     <result column="is_toplevel_name" jdbcType="VARCHAR" property="isToplevelName" />
+    <result column="company_code_name" jdbcType="VARCHAR" property="companyCodeName" />
+    <result column="maintenance_team_name" jdbcType="VARCHAR" property="maintenanceTeamName" />
+    <result column="hierarchy_name" property="hierarchyName" jdbcType="VARCHAR" />
+    <result column="cost_center_name" property="costCenterName" jdbcType="VARCHAR" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
   </resultMap>
+  
+    <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+		</sql>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -79,66 +93,230 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    position_id, position_code, position_name, superior_position, wind_id, department, 
-    hierarchy, crew, company_code, cost_center, maintenance_team,is_toplevel,status,wind_name,crew_name,status_name,is_toplevel_name
+    position_id, position_code, position_name, superior_position, wind_id, department, superior_position_name,
+    hierarchy, crew, company_code, cost_center, maintenance_team,is_toplevel,status,
+    wind_name,crew_name,status_name,is_toplevel_name,company_code_name,maintenance_team_name,hierarchy_name,cost_center_name,create_time,
+    department_name
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.PositionEncodeExample" >
     select 
     <include refid="Base_Column_List" /> 
     from (
     select  
-    DISTINCT
     p.*,
-    a.title as status_name ,sc.title as is_toplevel_name ,f.wind_name as wind_name,
-	c.crew_name as crew_name
+    a.title as status_name ,sc.title as is_toplevel_name ,f.architecture_name as wind_name,
+	  c.crew_name as crew_name,g.architecture_code as company_code_name,h.architecture_name as maintenance_team_name,
+	  k.architecture_name as cost_center_name,scc.title as hierarchy_name,j.architecture_name as department_name
     from position_encode p
-    left join wind_field f  on f.wind_id=p.wind_id
+    left join  (select * from org_architecture where architecture_type='02') f  on f.architecture_code=p.wind_id
+	left join  (select * from org_architecture where architecture_type='01') g  on g.architecture_id=p.company_code
+	left join  (select * from org_architecture where architecture_type='03') j  on j.architecture_id=p.department
+	left join  (select * from org_architecture where architecture_type='04') h  on h.architecture_id=p.maintenance_team
+	left join  (select * from org_architecture where architecture_type='05') k  on k.architecture_id=p.cost_center
     left join crew_information  c on  c.crew_id=p.crew
-    LEFT JOIN sp_code a ON p.STATUS = a.
-	NAME LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+    LEFT JOIN sp_code a ON p.STATUS = a.NAME 
+    LEFT JOIN sp_code_type b ON a.code_type_id = b.id
 	LEFT JOIN sp_code sc ON p.is_toplevel = sc.name 
 	LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
+	LEFT JOIN sp_code scc ON p.hierarchy = scc.name 
+	LEFT JOIN sp_code_type m  ON scc.code_type_id = m.id 
 	WHERE
 	b.NAME = 'POSITION_STATUS' 
-	AND d.NAME = 'IS_TOPLEVEL' )p
+	AND d.NAME = 'IS_TOPLEVEL' and  m.name='HIERARCHY_TYPE')p
    <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <include refid="Pagination_Sql" />
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    DISTINCT
-     p.*,a.title as status_name ,sc.title as is_toplevel_name 
+    select  
+    p.*,
+   <!--  a.title as status_name ,sc.title as is_toplevel_name , -->f.architecture_name as wind_name,
+	  c.crew_name as crew_name,<!-- g.architecture_code as company_code_name, -->h.architecture_name as maintenance_team_name,
+	  <!-- k.architecture_name as cost_center_name, --><!-- scc.title as hierarchy_name, -->j.architecture_name as department_name
     from position_encode p
-    left join wind_field f  on f.wind_id=p.wind_id
+    left join  (select * from org_architecture where architecture_type='02') f  on f.architecture_code=p.wind_id
+<!-- 	left join  (select * from org_architecture where architecture_type='01') g  on g.architecture_id=p.company_code -->
+	left join  (select * from org_architecture where architecture_type='03') j  on j.architecture_id=p.department
+	left join  (select * from org_architecture where architecture_type='04') h  on h.architecture_id=p.maintenance_team
+	<!-- left join  (select * from org_architecture where architecture_type='05') k  on k.architecture_id=p.cost_center -->
     left join crew_information  c on  c.crew_id=p.crew
-    LEFT JOIN sp_code a ON p.STATUS = a.
-	NAME LEFT JOIN sp_code_type b ON a.code_type_id = b.id
-	LEFT JOIN sp_code sc ON p.is_toplevel = sc.
-	NAME LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
-WHERE
-	b.NAME = 'POSITION_STATUS' 
-	AND d.NAME = 'IS_TOPLEVEL' 
-    and  position_id = #{positionId,jdbcType=VARCHAR}
+<!--     LEFT JOIN sp_code a ON p.STATUS = a.NAME 
+    LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+	LEFT JOIN sp_code sc ON p.is_toplevel = sc.name 
+	LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
+	LEFT JOIN sp_code scc ON p.hierarchy = scc.name 
+	LEFT JOIN sp_code_type m  ON scc.code_type_id = m.id 
+	WHERE
+	 b.NAME = 'POSITION_STATUS' 
+	AND d.NAME = 'IS_TOPLEVEL' and  m.name='HIERARCHY_TYPE'  -->
+   where  p.position_id = #{positionId,jdbcType=VARCHAR}
   </select>
   
-  <select id="selectStructure" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectBySuperPosition" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select  
+    p.*,
+    a.title as status_name ,sc.title as is_toplevel_name ,f.architecture_name as wind_name,
+	  c.crew_name as crew_name,g.architecture_code as company_code_name,h.architecture_name as maintenance_team_name,
+	  k.architecture_name as cost_center_name,scc.title as hierarchy_name,j.architecture_name as department_name
+    from position_encode p
+    left join  (select * from org_architecture where architecture_type='02') f  on f.architecture_code=p.wind_id
+	left join  (select * from org_architecture where architecture_type='01') g  on g.architecture_id=p.company_code
+	left join  (select * from org_architecture where architecture_type='03') j  on j.architecture_id=p.department
+	left join  (select * from org_architecture where architecture_type='04') h  on h.architecture_id=p.maintenance_team
+	left join  (select * from org_architecture where architecture_type='05') k  on k.architecture_id=p.cost_center
+    left join crew_information  c on  c.crew_id=p.crew
+    LEFT JOIN sp_code a ON p.STATUS = a.NAME 
+    LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+	LEFT JOIN sp_code sc ON p.is_toplevel = sc.name 
+	LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
+	LEFT JOIN sp_code scc ON p.hierarchy = scc.name 
+	LEFT JOIN sp_code_type m  ON scc.code_type_id = m.id 
+	WHERE
+	b.NAME = 'POSITION_STATUS' 
+	AND d.NAME = 'IS_TOPLEVEL' and  m.name='HIERARCHY_TYPE'
+    and  p.superior_position = #{positionId,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="selectByIdAndCodeAndName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+<!--     select p.* from ( -->
+    
+    select  
+    p.*,
+    a.title as status_name ,sc.title as is_toplevel_name ,f.architecture_name as wind_name,
+	  c.crew_name as crew_name,g.architecture_code as company_code_name,h.architecture_name as maintenance_team_name,
+	  k.architecture_name as cost_center_name,scc.title as hierarchy_name,j.architecture_name as department_name
+    from position_encode p
+    left join  (select * from org_architecture where architecture_type='02') f  on f.architecture_code=p.wind_id
+	left join  (select * from org_architecture where architecture_type='01') g  on g.architecture_id=p.company_code
+	left join  (select * from org_architecture where architecture_type='03') j  on j.architecture_id=p.department
+	left join  (select * from org_architecture where architecture_type='04') h  on h.architecture_id=p.maintenance_team
+	left join  (select * from org_architecture where architecture_type='05') k  on k.architecture_id=p.cost_center
+    left join crew_information  c on  c.crew_id=p.crew
+    LEFT JOIN sp_code a ON p.STATUS = a.NAME 
+    LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+	LEFT JOIN sp_code sc ON p.is_toplevel = sc.name 
+	LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
+	LEFT JOIN sp_code scc ON p.hierarchy = scc.name 
+	LEFT JOIN sp_code_type m  ON scc.code_type_id = m.id 
+	WHERE
+	b.NAME = 'POSITION_STATUS' 
+	AND d.NAME = 'IS_TOPLEVEL' and  m.name='HIERARCHY_TYPE'<!-- ) p -->  and position_id = #{positionId,jdbcType=VARCHAR}
+   <!--  <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if> -->
+  </select>
+  
+  <select id="selectStructure" resultMap="BaseResultMap" parameterType="java.lang.String">
     select 
-    <include refid="Base_Column_List" />
-    from equipment_classification
-     where is_toplevel=0
+     p.*
+    from position_encode  p  where  p.status='01' 
+  </select>
+  
+  <select id="selectIsTop" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+     p.*
+    from position_encode  p  where  p.status='01'  and  p.is_toplevel='01'
+    <if test=" windId !=null ">
+        and  p.wind_id=#{windId}
+    </if>
+  </select>
+  
+  <select id="selectNotIsTop" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+     p.*
+    from position_encode  p  where  p.status='01'  and  p.is_toplevel='02'
+    <if test=" windId !=null ">
+        and  p.wind_id=#{windId}
+    </if>
+  </select>
+  
+  <select id="selectStructureAndHierarchy1" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select 
+     p.*
+    from position_encode  p  where  p.status='01'  
+    
+    <if test=" windId !=null ">
+        and  p.wind_id=#{windId}
+    </if>
+  </select>
+  <select id="selectStructureAndHierarchy2" resultMap="BaseResultMap" parameterType="String">
+    select 
+     p.*
+    from  position_encode  p  where  p.status='01' and  p.hierarchy=#{hierarchy,jdbcType=VARCHAR} and  p.wind_id=#{windId,jdbcType=VARCHAR}
+    
+  </select>
+  <!-- <select id="selectStructureAndHierarchy3" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+     p.*
+    from position_encode  p  where  p.status='01'and  p.hierarchy='03' order by wind_id
+  </select>
+  <select id="selectStructureAndHierarchy4" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+     p.*
+    from position_encode  p  where  p.status='01' and  p.hierarchy='04' order by wind_id
+  </select>
+  <select id="selectStructureAndHierarchy5" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+     p.*
+    from position_encode  p  where  p.status='01' and  p.hierarchy='05' order by wind_id
+  </select> 
+   -->
+  
+  
+  
+   <select id="selectStructures" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+     p.*
+    from position_encode p  where  p.is_toplevel='01'  and p.status='01'
   </select>
   
    <select id="selectStructureList" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from equipment_classification
-     where  superior_position=#{superiorPosition,jdbcType=VARCHAR}
+       select  
+    p.*,
+    a.title as status_name ,sc.title as is_toplevel_name ,f.architecture_name as wind_name,
+	  c.crew_name as crew_name,g.architecture_code as company_code_name,h.architecture_name as maintenance_team_name,
+	  k.architecture_name as cost_center_name,scc.title as hierarchy_name,j.architecture_name as department_name
+    from position_encode p
+    left join  (select * from org_architecture where architecture_type='02') f  on f.architecture_code=p.wind_id
+	left join  (select * from org_architecture where architecture_type='01') g  on g.architecture_id=p.company_code
+	left join  (select * from org_architecture where architecture_type='03') j  on j.architecture_id=p.department
+	left join  (select * from org_architecture where architecture_type='04') h  on h.architecture_id=p.maintenance_team
+	left join  (select * from org_architecture where architecture_type='05') k  on k.architecture_id=p.cost_center
+    left join crew_information  c on  c.crew_id=p.crew
+    LEFT JOIN sp_code a ON p.STATUS = a.NAME 
+    LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+	LEFT JOIN sp_code sc ON p.is_toplevel = sc.name 
+	LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
+	LEFT JOIN sp_code scc ON p.hierarchy = scc.name 
+	LEFT JOIN sp_code_type m  ON scc.code_type_id = m.id 
+	WHERE
+	b.NAME = 'POSITION_STATUS' 
+	AND d.NAME = 'IS_TOPLEVEL' and  m.name='HIERARCHY_TYPE'
+    and  p.superior_position=#{positionId,jdbcType=VARCHAR}
   </select>
   
+   <select id="selectByPositionCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+     p.*
+    from position_encode p  where p.status='01' and   p.position_code=#{positionCode,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap"  parameterType="com.qz.zframe.device.entity.PositionEncode" >
+  
+     select  p.*  from  position_encode p  where p.status='01'
+  
+  </select>
+  
+      <!--根据风电场id 查询位置信息 -->
+  <select id="selectByWindId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+      select  p.*   from  position_encode  p
+      left join  (select * from org_architecture where architecture_type='02') f  on f.architecture_code=p.wind_id
+      where  p.wind_id =#{windId,jdbcType=VARCHAR}
+  </select>
   
   
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
@@ -164,13 +342,14 @@ WHERE
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.device.entity.PositionEncode" >
     insert into position_encode (position_id, position_code, position_name, 
-      superior_position, wind_id, department, 
+      superior_position, wind_id, department, is_toplevel,status,
       hierarchy, crew, company_code, 
-      cost_center, maintenance_team)
+      cost_center, maintenance_team,superior_position_name,create_time)
     values (#{positionId,jdbcType=VARCHAR}, #{positionCode,jdbcType=VARCHAR}, #{positionName,jdbcType=VARCHAR}, 
       #{superiorPosition,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{isToplevel,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
       #{hierarchy,jdbcType=VARCHAR}, #{crew,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, 
-      #{costCenter,jdbcType=VARCHAR}, #{maintenanceTeam,jdbcType=VARCHAR})
+      #{costCenter,jdbcType=VARCHAR}, #{maintenanceTeam,jdbcType=VARCHAR},#{superiorPositionName,jdbcType=VARCHAR},#{createTime,jdbcType=DATE})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.PositionEncode" >
     insert into position_encode
@@ -246,10 +425,28 @@ WHERE
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qz.zframe.device.entity.PositionEncodeExample" resultType="java.lang.Integer" >
-    select count(*) from position_encode   p
-    left join wind_field f  on f.wind_id=p.wind_id
+    select count(*) from  (select  
+    p.*,
+    a.title as status_name ,sc.title as is_toplevel_name ,f.architecture_name as wind_name,
+	  c.crew_name as crew_name,g.architecture_code as company_code_name,h.architecture_name as maintenance_team_name,
+	  k.architecture_name as cost_center_name,scc.title as hierarchy_name,j.architecture_name as department_name
+    from position_encode p
+    left join  (select * from org_architecture where architecture_type='02') f  on f.architecture_code=p.wind_id
+	left join  (select * from org_architecture where architecture_type='01') g  on g.architecture_id=p.company_code
+	left join  (select * from org_architecture where architecture_type='03') j  on j.architecture_id=p.department
+	left join  (select * from org_architecture where architecture_type='04') h  on h.architecture_id=p.maintenance_team
+	left join  (select * from org_architecture where architecture_type='05') k  on k.architecture_id=p.cost_center
     left join crew_information  c on  c.crew_id=p.crew
-    <if test="_parameter != null" >
+    LEFT JOIN sp_code a ON p.STATUS = a.NAME 
+    LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+	LEFT JOIN sp_code sc ON p.is_toplevel = sc.name 
+	LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
+	LEFT JOIN sp_code scc ON p.hierarchy = scc.name 
+	LEFT JOIN sp_code_type m  ON scc.code_type_id = m.id 
+	WHERE
+	b.NAME = 'POSITION_STATUS' 
+	AND d.NAME = 'IS_TOPLEVEL' and  m.name='HIERARCHY_TYPE')p
+   <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
@@ -351,14 +548,18 @@ WHERE
     update position_encode
     set position_code = #{positionCode,jdbcType=VARCHAR},
       position_name = #{positionName,jdbcType=VARCHAR},
+      is_toplevel=#{isToplevel,jdbcType=VARCHAR},
+      status=#{status,jdbcType=VARCHAR},
       superior_position = #{superiorPosition,jdbcType=VARCHAR},
+      superior_position_name=#{superiorPositionName,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},
       department = #{department,jdbcType=VARCHAR},
       hierarchy = #{hierarchy,jdbcType=VARCHAR},
       crew = #{crew,jdbcType=VARCHAR},
       company_code = #{companyCode,jdbcType=VARCHAR},
       cost_center = #{costCenter,jdbcType=VARCHAR},
-      maintenance_team = #{maintenanceTeam,jdbcType=VARCHAR}
+      maintenance_team = #{maintenanceTeam,jdbcType=VARCHAR},
+      create_time=#{createTime,jdbcType=DATE}
     where position_id = #{positionId,jdbcType=VARCHAR}
   </update>
 </mapper>

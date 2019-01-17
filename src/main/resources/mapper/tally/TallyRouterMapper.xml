@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyRouterDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.TallyRoute" >
+        <id column="route_id" property="routeId" />
+        <result column="route_name" property="routeName" />
+        <result column="route_code" property="routeCode"/>
+        <result column="wind_id" property="windId" />
+        <result column="status" property="status"  />
+        <result column="remark" property="remark" />
+        <result column="maintenancer" property="maintenancer" />
+        <result column="maintenance_time" property="maintenanceTime" />
+        <result column="serial_num" property="serialNum" />
+        <result column="architecture_name" property="windName" />
+        <result column="cycle_name" property="cycleName" />
+    </resultMap>
+    <resultMap id="BaseResultMap2" type="com.qz.zframe.tally.dto.TallyRouterDto" >
+        <id column="route_id" property="routeId" />
+        <result column="route_name" property="routeName" />
+        <result column="route_code" property="routeCode"/>
+        <result column="wind_id" property="windId" />
+        <result column="cycle_name" property="cycleName"  />
+    </resultMap>
+    <resultMap id="BaseResultMap3" type="com.qz.zframe.tally.vo.TallyPlanVO" >
+        <result column="route_name" property="routeName" />
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime" />
+    </resultMap>
+    <resultMap id="BaseResultMap4" type="com.qz.zframe.tally.dto.PostDto" >
+        <result column="is_practitioners" property="isPractitioners" />
+        <result column="is_managers" property="isManagers"/>
+        <result column="is_head" property="isHead" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap5" type="com.qz.zframe.tally.entity.Cycle" >
+        <result column="cycle_id" property="cycleId" />
+        <result column="route_id" property="routeId"/>
+        <result column="cycle_name" property="cycleName" />
+        <result column="cycle_unit" property="cycleUnit" />
+        <result column="benchmark_date" property="benchmarkDate"/>
+        <result column="cycle" property="cycle" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap6" type="com.qz.zframe.tally.entity.PeriodTime" >
+        <result column="period_time_id" property="periodTimeId" />
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap7" type="com.qz.zframe.tally.dto.UserDto" >
+        <result column="user_id" property="userId" />
+        <result column="user_name" property="userName"/>
+        <result column="architecture_name" property="architectureName" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap8" type="com.qz.zframe.tally.vo.PeriodTimeVO">
+        <result column="start_time" property="startTimes" />
+        <result column="end_time" property="endTimes"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap9" type="com.qz.zframe.tally.vo.RouteUserVO">
+        <result column="id" property="id" />
+        <result column="route_id" property="routeId"/>
+        <result column="user_id" property="userId" />
+        <result column="is_practitioners" property="isPractitioners"/>
+        <result column="is_managers" property="isManagers" />
+        <result column="is_head" property="isHead"/>
+        <result column="remark" property="remark" />
+        <result column="architecture_name" property="architectureName" />
+        <result column="user_name" property="userName" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap10" type="com.qz.zframe.tally.entity.TallyRoute" >
+        <id column="route_id" property="routeId" />
+        <result column="route_name" property="routeName" />
+        <result column="route_code" property="routeCode"/>
+        <result column="wind_id" property="windId" />
+        <result column="status" property="status"  />
+        <result column="remark" property="remark" />
+        <result column="maintenancer" property="maintenancer" />
+        <result column="maintenance_time" property="maintenanceTime" />
+        <result column="serial_num" property="serialNum" />
+        <result column="architecture_name" property="windName" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id, tally_route.status,tally_route.remark,tally_route.maintenancer,tally_route.maintenance_time,tally_route.serial_num
+    </sql>
+    <sql id="Base_Column_List2" >
+        tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id,cycle.cycle_name
+    </sql>
+
+    <select id="findAllTallyRouter" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from tally_route
+        WHERE 1=1
+            <if test="windId !=null">
+                and wind_id=#{windId}
+            </if>
+        <if test="routeCode !=null">
+            and route_code=#{routeCode}
+        </if>
+        <if test="routeName !=null">
+            and route_name like "%"#{routeName}"%"
+        </if>
+    </select>
+
+    <select id="sal" resultType="int" >
+        select
+        COUNT (*)
+        from tally_route
+    </select>
+
+    <select id="findCycleNameByRouteId" resultType="string" >
+        select
+        cycle_name
+        from cycle
+        WHERE route_id = #{routeId}
+    </select>
+
+    <select id="findUserIdsByRouteId" resultType="java.lang.String" parameterType="string">
+        select
+        user_id
+        from route_user
+        WHERE route_id = #{routeId}
+    </select>
+
+    <select id="findUserNameByUserId" resultType="string" parameterType="string">
+        select
+        user_name
+        from isc_user
+        WHERE user_id = #{userId}
+    </select>
+
+    <delete id="deleteByRouteId">
+        DELETE cycle.* FROM cycle WHERE cycle.route_id IN
+        <foreach collection="routeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteRouteUserByRouteId">
+        DELETE FROM route_user WHERE route_id IN
+        <foreach collection="routeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTallyRouteStandardByRouteId">
+        DELETE FROM tally_route_standard WHERE route_id IN
+        <foreach collection="routeIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="deleteTallyRouteByRouteId">
+        UPDATE tally_route
+          set tally_route.true_id='1'
+           WHERE tally_route.route_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+           #{item}
+        </foreach>
+    </update>
+
+    <select id="findserialNum" resultType="int" >
+        select
+        COUNT(*)
+        from tally_route
+    </select>
+
+    <!-- 新增 -->
+    <insert id="addTallyRoute">
+        INSERT INTO tally_route
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="routeId!=null and routeId!=''">route_id,</if>
+            <if test="routeName!=null and routeName!=''">route_name,</if>
+            <if test="routeCode!=null and routeCode!=''">route_code,</if>
+            <if test="windId!=null and windId!=''">wind_id,</if>
+            <if test="status!=null and status!=''">status,</if>
+            <if test="remark!=null and remark!=''">remark,</if>
+            <if test="maintenancer!=null and maintenancer!=''">maintenancer,</if>
+            <if test="maintenanceTime!=null">maintenance_time,</if>
+            <if test="serialNum!=null and serialNum!=''">serial_num,</if>
+            <if test="trueId!=null and trueId!=''">true_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="routeId!=null and routeId!=''">#{routeId},</if>
+            <if test="routeName!=null and routeName!=''">#{routeName},</if>
+            <if test="routeCode!=null and routeCode!=''">#{routeCode},</if>
+            <if test="windId!=null and windId!=''">#{windId},</if>
+            <if test="status!=null and status!=''">#{status},</if>
+            <if test="remark!=null and remark!=''">#{remark},</if>
+            <if test="maintenancer!=null and maintenancer!=''">#{maintenancer},</if>
+            <if test="maintenanceTime!=null">#{maintenanceTime},</if>
+            <if test="serialNum!=null and serialNum!=''">#{serialNum},</if>
+            <if test="trueId!=null and trueId!=''">#{trueId},</if>
+        </trim>
+    </insert>
+
+    <!-- 新增 -->
+    <insert id="addCycle">
+        INSERT INTO cycle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cycleId!=null and cycleId!=''">cycle_id,</if>
+            <if test="routeId!=null and routeId!=''">route_id,</if>
+            <if test="cycleName!=null and cycleName!=''">cycle_name,</if>
+            <if test="cycleUnit!=null and cycleUnit!=''">cycle_unit,</if>
+            <if test="benchmarkDate!=null">benchmark_date,</if>
+            <if test="cycle!=null and cycle!=''">cycle,</if>
+            <if test="trueId!=null and trueId!=''">true_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cycleId!=null and cycleId!=''">#{cycleId},</if>
+            <if test="routeId!=null and routeId!=''">#{routeId},</if>
+            <if test="cycleName!=null and cycleName!=''">#{cycleName},</if>
+            <if test="cycleUnit!=null and cycleUnit!=''">#{cycleUnit},</if>
+            <if test="benchmarkDate!=null">#{benchmarkDate},</if>
+            <if test="cycle!=null and cycle!=''">#{cycle},</if>
+            <if test="trueId!=null and trueId!=''">#{trueId},</if>
+        </trim>
+    </insert>
+
+    <!-- 新增 -->
+    <insert id="addPeriodTime">
+        INSERT INTO period_time
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="periodTimeId!=null and periodTimeId!=''">period_time_id,</if>
+            <if test="startTime!=null">start_time,</if>
+            <if test="endTime!=null">end_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="periodTimeId!=null and periodTimeId!=''">#{periodTimeId},</if>
+            <if test="startTime!=null">#{startTime},</if>
+            <if test="endTime!=null">#{endTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 新增 -->
+    <insert id="addCyclePeriodTime">
+        INSERT INTO cycle_period_time
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">id,</if>
+            <if test="cycleId!=null and cycleId!=''">cycle_id,</if>
+            <if test="periodTimeId!=null and periodTimeId!=''">period_time_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">#{id},</if>
+            <if test="cycleId!=null and cycleId!=''">#{cycleId},</if>
+            <if test="periodTimeId!=null and periodTimeId!=''">#{periodTimeId},</if>
+        </trim>
+    </insert>
+
+    <select id="findUserIdByUserName" resultType="string" parameterType="string">
+        select
+        user_id
+        from isc_user
+        where user_name=#{userName}
+    </select>
+
+    <!-- 新增 -->
+    <insert id="addRouteUser">
+        INSERT INTO route_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">id,</if>
+            <if test="routeId!=null and routeId!=''">route_id,</if>
+            <if test="userId!=null and userId!=''">user_id,</if>
+            <if test="isPractitioners!=null and isPractitioners!=''">is_practitioners,</if>
+            <if test="isManagers!=null and isManagers!=''">is_managers,</if>
+            <if test="isHead!=null and isHead!=''">is_head,</if>
+            <if test="remark!=null and remark!=''">remark,</if>
+            <if test="trueId!=null and trueId!=''">true_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null and id!=''">#{id},</if>
+            <if test="routeId!=null and routeId!=''">#{routeId},</if>
+            <if test="userId!=null and userId!=''">#{userId},</if>
+            <if test="isPractitioners!=null and isPractitioners!=''">#{isPractitioners},</if>
+            <if test="isManagers!=null and isManagers!=''">#{isManagers},</if>
+            <if test="isHead!=null and isHead!=''">#{isHead},</if>
+            <if test="remark!=null and remark!=''">#{remark},</if>
+            <if test="trueId!=null and trueId!=''">#{trueId},</if>
+        </trim>
+    </insert>
+
+    <select id="checkRouteId" resultType="int" parameterType="string">
+        select
+        COUNT(*)
+        FROM tally_route
+        WHERE route_id=#{routeId}
+    </select>
+
+    <select id="choicePeople" resultType="java.lang.String">
+        select
+        user_name
+        from isc_user
+    </select>
+
+    <select id="findAllWind" resultType="java.lang.String">
+        select
+        org_name
+        from isc_org
+    </select>
+
+    <select id="findTallyRouteByPlan" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from tally_route,cycle,period_time,cycle_period_time
+        WHERE 1=1
+        <if test="windId !=null">
+            and tally_route.wind_id=#{windId}
+        </if>
+        <if test="maintenancer !=null">
+            and tally_route.maintenancer=#{maintenancer}
+        </if>
+        <if test="routeName !=null">
+            and tally_route.route_name like "%"#{routeName}"%"
+        </if>
+        <if test="startTime !=null">
+            and period_time.start_time=#{startTime} and period_time.period_time_id=cycle_period_time.period_time_id and cycle_period_time.cycle_id=cycle.cycle_id and cycle.route_id=tally_route.route_id
+        </if>
+        <if test="endTime !=null">
+            and period_time.end_time=#{endTime} and period_time.period_time_id=cycle_period_time.period_time_id and cycle_period_time.cycle_id=cycle.cycle_id and cycle.route_id=tally_route.route_id
+        </if>
+    </select>
+
+    <select id="findAllTallyRouterDto"  resultMap="BaseResultMap2">
+        select
+        tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id,cycle.cycle_name
+        from tally_route,cycle
+        WHERE 1=1
+        <if test="windId !=null">
+            and wind_id=#{windId}
+        </if>
+        <if test="routeCode !=null">
+            and route_code=#{routeCode}
+        </if>
+        <if test="routeName !=null">
+            and route_name like "%"#{routeName}"%"
+        </if>
+        and cycle.route_id=tally_route.route_id
+    </select>
+
+    <select id="findTallyPlanVOByPlan" resultMap="BaseResultMap3" >
+        select
+        tally_route.route_name,isc_user.user_name,period_time.start_time,period_time.end_time
+        from tally_route,cycle,period_time,cycle_period_time,isc_user,route_user
+        WHERE 1=1
+        <if test="windId !=null">
+            and tally_route.wind_id=#{windId}
+        </if>
+        <if test="maintenancer !=null">
+            and isc_user.user_name=#{maintenancer}
+        </if>
+        <if test="routeName !=null">
+            and tally_route.route_name like "%"#{routeName}"%"
+        </if>
+        <if test="startTime !=null">
+            and period_time.start_time=#{startTime}
+        </if>
+        <if test="endTime !=null">
+            and period_time.end_time=#{endTime}
+        </if>
+        and period_time.period_time_id=cycle_period_time.period_time_id and cycle_period_time.cycle_id=cycle.cycle_id and cycle.route_id=tally_route.route_id
+        and tally_route.route_id=route_user.route_id and route_user.user_id=isc_user.user_id and route_user.is_practitioners="0"
+    </select>
+
+    <select id="findAllRouteCode" resultType="string">
+            SELECT route_code
+            FROM tally_route
+    </select>
+
+    <select id="findWindIdByRouteCode" resultType="string" parameterType="string">
+        SELECT wind_id
+        FROM tally_route
+        WHERE route_code=#{routeCode}
+    </select>
+
+    <select id="countTallyRoute" resultType="int">
+        select
+        COUNT(*)
+        from tally_route,cycle
+        WHERE 1=1
+        <if test="windId !=null">
+            and wind_id=#{windId}
+        </if>
+        <if test="routeCode !=null">
+            and route_code=#{routeCode}
+        </if>
+        <if test="routeName !=null">
+            and route_name like "%"#{routeName}"%"
+        </if>
+        and cycle.route_id=tally_route.route_id
+    </select>
+
+    <select id="findPostByUserName" parameterType="string" resultMap="BaseResultMap4">
+        SELECT
+        is_practitioners,is_managers,is_head
+        FROM route_user,isc_user
+        WHERE user_name=#{userName} and isc_user.user_id=route_user.user_id
+    </select>
+
+    <select id="findRouteCodeRelevant" parameterType="string" resultMap="BaseResultMap">
+            SELECT
+            tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id, tally_route.mandatory_order,tally_route.remark,tally_route.maintenancer,tally_route.maintenance_time,tally_route.serial_num
+            FROM tally_route
+            WHERE route_code=#{routeCode}
+    </select>
+
+    <select id="findCycleByCycleNameAndRouteId" resultMap="BaseResultMap5">
+            SELECT
+            *
+            FROM cycle
+            WHERE cycle_name=#{cycleName} and route_id=#{routeId}
+    </select>
+
+    <select id="findPeriodTimeByCycleId" parameterType="string" resultMap="BaseResultMap6">
+        SELECT
+        period_time.*
+        FROM period_time,cycle_period_time
+        WHERE cycle_period_time.period_time_id=period_time.period_time_id and cycle_period_time.cycle_id=#{cycleId}
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateTallyRoute">
+        UPDATE tally_route
+        <set>
+            <if test="routeName!=null ">route_name=#{routeName},</if>
+            <if test="windId!=null ">wind_id=#{windId},</if>
+            <if test="status!=null ">status=#{status},</if>
+            <if test="remark!=null ">remark=#{remark},</if>
+            <if test="maintenancer!=null ">maintenancer=#{maintenancer},</if>
+            <if test="maintenanceTime!=null">maintenance_time=#{maintenanceTime},</if>
+            <if test="serialNum!=null">serial_num=#{serialNum},</if>
+        </set>
+        WHERE route_id=#{routeId}
+    </update>
+
+    <!-- 更新 -->
+    <update id="updateCycle">
+        UPDATE cycle
+        <set>
+            <if test="cycleUnit!=null ">cycle_name=#{cycleName},</if>
+            <if test="cycleUnit!=null ">cycle_unit=#{cycleUnit},</if>
+            <if test="benchmarkDate!=null">benchmark_date=#{benchmarkDate},</if>
+            <if test="cycle!=null ">cycle=#{cycle},</if>
+        </set>
+        WHERE route_id=#{routeId}
+    </update>
+
+    <select id="findPeriodTimeIdByCycleIdStartTimeAndEndTime" resultType="string">
+        SELECT period_time.period_time_id
+        FROM period_time,cycle_period_time
+        WHERE cycle_period_time.cycle_id=#{cycleId} and cycle_period_time.period_time_id=period_time.period_time_id
+        and period_time.start_time=#{startTime} and period_time.end_time=#{endTime}
+    </select>
+
+    <!-- 更新 -->
+    <update id="updatePeriodTime">
+        UPDATE cycle
+        <set>
+            <if test="cycleName!=null">start_time=#{startTime},</if>
+            <if test="cycleUnit!=null">end_time=#{endTime},</if>
+        </set>
+        WHERE period_time_id=#{periodTimeId}
+    </update>
+
+    <select id="findIdByRouteIdAndUserId" resultType="string">
+        SELECT
+        id
+        FROM route_user
+        WHERE route_id=#{routeId} AND user_id=#{userId}
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateRouteUser">
+        UPDATE route_user
+        <set>
+            <if test="userId!=null and userId!=''">user_id=#{userId},</if>
+            <if test="isPractitioners!=null and isPractitioners!=''">is_practitioners=#{isPractitioners},</if>
+            <if test="isManagers!=null and isManagers!=''">is_managers=#{isManagers},</if>
+            <if test="isHead!=null and isHead!=''">is_head=#{isHead},</if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deletePeriodTimeByCycleNameAndStartTimeAndEndTime">
+        DELETE period_time.*,cycle_period_time.* FROM period_time,cycle,cycle_period_time WHERE cycle.cycle_name=#{cycleName} and cycle.cycle_id=cycle_period_time.cycle_id
+        and period_time.period_time_id=cycle_period_time.period_time_id
+        and period_time.start_time=#{startTime} and period_time.end_time=#{endTime}
+    </delete>
+
+    <select id="findPeriodTimeByCycleIdStartTimeAndEndTime" resultType="int">
+         SELECT COUNT(period_time.period_time_id)
+        FROM period_time,cycle_period_time
+        WHERE cycle_period_time.cycle_id=#{cycleId} and cycle_period_time.period_time_id=period_time.period_time_id
+        and period_time.start_time=#{startTime} and period_time.end_time=#{endTime}
+    </select>
+
+    <select id="findTallyRouteByWindIdAndRouteName" resultMap="BaseResultMap10">
+        SELECT
+         tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id, tally_route.status,tally_route.remark,tally_route.maintenancer,tally_route.maintenance_time,tally_route.serial_num,
+        org_architecture.architecture_name
+         FROM tally_route,org_architecture
+         WHERE 1=1
+        <if test="windId !=null and windId !=''">
+            and org_architecture.architecture_code=#{windId}
+        </if>
+        <if test="routeName !=null and routeName!=''" >
+            and route_name like "%"#{routeName}"%"
+        </if>
+        and org_architecture.architecture_code=tally_route.wind_id
+        and tally_route.true_id="0"
+        and org_architecture.architecture_type="02"
+        order by tally_route.route_id desc
+    </select>
+
+    <select id="countByWindIdAndRouteName" resultType="int">
+        SELECT COUNT(*)
+        FROM tally_route
+        WHERE 1=1
+        <if test="windId !=null">
+            and wind_id=#{windId}
+        </if>
+        <if test="routeName !=null">
+            and route_name like "%"#{routeName}"%"
+        </if>
+    </select>
+
+    <select id="findRouteId" resultType="string">
+        SELECT MAX(route_id)
+        FROM tally_route
+    </select>
+
+    <select id="findCycleId" resultType="string">
+        SELECT cycle_id
+        FROM cycle
+    </select>
+
+    <select id="findDepartmentByUserName" parameterType="string" resultType="string">
+        SELECT org_architecture.architecture_name
+        FROM org_architecture
+        WHERE isc_user.user_name
+    </select>
+
+    <select id="findAllUserDto" resultMap="BaseResultMap7">
+        SELECT
+        isc_user.user_id,isc_user.user_name,org_architecture.architecture_name
+        FROM isc_user,org_architecture,org_architecture_user
+        WHERE isc_user.user_id=org_architecture_user.user_id AND org_architecture_user.architecture_id=org_architecture.architecture_id
+    </select>
+
+    <delete id="deletePeriodTimeByCycleId">
+        DELETE period_time.*,cycle_period_time.*
+        FROM period_time,cycle_period_time
+        WHERE cycle_period_time.cycle_id=#{cycleId} and cycle_period_time.period_time_id=period_time.period_time_id
+    </delete>
+
+    <select id="findTallyRouteByRouteId" parameterType="string" resultMap="BaseResultMap">
+          SELECT a.*,b.architecture_name 
+          FROM tally_route a left join org_architecture b on a.wind_id=b.architecture_code 
+          WHERE  a.route_id=#{routeId} and b.architecture_type='02'
+    </select>
+
+    <select id="findCycleByRouteId" parameterType="string" resultMap="BaseResultMap5">
+        SELECT
+        cycle_id,route_id,cycle_name,cycle_unit,benchmark_date,cycle
+        FROM cycle
+        WHERE route_id=#{routeId}
+    </select>
+
+    <select id="findPeriodTimeVOByCycleId" parameterType="string" resultMap="BaseResultMap8">
+        SELECT
+        period_time.start_time,period_time.end_time
+        FROM period_time,cycle_period_time
+        WHERE cycle_period_time.cycle_id=#{cycleId} and period_time.period_time_id=cycle_period_time.period_time_id
+    </select>
+
+    <select id="findRouteUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM route_user
+    </select>
+
+    <select id="findRouteUserByrouteId" parameterType="string" resultMap="BaseResultMap9">
+        SELECT
+        route_user.id,route_user.route_id,route_user.user_id,route_user.is_practitioners,route_user.is_managers,route_user.is_head,route_user.remark,org_architecture.architecture_name,isc_user.user_name
+        FROM route_user,org_architecture,org_architecture_user,isc_user
+        WHERE route_id=#{routeId} and isc_user.user_id=route_user.user_id and isc_user.user_id=org_architecture_user.user_id and org_architecture_user.architecture_id=org_architecture.architecture_id
+    </select>
+
+    <select id="findRouterUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM route_user
+    </select>
+
+    <select id="findTallyRouteByWindIdAndRouteName2" resultMap="BaseResultMap10">
+        SELECT
+        tally_route.route_id,tally_route.route_name, tally_route.route_code, tally_route.wind_id, tally_route.status,tally_route.remark,tally_route.maintenancer,tally_route.maintenance_time,tally_route.serial_num,
+        org_architecture.architecture_name
+        FROM tally_route,org_architecture
+        WHERE 1=1
+        <if test="windId11 !=null and windId22 !=null and windId11!='' and windId22!=''">
+            and org_architecture.architecture_code BETWEEN #{windId11} and #{windId22}
+        </if>
+        <if test="routeName !=null and routeName!=''">
+            and tally_route.route_name like "%"#{routeName}"%"
+        </if>
+        and org_architecture.architecture_type="02"
+        and org_architecture.architecture_code=tally_route.wind_id
+        and tally_route.true_id="0"
+        order by tally_route.route_id desc
+    </select>
+
+    <select id="findWindIdByCode" parameterType="string" resultType="string">
+        SELECT
+        architecture_name
+        FROM org_architecture
+        WHERE architecture_code=#{windId1}
+        and architecture_type="02"
+    </select>
+
+
+<delete id="deleteUserByRouteId" parameterType="java.lang.String" >
+    delete from route_user
+    where route_id = #{routeId,jdbcType=VARCHAR}
+  </delete>
+
+    <select id="findAllTallyRouteName" resultMap="BaseResultMap">
+        SELECT
+        tally_route.route_id,tally_route.route_name,cycle.cycle_name
+        FROM tally_route,cycle
+        WHERE tally_route.true_id="0"
+        and tally_route.route_id=cycle.route_id
+    </select>
+
+
+
+
+</mapper>

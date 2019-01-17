@@ -2,6 +2,7 @@ package com.qz.zframe.run.dao;
 
 import com.qz.zframe.run.entity.Shift;
 import com.qz.zframe.run.entity.ShiftExample;
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -33,7 +34,7 @@ public interface ShiftMapper {
     
     Shift selectMaxSort();
     
-    
-    
-    
+    int  selectCount();
+	
+	Shift selectSort(int sort);
 }

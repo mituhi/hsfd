@@ -11,25 +11,41 @@ public interface OperateTicketTypeService {
     /**
      * 添加操作票类型
      */
-    public ResultEntity addOperateTicketType(OperateTicketTypeVo operateTicketTypeVo);
-
-    /**
-     * 删除操作票类型
-     */
-    public ResultEntity deleteOperateTicketType(String ticketTypeIds);
+    ResultEntity addOperateTicketType(OperateTicketTypeVo operateTicketTypeVo);
 
     /**
      * 修改操作票类型
      */
-    public ResultEntity updateOperateTicketType(OperateTicketTypeVo operateTicketTypeVo);
+    ResultEntity updateOperateTicketType(OperateTicketTypeVo operateTicketTypeVo);
+
+    /**
+     * 删除操作票类型
+     */
+    ResultEntity deleteOperateTicketType(String[] ticketTypeIds);
 
     /**
      * 浏览操作票类型
      */
-    public ResultEntity getOperateTicketTypeDetail(String ticketTypeId);
+    ResultEntity getOperateTicketTypeDetail(String ticketTypeId);
 
     /**
      * 操作票类型列表查询
      */
-    public PageResultEntity getOperateTicketTypeList(Map<String,String> pageAndCondition);
+    PageResultEntity getOperateTicketTypeList(Map<String,String> pageAndCondition);
+
+    /**
+     * 下拉框-操作票类型
+     */
+    ResultEntity getAllperateTicketType();
+
+    /**
+     * 操作人列表查询
+     */
+    ResultEntity getExecuterList(String ticketTypeId);
+
+    /**
+     * 监护人列表查询
+     */
+    ResultEntity getSupervisiorList(String ticketTypeId);
+
 }

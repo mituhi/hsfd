@@ -2,7 +2,6 @@ package com.qz.zframe.tickets.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class WorkTicketExample {
@@ -104,32 +103,6 @@ public class WorkTicketExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andTicketIdIsNull() {
@@ -633,52 +606,52 @@ public class WorkTicketExample {
         }
 
         public Criteria andMaintainDateEqualTo(Date value) {
-            addCriterionForJDBCDate("maintain_date =", value, "maintainDate");
+            addCriterion("maintain_date =", value, "maintainDate");
             return (Criteria) this;
         }
 
         public Criteria andMaintainDateNotEqualTo(Date value) {
-            addCriterionForJDBCDate("maintain_date <>", value, "maintainDate");
+            addCriterion("maintain_date <>", value, "maintainDate");
             return (Criteria) this;
         }
 
         public Criteria andMaintainDateGreaterThan(Date value) {
-            addCriterionForJDBCDate("maintain_date >", value, "maintainDate");
+            addCriterion("maintain_date >", value, "maintainDate");
             return (Criteria) this;
         }
 
         public Criteria andMaintainDateGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("maintain_date >=", value, "maintainDate");
+            addCriterion("maintain_date >=", value, "maintainDate");
             return (Criteria) this;
         }
 
         public Criteria andMaintainDateLessThan(Date value) {
-            addCriterionForJDBCDate("maintain_date <", value, "maintainDate");
+            addCriterion("maintain_date <", value, "maintainDate");
             return (Criteria) this;
         }
 
         public Criteria andMaintainDateLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("maintain_date <=", value, "maintainDate");
+            addCriterion("maintain_date <=", value, "maintainDate");
             return (Criteria) this;
         }
 
         public Criteria andMaintainDateIn(List<Date> values) {
-            addCriterionForJDBCDate("maintain_date in", values, "maintainDate");
+            addCriterion("maintain_date in", values, "maintainDate");
             return (Criteria) this;
         }
 
         public Criteria andMaintainDateNotIn(List<Date> values) {
-            addCriterionForJDBCDate("maintain_date not in", values, "maintainDate");
+            addCriterion("maintain_date not in", values, "maintainDate");
             return (Criteria) this;
         }
 
         public Criteria andMaintainDateBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("maintain_date between", value1, value2, "maintainDate");
+            addCriterion("maintain_date between", value1, value2, "maintainDate");
             return (Criteria) this;
         }
 
         public Criteria andMaintainDateNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("maintain_date not between", value1, value2, "maintainDate");
+            addCriterion("maintain_date not between", value1, value2, "maintainDate");
             return (Criteria) this;
         }
 
@@ -819,6 +792,76 @@ public class WorkTicketExample {
 
         public Criteria andFlowStatusNotBetween(String value1, String value2) {
             addCriterion("flow_status not between", value1, value2, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionIsNull() {
+            addCriterion("work_position is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionIsNotNull() {
+            addCriterion("work_position is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionEqualTo(String value) {
+            addCriterion("work_position =", value, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionNotEqualTo(String value) {
+            addCriterion("work_position <>", value, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionGreaterThan(String value) {
+            addCriterion("work_position >", value, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionGreaterThanOrEqualTo(String value) {
+            addCriterion("work_position >=", value, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionLessThan(String value) {
+            addCriterion("work_position <", value, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionLessThanOrEqualTo(String value) {
+            addCriterion("work_position <=", value, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionLike(String value) {
+            addCriterion("work_position like", value, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionNotLike(String value) {
+            addCriterion("work_position not like", value, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionIn(List<String> values) {
+            addCriterion("work_position in", values, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionNotIn(List<String> values) {
+            addCriterion("work_position not in", values, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionBetween(String value1, String value2) {
+            addCriterion("work_position between", value1, value2, "workPosition");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkPositionNotBetween(String value1, String value2) {
+            addCriterion("work_position not between", value1, value2, "workPosition");
             return (Criteria) this;
         }
 

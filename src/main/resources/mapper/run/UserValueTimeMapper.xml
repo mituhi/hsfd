@@ -201,6 +201,12 @@
 			#{item}
 		</foreach>
 	</delete>
+
+  <delete id="deleteBySchedulingRuleId" parameterType="string">
+    DELETE
+    FROM user_value_time
+    WHERE scheduling_rule_id=#{schedulingRuleId}
+  </delete>
   
   
   

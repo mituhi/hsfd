@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.DutyPersonUpdateMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.DutyPersonUpdate" >
+    <id column="duty_person_update_id" property="dutyPersonUpdateId" jdbcType="VARCHAR" />
+    <result column="scheduling_associated_id" property="schedulingAssociatedId" jdbcType="VARCHAR" />
+    <result column="value_id" property="valueId" jdbcType="VARCHAR" />
+    <result column="shift_id" property="shiftId" jdbcType="VARCHAR" />
+    <result column="duty_date" property="dutyDate" jdbcType="TIMESTAMP" />
+    <result column="duty_users_id" property="dutyUsersId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    duty_person_update_id, scheduling_associated_id, value_id, shift_id, duty_date, duty_users_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.DutyPersonUpdateExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from duty_person_update
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from duty_person_update
+    where duty_person_update_id = #{dutyPersonUpdateId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from duty_person_update
+    where duty_person_update_id = #{dutyPersonUpdateId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.DutyPersonUpdateExample" >
+    delete from duty_person_update
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.DutyPersonUpdate" >
+    insert into duty_person_update (duty_person_update_id, scheduling_associated_id, 
+      value_id, shift_id, duty_date, 
+      duty_users_id)
+    values (#{dutyPersonUpdateId,jdbcType=VARCHAR}, #{schedulingAssociatedId,jdbcType=VARCHAR}, 
+      #{valueId,jdbcType=VARCHAR}, #{shiftId,jdbcType=VARCHAR}, #{dutyDate,jdbcType=TIMESTAMP}, 
+      #{dutyUsersId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.DutyPersonUpdate" >
+    insert into duty_person_update
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dutyPersonUpdateId != null" >
+        duty_person_update_id,
+      </if>
+      <if test="schedulingAssociatedId != null" >
+        scheduling_associated_id,
+      </if>
+      <if test="valueId != null" >
+        value_id,
+      </if>
+      <if test="shiftId != null" >
+        shift_id,
+      </if>
+      <if test="dutyDate != null" >
+        duty_date,
+      </if>
+      <if test="dutyUsersId != null" >
+        duty_users_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dutyPersonUpdateId != null" >
+        #{dutyPersonUpdateId,jdbcType=VARCHAR},
+      </if>
+      <if test="schedulingAssociatedId != null" >
+        #{schedulingAssociatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="valueId != null" >
+        #{valueId,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftId != null" >
+        #{shiftId,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyDate != null" >
+        #{dutyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dutyUsersId != null" >
+        #{dutyUsersId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.DutyPersonUpdateExample" resultType="java.lang.Integer" >
+    select count(*) from duty_person_update
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update duty_person_update
+    <set >
+      <if test="record.dutyPersonUpdateId != null" >
+        duty_person_update_id = #{record.dutyPersonUpdateId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.schedulingAssociatedId != null" >
+        scheduling_associated_id = #{record.schedulingAssociatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.valueId != null" >
+        value_id = #{record.valueId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shiftId != null" >
+        shift_id = #{record.shiftId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dutyDate != null" >
+        duty_date = #{record.dutyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dutyUsersId != null" >
+        duty_users_id = #{record.dutyUsersId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update duty_person_update
+    set duty_person_update_id = #{record.dutyPersonUpdateId,jdbcType=VARCHAR},
+      scheduling_associated_id = #{record.schedulingAssociatedId,jdbcType=VARCHAR},
+      value_id = #{record.valueId,jdbcType=VARCHAR},
+      shift_id = #{record.shiftId,jdbcType=VARCHAR},
+      duty_date = #{record.dutyDate,jdbcType=TIMESTAMP},
+      duty_users_id = #{record.dutyUsersId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.DutyPersonUpdate" >
+    update duty_person_update
+    <set >
+      <if test="schedulingAssociatedId != null" >
+        scheduling_associated_id = #{schedulingAssociatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="valueId != null" >
+        value_id = #{valueId,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftId != null" >
+        shift_id = #{shiftId,jdbcType=VARCHAR},
+      </if>
+      <if test="dutyDate != null" >
+        duty_date = #{dutyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dutyUsersId != null" >
+        duty_users_id = #{dutyUsersId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where duty_person_update_id = #{dutyPersonUpdateId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.DutyPersonUpdate" >
+    update duty_person_update
+    set scheduling_associated_id = #{schedulingAssociatedId,jdbcType=VARCHAR},
+      value_id = #{valueId,jdbcType=VARCHAR},
+      shift_id = #{shiftId,jdbcType=VARCHAR},
+      duty_date = #{dutyDate,jdbcType=TIMESTAMP},
+      duty_users_id = #{dutyUsersId,jdbcType=VARCHAR}
+    where duty_person_update_id = #{dutyPersonUpdateId,jdbcType=VARCHAR}
+  </update>
+  
+  
+	<insert id="addDutyPersonUpdate" parameterType="com.qz.zframe.run.entity.DutyPersonUpdate">
+       insert into duty_person_update (duty_person_update_id, scheduling_associated_id,value_id, shift_id, duty_date, duty_users_id)
+    	values 
+        <foreach collection="list" item="dutyPersonUpdates" separator=",">
+            (#{dutyPersonUpdates.dutyPersonUpdateId}, #{dutyPersonUpdates.schedulingAssociatedId}, 
+	        #{dutyPersonUpdates.valueId}, #{dutyPersonUpdates.shiftId}, #{dutyPersonUpdates.dutyDate}, 
+	        #{dutyPersonUpdates.dutyUsersId})
+        </foreach>
+    </insert>
+  	
+  
+  <!-- 自定义mapper -->
+  <resultMap id="myResultMap" type="com.qz.zframe.run.entity.result.SchedulingQueryResult" >
+    <id column="duty_person_update_id" property="dutyPersonUpdateId" jdbcType="VARCHAR" />
+    <result column="duty_date" property="dutyDate" jdbcType="TIMESTAMP" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="scheduling_code" property="schedulingCode" jdbcType="VARCHAR" />
+    <result column="scheduling_name" property="schedulingName" jdbcType="VARCHAR" />
+    <result column="value_name" property="valueName" jdbcType="VARCHAR" />
+    <result column="shift_name" property="shiftName" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <!-- 值班人员修改数据查询 -->
+  <select id="listDutyPersonUpdate" parameterType = "com.qz.zframe.run.entity.submit.DutyPersonUpdateSubmit" resultMap="myResultMap">
+  
+  	SELECT
+		duty_person_update.duty_person_update_id,
+		duty_person_update.duty_date ,
+		scheduling_management.department,
+		scheduling_management.scheduling_code,
+		scheduling_name,
+		value_name,shift_name,user_name,
+		isc_user.user_id
+	FROM 
+		`duty_person_update` ,shift,value_time,isc_user,scheduling_associated,scheduling_management
+	<where>
+		duty_person_update.value_id = value_time.value_id
+		and duty_person_update.shift_id = shift.shift_id
+		and  duty_person_update.duty_users_id = isc_user.user_id 
+		and  duty_person_update.scheduling_associated_id = scheduling_associated.id
+		and  scheduling_associated.scheduling_management_id = scheduling_management.scheduling_management_id
+		
+		 <if test="date != null" >
+			and duty_person_update.duty_date = #{date}
+		</if>
+		
+		<if test="shiftId != null and shiftId != ''">
+			and duty_person_update.shift_id= #{shiftId}
+		</if>
+		
+		<if test="schedulingName != null and schedulingName != ''">
+			<!--使用id来查询：上传给我变成了排班管理表id      and scheduling_management.scheduling_name = #{schedulingName} -->
+			and scheduling_management.scheduling_management_id = #{schedulingName}
+		</if>
+		
+		<if test="dutyPersonUpdateId != null and dutyPersonUpdateId != ''">
+			and duty_person_update.duty_person_update_id = #{dutyPersonUpdateId}
+		</if>
+		
+		<if test="defaultDate != null">
+			and duty_person_update.duty_date >= #{defaultDate}
+		</if>
+		ORDER BY duty_person_update.duty_date
+		
+  	</where>
+  </select>
+ 
+ 
+ <!--排班查询 -->
+  <select id="listSchedulingQuery" parameterType = "com.qz.zframe.run.entity.submit.DutyPersonUpdateSubmit" resultMap="myResultMap">
+  
+  	SELECT
+		duty_person_update.duty_person_update_id,
+		duty_person_update.duty_date ,
+		scheduling_management.department,
+		scheduling_management.scheduling_code,
+		scheduling_name,
+		value_name,shift_name,user_name,
+		isc_user.user_id
+	FROM 
+		`duty_person_update` ,shift,value_time,isc_user,scheduling_associated,scheduling_management
+	<where>
+		duty_person_update.value_id = value_time.value_id
+		and duty_person_update.shift_id = shift.shift_id
+		and  duty_person_update.duty_users_id = isc_user.user_id 
+		and  duty_person_update.scheduling_associated_id = scheduling_associated.id
+		and  scheduling_associated.scheduling_management_id = scheduling_management.scheduling_management_id
+		<if test="department != null and department != ''">
+			and scheduling_management.department = #{department} 
+		</if>
+		
+		<if test="schedulingName != null and schedulingName != ''">
+			<!--使用id来查询：上传给我变成了排班管理表id      and scheduling_management.scheduling_name = #{schedulingName} -->
+			and scheduling_management.scheduling_management_id = #{schedulingName}
+		</if>
+		
+		 <if test="date != null" >
+			and duty_person_update.duty_date >= #{date}
+		</if>
+
+		 <if test="defaultDate != null">
+			and duty_person_update.duty_date >= #{defaultDate}
+		</if>
+
+			and duty_person_update.duty_date &lt;= #{monthOfLastDate}
+		
+		
+			ORDER BY duty_person_update.duty_date
+  	</where>
+  </select>
+  
+  <!-- 批量添加 -->
+  <insert id="addDutyPersonUpdateList" parameterType="java.util.List">
+  	insert into duty_person_update (duty_person_update_id, scheduling_associated_id,value_id, shift_id, duty_date, duty_users_id)
+  	 values
+  	 <foreach collection="list" item="item" index="index" separator=",">
+  	 		(#{item.dutyPersonUpdateId},#{item.schedulingAssociatedId},#{item.valueId},#{item.shiftId},#{item.dutyDate},#{item.dutyUsersId})
+  	 </foreach>
+  </insert>
+  
+  
+</mapper>

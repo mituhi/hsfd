@@ -18,13 +18,13 @@
     <result column="manufacturer" property="manufacturer" jdbcType="VARCHAR" />
     <result column="equipment_number" property="equipmentNumber" jdbcType="VARCHAR" />
     <result column="fixed_assets" property="fixedAssets" jdbcType="VARCHAR" />
-    <result column="date_manufacture" property="dateManufacture" jdbcType="TIMESTAMP" />
-    <result column="install_date" property="installDate" jdbcType="TIMESTAMP" />
-    <result column="date_delivery" property="dateDelivery" jdbcType="TIMESTAMP" />
+    <result column="date_manufacture" property="dateManufacture" jdbcType="DATE" />
+    <result column="install_date" property="installDate" jdbcType="DATE" />
+    <result column="date_delivery" property="dateDelivery" jdbcType="DATE" />
     <result column="equipment_information" property="equipmentInformation" jdbcType="VARCHAR" />
     <result column="supplier" property="supplier" jdbcType="VARCHAR" />
     <result column="asset_status" property="assetStatus" jdbcType="VARCHAR" />
-    <result column="asset_status_date" property="assetStatusDate" jdbcType="TIMESTAMP" />
+    <result column="asset_status_date" property="assetStatusDate" jdbcType="DATE" />
     <result column="asset_code" property="assetCode" jdbcType="VARCHAR" />
     <result column="asset_value" property="assetValue" jdbcType="DECIMAL" />
     <result column="monthly_depreciation_rate" property="monthlyDepreciationRate" jdbcType="DECIMAL" />
@@ -38,11 +38,26 @@
     <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
     <result column="asset_status_name" property="assetStatusName" jdbcType="VARCHAR" />
     <result column="position_id" property="positionId" jdbcType="VARCHAR" />
-    <result column="equipment_type" property="equipmentType" jdbcType="VARCHAR" />
+    <result column="enclosure" property="enclosure" jdbcType="LONGVARBINARY" /><!-- LONGVARBINARY -->
+    <result column="company_code_name" jdbcType="VARCHAR" property="companyCodeName" />
+    <result column="maintenance_team_name" jdbcType="VARCHAR" property="maintenanceTeamName" />
+    <result column="hierarchy_name" property="hierarchyName" jdbcType="VARCHAR" />
+    <result column="cost_center_name" property="costCenterName" jdbcType="VARCHAR" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
+   <!--   <result column="asset_status_dates" property="assetStatusDates" jdbcType="DATE" />
+    <result column="date_deliverys" property="dateDeliverys" jdbcType="DATE" /> -->
+   <!--  <result column="equipment_type" property="equipmentType" jdbcType="VARCHAR" /> -->
   </resultMap>
- <resultMap id="ResultMapWithBLOBs" type="com.qz.zframe.device.entity.EquipmentAssetLedger" extends="BaseResultMap" >
+ <!-- <resultMap id="ResultMapWithBLOBs" type="com.qz.zframe.device.entity.EquipmentAssetLedger" extends="BaseResultMap" >
     <result column="enclosure" property="enclosure" jdbcType="LONGVARBINARY" />
-  </resultMap> 
+  </resultMap>  -->
+  
+    <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+		</sql>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -107,9 +122,10 @@
     address, manufacturer, equipment_number, fixed_assets, date_manufacture, install_date, 
     date_delivery, equipment_information, supplier, asset_status, asset_status_date, 
     asset_code, asset_value, monthly_depreciation_rate, component_id, output_id, run_id, 
-    equipment_id,position_id,wind_name,crew_name,type_name,supplier_name,asset_status_name,equipment_type
+    equipment_id,position_id,wind_name,crew_name,type_name,supplier_name,asset_status_name <!--, company_code_name,maintenance_team_name,hierarchy_name,cost_center_name, -->
+   <!--  department_name  -->
   </sql>
-  <sql id="Blob_Column_List" >
+ <!--  <sql id="Blob_Column_List" >
     enclosure
   </sql>
   <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" >
@@ -127,27 +143,53 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
-  </select>
+  </select> -->
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" >
   
   select 
   <include refid="Base_Column_List" />
   from
-   ( select e.*,sc.title as asset_status_name,f.wind_name as wind_name,
-	c.crew_name as crew_name,i.equipment_type as equipment_type,
+   ( select 
+    e.*,sc.title as asset_status_name,f.architecture_name as wind_name,
+	c.crew_name as crew_name, i.equipment_type as equipment_type, 
 	p.position_name as  position_name,s.supplier_name as supplier_name,
-	p.position_code as  position_code,i.type_name as type_name
-    <if test="distinct" >
-      distinct
-    </if>
+	i.equipment_type as type_name,p.position_code as  position_code
     from equipment_asset_ledger  e
     left  join  crew_information  c  on  c.crew_id=e.crew
     left join  equipment_classification i on i.equipment_id=e.equipment_id
     left join position_encode   p on p.position_id=e.position_id
-    left join wind_field   f  on f.wind_id=e.wind_id
+    left join (select * from org_architecture where architecture_type='02') f on f.architecture_code=e.wind_id
     left join  supplier  s on s.supplier_id=e.supplier
     left join sp_code sc ON e.asset_status = sc.name 
-    left join sp_code_type d ON sc.code_type_id = d.id where  d.name='ASSET_STATUS') e
+    left join sp_code_type d ON sc.code_type_id = d.id
+    where d.name='ASSET_STATUS') e
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     <include refid="Pagination_Sql" />
+  </select>
+  
+  <select id="select" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" > 
+  select 
+     e.*
+  from
+   ( select 
+    e.*,sc.title as asset_status_name,f.architecture_name as wind_name,
+	c.crew_name as crew_name, i.equipment_type as equipment_type, 
+	p.position_name as  position_name,s.supplier_name as supplier_name,
+	i.equipment_type as type_name,p.position_code as  position_code
+    from equipment_asset_ledger  e
+    left  join  crew_information  c  on  c.crew_id=e.crew
+    left join  equipment_classification i on i.equipment_id=e.equipment_id
+    left join position_encode   p on p.position_id=e.position_id
+    left join (select * from org_architecture where architecture_type='02') f on f.architecture_code=e.wind_id
+    left join  supplier  s on s.supplier_id=e.supplier
+    left join sp_code sc ON e.asset_status = sc.name 
+    left join sp_code_type d ON sc.code_type_id = d.id
+    where  d.name='ASSET_STATUS' and  e.asset_status != '01' ) e
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -157,64 +199,102 @@
   </select>
   
    <select id="selectByExamples" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" >
-    select  
-    <include refid="Base_Column_List" />
+    select 
+   <include refid="Base_Column_List" /> 
     from  (
     select 
-    DISTINCT
-    e.*,sc.title as asset_status_name,f.wind_name as wind_name,
-	c.crew_name as crew_name,i.equipment_type as equipment_type,
+    select 
+    e.*,sc.title as asset_status_name,f.architecture_name as wind_name,
+	c.crew_name as crew_name, i.equipment_type as equipment_type, 
 	p.position_name as  position_name,s.supplier_name as supplier_name,
-	i.type_name as type_name,p.position_code as  position_code
+	i.equipment_type as type_name,p.position_code as  position_code
     from equipment_asset_ledger  e
     left  join  crew_information  c  on  c.crew_id=e.crew
     left join  equipment_classification i on i.equipment_id=e.equipment_id
     left join position_encode   p on p.position_id=e.position_id
-    left join wind_field   f  on f.wind_id=e.wind_id
+    left join (select * from org_architecture where architecture_type='02') f on f.architecture_code=e.wind_id
     left join  supplier  s on s.supplier_id=e.supplier
     left join sp_code sc ON e.asset_status = sc.name 
-    left join sp_code_type d ON sc.code_type_id = d.id where d.name='ASSET_STATUS' and e.asset_status != '01' ) e
+    left join sp_code_type d ON sc.code_type_id = d.id
+  
+     where d.name='ASSET_STATUS'  and e.asset_status != '01' ) e
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if> 
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+     <include refid="Pagination_Sql" />
   </select>
   
   
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    SELECT
+	e.*,
+	f.architecture_name AS wind_name,
+	c.crew_name AS crew_name,
+	i.equipment_type AS equipment_type,
+	p.position_name AS position_name,
+	s.supplier_name AS supplier_name,
+	p.position_code AS position_code,
+	i.equipment_type AS type_name,
+	j.architecture_name AS department_name,
+	h.architecture_name AS maintenance_team_name 
+FROM
+	equipment_asset_ledger e
+	LEFT JOIN crew_information c ON c.crew_id = e.crew
+	LEFT JOIN equipment_classification i ON i.equipment_id = e.equipment_id
+	LEFT JOIN position_encode p ON p.position_id = e.position_id
+	LEFT JOIN ( SELECT * FROM org_architecture WHERE architecture_type = '02' ) f ON f.architecture_code = e.wind_id
+	LEFT JOIN ( SELECT * FROM org_architecture WHERE architecture_type = '03' ) j ON j.architecture_id = p.department
+	LEFT JOIN ( SELECT * FROM org_architecture WHERE architecture_type = '04' ) h ON h.architecture_id = e.maintenance_team 
+	LEFT JOIN supplier s ON s.supplier_id = e.supplier
+WHERE
+	e.equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKeys" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    e.*,sc.title as asset_status_name,f.wind_name as wind_name,
+    e.*,sc.title as asset_status_name,f.architecture_name as wind_name,
 	c.crew_name as crew_name,i.equipment_type as equipment_type,
 	p.position_name as  position_name,s.supplier_name as supplier_name,
-	p.position_code as  position_code,i.type_name as type_name
+	p.position_code as  position_code,i.equipment_type as type_name, 
+    scc.title as hierarchy_name,j.architecture_name AS department_name,
+	h.architecture_name AS maintenance_team_name 
     from equipment_asset_ledger  e
     left  join  crew_information  c  on  c.crew_id=e.crew
     left join  equipment_classification i on i.equipment_id=e.equipment_id
     left join position_encode   p on p.position_id=e.position_id
-    left join wind_field   f  on f.wind_id=e.wind_id
+    left join (select * from org_architecture where architecture_type='02') f on f.architecture_code=e.wind_id
+    LEFT JOIN ( SELECT * FROM org_architecture WHERE architecture_type = '03' ) j ON j.architecture_id = p.department
+	LEFT JOIN ( SELECT * FROM org_architecture WHERE architecture_type = '04' ) h ON h.architecture_id = e.maintenance_team 
     left join  supplier  s on s.supplier_id=e.supplier
-    left join sp_code sc ON e.asset_status = sc.name 
+    <!-- left join sp_code sc ON e.asset_status = sc.name 
     left join sp_code_type d ON sc.code_type_id = d.id 
-    where d.name='ASSET_STATUS' and e.asset_status != '01'  and equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
+    LEFT JOIN sp_code scc ON e.hierarchy = scc.name 
+	LEFT JOIN sp_code_type m  ON scc.code_type_id = m.id  -->
+    where <!-- d.name='ASSET_STATUS' and  m.name='HIERARCHY_TYPE'  and --> e.equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
   </select>
-  <select id="selectByPrimaryKeys" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
-    select
-    e.*,sc.title as asset_status_name,f.wind_name as wind_name,
-	c.crew_name as crew_name,i.equipment_type as equipment_type,
-	p.position_name as  position_name,s.supplier_name as supplier_name,
-	p.position_code as  position_code,i.type_name as type_name
-    from equipment_asset_ledger  e
-    left  join  crew_information  c  on  c.crew_id=e.crew
-    left join  equipment_classification i on i.equipment_id=e.equipment_id
-    left join position_encode   p on p.position_id=e.position_id
-    left join wind_field   f  on f.wind_id=e.wind_id
-    left join  supplier  s on s.supplier_id=e.supplier
-    left join sp_code sc ON e.asset_status = sc.name 
-    left join sp_code_type d ON sc.code_type_id = d.id 
-    where d.name='ASSET_STATUS' and e.asset_status != '01'  and equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
-  </select>
+  
+   <select id="selectByEquipmentCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+      select e.* from  equipment_asset_ledger  e  where e.equipment_code=#{equipmentCode,jdbcType=VARCHAR}
+   </select>
+   
+   <!-- 根据风电场和位置信息查询设备信息 -->
+   
+      <select id="selectByWindAndPosition" resultMap="BaseResultMap" parameterType="java.lang.String" >
+      select e.* from  equipment_asset_ledger  e  
+      left join  position_encode  p  on e.position_id=p.position_id
+      left join (select * from org_architecture where architecture_type='02') f on f.architecture_code=e.wind_id
+      where  1=1
+      <if test=" positionId!=null">
+          and e.position_id=#{positionId,jdbcType=VARCHAR}
+      </if>
+      <!-- <if test=" wind_id !=null"> 
+       and  e.wind_id=#{windId,jdbcType=VARCHAR}
+      </if> -->
+    
+   </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from equipment_asset_ledger
     where equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
@@ -238,7 +318,7 @@
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedger" >
     insert into equipment_asset_ledger (equipment_asset_id, equipment_code, 
-      equipment_name, position_code, position_name, 
+      equipment_name, position_id, 
       wind_id, department, hierarchy, 
       crew, company_code, cost_center, 
       maintenance_team, address, manufacturer, 
@@ -249,16 +329,16 @@
       component_id, output_id, run_id, 
       equipment_id, enclosure)
     values (#{equipmentAssetId,jdbcType=VARCHAR}, #{equipmentCode,jdbcType=VARCHAR}, 
-      #{equipmentName,jdbcType=VARCHAR}, #{positionCode,jdbcType=VARCHAR}, #{positionName,jdbcType=VARCHAR}, 
+      #{equipmentName,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR},
       #{windId,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{hierarchy,jdbcType=VARCHAR}, 
       #{crew,jdbcType=VARCHAR}, #{companyCode,jdbcType=VARCHAR}, #{costCenter,jdbcType=VARCHAR}, 
       #{maintenanceTeam,jdbcType=VARCHAR}, #{address,jdbcType=DECIMAL}, #{manufacturer,jdbcType=VARCHAR}, 
       #{equipmentNumber,jdbcType=VARCHAR}, #{fixedAssets,jdbcType=VARCHAR}, #{dateManufacture,jdbcType=TIMESTAMP}, 
       #{installDate,jdbcType=TIMESTAMP}, #{dateDelivery,jdbcType=TIMESTAMP}, #{equipmentInformation,jdbcType=VARCHAR}, 
       #{supplier,jdbcType=VARCHAR}, #{assetStatus,jdbcType=VARCHAR}, #{assetStatusDate,jdbcType=TIMESTAMP}, 
-      #{assetCode,jdbcType=VARCHAR}, #{assetValue,jdbcType=DECIMAL}, #{monthlyDepreciationRate,jdbcType=DECIMAL}, 
+      #{assetCode,jdbcType=VARCHAR}, #{assetValue,jdbcType=DECIMAL}, #{monthlyDepreciationRate,jdbcType=VARCHAR}, 
       #{componentId,jdbcType=VARCHAR}, #{outputId,jdbcType=VARCHAR}, #{runId,jdbcType=VARCHAR}, 
-      #{equipmentId,jdbcType=VARCHAR}, #{enclosure,jdbcType=LONGVARBINARY})
+      #{equipmentId,jdbcType=VARCHAR}, #{enclosure,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedger" >
     insert into equipment_asset_ledger
@@ -454,28 +534,48 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" resultType="java.lang.Integer" >
-    select distinct count(*) from equipment_asset_ledger e
+    select  count(*) from (select e.*,sc.title as asset_status_name,f.architecture_name as wind_name,
+	c.crew_name as crew_name, i.equipment_type as equipment_type, 
+	p.position_name as  position_name,s.supplier_name as supplier_name,
+	p.position_code as  position_code,i.equipment_type as type_name 
+    from equipment_asset_ledger  e
     left  join  crew_information  c  on  c.crew_id=e.crew
     left join  equipment_classification i on i.equipment_id=e.equipment_id
     left join position_encode   p on p.position_id=e.position_id
-    left join wind_field   f  on f.wind_id=e.wind_id
+    left join (select * from org_architecture where architecture_type='02') f on f.architecture_code=e.wind_id
     left join  supplier  s on s.supplier_id=e.supplier
- 
+    left join sp_code sc ON e.asset_status = sc.name 
+    left join sp_code_type d ON sc.code_type_id = d.id 
+ <!--   LEFT JOIN sp_code scc ON p.hierarchy = scc.name 
+	LEFT JOIN sp_code_type m  ON scc.code_type_id = m.id  -->
+    where  d.name='ASSET_STATUS') e
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
-    </if>
+    </if> 
   </select>
    <select id="countByExamples" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" resultType="java.lang.Integer" >
-     select
-     distinct count(*) from
-    (select 
-     e.*
+    select
+    count(*) from
+    (select e.*,sc.title as asset_status_name,f.architecture_name as wind_name,
+	c.crew_name as crew_name,i.equipment_type as equipment_type, 
+	p.position_name as  position_name,s.supplier_name as supplier_name,
+	p.position_code as  position_code,i.equipment_type as type_name <!-- g.architecture_code as company_code_name,h.architecture_name as maintenance_team_name,
+    k.architecture_name as cost_center_name, --><!-- scc.title as hierarchy_name --><!-- ,j.architecture_name as department_name -->
     from equipment_asset_ledger e
     left  join  crew_information  c  on  c.crew_id=e.crew
     left join  equipment_classification i on i.equipment_id=e.equipment_id
     left join position_encode   p on p.position_id=e.position_id
-    left join wind_field   f  on f.wind_id=e.wind_id
-    left join  supplier  s on s.supplier_id=e.supplier where e.asset_status != '01' ) e
+    left join (select * from org_architecture where architecture_type='02') f on f.architecture_code=e.wind_id
+   <!--  left join  (select * from org_architecture where architecture_type='01') g  on g.architecture_id=e.company_code
+	left join  (select * from org_architecture where architecture_type='03') j  on j.architecture_id=p.department
+	left join  (select * from org_architecture where architecture_type='04') h  on h.architecture_id=e.maintenance_team
+	left join  (select * from org_architecture where architecture_type='05') k  on k.architecture_id=e.cost_center -->
+    left join  supplier  s on s.supplier_id=e.supplier 
+    left join sp_code sc ON e.asset_status = sc.name 
+    left join sp_code_type d ON sc.code_type_id = d.id
+<!--     LEFT JOIN sp_code scc ON p.hierarchy = scc.name 
+	LEFT JOIN sp_code_type m  ON scc.code_type_id = m.id  --> 
+     where d.name='ASSET_STATUS' <!--  and m.name='HIERARCHY_TYPE' -->  and e.asset_status != '01' ) e
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -788,8 +888,8 @@
     update equipment_asset_ledger
     set equipment_code = #{equipmentCode,jdbcType=VARCHAR},
       equipment_name = #{equipmentName,jdbcType=VARCHAR},
-      position_code = #{positionCode,jdbcType=VARCHAR},
-      position_name = #{positionName,jdbcType=VARCHAR},
+     <!--  position_code = #{positionCode,jdbcType=VARCHAR}, -->
+      position_id = #{positionId,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},
       department = #{department,jdbcType=VARCHAR},
       hierarchy = #{hierarchy,jdbcType=VARCHAR},
@@ -817,4 +917,28 @@
       equipment_id = #{equipmentId,jdbcType=VARCHAR}
     where equipment_asset_id = #{equipmentAssetId,jdbcType=VARCHAR}
   </update>
+  <select id="selectByWindId" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" >
+  select e.* from(
+    select e.*
+   
+    from equipment_asset_ledger  e where e.asset_status='01')e
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     <include refid="Pagination_Sql" />
+  </select>
+  <select id="selectByWindIdCount" parameterType="com.qz.zframe.device.entity.EquipmentAssetLedgerExample" resultType="java.lang.Integer" >
+  select COUNT(*) from(
+    select e.*
+   
+    from equipment_asset_ledger  e  where e.asset_status='01')e
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+     <include refid="Pagination_Sql" />
+  </select>
+  
 </mapper>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.ResDao">
+	
+	<resultMap id="res" type="com.qz.zframe.common.entity.Res">
+        <id column="res_id" property="resId"/>
+        <result column="res_pid" property="resPid"/>
+        <result column="res_name" property="resName"/>
+        <result column="res_value" property="resValue"/>
+        <result column="res_type" property="resType"/>
+        <result column="res_path" property="resPath"/>
+        <result column="res_attr" property="resAttr"/>
+        <result column="order_no" property="orderNo"/>
+    </resultMap>
+    
+    <!-- 新增资源信息 -->
+    <insert id="addRes" parameterType="com.qz.zframe.common.entity.Res">
+        insert into isc_res (res_id, res_pid, res_name, res_value, res_type, res_path, res_attr, order_no)
+        values (#{resId}, #{resPid}, #{resName}, #{resValue}, #{resType}, #{resPath}, #{resAttr}, #{orderNo})
+    </insert>
+    
+    <!-- 批量获取资源信息 -->
+    <select id="findResList" parameterType="com.qz.zframe.common.entity.Res" resultMap="res">
+        select
+        res_id,
+        res_pid,
+        res_name,
+        res_value,
+        res_type,
+        res_path,
+        res_attr,
+        order_no
+        from isc_res
+        <where>
+            <if test="resId != null and resId != ''">
+                and res_id = #{resId}
+            </if>
+            <if test="resPid != null and resPid != ''">
+                and res_pid = #{resPid}
+            </if>
+            <if test="resName != null and resName != ''">
+                and res_name like concat('%', #{resName}, '%')
+            </if>
+            <if test="resValue != null and resValue != ''">
+                and res_value = #{resValue}
+            </if>
+            <if test="resType != null and resType != ''">
+                and res_type = #{resType}
+            </if>
+            <if test="resPath != null and resPath != ''">
+                and res_path like concat(#{resPath}, '%')
+            </if>
+            <if test="resAttr != null and resAttr != ''">
+                and res_attr = #{resAttr}
+            </if>
+        </where>
+        order by order_no
+    </select>
+    
+    <!-- 批量删除资源信息 -->
+    <delete id="deleteResInBatch" parameterType="java.util.List">
+        delete from isc_res where res_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <!-- 删除角色资源关系表数据 -->
+    <delete id="deleteRoleResRelaByResIds" parameterType="java.util.List">
+        delete from isc_role_res_rela where res_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <!-- 修改资源信息 -->
+    <update id="updateResMsg" parameterType="com.qz.zframe.common.entity.Res">
+        update isc_res
+        <set>
+            <if test="resName != null and resName != ''">
+                res_name = #{resName},
+            </if>
+            <if test="resValue != null and resValue != ''">
+                res_value = #{resValue},
+            </if>
+            <if test="resType != null and resType != ''">
+                res_type = #{resType},
+            </if>
+            <if test="resPath != null and resPath != ''">
+                res_path = #{resPath},
+            </if>
+            <if test="resAttr != null and resAttr != ''">
+                res_attr = #{resAttr},
+            </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo},
+            </if>
+            <if test="resPid != null and resPid != ''">
+                res_pid = #{resPid}
+            </if>
+        </set>
+        where res_id = #{resId}
+    </update>
+    
+    <!-- 批量获取角色下的资源信息 -->
+    <select id="findRoleResList" parameterType="java.lang.String" resultMap="res">
+        select
+        ir.res_id,
+        ir.res_pid,
+        ir.res_name,
+        ir.res_value,
+        ir.res_type,
+        ir.res_path,
+        ir.res_attr,
+        ir.order_no
+        from isc_res ir, isc_role_res_rela irrr
+        where ir.res_id = irrr.res_id
+        <if test="roleId != null and roleId != ''">
+            and irrr.role_id = #{roleId}
+        </if>
+    </select>
+    
+    <!-- 批量获取角色资源关系信息 -->
+    <select id="findRoleResRelaList" parameterType="java.util.Map" resultType="java.util.Map">
+        select rela_id, role_id, res_id from isc_role_res_rela where role_id = #{roleId} and res_id = #{resId}
+    </select>
+    
+    <!-- 新增角色资源关系 -->
+    <insert id="addRoleResRela" parameterType="java.util.Map">
+        insert into isc_role_res_rela(rela_id, role_id, res_id)
+        values(#{relaId}, #{roleId}, #{resId})
+    </insert>
+    
+    <!-- 删除角色资源关系 -->
+    <delete id="deleteRoleResRela" parameterType="java.util.Map">
+        delete from isc_role_res_rela where roleId = #{roleId} and res_id = #{resId}
+    </delete>
+    
+    <!-- 通过角色id列表批量获取角色的资源信息 -->
+    <select id="findRoleResByRoleIdsList" parameterType="java.util.List" resultMap="res">
+        select
+        ir.res_id,
+        ir.res_pid,
+        ir.res_name,
+        ir.res_value,
+        ir.res_type,
+        ir.res_path,
+        ir.res_attr,
+        ir.order_no
+        from isc_res ir, isc_role_res_rela irrr
+        where ir.res_id = irrr.res_id
+        and irrr.role_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    <select id="findTreeMenuInfoListByUserId" parameterType="string" resultMap="res">
+      select
+        DISTINCT ir.res_id,
+        ir.res_pid,
+        ir.res_name,
+        ir.res_value,
+        ir.res_type,
+        ir.res_path,
+        ir.res_attr,
+        ir.order_no
+        from isc_res ir, isc_role_res_rela irrr,isc_role_user_rela irur
+        where ir.res_id = irrr.res_id AND irur.role_id = irrr.role_id
+        AND irur.user_id = #{userId}
+
+    </select>
+
+    <select id="findTreeMenuInfoListByRoleId" parameterType="string" resultMap="res">
+      select
+        DISTINCT ir.res_id,
+        ir.res_pid,
+        ir.res_name,
+        ir.res_value,
+        ir.res_type,
+        ir.res_path,
+        ir.res_attr,
+        ir.order_no
+        from isc_res ir, isc_role_res_rela irrr
+        where ir.res_id = irrr.res_id AND
+         irrr.role_id = #{roleId}
+    </select>
+    
+    <!-- 清空角色资源 -->
+    <delete id="clearRoleRes" parameterType="java.lang.String">
+        delete from isc_role_res_rela where role_id = #{roleId}
+    </delete>
+    
+    <!-- 分页查询菜单信息 -->
+    <select id="findResPage" parameterType="com.qz.zframe.common.entity.Res" resultMap="res">
+        select
+        res_id,
+        res_pid,
+        res_name,
+        res_value,
+        res_type,
+        res_path,
+        res_attr,
+        order_no
+        from isc_res
+        <where>
+            <if test="resName != null and resName != ''">
+                and res_name like concat('%', #{resName}, '%')
+            </if>
+            <if test="resValue != null and resValue != ''">
+                and res_value = #{resValue}
+            </if>
+        </where>
+        order by order_no
+        limit #{firstIndex},#{lastIndex}
+    </select>
+    
+    <!-- 查询菜单数量 -->
+    <select id="findCountRes" resultType="Integer">
+        select count(res_id) from isc_res
+        <where>
+            <if test="resName != null and resName != ''">
+                and res_name like concat('%', #{resName}, '%')
+            </if>
+            <if test="resValue != null and resValue != ''">
+                and res_value = #{resValue}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 根据id查询菜单信息 -->
+    <select id="queryResInfo" resultMap="res">
+        select
+        res_id,
+        res_pid,
+        res_name,
+        res_value,
+        res_type,
+        res_path,
+        res_attr,
+        order_no
+        from isc_res
+        where res_id = #{resId}
+    </select>
+
+    <!-- 根据条件查询关联菜单数量 -->
+    <select id="findCountByMsg" parameterType="map" resultType="int">
+        select
+          count(*)
+        from isc_role_res_rela
+        <where>
+            <if test="map != null and map.resId != null and map.resId != ''">
+                and res_id = #{map.resId}
+            </if>
+            <if test="map != null and map.roles != null">
+                and role_id in
+                <foreach collection="map.roles" item="item" open="(" separator="," close=")">
+                    #{item.roleId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <!-- 根据菜单id获取按钮信息 -->
+    <select id="findResByMap" parameterType="map" resultMap="res">
+        SELECT
+            i.res_id,
+            i.res_pid,
+            i.res_name,
+            i.res_value,
+            i.res_type,
+            i.res_path,
+            i.res_attr,
+            i.order_no
+        FROM
+            isc_res i,
+            isc_role_res_rela r
+        WHERE
+            i.res_id = r.res_id
+            AND i.res_pid = #{map.resId}
+            AND r.role_id in
+            <foreach collection="map.roles" item="item" open="(" separator="," close=")">
+                #{item.roleId}
+            </foreach>
+    </select>
+</mapper>

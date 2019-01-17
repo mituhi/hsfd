@@ -1,5 +1,6 @@
 package com.qz.zframe.maintain.mapper;
 
+import com.qz.zframe.common.entity.Role;
 import com.qz.zframe.maintain.entity.BreakdownKnowledgeBase;
 import com.qz.zframe.maintain.entity.BreakdownKnowledgeBaseExample;
 import com.qz.zframe.maintain.vo.KnowledgeVo;
@@ -20,14 +21,24 @@ public interface BreakdownKnowledgeBaseMapper {
     int insert(BreakdownKnowledgeBase record);
 
     int insertSelective(BreakdownKnowledgeBase record);
-    //批量删除
-    int batchDelete(@Param("array") String[] ids);
+
+    //批量真删除
+    int batchDeleteTrue(@Param("list") List<String> knowledgeIds);
+
+    //批量假删除
+    int batchDeleteFalse(@Param("list") List<String> knowledgeIds);
+
     //详情查询
     KnowledgeVo getBreakdownKnowledgeDetail(@Param("knowledgeId") String knowledgeId);
+
     //分页+条件列表查询
-    List<KnowledgeVo> getBreakdownKnowledgeListByPageAndCondition(@Param("map") Map<String, String> pageAndCondition);
+    List<KnowledgeVo> getBreakdownKnowledgeListByPageAndCondition(@Param("map") Map<String, String> pageAndCondition,
+                                                                  @Param("userId") String userId,
+                                                                  @Param("list") List<Role> roleIds);
     //根据条件查询总记录数
-    int getTotal(@Param("map") Map<String, String> pageAndCondition);
+    int getTotal(@Param("map") Map<String, String> pageAndCondition,
+                 @Param("userId") String userId,
+                 @Param("list") List<Role> roleIds);
 
     List<BreakdownKnowledgeBase> selectByExample(BreakdownKnowledgeBaseExample example);
 

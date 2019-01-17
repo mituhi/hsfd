@@ -38,14 +38,22 @@ public class StoreHouseType implements Serializable{
     private String typeName;
 
    
-	@ApiModelProperty(name="isRelatedJobs",value="是否关联工单，01是，02否",required=true)
+	@ApiModelProperty(name="isRelatedJobs",value="是否关联工单编码，01是，02否",required=true)
 	@JsonView({ListView.class})
     private String isRelatedJobs;
+	
+	@ApiModelProperty(name="isRelatedJobsText",value="是否关联工单文本，是否",required=true)
+	@JsonView({ListView.class})
+    private String isRelatedJobsText;
 
    
-	@ApiModelProperty(name="isNegative",value="是否负数，01是02否",required=true)
+	@ApiModelProperty(name="isNegative",value="出入库类别，01出库，02入库",required=true)
 	@JsonView({ListView.class})
     private String isNegative;
+	
+	@ApiModelProperty(name="isNegativeText",value="是否负数文本，01是02否",required=true)
+	@JsonView({ListView.class})
+    private String isNegativeText;
 
     /**
      * 删除状态
@@ -61,6 +69,15 @@ public class StoreHouseType implements Serializable{
      * 创建时间
      */
     private Date createTime;
+    
+    
+    @ApiModelProperty(name="superTypeId",value="关联类型id",required=true)
+	@JsonView({ListView.class})
+    private String superTypeId;
+    
+    @ApiModelProperty(name="superTypeName",value="关联类型名称",required=true)
+    @JsonView({ListView.class})
+    private String superTypeName;
 
     public String getCreater() {
 		return creater;
@@ -125,4 +142,37 @@ public class StoreHouseType implements Serializable{
     public void setIsDelete(String isDelete) {
         this.isDelete = isDelete == null ? null : isDelete.trim();
     }
+
+	public String getIsRelatedJobsText() {
+		return isRelatedJobsText;
+	}
+
+	public void setIsRelatedJobsText(String isRelatedJobsText) {
+		this.isRelatedJobsText = isRelatedJobsText;
+	}
+
+	public String getIsNegativeText() {
+		return isNegativeText;
+	}
+
+	public void setIsNegativeText(String isNegativeText) {
+		this.isNegativeText = isNegativeText;
+	}
+
+	public String getSuperTypeId() {
+		return superTypeId;
+	}
+
+	public void setSuperTypeId(String superTypeId) {
+		this.superTypeId = superTypeId;
+	}
+
+	public String getSuperTypeName() {
+		return superTypeName;
+	}
+
+	public void setSuperTypeName(String superTypeName) {
+		this.superTypeName = superTypeName;
+	} 
+	
 }

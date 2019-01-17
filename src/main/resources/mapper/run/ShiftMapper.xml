@@ -5,11 +5,13 @@
     <id column="shift_id" property="shiftId" jdbcType="VARCHAR" />
     <result column="shift_code" property="shiftCode" jdbcType="VARCHAR" />
     <result column="shift_name" property="shiftName" jdbcType="VARCHAR" />
-    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
-    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="start_time" property="startTime" jdbcType="VARCHAR" />
+    <result column="end_time" property="endTime" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="sort" property="sort" jdbcType="INTEGER" />
     <result column="is_meter_read" property="isMeterRead" jdbcType="VARCHAR" />
+    <result column="status_name" property="statusName" jdbcType="VARCHAR" />
+    <result column="is_meter_read_name" property="isMeterReadName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,15 +72,20 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    shift_id, shift_code, shift_name, start_time, end_time, status, sort, is_meter_read
+    shift_id, shift_code, shift_name, start_time, end_time, status, sort, is_meter_read,status_name,is_meter_read_name 
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.ShiftExample" >
     select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from shift
+      <include refid="Base_Column_List" />
+   from(
+    select t.*,a.title as status_name,s.title as is_meter_read_name 
+    from shift  t
+    LEFT JOIN sp_code a ON t.STATUS = a.name
+    LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+	LEFT JOIN sp_code s ON t.is_meter_read = s.name 
+	LEFT JOIN sp_code_type d ON s.code_type_id = d.id 
+	where  b.NAME = 'SHIFT_VALUE' 
+	AND d.NAME = 'METERREAD' ) sh 
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,9 +95,15 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
-    <include refid="Base_Column_List" />
-    from shift
-    where shift_id = #{shiftId,jdbcType=VARCHAR}
+    t.* ,a.title as status_name,sc.title as is_meter_read_name 
+    from shift t
+    LEFT JOIN sp_code a ON t.STATUS = a.NAME 
+    LEFT JOIN sp_code_type b ON a.code_type_id = b.id
+	LEFT JOIN sp_code sc ON t.is_meter_read = sc.name 
+	LEFT JOIN sp_code_type d ON sc.code_type_id = d.id 
+	where  b.NAME = 'SHIFT_VALUE' 
+	AND d.NAME = 'METERREAD' 
+    and t.shift_id = #{shiftId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from shift
@@ -107,7 +120,7 @@
       start_time, end_time, status, 
       sort, is_meter_read)
     values (#{shiftId,jdbcType=VARCHAR}, #{shiftCode,jdbcType=VARCHAR}, #{shiftName,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=VARCHAR}, #{endTime,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{sort,jdbcType=INTEGER}, #{isMeterRead,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.Shift" >
@@ -149,10 +162,10 @@
         #{shiftName,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null" >
-        #{startTime,jdbcType=TIMESTAMP},
+        #{startTime,jdbcType=VARCHAR},
       </if>
       <if test="endTime != null" >
-        #{endTime,jdbcType=TIMESTAMP},
+        #{endTime,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
@@ -184,10 +197,10 @@
         shift_name = #{record.shiftName,jdbcType=VARCHAR},
       </if>
       <if test="record.startTime != null" >
-        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+        start_time = #{record.startTime,jdbcType=VARCHAR},
       </if>
       <if test="record.endTime != null" >
-        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+        end_time = #{record.endTime,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
@@ -208,8 +221,8 @@
     set shift_id = #{record.shiftId,jdbcType=VARCHAR},
       shift_code = #{record.shiftCode,jdbcType=VARCHAR},
       shift_name = #{record.shiftName,jdbcType=VARCHAR},
-      start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      start_time = #{record.startTime,jdbcType=VARCHAR},
+      end_time = #{record.endTime,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       sort = #{record.sort,jdbcType=INTEGER},
       is_meter_read = #{record.isMeterRead,jdbcType=VARCHAR}
@@ -227,10 +240,10 @@
         shift_name = #{shiftName,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null" >
-        start_time = #{startTime,jdbcType=TIMESTAMP},
+        start_time = #{startTime,jdbcType=VARCHAR},
       </if>
       <if test="endTime != null" >
-        end_time = #{endTime,jdbcType=TIMESTAMP},
+        end_time = #{endTime,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -248,40 +261,27 @@
     update shift
     set shift_code = #{shiftCode,jdbcType=VARCHAR},
       shift_name = #{shiftName,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=INTEGER},
       is_meter_read = #{isMeterRead,jdbcType=VARCHAR}
     where shift_id = #{shiftId,jdbcType=VARCHAR}
   </update>
   
-  <!-- 批量获取班次表信息 -->
- <!--  <select id="listShift" parameterType="com.qz.zframe.run.entity.Shift" resultMap="BaseResultMap">
-  	
-		select 
-			shift_id,
-			shift_code,
-			shift_name,
-			start_time,
-			end_time,
-			status,
-			sort,
-			is_meter_read
-		from shift
-		<where>
-			<if test="shiftId != null and shiftId != ''">
-				
-			</if>
-		</where>
-		ORDER BY  sort
-  
-  </select> -->
-  
+    
   <select id="selectMaxSort" resultMap="BaseResultMap">
   	SELECT MAX(sort) as sort FROM `shift` 
   </select>
   
-  
+   <select id="selectCount" resultType="java.lang.Integer">
+   select count(*) from shift
+  </select>
+  <select id="selectSort" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.Shift">
+   select  
+   s.*
+  <!--  <include refid="Base_Column_List" /> -->
+   from shift  s where  sort=#{sort,jdbcType=INTEGER}
+  </select>
   
 </mapper>

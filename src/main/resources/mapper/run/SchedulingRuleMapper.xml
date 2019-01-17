@@ -5,12 +5,23 @@
     <id column="scheduling_rule_id" property="schedulingRuleId" jdbcType="VARCHAR" />
     <result column="scheduling_rule_code" property="schedulingRuleCode" jdbcType="VARCHAR" />
     <result column="scheduling_rule" property="schedulingRule" jdbcType="VARCHAR" />
-    <result column="department" property="department" jdbcType="VARCHAR" />
-    <result column="scheduling_shift" property="schedulingShift" jdbcType="VARCHAR" />
+    <result column="wind_code" property="windCode" jdbcType="VARCHAR" />
     <result column="rotation_cycle" property="rotationCycle" jdbcType="VARCHAR" />
-    <result column="is_across_day" property="isAcrossDay" jdbcType="VARCHAR" />
-    <result column="day_num" property="dayNum" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="architecture_name" property="windName" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.qz.zframe.run.entity.dto.RuleShiftValueDto" >
+    <id column="scheduling_rule_id" property="schedulingRuleId" jdbcType="VARCHAR" />
+    <result column="shift_id" property="shiftId" jdbcType="VARCHAR" />
+    <result column="shift_name" property="shiftName" jdbcType="VARCHAR" />
+    <result column="value_id" property="valueId" jdbcType="VARCHAR" />
+    <result column="value_name" property="valueName" jdbcType="VARCHAR" />
+    <result column="day_id" property="dayId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResultMap3" type="com.qz.zframe.run.entity.dto.IscUserDto" >
+    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="value_id" property="valueId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,8 +82,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    scheduling_rule_id, scheduling_rule_code, scheduling_rule, department, scheduling_shift, 
-    rotation_cycle, is_across_day, day_num, status
+    scheduling_rule_id, scheduling_rule_code, scheduling_rule, wind_code,
+    rotation_cycle, status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.SchedulingRuleExample" >
     select
@@ -106,12 +117,10 @@
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.run.entity.SchedulingRule" >
     insert into scheduling_rule (scheduling_rule_id, scheduling_rule_code, 
-      scheduling_rule, department, scheduling_shift, 
-      rotation_cycle, is_across_day, day_num, 
+      scheduling_rule, wind_code, rotation_cycle,true_id,
       status)
     values (#{schedulingRuleId,jdbcType=VARCHAR}, #{schedulingRuleCode,jdbcType=VARCHAR}, 
-      #{schedulingRule,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{schedulingShift,jdbcType=VARCHAR}, 
-      #{rotationCycle,jdbcType=VARCHAR}, #{isAcrossDay,jdbcType=VARCHAR}, #{dayNum,jdbcType=VARCHAR}, 
+      #{schedulingRule,jdbcType=VARCHAR}, #{windCode,jdbcType=VARCHAR}, #{rotationCycle,jdbcType=VARCHAR},#{trueId,jdbcType=VARCHAR},
       #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.SchedulingRule" >
@@ -240,20 +249,11 @@
       <if test="schedulingRule != null" >
         scheduling_rule = #{schedulingRule,jdbcType=VARCHAR},
       </if>
-      <if test="department != null" >
-        department = #{department,jdbcType=VARCHAR},
-      </if>
-      <if test="schedulingShift != null" >
-        scheduling_shift = #{schedulingShift,jdbcType=VARCHAR},
+      <if test="windCode != null" >
+        wind_code = #{windCode,jdbcType=VARCHAR},
       </if>
       <if test="rotationCycle != null" >
         rotation_cycle = #{rotationCycle,jdbcType=VARCHAR},
-      </if>
-      <if test="isAcrossDay != null" >
-        is_across_day = #{isAcrossDay,jdbcType=VARCHAR},
-      </if>
-      <if test="dayNum != null" >
-        day_num = #{dayNum,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -265,12 +265,146 @@
     update scheduling_rule
     set scheduling_rule_code = #{schedulingRuleCode,jdbcType=VARCHAR},
       scheduling_rule = #{schedulingRule,jdbcType=VARCHAR},
-      department = #{department,jdbcType=VARCHAR},
-      scheduling_shift = #{schedulingShift,jdbcType=VARCHAR},
+      wind_code = #{windCode,jdbcType=VARCHAR},
       rotation_cycle = #{rotationCycle,jdbcType=VARCHAR},
-      is_across_day = #{isAcrossDay,jdbcType=VARCHAR},
-      day_num = #{dayNum,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR}
     where scheduling_rule_id = #{schedulingRuleId,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectByWindCode" parameterType="string" resultMap="BaseResultMap">
+        SELECT s.scheduling_rule_id,s.scheduling_rule_code,s.scheduling_rule,
+        s.wind_code,s.rotation_cycle,s.status,
+        o.architecture_name
+        FROM scheduling_rule s,org_architecture o
+        WHERE true_id="0"
+    <if test="windCode!=null and windCode!=''">
+      and s.wind_code=#{windCode}
+    </if>
+    and o.architecture_type="02"
+    and o.architecture_code=s.wind_code
+  </select>
+
+  <select id="getShifts" parameterType="string" resultType="com.qz.zframe.run.entity.Shift">
+    SELECT s.shift_name as shiftName
+    FROM shift s,rule_shift_value r
+    WHERE s.shift_id=r.shift_id
+    and r.scheduling_rule_id=#{schedulingRuleId}
+  </select>
+
+  <select id="findSchedulingRuleCode" parameterType="string" resultType="int">
+    SELECT COUNT(scheduling_rule_code)
+    FROM scheduling_rule
+    WHERE scheduling_rule_code=#{schedulingRuleCode}
+  </select>
+
+  <select id="count" resultType="int">
+    SELECT COUNT(scheduling_rule_id)
+    FROM scheduling_rule
+  </select>
+
+  <update id="deleteById" parameterType="string">
+    UPDATE scheduling_rule
+    SET true_id='1'
+    WHERE scheduling_rule_id=#{id}
+  </update>
+
+  <select id="countBySchedulingRuleId" parameterType="string" resultType="int">
+    SELECT COUNT(scheduling_rule_id)
+    FROM scheduling_rule
+    WHERE scheduling_rule_id=#{schedulingRuleId}
+  </select>
+
+  <select id="countBySchedulingRuleCode" parameterType="string" resultType="int">
+    SELECT COUNT(scheduling_rule_code)
+    FROM scheduling_rule
+    WHERE scheduling_rule_code=#{schedulingRuleCode}
+    and true_id="0"
+  </select>
+
+  <select id="findSchedulingRuleCodeById" parameterType="string" resultType="string">
+    SELECT scheduling_rule_code
+    FROM scheduling_rule
+    WHERE scheduling_rule_id=#{schedulingRuleId}
+  </select>
+
+  <select id="findRuleShiftValueDto" resultMap="BaseResultMap2">
+      SELECT
+      r.scheduling_rule_id,r.shift_id,s.shift_name,r.value_id,v.value_name,r.day_id
+      FROM rule_shift_value r,shift s,value_time v
+      WHERE
+      scheduling_rule_id=#{schedulingRuleId}
+      and r.shift_id=s.shift_id
+      and r.value_id=v.value_id
+      and day_id in
+    <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="findIscUserDto" resultMap="BaseResultMap3">
+      SELECT i.user_id,i.user_name
+      FROM isc_user i,user_value_time u
+      WHERE u.scheduling_rule_id=#{schedulingRuleId}
+      and u.value_id=#{valueId}
+      and i.user_id=u.user_id
+  </select>
+
+  <select id="findRuleShiftValueDtoByschedulingRuleIdAndDayId" resultMap="BaseResultMap2">
+    SELECT
+    r.scheduling_rule_id,r.shift_id,s.shift_name,r.value_id,v.value_name,r.day_id
+    FROM rule_shift_value r,shift s,value_time v
+    WHERE
+    scheduling_rule_id=#{schedulingRuleId}
+    and r.shift_id=s.shift_id
+    and r.value_id=v.value_id
+    and day_id=#{dayId}
+  </select>
+
+  <select id="findMaxDayIdBySchedulingRuleId" parameterType="string" resultType="string">
+    SELECT max(day_id)
+    FROM rule_shift_value
+    WHERE scheduling_rule_id=#{schedulingRuleId};
+  </select>
+
+  <select id="findRuleShiftValueDtoByschedulingRuleId" resultMap="BaseResultMap2">
+    SELECT
+    r.scheduling_rule_id,r.shift_id,s.shift_name,r.value_id,v.value_name,r.day_id
+    FROM rule_shift_value r,shift s,value_time v
+    WHERE
+    scheduling_rule_id=#{schedulingRuleId}
+    and r.shift_id=s.shift_id
+    and r.value_id=v.value_id
+  </select>
+
+  <select id="findIscUserDtoBySchedulingRuleId" resultMap="BaseResultMap3">
+    SELECT i.user_id,i.user_name,u.value_id
+    FROM isc_user i,user_value_time u
+    WHERE u.scheduling_rule_id=#{schedulingRuleId}
+    and i.user_id=u.user_id
+  </select>
+
+  <select id="findValueIdsBySchedulingRuleId" parameterType="string" resultType="string">
+    SELECT distinct value_id
+    FROM user_value_time
+    WHERE scheduling_rule_id=#{schedulingRuleId}
+  </select>
+
+  <select id="findDayIdsBySchedulingRuleId" parameterType="string" resultType="string">
+      SELECT DISTINCT day_id
+      FROM rule_shift_value
+      WHERE scheduling_rule_id=#{schedulingRuleId}
+  </select>
+
+  <select id="findValueIdsBySchedulingRuleById" parameterType="string" resultType="string">
+      SELECT DISTINCT value_id
+      FROM user_value_time
+      WHERE scheduling_rule_id=#{schedulingRuleId}
+  </select>
+
+  <select id="findShiftIdsBySchedulingRuleById" parameterType="string" resultType="string">
+    SELECT DISTINCT shift_id
+    FROM rule_shift_value
+    WHERE scheduling_rule_id=#{schedulingRuleId}
+  </select>
+
 </mapper>

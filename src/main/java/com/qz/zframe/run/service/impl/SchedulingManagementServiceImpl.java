@@ -20,7 +20,7 @@ import com.qz.zframe.run.service.SchedulingManagementService;
 /**
  * <p>Title: SchedulingManagementServiceImpl</p>
  * <p>@Description:排班管理实现  </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月1日 下午12:27:49
  * @version:V1.0
  */
@@ -47,6 +47,7 @@ public class SchedulingManagementServiceImpl implements SchedulingManagementServ
 	@Override
 	public ResultEntity saveSchedulingManagement(SchedulingManagement schedulingManagement) {
 		
+		ResultEntity resultEntity = new ResultEntity();
 		//如果为空
 		if(StringUtils.isBlank(schedulingManagement.getSchedulingManagementId())){
 			//生成id
@@ -54,10 +55,21 @@ public class SchedulingManagementServiceImpl implements SchedulingManagementServ
 			schedulingManagement.setSchedulingManagementId(id);
 		}
 		
+		//执行插入之前先要查询一个是否存在相同名称的排班表名称
+		SchedulingManagement management = this.getSchedulingManagementBySchedulingName(schedulingManagement.getSchedulingName());
+		
+		//如果不为null，则存在相同的排班表
+		if(management!=null){
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("排班表名称重复");
+			return resultEntity;
+		}
+		
+		
 		//执行插入操作
 		schedulingManagementMapper.insert(schedulingManagement);
 		
-		ResultEntity resultEntity = new ResultEntity();
+		
 		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("添加成功");
 		return resultEntity;

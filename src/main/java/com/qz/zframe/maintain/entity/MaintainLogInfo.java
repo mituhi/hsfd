@@ -1,48 +1,48 @@
 package com.qz.zframe.maintain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class MaintainLogInfo {
 
-    @ApiParam(name="dayId",value="日志id",required=false)
+    @ApiModelProperty(name="dayId",value="日志id",required=false)
     private String dayId;
 
-    @ApiParam(name="serialNumber",value="流水号",required=false)
+    @ApiModelProperty(name="serialNumber",value="流水号",required=false)
     private String serialNumber;
 
-    @ApiParam(name="maintainer",value="维护人",required=true)
+    @ApiModelProperty(name="maintainer",value="维护人id",required=true)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=true)
+    @ApiModelProperty(name="maintainDate",value="维护日期",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="status",value="状态",required=false)
+    @ApiModelProperty(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="dayOfWeek",value="星期",required=true)
+    @ApiModelProperty(name="dayOfWeek",value="星期几",required=true)
     private String dayOfWeek;
 
-    @ApiParam(name="weather",value="天气",required=true)
+    @ApiModelProperty(name="weather",value="天气",required=true)
     private String weather;
 
-    @ApiParam(name="windId",value="风电场",required=true)
+    @ApiModelProperty(name="windId",value="风电场",required=true)
     private String windId;
 
-    @ApiParam(name="recordPerson",value="记录人",required=true)
+    @ApiModelProperty(name="recordPerson",value="记录人id",required=true)
     private String recordPerson;
 
-    @ApiParam(name="maintainTime",value="维护时间",required=true)
+    @ApiModelProperty(name="maintainTime",value="维护时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date maintainTime;
 
-    @ApiParam(name="onDutyPerson",value="当班人员",required=true)
+    @ApiModelProperty(name="onDutyPerson",value="当班人员ids",required=true)
     private String onDutyPerson;
 
-    @ApiParam(name="remark",value="备注",required=false)
+    @ApiModelProperty(name="remark",value="备注",required=false)
     private String remark;
 
     public String getDayId() {

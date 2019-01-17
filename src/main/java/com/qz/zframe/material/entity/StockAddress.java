@@ -38,21 +38,29 @@ public class StockAddress implements Serializable{
 	@ApiModelProperty(name="stockAddAttr",value="库存地点属性，01物理，02逻辑",required=true)
 	@JsonView({ ListView.class })
     private String stockAddAttr;
-
-
-	@ApiModelProperty(name="windId",value="风电场id",required=true)
+	
+	@ApiModelProperty(name="stockAddAttrText",value="库存地点属性转换文本",required=false)
 	@JsonView({ ListView.class })
-    private String windId;
+    private String stockAddAttrText;
+
+
+	@ApiModelProperty(name="architectureCode",value="风电场编码",required=true)
+	@JsonView({ ListView.class })
+    private String architectureCode;
     
  
-	@ApiModelProperty(name="windName",value="风电场名称",required=false)
+	@ApiModelProperty(name="architectureName",value="风电场名称",required=false)
 	@JsonView({ ListView.class })
-    private String windName;
+    private String architectureName;
 
     
 	@ApiModelProperty(name="status",value="库存地状态，01启用，02停用",required=true)
 	@JsonView({ ListView.class })
     private String status;
+	
+	@ApiModelProperty(name="statusText",value="库存地状态转换文本",required=false)
+	@JsonView({ ListView.class })
+    private String statusText;
 
   
 	@ApiModelProperty(name="remark",value="备注",required=false)
@@ -107,14 +115,6 @@ public class StockAddress implements Serializable{
         this.stockAddAttr = stockAddAttr == null ? null : stockAddAttr.trim();
     }
 
-    public String getWindId() {
-        return windId;
-    }
-
-    public void setWindId(String windId) {
-        this.windId = windId == null ? null : windId.trim();
-    }
-
     public String getStatus() {
         return status;
     }
@@ -130,16 +130,6 @@ public class StockAddress implements Serializable{
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
-
-   
-
-	public String getWindName() {
-		return windName;
-	}
-
-	public void setWindName(String windName) {
-		this.windName = windName;
-	}
 
 	public String getIsDelete() {
 		return isDelete;
@@ -163,6 +153,39 @@ public class StockAddress implements Serializable{
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+
+	public String getArchitectureCode() {
+		return architectureCode;
+	}
+
+	public void setArchitectureCode(String architectureCode) {
+		this.architectureCode = architectureCode;
+	}
+
+	public String getArchitectureName() {
+		return architectureName;
+	}
+
+	public void setArchitectureName(String architectureName) {
+		this.architectureName = architectureName;
+	}
+
+	public String getStockAddAttrText() {
+		return stockAddAttrText;
+	}
+
+	public void setStockAddAttrText(String stockAddAttrText) {
+		this.stockAddAttrText = stockAddAttrText;
+	}
+
+	public String getStatusText() {
+		return statusText;
+	}
+
+	public void setStatusText(String statusText) {
+		this.statusText = statusText;
 	}
 	
 }

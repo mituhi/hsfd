@@ -1,6 +1,10 @@
 package com.qz.zframe.device.entity;
 
+import java.util.Date;
+
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -41,12 +45,19 @@ public class Parameters {
 	@ApiModelProperty(name = "statusName", value = "状态名称", required = false)
 	@Transient
 	private String statusName;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	private Date createTime;
+
+	private String runIs;
+
+	private String outputIs;
+
 	public String getParameterId() {
 		return parameterId;
 	}
 
 	public void setParameterId(String parameterId) {
-		this.parameterId = parameterId == null ? null : parameterId.trim();
+		this.parameterId = parameterId;
 	}
 
 	public String getOutput() {
@@ -54,7 +65,7 @@ public class Parameters {
 	}
 
 	public void setOutput(String output) {
-		this.output = output == null ? null : output.trim();
+		this.output = output;
 	}
 
 	public String getRun() {
@@ -62,7 +73,7 @@ public class Parameters {
 	}
 
 	public void setRun(String run) {
-		this.run = run == null ? null : run.trim();
+		this.run = run;
 	}
 
 	public String getParameterCode() {
@@ -70,7 +81,7 @@ public class Parameters {
 	}
 
 	public void setParameterCode(String parameterCode) {
-		this.parameterCode = parameterCode == null ? null : parameterCode.trim();
+		this.parameterCode = parameterCode;
 	}
 
 	public String getParameterName() {
@@ -78,7 +89,7 @@ public class Parameters {
 	}
 
 	public void setParameterName(String parameterName) {
-		this.parameterName = parameterName == null ? null : parameterName.trim();
+		this.parameterName = parameterName;
 	}
 
 	public String getType() {
@@ -86,7 +97,7 @@ public class Parameters {
 	}
 
 	public void setType(String type) {
-		this.type = type == null ? null : type.trim();
+		this.type = type;
 	}
 
 	public String getCompany() {
@@ -94,7 +105,7 @@ public class Parameters {
 	}
 
 	public void setCompany(String company) {
-		this.company = company == null ? null : company.trim();
+		this.company = company;
 	}
 
 	public String getStatus() {
@@ -102,15 +113,42 @@ public class Parameters {
 	}
 
 	public void setStatus(String status) {
-		this.status = status == null ? null : status.trim();
+		this.status = status;
 	}
-	@Transient
+
 	public String getStatusName() {
 		return statusName;
 	}
-	@Transient
+
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
 	}
+
+	public String getRunIs() {
+		return runIs;
+	}
+
+	public void setRunIs(String runIs) {
+		this.runIs = runIs;
+	}
+
+	public String getOutputIs() {
+		return outputIs;
+	}
+
+	public void setOutputIs(String outputIs) {
+		this.outputIs = outputIs;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	
+	
 	
 }

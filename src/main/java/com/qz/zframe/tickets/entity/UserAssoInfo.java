@@ -1,31 +1,34 @@
 package com.qz.zframe.tickets.entity;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 public class UserAssoInfo {
 
-    @ApiParam(name="assoId",value="关联id",required=false)
+    @ApiModelProperty(name="assoId",value="关联id",required=false)
     private String assoId;
 
-    @ApiParam(name="workTicketTypeId",value="工作票类型id",required=false)
+    @ApiModelProperty(name="workTicketTypeId",value="工作票类型id",required=false)
     private String workTicketTypeId;
 
-    @ApiParam(name="operTicketTypeId",value="操作票类型id",required=false)
+    @ApiModelProperty(name="operTicketTypeId",value="操作票类型id",required=false)
     private String operTicketTypeId;
 
-    @ApiParam(name="userNumbet",value="编号",required=false)
+    @ApiModelProperty(name="userNumbet",value="编号",required=false)
     private String userNumbet;
 
-    @ApiParam(name="userWorkNumber",value="人员工号",required=false)
+    @ApiModelProperty(name="userId",value="人员id",required=false)
+    private String userId;
+
+    @ApiModelProperty(name="userWorkNumber",value="人员工号",required=false)
     private String userWorkNumber;
 
-    @ApiParam(name="userName",value="人员名称",required=false)
+    @ApiModelProperty(name="userName",value="人员名称",required=false)
     private String userName;
 
-    @ApiParam(name="userUnit",value="单位",required=false)
+    @ApiModelProperty(name="userUnit",value="单位",required=false)
     private String userUnit;
 
-    @ApiParam(name="userType",value="人员类型",required=false)
+    @ApiModelProperty(name="userType",value="人员类型",required=false)
     private String userType;
 
     public String getAssoId() {
@@ -58,6 +61,14 @@ public class UserAssoInfo {
 
     public void setUserNumbet(String userNumbet) {
         this.userNumbet = userNumbet == null ? null : userNumbet.trim();
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUserWorkNumber() {

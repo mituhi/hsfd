@@ -1,13 +1,11 @@
 package com.qz.zframe.run.entity.result;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>Title: DeviceAssociationResult</p>
  * <p>@Description: 电厂主设备配置返回结果封装类 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月9日 下午3:06:14
  * @version:V1.0
  */
@@ -34,6 +32,9 @@ public class DeviceAssociationResult {
 	
 	@ApiModelProperty(value = "设备数量", name = "count",required=true)
 	private Integer count;
+	
+	
+	private String windName;
 	
 	public String getDeviceAssociationId() {
 		return deviceAssociationId;
@@ -91,4 +92,13 @@ public class DeviceAssociationResult {
 		this.count = count;
 	}
 
+	public String getWindName() {
+		return windName;
+	}
+
+	public void setWindName(String windName) {
+		this.windName = windName;
+	}
+
+	
 }

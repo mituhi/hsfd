@@ -11,7 +11,15 @@
     <result column="creater" property="creater" jdbcType="VARCHAR" />
     <result column="creat_date" property="creatDate" jdbcType="TIMESTAMP" />
     <result column="Wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="creater_name" property="createrName" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+		</sql>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -71,36 +79,93 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    crew_id, crew_code, crew_name, wind_id, installed_capacity, enable_date, creater, 
-    creat_date
+    crew_id, crew_code, crew_name, wind_id, installed_capacity,DATE_FORMAT(enable_date,'%Y-%m-%d') enable_date, creater, 
+    DATE_FORMAT(creat_date,'%Y-%m-%d') creat_date
   </sql>
   <sql id="Base_Column_Lists" >
     crew_id, crew_code, crew_name, wind_id, installed_capacity, enable_date, creater, 
-    creat_date,wind_name
+    creat_date,wind_name,creater_name
   </sql>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
-     *,f.wind_name as wind_name
+     c.*,a.architecture_name as wind_name,u.user_name as creater_name
     from crew_information c
-    left join wind_field  f  on c.wind_id=f.wind_id
+    left join (select * from org_architecture where architecture_type='02')a  on c.wind_id=a.architecture_code  
+    left join isc_user u on u.user_id=c.creater
     where crew_id = #{crewId,jdbcType=VARCHAR}
   </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.CrewInformationExample" >
 
-    select  *,f.wind_name as wind_name
+    select  c.*,a.architecture_name as wind_name,u.user_name as creater_name
     <if test="distinct" >
       distinct
     </if> 
     from crew_information c   
-    left join wind_field  f  on c.wind_id=f.wind_id  
+    left join (select * from org_architecture where architecture_type='02') a
+    on c.wind_id=a.architecture_code  
+    left join isc_user u on u.user_id=c.creater
      <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if> 
   <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>  
+    <include refid="Pagination_Sql" />
   </select>
+  
+    <select id="selectAll" parameterType="java.lang.String" resultMap="BaseResultMap" >
+
+     select  
+     <include refid="Base_Column_List" /> 
+      from crew_information   
+   
+  </select>
+  
+    <select id="selectByCrewCode" parameterType="java.lang.String" resultMap="BaseResultMap" >
+
+     select  
+     <include refid="Base_Column_List" /> 
+      from crew_information    where crew_code=#{crewCode,jdbcType=VARCHAR}
+   
+  </select>
+  
+  
+ <select id="select" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.CrewInformationExample" >
+
+    select  c.*,DATE_FORMAT(enable_date,'%Y-%m-%d')  enableDates,  
+
+    a.architecture_name as wind_name,u.user_name as creater_name,DATE_FORMAT(creat_date,'%Y-%m-%d') creatDates
+  <!--   <if test="distinct" >
+      distinct
+    </if>  -->
+    from crew_information c   
+    left join (select * from org_architecture where architecture_type='02') a
+     on c.wind_id=a.architecture_code  
+    left join isc_user u on u.user_id=c.creater 
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if> 
+  <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>  
+  </select> 
+   <select id="selectCrew" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.CrewInformation" >
+    select c.crew_id,c.crew_name 
+    from crew_information c  
+  </select> 
+<!--   根据风电场查询机组信息 -->
+  <select id="selectCrewByWind" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.CrewInformation" >
+    select c.*
+    from crew_information c 
+    left join (select * from org_architecture where architecture_type='02') a
+    on c.wind_id=a.architecture_code 
+    where 1=1
+    <if test=" windId != null">
+    and c.wind_id=#{windId,jdbcType=VARCHAR}
+    </if>
+  </select> 
+ 
   <delete id="deleteByExample" parameterType="com.qz.zframe.device.entity.CrewInformationExample" >
     delete from crew_information
     <if test="_parameter != null" >
@@ -181,7 +246,8 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qz.zframe.device.entity.CrewInformationExample" resultType="java.lang.Integer" >
-    select count(*) from crew_information c  left join wind_field  f  on c.wind_id=f.wind_id
+    select count(*) from crew_information c  left join (select * from org_architecture where architecture_type='02') f 
+    on c.wind_id=f.architecture_id  left join isc_user u on u.user_id=c.creater
   <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if> 
@@ -235,9 +301,9 @@
    <update id="update" parameterType="com.qz.zframe.device.entity.CrewInformation" >
     update crew_information
     set crew_code = #{crewCode,jdbcType=VARCHAR},
-      crew_name = #{crewCode,jdbcType=VARCHAR},
+      crew_name = #{crewName,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},
-      installed_capacity = #{nstalledCapacity,jdbcType=VARCHAR},
+      installed_capacity = #{installedCapacity,jdbcType=VARCHAR},
       enable_date = #{enableDate,jdbcType=TIMESTAMP},
       creater = #{creater,jdbcType=VARCHAR},
       creat_date=#{creatDate,jdbcType=TIMESTAMP}

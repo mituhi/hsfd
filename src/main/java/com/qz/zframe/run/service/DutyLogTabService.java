@@ -9,7 +9,7 @@ import com.qz.zframe.run.entity.DutyLogTabExample;
 /**
  * <p>Title: DutyLogTabService</p>
  * <p>@Description: 值班日志TAB接口声明 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月6日 下午1:30:40
  * @version:V1.0
  */
@@ -40,7 +40,7 @@ public interface DutyLogTabService {
 	 * @param: @param dutyLogTab   
 	 * @return: void
 	 */
-	void editDutyLogTabById(DutyLogTab dutyLogTab);
+	ResultEntity editDutyLogTabById(DutyLogTab dutyLogTab);
 	
 	
 	/**
@@ -48,6 +48,6 @@ public interface DutyLogTabService {
 	 * @param: @param id   
 	 * @return: void
 	 */
-	void removeDutyLogTabById(String tabId);
+	void removeDutyLogTabById(List<String> tabId);
 	
 }

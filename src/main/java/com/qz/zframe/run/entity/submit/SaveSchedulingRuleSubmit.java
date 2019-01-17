@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * <p>Title: SaveSchedulingRuleSbumit</p>
  * <p>@Description: 排班规则添加页面提交封装类 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月2日 下午5:05:44
  * @version:V1.0
  */

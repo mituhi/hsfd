@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression.DateTime;
 
 
-public class CrewInformation {
+public class CrewInformation{
 	@ApiModelProperty(name = "crewId", value = "机组信息id", required = false)
 
 	private String crewId;
@@ -51,6 +51,30 @@ public class CrewInformation {
 	@Transient
     private String windName;
 	
+	@ApiModelProperty(name = "createrName", value = "创建人名称", required = false)
+	@Transient
+    private String createrName;
+	@Transient
+	private String  creatDates;
+	@Transient
+	private String enableDates;
+	@Transient
+	public String getCreatDates() {
+		return creatDates;
+	}
+	@Transient
+	public void setCreatDates(String creatDates) {
+		this.creatDates = creatDates;
+	}
+	@Transient
+	public String getEnableDates() {
+		return enableDates;
+	}
+	@Transient
+	public void setEnableDates(String enableDates) {
+		this.enableDates = enableDates;
+	}
+
 	public String getCrewId() {
 		return crewId;
 	}
@@ -121,6 +145,14 @@ public class CrewInformation {
 	@Transient
 	public void setWindName(String windName) {
 		this.windName = windName;
+	}
+	@Transient
+	public String getCreaterName() {
+		return createrName;
+	}
+	@Transient
+	public void setCreaterName(String createrName) {
+		this.createrName = createrName;
 	}
 	
 	

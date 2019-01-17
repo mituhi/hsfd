@@ -22,12 +22,14 @@ public interface OperateTicketTypeMapper {
     int insertSelective(OperateTicketType record);
     //批量删除
     int batchDelete(@Param("array") String[] ids);
+    //根据id查询名称
+    String getNameById(@Param("ticketTypeId") String ticketTypeId);
     //详情查询
     OperateTicketTypeVo getOperateTicketTypeDetail(@Param("ticketTypeId") String ticketTypeId);
     //列表查询
     List<OperateTicketTypeVo> getOperateTicketTypeList(@Param("map") Map<String,String> pageAndCondition);
     //查询总记录数
-    int getTotal();
+    int getTotal(@Param("map") Map<String,String> pageAndCondition);
 
     List<OperateTicketType> selectByExample(OperateTicketTypeExample example);
 
@@ -40,4 +42,6 @@ public interface OperateTicketTypeMapper {
     int updateByPrimaryKeySelective(OperateTicketType record);
 
     int updateByPrimaryKey(OperateTicketType record);
+
+    int deleteChildMsg(@Param("operTicketTypeId") String operTicketTypeId);
 }

@@ -1,40 +1,40 @@
 package com.qz.zframe.maintain.entity;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 public class WorkorderService {
 
-    @ApiParam(name="serviceId",value="服务id",required=false)
+    @ApiModelProperty(name="serviceId",value="服务id",required=false)
     private String serviceId;
 
-    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    @ApiModelProperty(name="workorderId",value="缺陷工单id",required=false)
     private String workorderId;
 
-    @ApiParam(name="knowledgeId",value="故障知识id",required=false)
+    @ApiModelProperty(name="knowledgeId",value="故障知识id",required=false)
     private String knowledgeId;
 
-    @ApiParam(name="orderId",value="工单id",required=false)
+    @ApiModelProperty(name="orderId",value="工单id",required=false)
     private String orderId;
 
-    @ApiParam(name="serviceNumber",value="服务编码",required=false)
+    @ApiModelProperty(name="serviceNumber",value="服务编码",required=false)
     private String serviceNumber;
 
-    @ApiParam(name="serviceDesc",value="服务描述",required=false)
+    @ApiModelProperty(name="serviceDesc",value="服务描述",required=false)
     private String serviceDesc;
 
-    @ApiParam(name="serviceUnit",value="单位",required=false)
+    @ApiModelProperty(name="serviceUnit",value="单位",required=false)
     private String serviceUnit;
 
-    @ApiParam(name="servicePlanAmount",value="计划数量",required=false)
+    @ApiModelProperty(name="servicePlanAmount",value="计划数量",required=false)
     private String servicePlanAmount;
 
-    @ApiParam(name="serviceCost",value="成本单价",required=false)
+    @ApiModelProperty(name="serviceCost",value="成本单价",required=false)
     private String serviceCost;
 
-    @ApiParam(name="serviceActualAmount",value="实际数量",required=false)
+    @ApiModelProperty(name="serviceActualAmount",value="实际数量",required=false)
     private String serviceActualAmount;
 
-    @ApiParam(name="serviceActualMoney",value="实际金额",required=false)
+    @ApiModelProperty(name="serviceActualMoney",value="实际金额",required=false)
     private String serviceActualMoney;
 
     public String getServiceId() {

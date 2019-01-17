@@ -384,213 +384,143 @@ public class WorkorderMaterialExample {
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberIsNull() {
-            addCriterion("material_number is null");
+        public Criteria andInventoryIdIsNull() {
+            addCriterion("inventory_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberIsNotNull() {
-            addCriterion("material_number is not null");
+        public Criteria andInventoryIdIsNotNull() {
+            addCriterion("inventory_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberEqualTo(String value) {
-            addCriterion("material_number =", value, "materialNumber");
+        public Criteria andInventoryIdEqualTo(String value) {
+            addCriterion("inventory_id =", value, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberNotEqualTo(String value) {
-            addCriterion("material_number <>", value, "materialNumber");
+        public Criteria andInventoryIdNotEqualTo(String value) {
+            addCriterion("inventory_id <>", value, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberGreaterThan(String value) {
-            addCriterion("material_number >", value, "materialNumber");
+        public Criteria andInventoryIdGreaterThan(String value) {
+            addCriterion("inventory_id >", value, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberGreaterThanOrEqualTo(String value) {
-            addCriterion("material_number >=", value, "materialNumber");
+        public Criteria andInventoryIdGreaterThanOrEqualTo(String value) {
+            addCriterion("inventory_id >=", value, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberLessThan(String value) {
-            addCriterion("material_number <", value, "materialNumber");
+        public Criteria andInventoryIdLessThan(String value) {
+            addCriterion("inventory_id <", value, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberLessThanOrEqualTo(String value) {
-            addCriterion("material_number <=", value, "materialNumber");
+        public Criteria andInventoryIdLessThanOrEqualTo(String value) {
+            addCriterion("inventory_id <=", value, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberLike(String value) {
-            addCriterion("material_number like", value, "materialNumber");
+        public Criteria andInventoryIdLike(String value) {
+            addCriterion("inventory_id like", value, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberNotLike(String value) {
-            addCriterion("material_number not like", value, "materialNumber");
+        public Criteria andInventoryIdNotLike(String value) {
+            addCriterion("inventory_id not like", value, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberIn(List<String> values) {
-            addCriterion("material_number in", values, "materialNumber");
+        public Criteria andInventoryIdIn(List<String> values) {
+            addCriterion("inventory_id in", values, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberNotIn(List<String> values) {
-            addCriterion("material_number not in", values, "materialNumber");
+        public Criteria andInventoryIdNotIn(List<String> values) {
+            addCriterion("inventory_id not in", values, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberBetween(String value1, String value2) {
-            addCriterion("material_number between", value1, value2, "materialNumber");
+        public Criteria andInventoryIdBetween(String value1, String value2) {
+            addCriterion("inventory_id between", value1, value2, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialNumberNotBetween(String value1, String value2) {
-            addCriterion("material_number not between", value1, value2, "materialNumber");
+        public Criteria andInventoryIdNotBetween(String value1, String value2) {
+            addCriterion("inventory_id not between", value1, value2, "inventoryId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescIsNull() {
-            addCriterion("material_desc is null");
+        public Criteria andMaterialIdIsNull() {
+            addCriterion("material_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescIsNotNull() {
-            addCriterion("material_desc is not null");
+        public Criteria andMaterialIdIsNotNull() {
+            addCriterion("material_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescEqualTo(String value) {
-            addCriterion("material_desc =", value, "materialDesc");
+        public Criteria andMaterialIdEqualTo(String value) {
+            addCriterion("material_id =", value, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescNotEqualTo(String value) {
-            addCriterion("material_desc <>", value, "materialDesc");
+        public Criteria andMaterialIdNotEqualTo(String value) {
+            addCriterion("material_id <>", value, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescGreaterThan(String value) {
-            addCriterion("material_desc >", value, "materialDesc");
+        public Criteria andMaterialIdGreaterThan(String value) {
+            addCriterion("material_id >", value, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescGreaterThanOrEqualTo(String value) {
-            addCriterion("material_desc >=", value, "materialDesc");
+        public Criteria andMaterialIdGreaterThanOrEqualTo(String value) {
+            addCriterion("material_id >=", value, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescLessThan(String value) {
-            addCriterion("material_desc <", value, "materialDesc");
+        public Criteria andMaterialIdLessThan(String value) {
+            addCriterion("material_id <", value, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescLessThanOrEqualTo(String value) {
-            addCriterion("material_desc <=", value, "materialDesc");
+        public Criteria andMaterialIdLessThanOrEqualTo(String value) {
+            addCriterion("material_id <=", value, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescLike(String value) {
-            addCriterion("material_desc like", value, "materialDesc");
+        public Criteria andMaterialIdLike(String value) {
+            addCriterion("material_id like", value, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescNotLike(String value) {
-            addCriterion("material_desc not like", value, "materialDesc");
+        public Criteria andMaterialIdNotLike(String value) {
+            addCriterion("material_id not like", value, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescIn(List<String> values) {
-            addCriterion("material_desc in", values, "materialDesc");
+        public Criteria andMaterialIdIn(List<String> values) {
+            addCriterion("material_id in", values, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescNotIn(List<String> values) {
-            addCriterion("material_desc not in", values, "materialDesc");
+        public Criteria andMaterialIdNotIn(List<String> values) {
+            addCriterion("material_id not in", values, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescBetween(String value1, String value2) {
-            addCriterion("material_desc between", value1, value2, "materialDesc");
+        public Criteria andMaterialIdBetween(String value1, String value2) {
+            addCriterion("material_id between", value1, value2, "materialId");
             return (Criteria) this;
         }
 
-        public Criteria andMaterialDescNotBetween(String value1, String value2) {
-            addCriterion("material_desc not between", value1, value2, "materialDesc");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitIsNull() {
-            addCriterion("material_unit is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitIsNotNull() {
-            addCriterion("material_unit is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitEqualTo(String value) {
-            addCriterion("material_unit =", value, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitNotEqualTo(String value) {
-            addCriterion("material_unit <>", value, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitGreaterThan(String value) {
-            addCriterion("material_unit >", value, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitGreaterThanOrEqualTo(String value) {
-            addCriterion("material_unit >=", value, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitLessThan(String value) {
-            addCriterion("material_unit <", value, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitLessThanOrEqualTo(String value) {
-            addCriterion("material_unit <=", value, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitLike(String value) {
-            addCriterion("material_unit like", value, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitNotLike(String value) {
-            addCriterion("material_unit not like", value, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitIn(List<String> values) {
-            addCriterion("material_unit in", values, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitNotIn(List<String> values) {
-            addCriterion("material_unit not in", values, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitBetween(String value1, String value2) {
-            addCriterion("material_unit between", value1, value2, "materialUnit");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialUnitNotBetween(String value1, String value2) {
-            addCriterion("material_unit not between", value1, value2, "materialUnit");
+        public Criteria andMaterialIdNotBetween(String value1, String value2) {
+            addCriterion("material_id not between", value1, value2, "materialId");
             return (Criteria) this;
         }
 
@@ -661,76 +591,6 @@ public class WorkorderMaterialExample {
 
         public Criteria andMaterialPlanAmountNotBetween(String value1, String value2) {
             addCriterion("material_plan_amount not between", value1, value2, "materialPlanAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostIsNull() {
-            addCriterion("material_cost is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostIsNotNull() {
-            addCriterion("material_cost is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostEqualTo(String value) {
-            addCriterion("material_cost =", value, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostNotEqualTo(String value) {
-            addCriterion("material_cost <>", value, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostGreaterThan(String value) {
-            addCriterion("material_cost >", value, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostGreaterThanOrEqualTo(String value) {
-            addCriterion("material_cost >=", value, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostLessThan(String value) {
-            addCriterion("material_cost <", value, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostLessThanOrEqualTo(String value) {
-            addCriterion("material_cost <=", value, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostLike(String value) {
-            addCriterion("material_cost like", value, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostNotLike(String value) {
-            addCriterion("material_cost not like", value, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostIn(List<String> values) {
-            addCriterion("material_cost in", values, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostNotIn(List<String> values) {
-            addCriterion("material_cost not in", values, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostBetween(String value1, String value2) {
-            addCriterion("material_cost between", value1, value2, "materialCost");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialCostNotBetween(String value1, String value2) {
-            addCriterion("material_cost not between", value1, value2, "materialCost");
             return (Criteria) this;
         }
 
@@ -871,76 +731,6 @@ public class WorkorderMaterialExample {
 
         public Criteria andMaterialActualMoneyNotBetween(String value1, String value2) {
             addCriterion("material_actual_money not between", value1, value2, "materialActualMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameIsNull() {
-            addCriterion("material_wind_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameIsNotNull() {
-            addCriterion("material_wind_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameEqualTo(String value) {
-            addCriterion("material_wind_name =", value, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameNotEqualTo(String value) {
-            addCriterion("material_wind_name <>", value, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameGreaterThan(String value) {
-            addCriterion("material_wind_name >", value, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameGreaterThanOrEqualTo(String value) {
-            addCriterion("material_wind_name >=", value, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameLessThan(String value) {
-            addCriterion("material_wind_name <", value, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameLessThanOrEqualTo(String value) {
-            addCriterion("material_wind_name <=", value, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameLike(String value) {
-            addCriterion("material_wind_name like", value, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameNotLike(String value) {
-            addCriterion("material_wind_name not like", value, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameIn(List<String> values) {
-            addCriterion("material_wind_name in", values, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameNotIn(List<String> values) {
-            addCriterion("material_wind_name not in", values, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameBetween(String value1, String value2) {
-            addCriterion("material_wind_name between", value1, value2, "materialWindName");
-            return (Criteria) this;
-        }
-
-        public Criteria andMaterialWindNameNotBetween(String value1, String value2) {
-            addCriterion("material_wind_name not between", value1, value2, "materialWindName");
             return (Criteria) this;
         }
 

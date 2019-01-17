@@ -1,159 +1,165 @@
 package com.qz.zframe.maintain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class DefectWorkorder {
 
-    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    @ApiModelProperty(name="workorderId",value="缺陷工单id",required=false)
     private String workorderId;
 
-    @ApiParam(name="workorderId",value="工单编号(流水号)",required=false)
+    @ApiModelProperty(name="workorderId",value="工单编号(流水号)",required=false)
     private String serialNumber;
 
-    @ApiParam(name="workorderCode",value="工单代码",required=false)
-    private String workorderCode;
+    @ApiModelProperty(name="breakdownId",value="故障id",required=true)
+    private String breakdownId;
 
-    @ApiParam(name="workorderTypeId",value="工单类型id",required=true)
+    @ApiModelProperty(name="workorderTypeId",value="工单类型id",required=true)
     private String workorderTypeId;
 
-    @ApiParam(name="workorderDesc",value="工单描述",required=true)
+    @ApiModelProperty(name="workorderDesc",value="工单描述",required=true)
     private String workorderDesc;
 
-    @ApiParam(name="maintainer",value="维护人",required=true)
+    @ApiModelProperty(name="maintainer",value="维护人id",required=true)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=true)
+    @ApiModelProperty(name="maintainDate",value="维护日期",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="status",value="状态",required=false)
+    @ApiModelProperty(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="windId",value="风电场id",required=true)
+    @ApiModelProperty(name="flowStatus",value="流程状态",required=false)
+    private String flowStatus;
+
+    @ApiModelProperty(name="windId",value="风电场id",required=true)
     private String windId;
 
-    @ApiParam(name="company",value="公司",required=true)
+    @ApiModelProperty(name="company",value="公司id",required=true)
     private String company;
 
-    @ApiParam(name="dealMode",value="处理方式",required=true)
+    @ApiModelProperty(name="department",value="部门",required=true)
+    private String department;
+
+    @ApiModelProperty(name="dealMode",value="处理方式id",required=true)
     private String dealMode;
 
-    @ApiParam(name="dutyTeam",value="负责班组",required=true)
+    @ApiModelProperty(name="dutyTeam",value="负责班组",required=true)
     private String dutyTeam;
 
-    @ApiParam(name="dutyHead",value="负责人",required=true)
+    @ApiModelProperty(name="dutyHead",value="负责人id",required=true)
     private String dutyHead;
 
-    @ApiParam(name="fillPerson",value="策划人",required=true)
+    @ApiModelProperty(name="fillPerson",value="策划人id",required=true)
     private String fillPerson;
 
-    @ApiParam(name="fillTime",value="填报时间",required=false)
+    @ApiModelProperty(name="fillTime",value="填报时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date fillTime;
 
-    @ApiParam(name="unitMember",value="本单位工作人员",required=false)
+    @ApiModelProperty(name="unitMember",value="本单位工作人员",required=false)
     private String unitMember;
 
-    @ApiParam(name="otherUnitMember",value="外单位工作人员",required=false)
+    @ApiModelProperty(name="otherUnitMember",value="外单位工作人员",required=false)
     private String otherUnitMember;
 
-    @ApiParam(name="crewId",value="机组",required=true)
+    @ApiModelProperty(name="crewId",value="机组id",required=true)
     private String crewId;
 
-    @ApiParam(name="positionId",value="位置id",required=true)
+    @ApiModelProperty(name="positionId",value="位置id",required=true)
     private String positionId;
 
-    @ApiParam(name="positionDesc",value="位置描述",required=false)
+    @ApiModelProperty(name="positionDesc",value="位置描述",required=false)
     private String positionDesc;
 
-    @ApiParam(name="equipmentId",value="设备id",required=false)
+    @ApiModelProperty(name="equipmentId",value="设备id",required=false)
     private String equipmentId;
 
-    @ApiParam(name="equipmentDesc",value="设备描述",required=false)
+    @ApiModelProperty(name="equipmentDesc",value="设备描述",required=false)
     private String equipmentDesc;
 
-    @ApiParam(name="breakdownDesc",value="故障描述",required=false)
+    @ApiModelProperty(name="breakdownDesc",value="故障描述",required=false)
     private String breakdownDesc;
 
-    @ApiParam(name="breakdownCode",value="故障代码",required=false)
+    @ApiModelProperty(name="breakdownCode",value="故障代码",required=false)
     private String breakdownCode;
 
-    @ApiParam(name="activeTime",value="故障激活时间",required=false)
+    @ApiModelProperty(name="activeTime",value="故障激活时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date activeTime;
 
-    @ApiParam(name="recoverTime",value="故障恢复时间",required=false)
+    @ApiModelProperty(name="recoverTime",value="故障恢复时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date recoverTime;
 
-    @ApiParam(name="downtimeWindspeed",value="停机风速",required=false)
+    @ApiModelProperty(name="downtimeWindspeed",value="停机风速",required=false)
     private String downtimeWindspeed;
 
-    @ApiParam(name="recoverWindspeed",value="恢复风速",required=false)
+    @ApiModelProperty(name="recoverWindspeed",value="恢复风速",required=false)
     private String recoverWindspeed;
 
-    @ApiParam(name="interruptTime",value="中断时间",required=false)
+    @ApiModelProperty(name="interruptTime",value="中断时间",required=false)
     private String interruptTime;
 
-    @ApiParam(name="electricityLoss",value="损耗电量",required=false)
+    @ApiModelProperty(name="electricityLoss",value="损耗电量",required=false)
     private String electricityLoss;
 
-    @ApiParam(name="gridConnectedRecoverTime",value="并网恢复时间",required=false)
+    @ApiModelProperty(name="gridConnectedRecoverTime",value="并网恢复时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date gridConnectedRecoverTime;
 
-    @ApiParam(name="breakdownLocation",value="故障位置id",required=false)
+    @ApiModelProperty(name="breakdownLocation",value="故障位置id",required=true)
     private String breakdownLocation;
 
-    @ApiParam(name="breakdownAttribute",value="故障属性id",required=false)
+    @ApiModelProperty(name="breakdownAttribute",value="故障属性id",required=true)
     private String breakdownAttribute;
 
-    @ApiParam(name="phenomenon",value="故障现象",required=false)
+    @ApiModelProperty(name="phenomenon",value="故障现象",required=false)
     private String phenomenon;
 
-    @ApiParam(name="picture",value="图片",required=false)
+    @ApiModelProperty(name="picture",value="图片",required=false)
     private String picture;
 
-    @ApiParam(name="defectRemark",value="备注",required=false)
+    @ApiModelProperty(name="defectRemark",value="备注",required=false)
     private String defectRemark;
 
-    @ApiParam(name="defectAnalysis",value="缺陷分析",required=false)
+    @ApiModelProperty(name="defectAnalysis",value="缺陷分析",required=true)
     private String defectAnalysis;
 
-    @ApiParam(name="planStartTime",value="计划开始时间",required=false)
+    @ApiModelProperty(name="planStartTime",value="计划开始时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date planStartTime;
 
-    @ApiParam(name="planEndTime",value="计划结束时间",required=false)
+    @ApiModelProperty(name="planEndTime",value="计划结束时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date planEndTime;
 
-    @ApiParam(name="planWorkHour",value="计划工时",required=false)
+    @ApiModelProperty(name="planWorkHour",value="计划工时",required=false)
     private String planWorkHour;
 
-    @ApiParam(name="planMaterialFee",value="计划材料费",required=false)
+    @ApiModelProperty(name="planMaterialFee",value="计划材料费",required=false)
     private String planMaterialFee;
 
-    @ApiParam(name="planServiceFee",value="计划服务费",required=false)
+    @ApiModelProperty(name="planServiceFee",value="计划服务费",required=false)
     private String planServiceFee;
 
-    @ApiParam(name="actualCompleteTime",value="实际完成时间",required=false)
+    @ApiModelProperty(name="actualCompleteTime",value="实际完成时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date actualCompleteTime;
 
-    @ApiParam(name="attachment",value="附件",required=false)
+    @ApiModelProperty(name="attachment",value="附件",required=false)
     private String attachment;
 
-    @ApiParam(name="equipmentStatusRequirement1",value="一次设备状态要求",required=false)
+    @ApiModelProperty(name="equipmentStatusRequirement1",value="一次设备状态要求",required=false)
     private String equipmentStatusRequirement1;
 
-    @ApiParam(name="equipmentStatusRequirement2",value="二次设备状态要求",required=false)
+    @ApiModelProperty(name="equipmentStatusRequirement2",value="二次设备状态要求",required=false)
     private String equipmentStatusRequirement2;
 
-    @ApiParam(name="otherRequirement",value="其他要求",required=false)
+    @ApiModelProperty(name="otherRequirement",value="其他要求",required=false)
     private String otherRequirement;
 
     public String getWorkorderId() {
@@ -172,12 +178,12 @@ public class DefectWorkorder {
         this.serialNumber = serialNumber == null ? null : serialNumber.trim();
     }
 
-    public String getWorkorderCode() {
-        return workorderCode;
+    public String getBreakdownId() {
+        return breakdownId;
     }
 
-    public void setWorkorderCode(String workorderCode) {
-        this.workorderCode = workorderCode == null ? null : workorderCode.trim();
+    public void setBreakdownId(String breakdownId) {
+        this.breakdownId = breakdownId;
     }
 
     public String getWorkorderTypeId() {
@@ -220,6 +226,14 @@ public class DefectWorkorder {
         this.status = status == null ? null : status.trim();
     }
 
+    public String getFlowStatus() {
+        return flowStatus;
+    }
+
+    public void setFlowStatus(String flowStatus) {
+        this.flowStatus = flowStatus;
+    }
+
     public String getWindId() {
         return windId;
     }
@@ -234,6 +248,14 @@ public class DefectWorkorder {
 
     public void setCompany(String company) {
         this.company = company == null ? null : company.trim();
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public String getDealMode() {
@@ -495,7 +517,6 @@ public class DefectWorkorder {
     public Date getActualCompleteTime() {
         return actualCompleteTime;
     }
-
     public void setActualCompleteTime(Date actualCompleteTime) {
         this.actualCompleteTime = actualCompleteTime;
     }

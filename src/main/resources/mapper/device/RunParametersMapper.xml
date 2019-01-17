@@ -14,6 +14,13 @@
     <result column="alphabet_value" property="alphabetValue" jdbcType="VARCHAR" />
     <result column="important_grade" property="importantGrade" jdbcType="VARCHAR" />
   </resultMap>
+  
+    <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+		</sql>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -89,6 +96,7 @@
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <include refid="Pagination_Sql" />
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

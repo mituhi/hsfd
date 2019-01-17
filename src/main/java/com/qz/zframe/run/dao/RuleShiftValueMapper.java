@@ -32,5 +32,6 @@ public interface RuleShiftValueMapper {
     int updateByPrimaryKeySelective(RuleShiftValue record);
 
     int updateByPrimaryKey(RuleShiftValue record);
-    
+
+    List<RuleShiftValue> getRuleShiftValuesBySchedulingRuleId(@Param("schedulingRuleId") String schedulingRuleId);
 }

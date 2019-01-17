@@ -1,6 +1,7 @@
 package com.qz.zframe.run.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LogTypeExample {
@@ -171,6 +172,76 @@ public class LogTypeExample {
 
         public Criteria andLogTypeIdNotBetween(String value1, String value2) {
             addCriterion("log_type_id not between", value1, value2, "logTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeIsNull() {
+            addCriterion("wind_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeIsNotNull() {
+            addCriterion("wind_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeEqualTo(String value) {
+            addCriterion("wind_code =", value, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeNotEqualTo(String value) {
+            addCriterion("wind_code <>", value, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeGreaterThan(String value) {
+            addCriterion("wind_code >", value, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("wind_code >=", value, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeLessThan(String value) {
+            addCriterion("wind_code <", value, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeLessThanOrEqualTo(String value) {
+            addCriterion("wind_code <=", value, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeLike(String value) {
+            addCriterion("wind_code like", value, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeNotLike(String value) {
+            addCriterion("wind_code not like", value, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeIn(List<String> values) {
+            addCriterion("wind_code in", values, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeNotIn(List<String> values) {
+            addCriterion("wind_code not in", values, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeBetween(String value1, String value2) {
+            addCriterion("wind_code between", value1, value2, "windCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andWindCodeNotBetween(String value1, String value2) {
+            addCriterion("wind_code not between", value1, value2, "windCode");
             return (Criteria) this;
         }
 
@@ -521,6 +592,136 @@ public class LogTypeExample {
 
         public Criteria andStatusNotBetween(String value1, String value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerIsNull() {
+            addCriterion("maintainer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerIsNotNull() {
+            addCriterion("maintainer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerEqualTo(String value) {
+            addCriterion("maintainer =", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerNotEqualTo(String value) {
+            addCriterion("maintainer <>", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerGreaterThan(String value) {
+            addCriterion("maintainer >", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerGreaterThanOrEqualTo(String value) {
+            addCriterion("maintainer >=", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerLessThan(String value) {
+            addCriterion("maintainer <", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerLessThanOrEqualTo(String value) {
+            addCriterion("maintainer <=", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerLike(String value) {
+            addCriterion("maintainer like", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerNotLike(String value) {
+            addCriterion("maintainer not like", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerIn(List<String> values) {
+            addCriterion("maintainer in", values, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerNotIn(List<String> values) {
+            addCriterion("maintainer not in", values, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerBetween(String value1, String value2) {
+            addCriterion("maintainer between", value1, value2, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerNotBetween(String value1, String value2) {
+            addCriterion("maintainer not between", value1, value2, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeIsNull() {
+            addCriterion("maintain_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeIsNotNull() {
+            addCriterion("maintain_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeEqualTo(Date value) {
+            addCriterion("maintain_time =", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeNotEqualTo(Date value) {
+            addCriterion("maintain_time <>", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeGreaterThan(Date value) {
+            addCriterion("maintain_time >", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("maintain_time >=", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeLessThan(Date value) {
+            addCriterion("maintain_time <", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeLessThanOrEqualTo(Date value) {
+            addCriterion("maintain_time <=", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeIn(List<Date> values) {
+            addCriterion("maintain_time in", values, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeNotIn(List<Date> values) {
+            addCriterion("maintain_time not in", values, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeBetween(Date value1, Date value2) {
+            addCriterion("maintain_time between", value1, value2, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeNotBetween(Date value1, Date value2) {
+            addCriterion("maintain_time not between", value1, value2, "maintainTime");
             return (Criteria) this;
         }
     }

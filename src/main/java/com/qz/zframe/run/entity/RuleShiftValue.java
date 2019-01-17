@@ -15,6 +15,17 @@ public class RuleShiftValue {
 	@ApiModelProperty(value="值次表id",name="valueId")
     private String valueId;
 
+    @ApiModelProperty(value="天次Id",name="dayId")
+    private String dayId;
+
+    public String getDayId() {
+        return dayId;
+    }
+
+    public void setDayId(String dayId) {
+        this.dayId = dayId;
+    }
+
     public String getId() {
         return id;
     }

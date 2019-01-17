@@ -324,62 +324,52 @@ public class OperateItemExample {
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberEqualTo(String value) {
+        public Criteria andItemNumberEqualTo(Integer value) {
             addCriterion("item_number =", value, "itemNumber");
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberNotEqualTo(String value) {
+        public Criteria andItemNumberNotEqualTo(Integer value) {
             addCriterion("item_number <>", value, "itemNumber");
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberGreaterThan(String value) {
+        public Criteria andItemNumberGreaterThan(Integer value) {
             addCriterion("item_number >", value, "itemNumber");
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberGreaterThanOrEqualTo(String value) {
+        public Criteria andItemNumberGreaterThanOrEqualTo(Integer value) {
             addCriterion("item_number >=", value, "itemNumber");
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberLessThan(String value) {
+        public Criteria andItemNumberLessThan(Integer value) {
             addCriterion("item_number <", value, "itemNumber");
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberLessThanOrEqualTo(String value) {
+        public Criteria andItemNumberLessThanOrEqualTo(Integer value) {
             addCriterion("item_number <=", value, "itemNumber");
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberLike(String value) {
-            addCriterion("item_number like", value, "itemNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andItemNumberNotLike(String value) {
-            addCriterion("item_number not like", value, "itemNumber");
-            return (Criteria) this;
-        }
-
-        public Criteria andItemNumberIn(List<String> values) {
+        public Criteria andItemNumberIn(List<Integer> values) {
             addCriterion("item_number in", values, "itemNumber");
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberNotIn(List<String> values) {
+        public Criteria andItemNumberNotIn(List<Integer> values) {
             addCriterion("item_number not in", values, "itemNumber");
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberBetween(String value1, String value2) {
+        public Criteria andItemNumberBetween(Integer value1, Integer value2) {
             addCriterion("item_number between", value1, value2, "itemNumber");
             return (Criteria) this;
         }
 
-        public Criteria andItemNumberNotBetween(String value1, String value2) {
+        public Criteria andItemNumberNotBetween(Integer value1, Integer value2) {
             addCriterion("item_number not between", value1, value2, "itemNumber");
             return (Criteria) this;
         }

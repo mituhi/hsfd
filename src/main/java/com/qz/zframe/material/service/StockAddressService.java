@@ -2,8 +2,10 @@ package com.qz.zframe.material.service;
 
 import java.util.List;
 
+import com.qz.zframe.common.util.NewPageResult;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.common.util.ResultEntityDetail;
 import com.qz.zframe.material.entity.StockAddress;
 import com.qz.zframe.material.entity.StockAddressExample;
 
@@ -17,7 +19,7 @@ public interface StockAddressService {
 	 * @return PageResultEntity    返回类型
 	 * @throws
 	 */
-	public PageResultEntity getStockAddrList(StockAddressExample example);
+	public NewPageResult<StockAddress> getStockAddrList(StockAddressExample example);
 
 	/**
 	 * 获取库存地点详情
@@ -27,7 +29,7 @@ public interface StockAddressService {
 	 * @return ResultEntity    返回类型
 	 * @throws
 	 */
-	public ResultEntity getStockAddrdetailById(String stockAddId);
+	public ResultEntityDetail<StockAddress> getStockAddrdetailById(String stockAddId);
 
 	/**
 	 * 新增库存地点
@@ -37,7 +39,7 @@ public interface StockAddressService {
 	 * @return ResultEntity    返回类型
 	 * @throws
 	 */
-	public ResultEntity addStockAddr(StockAddress stockAddress);
+	public ResultEntity addStockAddr(StockAddress stockAddress) throws Exception;
 
 	/**
 	 * 编辑库存地点信息
@@ -47,7 +49,7 @@ public interface StockAddressService {
 	 * @return ResultEntity    返回类型
 	 * @throws
 	 */
-	public ResultEntity editStockAddr(StockAddress stockAddress);
+	public ResultEntity editStockAddr(StockAddress stockAddress)  throws Exception;
 
 	/**
 	 * 删除库存地址，假删除

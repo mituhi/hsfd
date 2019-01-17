@@ -1,22 +1,34 @@
 package com.qz.zframe.maintain.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class MaintainWorkContent {
+
+    @ApiModelProperty(name="workContentId",value="工作内容id",required=false)
     private String workContentId;
 
+    @ApiModelProperty(name="dayId",value="日志id",required=false)
     private String dayId;
 
+    @ApiModelProperty(name="weekId",value="维护周计划id",required=false)
     private String weekId;
 
+    @ApiModelProperty(name="contentNumber",value="编号",required=false)
     private String contentNumber;
 
+    @ApiModelProperty(name="workPlace",value="工作地点",required=false)
     private String workPlace;
 
+    @ApiModelProperty(name="workTask",value="工作任务",required=false)
     private String workTask;
 
+    @ApiModelProperty(name="staff",value="工作人员",required=false)
     private String staff;
 
+    @ApiModelProperty(name="isComplete",value="是否完成",required=false)
     private String isComplete;
 
+    @ApiModelProperty(name="workContentType",value="工作内容类型",required=false)
     private String workContentType;
 
     public String getWorkContentId() {

@@ -1,6 +1,9 @@
 package com.qz.zframe.run.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,22 +17,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
 import com.qz.zframe.common.util.ErrorCode;
-import com.qz.zframe.common.util.ObjectIsBlankUtil;
+import com.qz.zframe.common.util.ExcelUtil;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
-import com.qz.zframe.run.entity.DeviceType;
-import com.qz.zframe.run.entity.DeviceTypeExample;
 import com.qz.zframe.run.entity.DutyLogTab;
 import com.qz.zframe.run.entity.DutyLogTabExample;
 import com.qz.zframe.run.service.DutyLogTabService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * <p>Title: DutyLogTabController</p>
  * <p>@Description: 值班日志TAB表controller类 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月6日 下午1:44:46
  * @version:V1.0
  */
@@ -53,14 +55,13 @@ public class DutyLogTabController {
 	public ResultEntity saveDutyLogTab(@RequestBody DutyLogTab dutyLogTab) {
 		
 		ResultEntity resultEntity = new ResultEntity();
-		
-		//判断字段是否为空
-		if(StringUtils.isBlank(dutyLogTab.getTabCode())
-				||StringUtils.isBlank(dutyLogTab.getTabName())
-				||StringUtils.isBlank(dutyLogTab.getUrl())){
-			//如果字段为空，返回错误信息
-			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少字段");
+
+		if (StringUtils.isBlank(dutyLogTab.getTabName())) {
+			resultEntity.setMsg("名称不能为空");
+			return resultEntity;
+		}
+		if (StringUtils.isBlank(dutyLogTab.getUrl())) {
+			resultEntity.setMsg("url不能为空");
 			return resultEntity;
 		}
 		
@@ -73,18 +74,49 @@ public class DutyLogTabController {
 	/**
 	 * @Description:模糊查询
 	 * @param: @param dutyLogTab
-	 * @param: @param pageNo
+	 * @param: @param pageNum
 	 * @param: @param pageSize
 	 * @param: @return   
 	 * @return: PageResultEntity
 	 */
 	@RequestMapping(value = "/listDutyLogTab", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(notes = "值班日志TAB表信息列表", value = "模糊查询值班日志TAB表")
-	public PageResultEntity listDutyLogTab(@RequestParam(required = false) String searchKey,
-			@RequestParam(required = false, defaultValue = "1") Integer pageNo,
+	@ApiOperation(notes = "值班日志TAB表信息列表查询", value = "模糊查询值班日志TAB表")
+	public PageResultEntity listDutyLogTab(@RequestParam(required = false)@ApiParam(name="searchKey",value="关键字查询") String searchKey,
+			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
 			@RequestParam(required = false, defaultValue = "10") Integer pageSize){
 		
 		PageResultEntity pageResultEntity = new PageResultEntity();
+		
+		DutyLogTabExample example = new DutyLogTabExample();
+		example.setOrderByClause("tab_code");
+		
+		if(StringUtils.isNotBlank(searchKey)){
+			//设置模糊查询
+			example.or().andTabCodeLike(searchKey);
+			example.or().andTabNameLike(searchKey);
+			example.or().andUrlLike(searchKey);
+		}
+		
+		
+		//执行查询
+		List<DutyLogTab> list = dutyLogTabService.listDutyLogTab(example,pageNum,pageSize);
+		
+		//设置返回结果
+		PageInfo<DutyLogTab> pageInfo = new PageInfo<DutyLogTab>(list);
+
+		pageResultEntity.setRows(list);
+		pageResultEntity.setTotal((int) pageInfo.getTotal());
+
+		pageResultEntity.setCode(ErrorCode.SUCCESS);
+		pageResultEntity.setMsg("查询成功");
+		return pageResultEntity;
+	}
+	
+	
+	/*@RequestMapping(value="/toExcel",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "导出EXCEL", notes = "导出EXCEL")*/
+	public void toExcel(@RequestParam(required = false)  @ApiParam(name="searchKey",value="关键字查询") String searchKey,
+			HttpServletResponse response) {
 		
 		DutyLogTabExample example = new DutyLogTabExample();
 		
@@ -97,17 +129,24 @@ public class DutyLogTabController {
 		
 		
 		//执行查询
-		List<DutyLogTab> list = dutyLogTabService.listDutyLogTab(example,pageNo,pageSize);
+		List<DutyLogTab> list = dutyLogTabService.listDutyLogTab(example,0,0);
 		
-		//设置返回结果
-		PageInfo<DutyLogTab> pageInfo = new PageInfo<DutyLogTab>(list);
-
-		pageResultEntity.setRows(list);
-		pageResultEntity.setTotal((int) pageInfo.getTotal());
-		pageResultEntity.setCode(ErrorCode.SUCCESS);
-		pageResultEntity.setMsg("执行成功");
-		return pageResultEntity;
+		LinkedHashMap<String, String> testMap = new LinkedHashMap<String, String>();
+		testMap.put("tabCode", "编码");
+		testMap.put("tabName", "名称");
+		testMap.put("url", "URL链接");
+		
+		try {
+			String fileName = ExcelUtil.listToExcel2(list, testMap, "值班日志TAB表", 65535, response);
+			System.out.println(fileName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+	
+	
+	
+	
 	
 	
 	/**
@@ -117,41 +156,29 @@ public class DutyLogTabController {
 	 * @return: ResultEntity
 	 */
 	@RequestMapping(value = "/editDutyLogTab", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(notes = "批量更新值班日志TAB表", value = "批量更新值班日志TAB表")
-	public ResultEntity editDutyLogTab(@RequestBody List<DutyLogTab> dutyLogTabs){
+	@ApiOperation(notes = "修改日志TAB表", value = "修改值班日志TAB表")
+	public ResultEntity editDutyLogTab(@RequestBody @ApiParam(name="dutyLogTab",value="值班日志TAB表") DutyLogTab dutyLogTab){
 		
 		ResultEntity resultEntity = new ResultEntity();
-		
-		//查看集合是否为空
-		if(CollectionUtils.isEmpty(dutyLogTabs)){
-			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少字段");
+
+		if (StringUtils.isBlank(dutyLogTab.getTabId())) {
+			resultEntity.setMsg("id不能为空");
 			return resultEntity;
 		}
-		
-		//查看字段值是否完整
-		for (DutyLogTab dutyLogTab : dutyLogTabs) {
-			try {
-				boolean falg = ObjectIsBlankUtil.isExistFieldBlank(dutyLogTab);
-				if (falg) {
-					resultEntity.setCode(ErrorCode.ERROR);
-					resultEntity.setMsg("缺少字段");
-					return resultEntity;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		if (StringUtils.isBlank(dutyLogTab.getTabCode())) {
+			resultEntity.setMsg("编码不能为空");
+			return resultEntity;
 		}
-		
-		//数据准备就绪
-		//循环根据主键进行更新操作
-		for (DutyLogTab dutyLogTab : dutyLogTabs) {
-			dutyLogTabService.editDutyLogTabById(dutyLogTab);
+		if (StringUtils.isBlank(dutyLogTab.getTabName())) {
+			resultEntity.setMsg("名称不能为空");
+			return resultEntity;
 		}
-		
-		resultEntity.setCode(ErrorCode.SUCCESS);
-		resultEntity.setMsg("执行完成");
-		return resultEntity;
+		if (StringUtils.isBlank(dutyLogTab.getUrl())) {
+			resultEntity.setMsg("url不能为空");
+			return resultEntity;
+		}
+
+		return dutyLogTabService.editDutyLogTabById(dutyLogTab);
 	}
 	
 	
@@ -165,38 +192,33 @@ public class DutyLogTabController {
 	 */
 	@RequestMapping(value = "/removeDutyLogTab", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(notes = "删除值班日志TAB表", value = "删除值班日志TAB表")
-	public ResultEntity removeDutyLogTab(@RequestParam List<String> tabIds){
+	public ResultEntity removeDutyLogTab(@RequestParam @ApiParam(name="tabIds",value="值班日志TAB表ids") List<String> tabIds){
 		
 		ResultEntity resultEntity = new ResultEntity();
 		
 		if(CollectionUtils.isEmpty(tabIds)){
 			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少字段");
+			resultEntity.setMsg("ids不能为空");
 			return resultEntity;
 		}
-		
-		for (String tabId : tabIds) {
-			dutyLogTabService.removeDutyLogTabById(tabId);
-		}
-		
+
+		dutyLogTabService.removeDutyLogTabById(tabIds);
+
 		resultEntity.setCode(ErrorCode.SUCCESS);
-		resultEntity.setMsg("执行完成");
+		resultEntity.setMsg("删除成功");
 		return resultEntity;
 	}
 	
-	
-	
-	
-	 /*************************    点击编辑：获取对应信息               ***************************/
+
 	@RequestMapping(value="/getDutyLogTab" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ApiOperation(value="点击编辑：获取对应信息 ", notes="点击编辑：获取对应信息")
-	public ResultEntity getDutyLogTab(@RequestParam String tabId){
+	@ApiOperation(value="详情查询 ", notes="详情查询")
+	public ResultEntity getDutyLogTab(@RequestParam @ApiParam(name="tabId",value="值班日志TAB表id") String tabId){
 
 		ResultEntity resultEntity = new ResultEntity();
 		
 		if(StringUtils.isBlank(tabId)){
 			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少字段");
+			resultEntity.setMsg("id不能为空");
 			return resultEntity;
 		}
 		
@@ -211,33 +233,10 @@ public class DutyLogTabController {
 			dutyLogTab = list.get(0);
 		}
 		
-		if(dutyLogTab != null){
-			resultEntity.setCode(ErrorCode.SUCCESS);
-			resultEntity.setMsg("执行完成");
-			resultEntity.setData(dutyLogTab);
-			return resultEntity;
-		}
-		
-		resultEntity.setCode(ErrorCode.ERROR);
-		resultEntity.setMsg("查询失败");
+		resultEntity.setCode(ErrorCode.SUCCESS);
+		resultEntity.setMsg("查询成功");
+		resultEntity.setData(dutyLogTab);
 		return resultEntity;
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

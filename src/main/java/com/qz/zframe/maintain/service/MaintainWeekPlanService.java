@@ -11,26 +11,26 @@ public interface MaintainWeekPlanService {
     /**
      * 添加维护周计划
      */
-    public ResultEntity addMaintainWeekPlan(MaintainWeekPlanVo maintainWeekPlanVo);
-
-    /**
-     * 批量删除
-     */
-    public ResultEntity deleteMaintainWeekPlan(String weekIds);
+    ResultEntity addMaintainWeekPlan(MaintainWeekPlanVo maintainWeekPlanVo);
 
     /**
      * 修改维护周计划
      */
-    public ResultEntity updateMaintainWeekPlan(MaintainWeekPlanVo maintainWeekPlanVo);
+    ResultEntity updateMaintainWeekPlan(MaintainWeekPlanVo maintainWeekPlanVo);
+
+    /**
+     * 批量删除
+     */
+    ResultEntity deleteMaintainWeekPlan(String[] weekIds);
 
     /**
      * 浏览维护周计划
      */
-    public ResultEntity getMaintainWeekPlanDetail(String weekId);
+    ResultEntity getMaintainWeekPlanDetail(String weekId);
 
     /**
      * 列表查询
      */
-    public PageResultEntity getMaintainWeekPlanList(Map<String,String> pageAndCondition);
+    PageResultEntity getMaintainWeekPlanList(Map<String,String> pageAndCondition);
 
 }

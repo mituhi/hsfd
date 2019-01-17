@@ -1,11 +1,8 @@
 package com.qz.zframe.tally.dao;
 
-import com.qz.zframe.tally.entity.TallyRoute;
-import com.qz.zframe.tally.entity.TallyRouteStandard;
-import com.qz.zframe.tally.entity.TallyStandard;
-import com.qz.zframe.tally.vo.TallyStandardPostVO;
-import com.qz.zframe.tally.vo.TallyStandardPostVO2;
-import com.qz.zframe.tally.vo.WindIdCycleNameVO;
+import com.qz.zframe.common.entity.DataDict;
+import com.qz.zframe.tally.entity.*;
+import com.qz.zframe.tally.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -74,10 +71,9 @@ public interface TallyStandardDao {
 
     /**
      * 根据路线名称查找周期名称
-     * @param routeName
      * @return
      */
-    List<String> findCycleNameByRouteName(String routeName);
+    String findCycleNameByRouteId(String routeId);
 
     /**
      * 更新标准
@@ -114,22 +110,19 @@ public interface TallyStandardDao {
 
     /**
      * 根据路线名称查询路线标准
-     * @param routeName
      * @return
      */
-    TallyStandard findTallyStandardByRouteName(String routeName);
+    TallyStandard findTallyStandardByStandardId(String standardId);
 
     /**
      * 根据路线名称数组进行删除路线标准关联表
-     * @param routeNames
      */
-    void deletetallyRouteStandardByRouteNames(@Param("routeNames") String[] routeNames);
+    void deletetallyRouteStandardByRouteNames(@Param("standardIds") String[] standardIds);
 
     /**
      * 根据标准id数组进行删除点检标准表
-     * @param routeNames
      */
-    void deleteTallyStandardByRouteNames(@Param("routeNames") String[] routeNames);
+    void deleteTallyStandardByRouteNames(@Param("standardIds") String[] standardIds);
 
     /**
      * 查询记录总数用于分页
@@ -165,4 +158,38 @@ public interface TallyStandardDao {
      * @return
      */
     String findCycleNameByStandardIdAndRouteId(@Param("standardId") String standardId,@Param("routeId") String routeId);
+
+    /**
+     * 查询巡检标准改版v1.0
+     * @param equipmentBelonging
+     * @param routeName
+     * @param standardType
+     * @param checkContent
+     * @return
+     */
+    List<TallyStandardVO2> findAllTallyStandardVO2(@Param("equipmentBelonging")String equipmentBelonging,@Param("routeName") String routeName,@Param("standardType") String standardType,@Param("checkContent") String checkContent);
+
+    String findIdByStandardId(String standardId);
+
+    int countStandard1();
+
+    String findEquipmentNameByEquipmentId(String equipmentId);
+
+    List<EquipmentOrQrCode> findEquipmentOrQrCode(@Param("windCode")String windCode,@Param("qrId")String qrId,@Param("equipmentId")String equipmentId);
+
+    List<TallyResult> findAllResult();
+
+    String findTitleByName(@Param("name1")String name1,@Param("name2")String name2);
+
+    String findPositonNameByQrId(String qrId);
+
+    String findWindNameByRouteId(String routeId);
+
+    String findQrIdByEquipmentId(String equipmentId);
+
+    List<TallyStandard> findAllTallyStandardForDetail(String qrId);
+
+    String findResultChooseByResultId(String resultId);
+
+    List<QrCode> findQrCodeByRouteId(String routeId);
 }

@@ -22,7 +22,15 @@ public interface CrewInformationMapper extends BaseMapper<CrewInformation, CrewI
 
     List<CrewInformation> selectByExample(CrewInformationExample example);
     
+    List<CrewInformation> select(CrewInformationExample example);
+    
+    List<CrewInformation> selectCrewByWind (@Param("windId")String windId);
+    
+    List<CrewInformation> selectAll();
+    
     CrewInformation selectByPrimaryKey(String crewId);
+    
+    CrewInformation selectByCrewCode(String crewCode);
     
     int update(CrewInformation record);
     

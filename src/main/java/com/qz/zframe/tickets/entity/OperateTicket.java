@@ -1,96 +1,96 @@
 package com.qz.zframe.tickets.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class OperateTicket {
 
-    @ApiParam(name="ticketId",value="操作票id",required=false)
+    @ApiModelProperty(name="ticketId",value="操作票id",required=false)
     private String ticketId;
 
-    @ApiParam(name="serialNumber",value="操作票号(流水号)",required=false)
+    @ApiModelProperty(name="serialNumber",value="操作票号(流水号)",required=false)
     private String serialNumber;
 
-    @ApiParam(name="operTicketTypeId",value="操作票类型id",required=true)
+    @ApiModelProperty(name="operTicketTypeId",value="操作票类型id",required=true)
     private String operTicketTypeId;
 
-    @ApiParam(name="typicalTicketId",value="典型操作票id",required=false)
+    @ApiModelProperty(name="typicalTicketId",value="典型操作票id",required=false)
     private String typicalTicketId;
 
-    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    @ApiModelProperty(name="workorderId",value="缺陷工单id",required=false)
     private String workorderId;
 
-    @ApiParam(name="orderId",value="工单id",required=false)
+    @ApiModelProperty(name="orderId",value="工单id",required=false)
     private String orderId;
 
-    @ApiParam(name="maintainer",value="维护人",required=true)
+    @ApiModelProperty(name="maintainer",value="维护人id",required=true)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=true)
+    @ApiModelProperty(name="maintainDate",value="维护日期",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="status",value="状态",required=false)
+    @ApiModelProperty(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="flowStep",value="流程节点",required=false)
+    @ApiModelProperty(name="flowStep",value="流程节点id",required=false)
     private String flowStep;
 
-    @ApiParam(name="windId",value="风电场id",required=true)
+    @ApiModelProperty(name="windId",value="风电场id",required=true)
     private String windId;
 
-    @ApiParam(name="crewId",value="机组id",required=true)
+    @ApiModelProperty(name="crewId",value="机组id",required=true)
     private String crewId;
 
-    @ApiParam(name="applicant",value="申请人",required=false)
+    @ApiModelProperty(name="applicant",value="申请人id",required=false)
     private String applicant;
 
-    @ApiParam(name="applyTime",value="申请时间",required=true)
+    @ApiModelProperty(name="applyTime",value="申请时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date applyTime;
 
-    @ApiParam(name="sender",value="发令人",required=true)
+    @ApiModelProperty(name="sender",value="发令人id",required=true)
     private String sender;
 
-    @ApiParam(name="receiver",value="受令人",required=true)
+    @ApiModelProperty(name="receiver",value="受令人id",required=true)
     private String receiver;
 
-    @ApiParam(name="sendTime",value="发令时间",required=true)
+    @ApiModelProperty(name="sendTime",value="发令时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date sendTime;
 
-    @ApiParam(name="workTeam",value="工作班组",required=true)
+    @ApiModelProperty(name="workTeam",value="工作班组id",required=true)
     private String workTeam;
 
-    @ApiParam(name="executer",value="操作人",required=true)
+    @ApiModelProperty(name="executer",value="操作人id",required=true)
     private String executer;
 
-    @ApiParam(name="supervisior",value="监护人",required=true)
+    @ApiModelProperty(name="supervisior",value="监护人id",required=true)
     private String supervisior;
 
-    @ApiParam(name="operStartTime",value="操作开始时间",required=true)
+    @ApiModelProperty(name="operStartTime",value="操作开始时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date operStartTime;
 
-    @ApiParam(name="operEndTime",value="操作结束时间",required=true)
+    @ApiModelProperty(name="operEndTime",value="操作结束时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date operEndTime;
 
-    @ApiParam(name="positionId",value="位置id",required=false)
+    @ApiModelProperty(name="positionId",value="位置id",required=false)
     private String positionId;
 
-    @ApiParam(name="positionDesc",value="位置描述",required=false)
+    @ApiModelProperty(name="positionDesc",value="位置描述",required=false)
     private String positionDesc;
 
-    @ApiParam(name="equipmentId",value="设备id",required=false)
+    @ApiModelProperty(name="equipmentId",value="设备id",required=false)
     private String equipmentId;
 
-    @ApiParam(name="equipmentDesc",value="设备描述",required=false)
+    @ApiModelProperty(name="equipmentDesc",value="设备描述",required=false)
     private String equipmentDesc;
 
-    @ApiParam(name="operateContent",value="操作内容",required=true)
+    @ApiModelProperty(name="operateContent",value="操作内容",required=true)
     private String operateContent;
 
     public String getTicketId() {

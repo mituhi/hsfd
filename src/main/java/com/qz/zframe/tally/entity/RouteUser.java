@@ -18,6 +18,16 @@ public class RouteUser {
     //备注
     private String remark;
 
+    private String trueId;
+
+    public String getTrueId() {
+        return trueId;
+    }
+
+    public void setTrueId(String trueId) {
+        this.trueId = trueId;
+    }
+
     public String getId() {
         return id;
     }

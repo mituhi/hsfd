@@ -31,5 +31,8 @@ public interface MaterialGroupMapper extends BaseMapper<MaterialGroup, MaterialG
 	public void updateIsdete(Map<String, Object> params);
 
 
+	public void updateByPrimaryKey(MaterialGroup materialGroup);
+
+
 
 }

@@ -1,141 +1,144 @@
 package com.qz.zframe.maintain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class BreakdownInfo {
 
-    @ApiParam(name="breakdownId",value="故障id",required=false)
+    @ApiModelProperty(name="breakdownId",value="故障id",required=false)
     private String breakdownId;
 
-    @ApiParam(name="serialNumber",value="(故障编号)流水号",required=false)
+    @ApiModelProperty(name="serialNumber",value="(故障编号)流水号",required=false)
     private String serialNumber;
 
-    @ApiParam(name="breakdownCode",value="故障代码",required=false)
+    @ApiModelProperty(name="breakdownCode",value="故障代码",required=true)
     private String breakdownCode;
 
-    @ApiParam(name="breakdownDesc",value="故障描述",required=true)
+    @ApiModelProperty(name="breakdownDesc",value="故障描述",required=true)
     private String breakdownDesc;
 
-    @ApiParam(name="maintainer",value="维护人",required=false)
+    @ApiModelProperty(name="maintainer",value="维护人id",required=true)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=false)
+    @ApiModelProperty(name="maintainDate",value="维护日期",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="status",value="状态",required=false)
+    @ApiModelProperty(name="breakdownSource",value="故障来源id",required=false)
+    private String breakdownSource;
+
+    @ApiModelProperty(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="dealwithMode",value="处理方式",required=false)
+    @ApiModelProperty(name="dealwithMode",value="处理方式id",required=true)
     private String dealwithMode;
 
-    @ApiParam(name="windId",value="风电场id",required=true)
+    @ApiModelProperty(name="windId",value="风电场id",required=true)
     private String windId;
 
-    @ApiParam(name="company",value="公司",required=false)
+    @ApiModelProperty(name="company",value="公司id",required=false)
     private String company;
 
-    @ApiParam(name="dealwithTeam",value="处理(负责)班组",required=true)
+    @ApiModelProperty(name="dealwithTeam",value="处理(负责)班组id",required=true)
     private String dealwithTeam;
 
-    @ApiParam(name="dealwithPerson",value="处理(负责)人",required=true)
+    @ApiModelProperty(name="dealwithPerson",value="处理(负责)人id",required=true)
     private String dealwithPerson;
 
-    @ApiParam(name="fillPerson",value="填报人",required=false)
+    @ApiModelProperty(name="fillPerson",value="填报人id",required=false)
     private String fillPerson;
 
-    @ApiParam(name="positionId",value="位置id",required=true)
+    @ApiModelProperty(name="positionId",value="位置id",required=true)
     private String positionId;
 
-    @ApiParam(name="positionDesc",value="位置描述",required=false)
+    @ApiModelProperty(name="positionDesc",value="位置描述",required=false)
     private String positionDesc;
 
-    @ApiParam(name="crewId",value="机组id",required=false)
+    @ApiModelProperty(name="crewId",value="机组id",required=true)
     private String crewId;
 
-    @ApiParam(name="equipmentId",value="设备id",required=false)
+    @ApiModelProperty(name="equipmentId",value="设备id",required=false)
     private String equipmentId;
 
-    @ApiParam(name="equipmentDesc",value="设备描述",required=false)
+    @ApiModelProperty(name="equipmentDesc",value="设备描述",required=false)
     private String equipmentDesc;
 
-    @ApiParam(name="vaneSpeed",value="叶轮转速",required=false)
+    @ApiModelProperty(name="vaneSpeed",value="叶轮转速",required=false)
     private String vaneSpeed;
 
-    @ApiParam(name="bladeTorque1",value="叶片1扭矩",required=false)
+    @ApiModelProperty(name="bladeTorque1",value="叶片1扭矩",required=false)
     private String bladeTorque1;
 
-    @ApiParam(name="bladeTorque2",value="叶片2扭矩",required=false)
+    @ApiModelProperty(name="bladeTorque2",value="叶片2扭矩",required=false)
     private String bladeTorque2;
 
-    @ApiParam(name="bladeTorque3",value="叶片3扭矩",required=false)
+    @ApiModelProperty(name="bladeTorque3",value="叶片3扭矩",required=false)
     private String bladeTorque3;
 
-    @ApiParam(name="activeTime",value="故障激活时间",required=false)
+    @ApiModelProperty(name="activeTime",value="故障激活时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date activeTime;
 
-    @ApiParam(name="recoverTime",value="故障恢复时间",required=false)
+    @ApiModelProperty(name="recoverTime",value="故障恢复时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date recoverTime;
 
-    @ApiParam(name="downtimeWindspeed",value="停机风速",required=false)
+    @ApiModelProperty(name="downtimeWindspeed",value="停机风速",required=false)
     private String downtimeWindspeed;
 
-    @ApiParam(name="recoverWindspeed",value="恢复风速",required=false)
+    @ApiModelProperty(name="recoverWindspeed",value="恢复风速",required=false)
     private String recoverWindspeed;
 
-    @ApiParam(name="interruptTime",value="中断时间",required=false)
+    @ApiModelProperty(name="interruptTime",value="中断时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private String interruptTime;
 
-    @ApiParam(name="electricityLoss",value="损失电量",required=false)
+    @ApiModelProperty(name="electricityLoss",value="损失电量",required=false)
     private String electricityLoss;
 
-    @ApiParam(name="gridConnectedRecoverTime",value="并网恢复时间",required=false)
+    @ApiModelProperty(name="gridConnectedRecoverTime",value="并网恢复时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date gridConnectedRecoverTime;
 
-    @ApiParam(name="breakdownLocation",value="故障位置id",required=true)
+    @ApiModelProperty(name="breakdownLocation",value="故障位置id",required=true)
     private String breakdownLocation;
 
-    @ApiParam(name="breakdownAttribute",value="故障属性id",required=true)
+    @ApiModelProperty(name="breakdownAttribute",value="故障属性id",required=true)
     private String breakdownAttribute;
 
-    @ApiParam(name="maximumLoad",value="最大负荷",required=false)
+    @ApiModelProperty(name="maximumLoad",value="最大负荷",required=false)
     private String maximumLoad;
 
-    @ApiParam(name="systemBusbar110",value="110kv系统母线",required=false)
+    @ApiModelProperty(name="systemBusbar110",value="110kv系统母线",required=false)
     private String systemBusbar110;
 
-    @ApiParam(name="systemBusbar35",value="35kv系统母线",required=false)
+    @ApiModelProperty(name="systemBusbar35",value="35kv系统母线",required=false)
     private String systemBusbar35;
 
-    @ApiParam(name="systemBusbar400",value="400kv系统母线",required=false)
+    @ApiModelProperty(name="systemBusbar400",value="400kv系统母线",required=false)
     private String systemBusbar400;
 
-    @ApiParam(name="workorderNumber",value="故障工单号",required=false)
+    @ApiModelProperty(name="workorderNumber",value="故障工单号",required=false)
     private String workorderNumber;
 
-    @ApiParam(name="workorderStatus",value="故障工单状态",required=false)
+    @ApiModelProperty(name="workorderStatus",value="故障工单状态",required=false)
     private String workorderStatus;
 
-    @ApiParam(name="workorderDesc",value="工单描述",required=false)
+    @ApiModelProperty(name="workorderDesc",value="工单描述",required=false)
     private String workorderDesc;
 
-    @ApiParam(name="workorderType",value="工单类型",required=false)
+    @ApiModelProperty(name="workorderType",value="工单类型id",required=false)
     private String workorderType;
 
-    @ApiParam(name="phenomenon",value="故障现象",required=false)
+    @ApiModelProperty(name="phenomenon",value="故障现象",required=false)
     private String phenomenon;
 
-    @ApiParam(name="remark",value="图片",required=false)
+    @ApiModelProperty(name="remark",value="图片",required=false)
     private String picture;
 
-    @ApiParam(name="remark",value="备注",required=false)
+    @ApiModelProperty(name="remark",value="备注",required=false)
     private String remark;
 
     public String getBreakdownId() {
@@ -184,6 +187,14 @@ public class BreakdownInfo {
 
     public void setMaintainDate(Date maintainDate) {
         this.maintainDate = maintainDate;
+    }
+
+    public String getBreakdownSource() {
+        return breakdownSource;
+    }
+
+    public void setBreakdownSource(String breakdownSource) {
+        this.breakdownSource = breakdownSource;
     }
 
     public String getStatus() {

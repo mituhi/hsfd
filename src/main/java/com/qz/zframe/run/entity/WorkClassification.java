@@ -2,6 +2,7 @@ package com.qz.zframe.run.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 public class WorkClassification {
@@ -9,26 +10,37 @@ public class WorkClassification {
 	@ApiModelProperty(value="工作分类表id",name="classificationId")
     private String classificationId;
 
-	@ApiModelProperty(value="分类流水号",name="classificationCode")
+    @ApiModelProperty(value="是否顶级",name="isTop")
+    private String isTop;
+
+	@ApiModelProperty(value="分类流水号/编号",name="classificationCode")
     private String classificationCode;
+
+    @ApiModelProperty(value="上级分类编号（如果为最顶级：值为0  ， 如果不为顶级下拉框选择）",name="superiorClassificationId",required = true)
+    private String superiorClassificationId;
 
 	@ApiModelProperty(value="分类名称",name="classificationName",required = true)
     private String classificationName;
 
-	@ApiModelProperty(value="任务属性",name="taskProperties",required = true)
+	@ApiModelProperty(value="任务属性",name="taskProperties",required = false)
     private String taskProperties;
 
 	@ApiModelProperty(value="状态",name="status",required = true)
     private String status;
 
-	@ApiModelProperty(value="用户id",name="userId")
-    private String userId;
+	@ApiModelProperty(value="维护人",name="maintainer")
+    private String maintainer;
 
-	@ApiModelProperty(value="创建时间",name="createTime")
+	@ApiModelProperty(value="维护时间",name="maintainTime")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+    private Date maintainTime;
+
+    @ApiModelProperty(value="创建人",name="creater")
+    private String creater;
+
+    @ApiModelProperty(value="创建时间",name="createTime")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date createTime;
-
-	@ApiModelProperty(value="上级分类编号（如果为最顶级：值为0  ， 如果不为顶级下拉框选择）",name="fatClassificationId",required = true)
-    private String fatClassificationId;
 
 	@ApiModelProperty(value="备注",name="remark")
     private String remark;
@@ -38,7 +50,15 @@ public class WorkClassification {
     }
 
     public void setClassificationId(String classificationId) {
-        this.classificationId = classificationId == null ? null : classificationId.trim();
+        this.classificationId = classificationId;
+    }
+
+    public String getIsTop() {
+        return isTop;
+    }
+
+    public void setIsTop(String isTop) {
+        this.isTop = isTop;
     }
 
     public String getClassificationCode() {
@@ -46,7 +66,15 @@ public class WorkClassification {
     }
 
     public void setClassificationCode(String classificationCode) {
-        this.classificationCode = classificationCode == null ? null : classificationCode.trim();
+        this.classificationCode = classificationCode;
+    }
+
+    public String getSuperiorClassificationId() {
+        return superiorClassificationId;
+    }
+
+    public void setSuperiorClassificationId(String superiorClassificationId) {
+        this.superiorClassificationId = superiorClassificationId;
     }
 
     public String getClassificationName() {
@@ -54,7 +82,7 @@ public class WorkClassification {
     }
 
     public void setClassificationName(String classificationName) {
-        this.classificationName = classificationName == null ? null : classificationName.trim();
+        this.classificationName = classificationName;
     }
 
     public String getTaskProperties() {
@@ -62,7 +90,7 @@ public class WorkClassification {
     }
 
     public void setTaskProperties(String taskProperties) {
-        this.taskProperties = taskProperties == null ? null : taskProperties.trim();
+        this.taskProperties = taskProperties;
     }
 
     public String getStatus() {
@@ -70,15 +98,31 @@ public class WorkClassification {
     }
 
     public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+        this.status = status;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getMaintainer() {
+        return maintainer;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
+    public void setMaintainer(String maintainer) {
+        this.maintainer = maintainer;
+    }
+
+    public Date getMaintainTime() {
+        return maintainTime;
+    }
+
+    public void setMaintainTime(Date maintainTime) {
+        this.maintainTime = maintainTime;
+    }
+
+    public String getCreater() {
+        return creater;
+    }
+
+    public void setCreater(String creater) {
+        this.creater = creater;
     }
 
     public Date getCreateTime() {
@@ -89,19 +133,11 @@ public class WorkClassification {
         this.createTime = createTime;
     }
 
-    public String getFatClassificationId() {
-        return fatClassificationId;
-    }
-
-    public void setFatClassificationId(String fatClassificationId) {
-        this.fatClassificationId = fatClassificationId == null ? null : fatClassificationId.trim();
-    }
-
     public String getRemark() {
         return remark;
     }
 
     public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
+        this.remark = remark;
     }
 }

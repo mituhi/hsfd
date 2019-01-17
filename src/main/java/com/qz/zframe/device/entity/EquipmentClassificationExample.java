@@ -216,7 +216,7 @@ public class EquipmentClassificationExample extends PageExample{
         }
 
         public Criteria andEquipmentTypeLike(String value) {
-            addCriterion("equipment_type like", value, "equipmentType");
+            addCriterion("equipment_type like", "%"+value+"%", "equipmentType");
             return (Criteria) this;
         }
 

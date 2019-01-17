@@ -9,9 +9,10 @@
     <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
-    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="maintain_date" property="maintainDate" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="flow_status" property="flowStatus" jdbcType="VARCHAR" />
+    <result column="work_position" property="workPosition" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
     <result column="applicant" property="applicant" jdbcType="VARCHAR" />
@@ -122,12 +123,12 @@
   </sql>
   <sql id="Base_Column_List" >
     ticket_id, serial_number, work_ticket_type_id, standard_ticket_id, workorder_id, 
-    order_id, maintainer, maintain_date, status, flow_status, wind_id, crew_id, applicant, 
-    apply_time, work_team, work_head, position_id, position_desc, equipment_id, equipment_desc, 
-    work_member, member_num, plan_start_time, plan_end_time, double_naem, work_place, 
-    work_content, work_condition, signer, sign_time, run_main_person, receive_head, receive_time, 
-    scene_licensor, run_licensor, license_start_time, work_team_opinion, head_change_to, 
-    head_change_signer, head_chaneg_time, delay_time, delay_head, delay_head_sign_time, 
+    order_id, maintainer, maintain_date, status, flow_status, work_position, wind_id, 
+    crew_id, applicant, apply_time, work_team, work_head, position_id, position_desc, 
+    equipment_id, equipment_desc, work_member, member_num, plan_start_time, plan_end_time, 
+    double_naem, work_place, work_content, work_condition, signer, sign_time, run_main_person, 
+    receive_head, receive_time, scene_licensor, run_licensor, license_start_time, work_team_opinion, 
+    head_change_to, head_change_signer, head_chaneg_time, delay_time, delay_head, delay_head_sign_time, 
     delay_licensor, delay_licensor_sign_time, work_end_head, work_end_licensor, work_end_time, 
     ticket_end_licensor, ticket_end_time, unuse_wire_number, unuse_wire_num, knife_car_num, 
     guardian, guardian_place_and_cont, guardian_other_thing, evaluation, evaluation_cont, 
@@ -138,6 +139,40 @@
 
 
 
+
+
+  <delete id="batchDeleteTrue" parameterType="java.lang.String">
+    delete from work_ticket
+    where ticket_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <update id="batchDeleteFalse" parameterType="java.lang.String">
+    update work_ticket set status = '0'
+    where ticket_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+  <update id="batchDeleteFalseByWorkorderIds" parameterType="java.lang.String">
+    update work_ticket set workorder_id = null
+    where workorder_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+  <update id="batchDeleteFalseByOrderIds" parameterType="java.lang.String">
+    update work_ticket set order_id = null
+    where order_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
   <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.WorkTicketVo" >
     <id column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
     <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
@@ -146,9 +181,10 @@
     <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
-    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="maintain_date" property="maintainDate" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="flow_status" property="flowStatus" jdbcType="VARCHAR" />
+    <result column="work_position" property="workPosition" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
     <result column="applicant" property="applicant" jdbcType="VARCHAR" />
@@ -202,14 +238,36 @@
     <result column="crew_name" property="crewName" jdbcType="TIMESTAMP" />
     <result column="position_name" property="positionName" jdbcType="TIMESTAMP" />
     <result column="equipment_name" property="equipmentName" jdbcType="TIMESTAMP" />
+    <result column="ticket_type_number" property="ticketTypeNumber" jdbcType="TIMESTAMP" />
     <result column="ticket_type_name" property="ticketTypeName" jdbcType="TIMESTAMP" />
     <result column="standard_ticket_name" property="standardTicketName" jdbcType="TIMESTAMP" />
+    <result column="flow_status_name" property="flowStatusName" jdbcType="TIMESTAMP" />
+    <result column="work_team_name" property="workTeamName" jdbcType="TIMESTAMP" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="TIMESTAMP" />
+    <result column="applicant_name" property="applicantName" jdbcType="TIMESTAMP" />
+    <result column="work_head_name" property="workHeadName" jdbcType="TIMESTAMP" />
+    <result column="signer_name" property="signerName" jdbcType="TIMESTAMP" />
+    <result column="run_main_person_name" property="runMainPersonName" jdbcType="TIMESTAMP" />
+    <result column="receive_head_name" property="receiveHeadName" jdbcType="TIMESTAMP" />
+    <result column="scene_licensor_name" property="sceneLicensorName" jdbcType="TIMESTAMP" />
+    <result column="run_licensor_name" property="runLicensorName" jdbcType="TIMESTAMP" />
+    <result column="head_change_to_name" property="headChangeToName" jdbcType="TIMESTAMP" />
+    <result column="head_change_signer_name" property="headChangeSignerName" jdbcType="TIMESTAMP" />
+    <result column="delay_head_name" property="delayHeadName" jdbcType="TIMESTAMP" />
+    <result column="delay_licensor_name" property="delayLicensorName" jdbcType="TIMESTAMP" />
+    <result column="work_end_head_name" property="workEndHeadName" jdbcType="TIMESTAMP" />
+    <result column="work_end_licensor_name" property="workEndLicensorName" jdbcType="TIMESTAMP" />
+    <result column="ticket_end_licensor_name" property="ticketEndLicensorName" jdbcType="TIMESTAMP" />
+    <result column="guardian_name" property="guardianName" jdbcType="TIMESTAMP" />
+    <result column="evaluation_name" property="evaluationName" jdbcType="TIMESTAMP" />
+    <result column="flow_sort" property="flowSort" jdbcType="TIMESTAMP" />
+    <result column="flow_name" property="flowName" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Get_Column_List" >
     a.ticket_id as ticket_id, a.serial_number as serial_number, a.work_ticket_type_id as work_ticket_type_id,
     a.standard_ticket_id as standard_ticket_id, a.workorder_id as workorder_id,
     a.order_id as order_id, a.maintainer as maintainer, a.maintain_date as maintain_date, a.status as status,
-    a.flow_status as flow_status, a.wind_id as wind_id, a.crew_id as crew_id, a.applicant as applicant,
+    a.flow_status as flow_status, a.work_position as work_position,a.wind_id as wind_id, a.crew_id as crew_id, a.applicant as applicant,
     a.apply_time as apply_time, a.work_team as work_team, a.work_head as work_head, a.position_id as position_id,
     a.position_desc as position_desc, a.equipment_id as equipment_id, a.equipment_desc as equipment_desc,
     a.work_member as work_member, a.member_num as member_num, a.plan_start_time as plan_start_time, a.plan_end_time as plan_end_time,
@@ -226,93 +284,314 @@
     a.guardian as guardian, a.guardian_place_and_cont as guardian_place_and_cont, a.guardian_other_thing as guardian_other_thing,
     a.evaluation as evaluation, a.evaluation_cont as evaluation_cont, a.evaluation_time as evaluation_time,
     b.architecture_name as wind_name,d.crew_name as crew_name,e.position_name as position_name,f.equipment_name as equipment_name,
-    g.ticket_type_name as ticket_type_name,h.standard_ticket_name as standard_ticket_name
+    g.ticket_type_number as ticket_type_number,g.ticket_type_name as ticket_type_name,h.standard_ticket_name as standard_ticket_name,i.title as flow_status_name,
+    j.architecture_name as work_team_name,k.process_sort as flow_sort, l.name as flow_name,
+    ua.user_name as maintainer_name,ub.user_name as applicant_name,uc.user_name as work_head_name,
+    ud.user_name as signer_name,ue.user_name as run_main_person_name,uf.user_name as receive_head_name,
+    ug.user_name as scene_licensor_name,uh.user_name as run_licensor_name,ui.user_name as head_change_to_name,
+    uj.user_name as head_change_signer_name,uk.user_name as delay_head_name,ul.user_name as delay_licensor_name,
+    um.user_name as work_end_head_name,un.user_name as work_end_licensor_name,uo.user_name as ticket_end_licensor_name,
+    up.user_name as guardian_name,uq.user_name as evaluation_name
   </sql>
-
-  <update id="batchDelete" parameterType="java.lang.String">
-    update work_ticket set status = "0"
-    where ticket_id in
-    <foreach collection="array" index="index" item="item"
-             open="(" separator="," close=")">
-      #{item}
-    </foreach>
-  </update>
   <select id="getWorkTicketDetail" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from work_ticket a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
     left join crew_information d on a.crew_id = d.crew_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join work_ticket_type g on a.work_ticket_type_id = g.work_ticket_type_id
     left join standard_work_ticket h on a.standard_ticket_id = h.standard_ticket_id
+    left join sp_code i on (a.flow_status = i.name and i.code_type_id = '1046')
+    left join org_architecture j on a.work_team = j.architecture_id
+    left join process k on a.ticket_id = k.order_id
+    left join process_detail l on (k.process_id = l.process_id and k.process_sort = sort)
+    left join isc_user ua on a.maintainer = ua.user_id
+    left join isc_user ub on a.applicant = ub.user_id
+    left join isc_user uc on a.work_head = uc.user_id
+    left join isc_user ud on a.signer = ud.user_id
+    left join isc_user ue on a.run_main_person = ue.user_id
+    left join isc_user uf on a.receive_head = uf.user_id
+    left join isc_user ug on a.scene_licensor = ug.user_id
+    left join isc_user uh on a.run_licensor = uh.user_id
+    left join isc_user ui on a.head_change_to = ui.user_id
+    left join isc_user uj on a.head_change_signer = uj.user_id
+    left join isc_user uk on a.delay_head = uk.user_id
+    left join isc_user ul on a.delay_licensor = ul.user_id
+    left join isc_user um on a.work_end_head = um.user_id
+    left join isc_user un on a.work_end_licensor = un.user_id
+    left join isc_user uo on a.ticket_end_licensor = uo.user_id
+    left join isc_user up on a.guardian = up.user_id
+    left join isc_user uq on a.evaluation = uq.user_id
     where a.status != '0' and a.ticket_id = #{ticketId}
   </select>
   <select id="getWorkTicketList" resultMap="GetResultMap">
     select
+    distinct
     <include refid="Get_Column_List" />
     from work_ticket a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on (a.wind_id = b.architecture_code and b.architecture_type = '02')
     left join crew_information d on a.crew_id = d.crew_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join work_ticket_type g on a.work_ticket_type_id = g.work_ticket_type_id
     left join standard_work_ticket h on a.standard_ticket_id = h.standard_ticket_id
-    where a.status != '0'
-    <if test="map.workTicketTypeId != null">
+    left join sp_code i on (a.flow_status = i.name and i.code_type_id = '1046')
+    left join org_architecture j on a.work_team = j.architecture_id
+    left join isc_user ua on a.maintainer = ua.user_id
+    left join isc_user ub on a.applicant = ub.user_id
+    left join isc_user uc on a.work_head = uc.user_id
+    left join isc_user ud on a.signer = ud.user_id
+    left join isc_user ue on a.run_main_person = ue.user_id
+    left join isc_user uf on a.receive_head = uf.user_id
+    left join isc_user ug on a.scene_licensor = ug.user_id
+    left join isc_user uh on a.run_licensor = uh.user_id
+    left join isc_user ui on a.head_change_to = ui.user_id
+    left join isc_user uj on a.head_change_signer = uj.user_id
+    left join isc_user uk on a.delay_head = uk.user_id
+    left join isc_user ul on a.delay_licensor = ul.user_id
+    left join isc_user um on a.work_end_head = um.user_id
+    left join isc_user un on a.work_end_licensor = un.user_id
+    left join isc_user uo on a.ticket_end_licensor = uo.user_id
+    left join isc_user up on a.guardian = up.user_id
+    left join isc_user uq on a.evaluation = uq.user_id
+    left join process k on (a.ticket_id = k.order_id and k.process_status = '01')
+    left join process_detail l on (k.process_id = l.process_id and ((k.process_sort+1) = l.sort))
+    left join process_detail_role_rela m on l.process_detail_id = m.process_detail_id
+    left join approve_record n on a.ticket_id = n.order_id
+    left join isc_user ur on n.approve_user = ur.user_id
+    where 1=1
+    <if test="map.workTicketTypeId != null and map.workTicketTypeId != ''">
       and a.work_ticket_type_id = #{map.workTicketTypeId}
     </if>
-    <if test="map.windId != null">
-      and a.wind_id = #{map.windId}
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')">
+      and a.wind_id = #{map.startWindId}
     </if>
-    <if test="map.status != null">
-      and a.status = #{map.status}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''">
+      and a.wind_id BETWEEN #{map.startWindId} and #{map.endWindId}
     </if>
-    <if test="map.crewId != null">
+    <if test="map.approveUser == null or map.approveUser == ''">
+      <if test="map.status == null or map.status == ''">
+        and ((a.status = '01' or a.status = '02' or a.status = '04') or (a.status = '03' and a.maintainer = #{userId}))
+      </if>
+      <if test="map.status == '01' or map.status =='02' or map.status == '04'">
+        and a.status = #{map.status}
+      </if>
+      <if test="map.status == '03'">
+        and (a.status = #{map.status} and a.maintainer = #{userId})
+      </if>
+    </if>
+    <if test="map.approveUser != null and map.approveUser != ''">
+      and (((a.flow_status = '01')
+      and (m.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>
+      or ur.user_name = #{map.approveUser}))
+      or ((a.flow_status = '02' or a.flow_status = '03') and ur.user_name = #{map.approveUser}))
+    </if>
+    <if test="map.crewId != null and map.crewId != ''">
       and a.crew_id = #{map.crewId}
     </if>
-    <if test="map.workContent != null">
+    <if test="map.workContent != null and map.workContent != ''">
       and a.work_content like '%${map.workContent}%'
     </if>
-    <if test="map.startTime != null">
-      and a.apply_time &gt;= #{map.startTime}
+    <if test="map.startTime != null and map.startTime != '' and (map.endTime == null or map.endTime == '')">
+      and  a.apply_time between #{map.startTime}
     </if>
-    <if test="map.endTime != null">
-      and a.apply_time &lt;= #{map.endTime}
+    <if test="map.endTime != null and map.endTime != '' and map.startTime != null and map.startTime != ''">
+      and (a.apply_time between  #{map.startTime} and #{map.endTime})
     </if>
-    order by a.serial_number desc
+    order by a.serial_number is null desc,a.serial_number desc,a.maintain_date desc
     limit ${map.start},${map.pageSize}
   </select>
   <select id="getTotal" resultType="java.lang.Integer">
     select
+    count(distinct a.ticket_id)
+    from work_ticket a
+    left join org_architecture b on (a.wind_id = b.architecture_code and b.architecture_type = '02')
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join work_ticket_type g on a.work_ticket_type_id = g.work_ticket_type_id
+    left join standard_work_ticket h on a.standard_ticket_id = h.standard_ticket_id
+    left join sp_code i on (a.flow_status = i.name and i.code_type_id = '1046')
+    left join org_architecture j on a.work_team = j.architecture_id
+    left join isc_user ua on a.maintainer = ua.user_id
+    left join isc_user ub on a.applicant = ub.user_id
+    left join isc_user uc on a.work_head = uc.user_id
+    left join isc_user ud on a.signer = ud.user_id
+    left join isc_user ue on a.run_main_person = ue.user_id
+    left join isc_user uf on a.receive_head = uf.user_id
+    left join isc_user ug on a.scene_licensor = ug.user_id
+    left join isc_user uh on a.run_licensor = uh.user_id
+    left join isc_user ui on a.head_change_to = ui.user_id
+    left join isc_user uj on a.head_change_signer = uj.user_id
+    left join isc_user uk on a.delay_head = uk.user_id
+    left join isc_user ul on a.delay_licensor = ul.user_id
+    left join isc_user um on a.work_end_head = um.user_id
+    left join isc_user un on a.work_end_licensor = un.user_id
+    left join isc_user uo on a.ticket_end_licensor = uo.user_id
+    left join isc_user up on a.guardian = up.user_id
+    left join isc_user uq on a.evaluation = uq.user_id
+    left join process k on (a.ticket_id = k.order_id and k.process_status = '01')
+    left join process_detail l on (k.process_id = l.process_id and ((k.process_sort+1) = l.sort))
+    left join process_detail_role_rela m on l.process_detail_id = m.process_detail_id
+    left join approve_record n on a.ticket_id = n.order_id
+    left join isc_user ur on n.approve_user = ur.user_id
+    where 1=1
+    <if test="map.workTicketTypeId != null and map.workTicketTypeId != ''">
+      and a.work_ticket_type_id = #{map.workTicketTypeId}
+    </if>
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')">
+      and a.wind_id = #{map.startWindId}
+    </if>
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''">
+      and a.wind_id BETWEEN #{map.startWindId} and #{map.endWindId}
+    </if>
+    <if test="map.approveUser == null or map.approveUser == ''">
+      <if test="map.status == null or map.status == ''">
+        and ((a.status = '01' or a.status = '02' or a.status = '04') or (a.status = '03' and a.maintainer = #{userId}))
+      </if>
+      <if test="map.status == '01' or map.status =='02' or map.status == '04'">
+        and a.status = #{map.status}
+      </if>
+      <if test="map.status == '03'">
+        and (a.status = #{map.status} and a.maintainer = #{userId})
+      </if>
+    </if>
+    <if test="map.approveUser != null and map.approveUser != ''">
+      and (((a.flow_status = '01')
+      and (m.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>
+      or ur.user_name = #{map.approveUser}))
+      or ((a.flow_status = '02' or a.flow_status = '03') and ur.user_name = #{map.approveUser}))
+    </if>
+    <if test="map.crewId != null and map.crewId != ''">
+      and a.crew_id = #{map.crewId}
+    </if>
+    <if test="map.workContent != null and map.workContent != ''">
+      and a.work_content like '%${map.workContent}%'
+    </if>
+    <if test="map.startTime != null and map.startTime != '' and (map.endTime == null or map.endTime == '')">
+      and  a.apply_time between #{map.startTime}
+    </if>
+    <if test="map.endTime != null and map.endTime != '' and map.startTime != null and map.startTime != ''">
+      and a.apply_time between  #{map.startTime} and #{map.endTime}
+    </if>
+  </select>
+  <select id="getWorkTicketListForWorkorder" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from work_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join work_ticket_type g on a.work_ticket_type_id = g.work_ticket_type_id
+    left join standard_work_ticket h on a.standard_ticket_id = h.standard_ticket_id
+    left join sp_code i on (a.flow_status = i.name and i.code_type_id = '1046')
+    left join org_architecture j on a.work_team = j.architecture_id
+    left join isc_user ua on a.maintainer = ua.user_id
+    left join isc_user ub on a.applicant = ub.user_id
+    left join isc_user uc on a.work_head = uc.user_id
+    left join isc_user ud on a.signer = ud.user_id
+    left join isc_user ue on a.run_main_person = ue.user_id
+    left join isc_user uf on a.receive_head = uf.user_id
+    left join isc_user ug on a.scene_licensor = ug.user_id
+    left join isc_user uh on a.run_licensor = uh.user_id
+    left join isc_user ui on a.head_change_to = ui.user_id
+    left join isc_user uj on a.head_change_signer = uj.user_id
+    left join isc_user uk on a.delay_head = uk.user_id
+    left join isc_user ul on a.delay_licensor = ul.user_id
+    left join isc_user um on a.work_end_head = um.user_id
+    left join isc_user un on a.work_end_licensor = un.user_id
+    left join isc_user uo on a.ticket_end_licensor = uo.user_id
+    left join isc_user up on a.guardian = up.user_id
+    left join isc_user uq on a.evaluation = uq.user_id
+    where a.status = '01' and a.workorder_id is null and a.order_id is null
+    <if test="map.workTicketTypeId != null and map.workTicketTypeId != ''">
+      and a.work_ticket_type_id = #{map.workTicketTypeId}
+    </if>
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')">
+      and a.wind_id = #{map.startWindId}
+    </if>
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''">
+      and a.wind_id BETWEEN #{map.startWindId} and #{map.endWindId}
+    </if>
+    <if test="map.crewId != null and map.crewId != ''">
+      and a.crew_id = #{map.crewId}
+    </if>
+    <if test="map.workContent != null and map.workContent != ''">
+      and a.work_content like '%${map.workContent}%'
+    </if>
+    <if test="map.startTime != null and map.startTime != '' and (map.endTime == null or map.endTime == '')">
+      and  a.apply_time between #{map.startTime}
+    </if>
+    <if test="map.endTime != null and map.endTime != '' and map.startTime != null and map.startTime != ''">
+      and a.apply_time between  #{map.startTime} and #{map.endTime}
+    </if>
+    order by a.serial_number is null desc,a.serial_number desc
+    limit ${map.start},${map.pageSize}
+  </select>
+  <select id="getTotalForWorkorder" resultType="java.lang.Integer">
+    select
     count(*)
-    from work_ticket
-    where status != '0'
-    <if test="map.workTicketTypeId != null">
-      and work_ticket_type_id = #{map.workTicketTypeId}
+    from work_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join work_ticket_type g on a.work_ticket_type_id = g.work_ticket_type_id
+    left join standard_work_ticket h on a.standard_ticket_id = h.standard_ticket_id
+    left join sp_code i on (a.flow_status = i.name and i.code_type_id = '1046')
+    left join org_architecture j on a.work_team = j.architecture_id
+    left join isc_user ua on a.maintainer = ua.user_id
+    left join isc_user ub on a.applicant = ub.user_id
+    left join isc_user uc on a.work_head = uc.user_id
+    left join isc_user ud on a.signer = ud.user_id
+    left join isc_user ue on a.run_main_person = ue.user_id
+    left join isc_user uf on a.receive_head = uf.user_id
+    left join isc_user ug on a.scene_licensor = ug.user_id
+    left join isc_user uh on a.run_licensor = uh.user_id
+    left join isc_user ui on a.head_change_to = ui.user_id
+    left join isc_user uj on a.head_change_signer = uj.user_id
+    left join isc_user uk on a.delay_head = uk.user_id
+    left join isc_user ul on a.delay_licensor = ul.user_id
+    left join isc_user um on a.work_end_head = um.user_id
+    left join isc_user un on a.work_end_licensor = un.user_id
+    left join isc_user uo on a.ticket_end_licensor = uo.user_id
+    left join isc_user up on a.guardian = up.user_id
+    left join isc_user uq on a.evaluation = uq.user_id
+    where a.status = '01' and a.workorder_id is null and a.order_id is null
+    <if test="map.workTicketTypeId != null and map.workTicketTypeId != ''">
+      and a.work_ticket_type_id = #{map.workTicketTypeId}
     </if>
-    <if test="map.windId != null">
-      and wind_id = #{map.windId}
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')">
+      and a.wind_id = #{map.startWindId}
     </if>
-    <if test="map.status != null">
-      and status = #{map.status}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''">
+      and a.wind_id BETWEEN #{map.startWindId} and #{map.endWindId}
     </if>
-    <if test="map.crewId != null">
-      and crew_id = #{map.crewId}
+    <if test="map.crewId != null and map.crewId != ''">
+      and a.crew_id = #{map.crewId}
     </if>
-    <if test="map.workContent != null">
-      and work_content like '%${map.workContent}%'
+    <if test="map.workContent != null and map.workContent != ''">
+      and a.work_content like '%${map.workContent}%'
     </if>
-    <if test="map.startTime != null">
-      and apply_time &gt;= #{map.startTime}
+    <if test="map.startTime != null and map.startTime != '' and (map.endTime == null or map.endTime == '')">
+      and  a.apply_time between #{map.startTime}
     </if>
-    <if test="map.endTime != null">
-      and apply_time &lt;= #{map.endTime}
+    <if test="map.endTime != null and map.endTime != '' and map.startTime != null and map.startTime != ''">
+      and a.apply_time between  #{map.startTime} and #{map.endTime}
     </if>
   </select>
   <resultMap id="WorkTicketStatisticsMap" type="com.qz.zframe.tickets.vo.TicketStatisticsRes">
-    <id column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="architecture_name" property="windName" jdbcType="VARCHAR" />
     <result column="apply_count" property="applyCount" jdbcType="VARCHAR" />
     <result column="in_process_count" property="inProcessCount" jdbcType="VARCHAR" />
     <result column="complete_count" property="completeCount" jdbcType="VARCHAR" />
@@ -320,20 +599,93 @@
     <result column="complete_rate" property="completeRate" jdbcType="VARCHAR" />
   </resultMap>
   <select id="getWorkTicketStatisticsList" resultMap="WorkTicketStatisticsMap">
-    select a.*,(a.complete_count/a.apply_count) as 'complete_rate'
+    select a.*,(a.complete_count/a.apply_count) as 'complete_rate',b.architecture_name
     from (select wind_id,count(*) as 'apply_count',
-    sum(IF(status = '1', 1, 0)) as 'in_process_count',
-    sum(IF(status = '2', 1, 0)) as 'complete_count',
-    sum(IF(status = '0', 1, 0)) as 'invalid_count'
+    sum(IF(status = '01', 1, 0)) as 'in_process_count',
+    sum(IF(status = '02', 1, 0)) as 'complete_count',
+    sum(IF(status = '04', 1, 0)) as 'invalid_count'
     from work_ticket
     where 1=1
-    <if test="startTime != null">
-      and apply_time &gt;= #{startTime}
+    <if test="startWindCode != null and startWindCode != '' and (endWindCode == null or endWindCode == '')">
+      and a.wind_id = #{startWindCode}
     </if>
-    <if test="endTime != null">
-      and apply_time &lt;= #{endTime}
+    <if test="startWindCode != null and startWindCode != '' and endWindCode != null and endWindCode != ''">
+      and a.wind_id BETWEEN #{startWindCode} and #{endWindCode}
     </if>
-    group by wind_id) as a;
+    <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+      and apply_time between #{startTime} and #{endTime}
+    </if>
+    group by wind_id) as a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+  </select>
+  <resultMap id="WorkorderMap" type="com.qz.zframe.maintain.vo.WorkTicketForWorkorederVo">
+    <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="ticket_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="work_team" property="workTeam" jdbcType="VARCHAR" />
+    <result column="work_team_name" property="workTeamName" jdbcType="VARCHAR" />
+    <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="applicant_name" property="applicantName" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="DATE" />
+    <result column="work_content" property="workContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Workorder_Column_List">
+    a.ticket_id as ticket_id,
+    a.serial_number as ticket_number,
+    a.work_team as work_team,
+    d.architecture_name as work_team_name,
+    b.ticket_type_name as ticket_type_name,
+    a.status as status,
+    a.applicant as applicant,
+    f.user_name as applicant_name,
+    a.apply_time as apply_time,
+    a.work_content as work_content
+  </sql>
+  <select id="getDefectWorkTicketList" resultMap="WorkorderMap">
+    select
+    <include refid="Workorder_Column_List"/>
+    from work_ticket a
+    left join work_ticket_type b on a.work_ticket_type_id = b.work_ticket_type_id
+    left join org_architecture d on a.work_team = d.architecture_id
+    left join isc_user f on a.applicant = f.user_id
+    where a.status != '0' and a.workorder_id = #{workorderId}
+    order by a.serial_number desc
+  </select>
+  <select id="getOrderWorkTicketList" resultMap="WorkorderMap">
+    select
+    <include refid="Workorder_Column_List"/>
+    from work_ticket a
+    left join work_ticket_type b on a.work_ticket_type_id = b.work_ticket_type_id
+    left join org_architecture d on a.work_team = d.architecture_id
+    left join isc_user f on a.applicant = f.user_id
+    where a.status != '0' and a.order_id = #{orderId}
+    order by a.serial_number desc
+  </select>
+  <select id="findRoleByUserName" parameterType="string" resultType="string">
+      SELECT isc_role.role_name
+      FROM isc_role,isc_user,isc_role_user_rela
+      WHERE isc_user.user_name=#{userName}
+      and isc_user.user_id=isc_role_user_rela.user_id
+      and isc_role_user_rela.role_id=isc_role.role_id
+  </select>
+
+  <select id="findFlowStatusQf" resultType="string">
+      SELECT record_id
+      FROM workorder_flow_record
+      WHERE
+      deploy_sort="2"
+      AND deal_result="完成"
+  </select>
+  <select id="getIdByName" parameterType="java.lang.String" resultType="java.lang.String">
+    select user_id
+    from isc_user
+    <where>
+      <if test="userName != null and userName != ''">
+        and user_name = #{userName}
+      </if>
+    </where>
+    order by order_no
   </select>
 
 
@@ -380,43 +732,43 @@
     insert into work_ticket (ticket_id, serial_number, work_ticket_type_id, 
       standard_ticket_id, workorder_id, order_id, 
       maintainer, maintain_date, status, 
-      flow_status, wind_id, crew_id, 
-      applicant, apply_time, work_team, 
-      work_head, position_id, position_desc, 
-      equipment_id, equipment_desc, work_member, 
-      member_num, plan_start_time, plan_end_time, 
-      double_naem, work_place, work_content, 
-      work_condition, signer, sign_time, 
-      run_main_person, receive_head, receive_time, 
-      scene_licensor, run_licensor, license_start_time, 
-      work_team_opinion, head_change_to, head_change_signer, 
-      head_chaneg_time, delay_time, delay_head, 
-      delay_head_sign_time, delay_licensor, delay_licensor_sign_time, 
-      work_end_head, work_end_licensor, work_end_time, 
-      ticket_end_licensor, ticket_end_time, unuse_wire_number, 
-      unuse_wire_num, knife_car_num, guardian, 
-      guardian_place_and_cont, guardian_other_thing, 
+      flow_status, work_position, wind_id, 
+      crew_id, applicant, apply_time, 
+      work_team, work_head, position_id, 
+      position_desc, equipment_id, equipment_desc, 
+      work_member, member_num, plan_start_time, 
+      plan_end_time, double_naem, work_place, 
+      work_content, work_condition, signer, 
+      sign_time, run_main_person, receive_head, 
+      receive_time, scene_licensor, run_licensor, 
+      license_start_time, work_team_opinion, head_change_to, 
+      head_change_signer, head_chaneg_time, delay_time, 
+      delay_head, delay_head_sign_time, delay_licensor, 
+      delay_licensor_sign_time, work_end_head, work_end_licensor, 
+      work_end_time, ticket_end_licensor, ticket_end_time, 
+      unuse_wire_number, unuse_wire_num, knife_car_num, 
+      guardian, guardian_place_and_cont, guardian_other_thing, 
       evaluation, evaluation_cont, evaluation_time
       )
     values (#{ticketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{workTicketTypeId,jdbcType=VARCHAR}, 
       #{standardTicketId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
-      #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, 
-      #{flowStatus,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{crewId,jdbcType=VARCHAR}, 
-      #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, #{workTeam,jdbcType=VARCHAR}, 
-      #{workHead,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}, #{positionDesc,jdbcType=VARCHAR}, 
-      #{equipmentId,jdbcType=VARCHAR}, #{equipmentDesc,jdbcType=VARCHAR}, #{workMember,jdbcType=VARCHAR}, 
-      #{memberNum,jdbcType=INTEGER}, #{planStartTime,jdbcType=TIMESTAMP}, #{planEndTime,jdbcType=TIMESTAMP}, 
-      #{doubleNaem,jdbcType=VARCHAR}, #{workPlace,jdbcType=VARCHAR}, #{workContent,jdbcType=VARCHAR}, 
-      #{workCondition,jdbcType=VARCHAR}, #{signer,jdbcType=VARCHAR}, #{signTime,jdbcType=TIMESTAMP}, 
-      #{runMainPerson,jdbcType=VARCHAR}, #{receiveHead,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
-      #{sceneLicensor,jdbcType=VARCHAR}, #{runLicensor,jdbcType=VARCHAR}, #{licenseStartTime,jdbcType=TIMESTAMP}, 
-      #{workTeamOpinion,jdbcType=VARCHAR}, #{headChangeTo,jdbcType=VARCHAR}, #{headChangeSigner,jdbcType=VARCHAR}, 
-      #{headChanegTime,jdbcType=TIMESTAMP}, #{delayTime,jdbcType=TIMESTAMP}, #{delayHead,jdbcType=VARCHAR}, 
-      #{delayHeadSignTime,jdbcType=TIMESTAMP}, #{delayLicensor,jdbcType=VARCHAR}, #{delayLicensorSignTime,jdbcType=TIMESTAMP}, 
-      #{workEndHead,jdbcType=VARCHAR}, #{workEndLicensor,jdbcType=VARCHAR}, #{workEndTime,jdbcType=TIMESTAMP}, 
-      #{ticketEndLicensor,jdbcType=VARCHAR}, #{ticketEndTime,jdbcType=TIMESTAMP}, #{unuseWireNumber,jdbcType=VARCHAR}, 
-      #{unuseWireNum,jdbcType=INTEGER}, #{knifeCarNum,jdbcType=INTEGER}, #{guardian,jdbcType=VARCHAR}, 
-      #{guardianPlaceAndCont,jdbcType=VARCHAR}, #{guardianOtherThing,jdbcType=VARCHAR}, 
+      #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
+      #{flowStatus,jdbcType=VARCHAR}, #{workPosition,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, 
+      #{crewId,jdbcType=VARCHAR}, #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
+      #{workTeam,jdbcType=VARCHAR}, #{workHead,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}, 
+      #{positionDesc,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR}, #{equipmentDesc,jdbcType=VARCHAR}, 
+      #{workMember,jdbcType=VARCHAR}, #{memberNum,jdbcType=INTEGER}, #{planStartTime,jdbcType=TIMESTAMP}, 
+      #{planEndTime,jdbcType=TIMESTAMP}, #{doubleNaem,jdbcType=VARCHAR}, #{workPlace,jdbcType=VARCHAR}, 
+      #{workContent,jdbcType=VARCHAR}, #{workCondition,jdbcType=VARCHAR}, #{signer,jdbcType=VARCHAR}, 
+      #{signTime,jdbcType=TIMESTAMP}, #{runMainPerson,jdbcType=VARCHAR}, #{receiveHead,jdbcType=VARCHAR}, 
+      #{receiveTime,jdbcType=TIMESTAMP}, #{sceneLicensor,jdbcType=VARCHAR}, #{runLicensor,jdbcType=VARCHAR}, 
+      #{licenseStartTime,jdbcType=TIMESTAMP}, #{workTeamOpinion,jdbcType=VARCHAR}, #{headChangeTo,jdbcType=VARCHAR}, 
+      #{headChangeSigner,jdbcType=VARCHAR}, #{headChanegTime,jdbcType=TIMESTAMP}, #{delayTime,jdbcType=TIMESTAMP}, 
+      #{delayHead,jdbcType=VARCHAR}, #{delayHeadSignTime,jdbcType=TIMESTAMP}, #{delayLicensor,jdbcType=VARCHAR}, 
+      #{delayLicensorSignTime,jdbcType=TIMESTAMP}, #{workEndHead,jdbcType=VARCHAR}, #{workEndLicensor,jdbcType=VARCHAR}, 
+      #{workEndTime,jdbcType=TIMESTAMP}, #{ticketEndLicensor,jdbcType=VARCHAR}, #{ticketEndTime,jdbcType=TIMESTAMP}, 
+      #{unuseWireNumber,jdbcType=VARCHAR}, #{unuseWireNum,jdbcType=INTEGER}, #{knifeCarNum,jdbcType=INTEGER}, 
+      #{guardian,jdbcType=VARCHAR}, #{guardianPlaceAndCont,jdbcType=VARCHAR}, #{guardianOtherThing,jdbcType=VARCHAR}, 
       #{evaluation,jdbcType=VARCHAR}, #{evaluationCont,jdbcType=VARCHAR}, #{evaluationTime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -452,6 +804,9 @@
       </if>
       <if test="flowStatus != null" >
         flow_status,
+      </if>
+      <if test="workPosition != null" >
+        work_position,
       </if>
       <if test="windId != null" >
         wind_id,
@@ -624,13 +979,16 @@
         #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="maintainDate != null" >
-        #{maintainDate,jdbcType=DATE},
+        #{maintainDate,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
       </if>
       <if test="flowStatus != null" >
         #{flowStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="workPosition != null" >
+        #{workPosition,jdbcType=VARCHAR},
       </if>
       <if test="windId != null" >
         #{windId,jdbcType=VARCHAR},
@@ -812,13 +1170,16 @@
         maintainer = #{record.maintainer,jdbcType=VARCHAR},
       </if>
       <if test="record.maintainDate != null" >
-        maintain_date = #{record.maintainDate,jdbcType=DATE},
+        maintain_date = #{record.maintainDate,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.flowStatus != null" >
         flow_status = #{record.flowStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workPosition != null" >
+        work_position = #{record.workPosition,jdbcType=VARCHAR},
       </if>
       <if test="record.windId != null" >
         wind_id = #{record.windId,jdbcType=VARCHAR},
@@ -981,9 +1342,10 @@
       workorder_id = #{record.workorderId,jdbcType=VARCHAR},
       order_id = #{record.orderId,jdbcType=VARCHAR},
       maintainer = #{record.maintainer,jdbcType=VARCHAR},
-      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      maintain_date = #{record.maintainDate,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=VARCHAR},
       flow_status = #{record.flowStatus,jdbcType=VARCHAR},
+      work_position = #{record.workPosition,jdbcType=VARCHAR},
       wind_id = #{record.windId,jdbcType=VARCHAR},
       crew_id = #{record.crewId,jdbcType=VARCHAR},
       applicant = #{record.applicant,jdbcType=VARCHAR},
@@ -1059,13 +1421,16 @@
         maintainer = #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="maintainDate != null" >
-        maintain_date = #{maintainDate,jdbcType=DATE},
+        maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="flowStatus != null" >
         flow_status = #{flowStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="workPosition != null" >
+        work_position = #{workPosition,jdbcType=VARCHAR},
       </if>
       <if test="windId != null" >
         wind_id = #{windId,jdbcType=VARCHAR},
@@ -1225,9 +1590,10 @@
       workorder_id = #{workorderId,jdbcType=VARCHAR},
       order_id = #{orderId,jdbcType=VARCHAR},
       maintainer = #{maintainer,jdbcType=VARCHAR},
-      maintain_date = #{maintainDate,jdbcType=DATE},
+      maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR},
       flow_status = #{flowStatus,jdbcType=VARCHAR},
+      work_position = #{workPosition,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},
       crew_id = #{crewId,jdbcType=VARCHAR},
       applicant = #{applicant,jdbcType=VARCHAR},

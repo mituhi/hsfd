@@ -1,31 +1,31 @@
 package com.qz.zframe.maintain.entity;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 public class WorkorderTool {
 
-    @ApiParam(name="toolId",value="工器具id",required=false)
+    @ApiModelProperty(name="toolId",value="工器具id",required=false)
     private String toolId;
 
-    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    @ApiModelProperty(name="workorderId",value="缺陷工单id",required=false)
     private String workorderId;
 
-    @ApiParam(name="knowledgeId",value="故障知识id",required=false)
+    @ApiModelProperty(name="knowledgeId",value="故障知识id",required=false)
     private String knowledgeId;
 
-    @ApiParam(name="orderId",value="工单id",required=false)
+    @ApiModelProperty(name="orderId",value="工单id",required=false)
     private String orderId;
 
-    @ApiParam(name="toolNumber",value="工器具编码",required=false)
+    @ApiModelProperty(name="toolNumber",value="工器具编码",required=false)
     private String toolNumber;
 
-    @ApiParam(name="toolDesc",value="工器具描述",required=false)
+    @ApiModelProperty(name="toolDesc",value="工器具描述",required=false)
     private String toolDesc;
 
-    @ApiParam(name="toolPlanAmount",value="计划数量",required=false)
+    @ApiModelProperty(name="toolPlanAmount",value="计划数量",required=false)
     private String toolPlanAmount;
 
-    @ApiParam(name="toolUnit",value="单位",required=false)
+    @ApiModelProperty(name="toolUnit",value="单位",required=false)
     private String toolUnit;
 
     public String getToolId() {

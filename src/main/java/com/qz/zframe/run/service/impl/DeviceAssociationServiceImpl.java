@@ -14,7 +14,6 @@ import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.run.dao.DeviceAssociationMapper;
-import com.qz.zframe.run.dao.DeviceTypeMapper;
 import com.qz.zframe.run.dao.LogTypeMapper;
 import com.qz.zframe.run.dao.MainEquipmentInfoMapper;
 import com.qz.zframe.run.dao.MainEquipmentMapper;
@@ -30,7 +29,7 @@ import com.qz.zframe.run.service.DeviceAssociationService;
 /**
  * <p>Title: DeviceAssociationServiceImpl</p>
  * <p>@Description: 设备关联表接口实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月9日 下午1:08:55
  * @version:V1.0
  */
@@ -68,8 +67,9 @@ public class DeviceAssociationServiceImpl implements DeviceAssociationService {
 
 	@Override
 	public ResultEntity deleteDeviceAssociationById(String deviceAssociationId) {
+		return null;
 		
-		ResultEntity resultEntity = new ResultEntity();
+		/*ResultEntity resultEntity = new ResultEntity();
 		
 		//先查询出其他id
 		DeviceAssociation deviceAssociation = deviceAssociationMapper.selectByPrimaryKey(deviceAssociationId);
@@ -89,7 +89,7 @@ public class DeviceAssociationServiceImpl implements DeviceAssociationService {
 		
 		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("执行成功");
-		return resultEntity;
+		return resultEntity;*/
 	}
 
 	
@@ -99,17 +99,18 @@ public class DeviceAssociationServiceImpl implements DeviceAssociationService {
 	@Override
 	public PageResultEntity listDeviceAssociation(MainEquipment mainEquipment, int pageNo, int pageSize) {
 		
-		//创建返回对象
+		/*//创建返回对象
 		PageResultEntity pageResultEntity = new PageResultEntity();
 		//返回对象数据
 		List<DeviceAssociationResult> result = new ArrayList<DeviceAssociationResult>();
 
 		if(pageNo != 0 && pageSize!= 0){
 			PageHelper.startPage(pageNo, pageSize);
+		}
 			//查询
-			List<DeviceAssociationResult> list = deviceAssociationMapper.listDeviceAssociationResult(mainEquipment);
+*/			List<DeviceAssociationResult> list = deviceAssociationMapper.listDeviceAssociationResult(mainEquipment);
 			//进行封装：封装的依据是如果主设备id一致，则设备累计
-			for (DeviceAssociationResult deviceAssociationResult : list) {
+		/*	for (DeviceAssociationResult deviceAssociationResult : list) {
 				
 				//返回结果中不为空就进行比较主设备id
 				if(CollectionUtils.isNotEmpty(result)){
@@ -141,14 +142,31 @@ public class DeviceAssociationServiceImpl implements DeviceAssociationService {
 					result.add(deviceAssociationResult);
 				}
 				
-			}
+			}*/
+return null;
 			
-		}
-		pageResultEntity.setCode(ErrorCode.SUCCESS);
-		pageResultEntity.setRows(result);
-		pageResultEntity.setTotal(result.size());
-		pageResultEntity.setMsg("执行成功");
-		return pageResultEntity;
+			/*
+			if(list!=null && !list.isEmpty()) {
+				for(DeviceAssociationResult  device:list) {
+				List<DeviceAssociationResult> deviceAssociationResult=	deviceAssociationMapper.selectByMainEquipmentId(device.getMainEquipmentId());
+				if(deviceAssociationResult!=null && !deviceAssociationResult.isEmpty()) {
+					device.setCount(deviceAssociationResult.size());
+				}
+				}
+				pageResultEntity.setRows(list);
+				pageResultEntity.setCode(ErrorCode.SUCCESS);
+				pageResultEntity.setTotal(list.size());
+				pageResultEntity.setMsg("执行成功");
+				return pageResultEntity;
+			}else {
+				pageResultEntity.setRows(null);
+				pageResultEntity.setCode(ErrorCode.ERROR);
+				pageResultEntity.setTotal(list.size());
+				pageResultEntity.setMsg("执行失败");
+				return pageResultEntity;
+			}
+		*/
+		
 	}
 
 	@Override
@@ -227,6 +245,35 @@ public class DeviceAssociationServiceImpl implements DeviceAssociationService {
 		}
 		
 		
+	}
+
+	
+	/**
+	 * 通过id获取对象
+	 */
+	@Override
+	public DeviceAssociation getDeviceAssociationbyId(String deviceAssociationId) {
+		return deviceAssociationMapper.selectByPrimaryKey(deviceAssociationId);
+	}
+
+	
+	/**
+	 * 通过主设备id获取集合
+	 */
+	@Override
+	public List<DeviceAssociation> getgetDeviceAssociationbyMainEqId(String mainEquipmentId) {
+		DeviceAssociationExample example = new DeviceAssociationExample();
+		example.createCriteria().andMainEquipmentIdEqualTo(mainEquipmentId);
+		return deviceAssociationMapper.selectByExample(example);
+	}
+
+	
+	/**
+	 * 通过example删除
+	 */
+	@Override
+	public void deleteDeviceAssociationByExample(DeviceAssociationExample example) {
+		deviceAssociationMapper.deleteByExample(example);
 	}
 
 }

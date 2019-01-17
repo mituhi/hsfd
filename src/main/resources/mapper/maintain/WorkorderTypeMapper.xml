@@ -9,6 +9,7 @@
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
     <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="statusText" property="statusText" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -80,13 +81,98 @@
 
 
   <update id="batchDelete" parameterType="java.lang.String">
-    update workorder_type set status = "0"
+    delete from  workorder_type
     where workorder_type_id in
     <foreach collection="array" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
   </update>
+  <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.WorkorderTypeVo" >
+    <id column="workorder_type_id" property="workorderTypeId" jdbcType="VARCHAR" />
+    <result column="workorder_type_code" property="workorderTypeCode" jdbcType="VARCHAR" />
+    <result column="workorder_type_name" property="workorderTypeName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.workorder_type_id as workorder_type_id, a.workorder_type_code as workorder_type_code, a.workorder_type_name as workorder_type_name,
+    a.status as status, a.maintainer as maintainer, a.maintain_date as maintain_date, a.remark as remark,
+    b.user_name as maintainer_name
+  </sql>
+  <select id="getNameById" resultType="java.lang.String">
+    select
+    workorder_type_name
+    from workorder_type
+    where workorder_type_id = #{workorderTypeId}
+  </select>
+<select id="getWorkorderTypeDetail" resultMap="GetResultMap">
+  select
+  <include refid="Get_Column_List" />
+  from workorder_type a
+  left join isc_user b on a.maintainer = b.user_id
+  where a.status != '0' and a.workorder_type_id = #{workorderTypeId}
+</select>
+<select id="getAllWorkorderType" resultMap="GetResultMap">
+  select
+  <include refid="Get_Column_List" />
+  FROM
+  workorder_type a
+  LEFT JOIN isc_user b ON a.maintainer = b.user_id
+  LEFT JOIN sp_code c ON c.name = a.status
+  LEFT JOIN sp_code_type t ON t.id = c.code_type_id
+  WHERE t.name ='WORKORDER_TYPE_STATUS'
+  order by a. workorder_type_code asc
+</select>
+  <select id="getAllWorkorderTypeByStatus" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    FROM
+    workorder_type a
+    LEFT JOIN isc_user b ON a.maintainer = b.user_id
+    LEFT JOIN sp_code c ON c.name = a.status
+    LEFT JOIN sp_code_type t ON t.id = c.code_type_id
+    WHERE t.name ='WORKORDER_TYPE_STATUS'
+    and  a.status = '01'
+    order by a. workorder_type_code asc
+  </select>
+<select id="getWorkorderTypeList" resultMap="GetResultMap">
+  select
+  <include refid="Get_Column_List" />
+  FROM
+  workorder_type a
+  LEFT JOIN isc_user b ON a.maintainer = b.user_id
+  LEFT JOIN sp_code c ON c.name = a.status
+  LEFT JOIN sp_code_type t ON t.id = c.code_type_id
+  WHERE t.name ='WORKORDER_TYPE_STATUS'
+    <if test="map != null and map.workorderTypeCode != null and map.workorderTypeCode != ''">
+      and a.workorder_type_code like #{map.workorderTypeCode,jdbcType=VARCHAR}
+    </if>
+    <if test="map != null and map.workorderTypeName != null and map.workorderTypeName != ''">
+      and a.workorder_type_name like #{map.workorderTypeName,jdbcType=VARCHAR}
+    </if>
+  order by a.workorder_type_code asc
+  limit ${map.start},${map.pageSize}
+</select>
+  <select id="getTotal" resultType="java.lang.Integer">
+    select
+    count(*)
+    FROM
+    workorder_type a
+    LEFT JOIN isc_user b ON a.maintainer = b.user_id
+    LEFT JOIN sp_code c ON c.name = a.status
+    LEFT JOIN sp_code_type t ON t.id = c.code_type_id
+    WHERE t.name ='WORKORDER_TYPE_STATUS'
+      <if test="map != null and map.workorderTypeCode != null and map.workorderTypeCode != ''">
+        and a.workorder_type_code like #{map.workorderTypeCode,jdbcType=VARCHAR}
+      </if>
+      <if test="map != null and map.workorderTypeName != null and map.workorderTypeName != ''">
+        and a.workorder_type_name like #{map.workorderTypeName,jdbcType=VARCHAR}
+      </if>
+  </select>
 
 
 

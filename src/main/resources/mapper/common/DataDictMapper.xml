@@ -120,4 +120,35 @@
         and t.name = #{codeType}
         </if>
     </select>
+    
+     <!-- 根据标准代码类型查询标准代码 -->
+    <select id="findDataDictsByCodeType" resultType="com.qz.zframe.common.entity.DataDict">
+        select c.id,c.code_type_id codeTypeId,c.name,c.title,c.state state,c.description,
+        c.disp_order dispOrder,t.name codeTypeName, t.title codeTypeTitle,t.description codeTypeDescription 
+        from sp_code c,sp_code_type t where c.code_type_id = t.id AND t.name in 
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+    </select>
+    
+    <!-- 根据编码类型获取编码信息 -->
+    <select id="queryCodeList" resultType="com.qz.zframe.common.entity.DataDict">
+        select c.id,c.code_type_id codeTypeId,c.name,c.title,c.state state,c.description,
+        c.disp_order dispOrder,t.name codeTypeName, t.title codeTypeTitle,t.description codeTypeDescription 
+        from sp_code c,sp_code_type t where c.code_type_id = t.id 
+        <if test="codeType != null and codeType != ''">
+        and t.name = #{codeType}
+        </if>
+    </select>
+    
+    <!-- 根据分类编码和资源id查询编码 -->
+    <select id="findDataDictByCodeAndType" resultType="com.qz.zframe.common.entity.DataDict">
+        select c.id,c.code_type_id codeTypeId,c.name,c.title,c.state state,c.description,
+        c.content01 , c.content02,
+        c.disp_order dispOrder,t.name codeTypeName, t.title codeTypeTitle,t.description codeTypeDescription 
+        from sp_code c,sp_code_type t 
+        where c.code_type_id = t.id 
+        and t.name = #{codeType}
+        and c.name = #{name}
+    </select>
 </mapper>

@@ -38,4 +38,8 @@ public interface ValueTimeMapper {
 	ValueTime selectMaxSort();
 	
 	List<ValueTime> getValueTimeBySchedulingRuleId(String schedulingRuleId);
+	
+	int  selectCount();
+	
+	ValueTime selectSort(int sort);
 }

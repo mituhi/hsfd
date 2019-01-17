@@ -88,14 +88,14 @@
 
 
 
-  <update id="batchDelete" parameterType="java.lang.String">
-    update standard_work_ticket set status = "0"
+  <delete id="batchDelete" parameterType="java.lang.String">
+    delete from standard_work_ticket
     where standard_ticket_id in
     <foreach collection="array" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
-  </update>
+  </delete>
   <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.StandardWorkTicketVo" >
     <id column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
     <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
@@ -119,6 +119,8 @@
     <result column="position_name" property="positionName" jdbcType="VARCHAR" />
     <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
     <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
+    <result column="work_team_name" property="workTeamName" jdbcType="VARCHAR" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Get_Column_List" >
     a.standard_ticket_id as standard_ticket_id, a.serial_number as serial_number, a.standard_ticket_name as standard_ticket_name,
@@ -127,66 +129,95 @@
     a.equipment_id as equipment_id, a.equipment_desc as equipment_desc, a.double_name as double_name, a.work_place as work_place,
     a.work_content as work_content,
     b.architecture_name as wind_name,d.crew_name as crew_name,e.position_name as position_name,f.equipment_name as equipment_name,
-    g.ticket_type_name as ticket_type_name
+    g.ticket_type_name as ticket_type_name,h.architecture_name as work_team_name,i.user_name as maintainer_name
   </sql>
   <select id="getStandardWorkTicketDetail" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from standard_work_ticket a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
     left join crew_information d on a.crew_id = d.crew_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join work_ticket_type g on a.ticket_type_id = g.work_ticket_type_id
+    left join org_architecture h on a.work_team = h.architecture_id
+    left join isc_user i on a.maintainer = i.user_id
     where a.status != '0' and standard_ticket_id = #{standardTicketId}
   </select>
   <select id="getStandardWorkTicketList" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from standard_work_ticket a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
     left join crew_information d on a.crew_id = d.crew_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join work_ticket_type g on a.ticket_type_id = g.work_ticket_type_id
-    where a.status != '0'
-    <if test="map.windId != null" >
-      and a.wind_id = #{map.windId}
+    left join org_architecture h on a.work_team = h.architecture_id
+    left join isc_user i on a.maintainer = i.user_id
+    where 1=1
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.startWindId}
     </if>
-    <if test="map.ticketTypeId != null" >
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
+    </if>
+    <if test="map.ticketTypeId != null and map.ticketTypeId != ''" >
       and a.ticket_type_id = #{map.ticketTypeId}
     </if>
-    <if test="map.status != null" >
+    <if test="map.status != null or map.status != ''" >
+      and (a.status = '01' or a.status = '02' or (a.status = '03' and a.maintainer = #{userId}))
+    </if>
+    <if test="map.status == '01' or map.status == '02'" >
       and a.status = #{map.status}
     </if>
-    <if test="map.workTeam != null" >
+    <if test="map.status == '03'" >
+      and (a.status = #{map.status} and a.maintainer = #{userId})
+    </if>
+    <if test="map.workTeam != null and map.workTeam != ''" >
       and a.work_team = #{map.workTeam}
     </if>
-    <if test="map.workContent != null" >
+    <if test="map.workContent != null and map.workContent != ''" >
       and a.work_content like '%${map.workContent}%'
     </if>
-    order by a.serial_number desc
+    order by a.serial_number is null desc,a.serial_number desc
     limit ${map.start},${map.pageSize}
   </select>
   <select id="getTotal" resultType="java.lang.Integer">
     select
     count(*)
-    from standard_work_ticket
-    where status != '0'
-    <if test="map.windId != null" >
-      and wind_id = #{map.windId}
+    from standard_work_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join work_ticket_type g on a.ticket_type_id = g.work_ticket_type_id
+    left join org_architecture h on a.work_team = h.architecture_id
+    left join isc_user i on a.maintainer = i.user_id
+    where 1=1
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.startWindId}
     </if>
-    <if test="map.ticketTypeId != null" >
-      and ticket_type_id = #{map.ticketTypeId}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
     </if>
-    <if test="map.status != null" >
-      and status = #{map.status}
+    <if test="map.ticketTypeId != null and map.ticketTypeId != ''" >
+      and a.ticket_type_id = #{map.ticketTypeId}
     </if>
-    <if test="map.workTeam != null" >
-      and work_team = #{map.workTeam}
+    <if test="map.status != null or map.status != ''" >
+      and (a.status = '01' or a.status = '02' or (a.status = '03' and a.maintainer = #{userId}))
     </if>
-    <if test="map.workContent != null" >
-      and work_content like '%${map.workContent}%'
+    <if test="map.status == '01' or map.status == '02'" >
+      and a.status = #{map.status}
+    </if>
+    <if test="map.status == '03'" >
+      and (a.status = #{map.status} and a.maintainer = #{userId})
+    </if>
+    <if test="map.workTeam != null and map.workTeam != ''" >
+      and a.work_team = #{map.workTeam}
+    </if>
+    <if test="map.workContent != null and map.workContent != ''" >
+      and a.work_content like '%${map.workContent}%'
     </if>
   </select>
 

@@ -1,22 +1,19 @@
 package com.qz.zframe.tally.controller;
 
-import com.github.pagehelper.PageHelper;
-import com.qz.zframe.common.util.ErrorCode;
-import com.qz.zframe.common.util.PageBean;
+import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
-import com.qz.zframe.tally.dto.TallyRecordDto;
 import com.qz.zframe.tally.entity.TallyAlarm;
 import com.qz.zframe.tally.service.TallyAlarmService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.text.ParseException;
 import java.util.List;
 
 @Controller
@@ -31,29 +28,60 @@ public class AlarmController {
     @Autowired
     TallyAlarmService tallyAlarmService;
 
-    @ApiOperation(value="报警管理查询", notes="可以根据线路，状态，风机场，开始时间，结束时间查询" ,httpMethod="GET")
-    @RequestMapping("list")
+
+    @ApiOperation(value="巡检告警分页查询", notes="巡检告警分页查询" ,httpMethod="GET")
+    @RequestMapping("alarmPage")
     @ResponseBody
-    public ResultEntity listStandard(String windId,
-                                     String routeName,
-                                     String treatmentStandard,
-                                     Date startTime,
-                                     Date endTime,
-                                     @RequestParam(value = "currentPage",defaultValue = "1")int currentPage,
-                                     @RequestParam(value = "pageSize",defaultValue = "5")  int pageSize) {
-        ResultEntity resultEntity=new ResultEntity();
+    public PageResultEntity alarmPage(
+            @RequestParam(required = false)
+            @ApiParam(name="companyId",value="公司id",required=false) String companyId,
+            @RequestParam(required = false)
+            @ApiParam(name="startArchitectureCode",value="起始风电场编号",required=false) String startArchitectureCode,
+            @RequestParam(required = false)
+            @ApiParam(name="endArchitectureCode",value="结束风电场编号",required=false) String endArchitectureCode,
+            @RequestParam(required = false)
+            @ApiParam(name="startTime",value="起始时间",required=false) String startTime,
+            @RequestParam(required = false)
+            @ApiParam(name="endTime",value="结束时间",required=false) String endTime,
+            @RequestParam(required = false)
+            @ApiParam(name="processingStatus",value="处理状态",required=false) String processingStatus,
+            @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+            @RequestParam(value = "pageSize",defaultValue = "10")  int pageSize) throws Exception {
+        return tallyAlarmService.alarmPage(companyId, startArchitectureCode, endArchitectureCode, startTime, endTime, processingStatus,
+                pageNum, pageSize);
+    }
 
-        PageHelper.startPage(currentPage,pageSize);
+    @ApiOperation(value = "无需处理", notes = "无需处理")
+    @RequestMapping(value = "unHandle", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public PageResultEntity unHandle(@RequestParam(required = true) List<String> alarmIds) {
+        return tallyAlarmService.unHandle(alarmIds);
+    }
 
-        List<TallyAlarm> tallyAlarmList=tallyAlarmService.findAllTallyAlarm(windId, routeName, treatmentStandard, startTime, endTime);
+    @ApiOperation(value = "新增巡检告警信息", notes = "新增巡检告警信息")
+    @RequestMapping(value = "addTallyAlarm", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResultEntity addTallyAlarm(@RequestBody TallyAlarm tallyAlarm) {
+        return tallyAlarmService.addTallyAlarm(tallyAlarm);
+    }
 
-        PageBean<TallyAlarm> pageDate=new PageBean<TallyAlarm>(currentPage,pageSize,tallyAlarmList.size());
-        pageDate.setItems(tallyAlarmList);
+    @ApiOperation(value = "批量新增巡检告警信息", notes = "批量新增巡检告警信息")
+    @RequestMapping(value = "addTallyAlarmBatch", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResultEntity addTallyAlarmBatch(@RequestBody List<TallyAlarm> tallyAlarms) {
+        return tallyAlarmService.addTallyAlarmBatch(tallyAlarms);
+    }
 
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("报警管理查询成功");
-        resultEntity.setData(pageDate);
+    @ApiOperation(value = "生成缺陷工单", notes = "生成缺陷工单")
+    @RequestMapping(value = "addDefectWorkorder", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResultEntity addDefectWorkorder(@RequestBody String alarmId) {
+        ResultEntity resultEntity = null;
+        try {
+            resultEntity = tallyAlarmService.addDefectWorkorder(alarmId);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return resultEntity;
-
     }
 }

@@ -6,13 +6,13 @@ public class SchedulingManagement {
 	@ApiModelProperty(value="排班管理id",name="schedulingManagementId")
     private String schedulingManagementId;
 
-	@ApiModelProperty(value="排班管理编号",name="schedulingCode")
+	@ApiModelProperty(value="排班管理编号",name="schedulingCode",required = true)
     private String schedulingCode;
 
-	@ApiModelProperty(value="排班表名称",name="schedulingName")
+	@ApiModelProperty(value="排班表名称",name="schedulingName",required = true)
     private String schedulingName;
 
-	@ApiModelProperty(value="部门",name="department")
+	@ApiModelProperty(value="部门",name="department",required = true)
     private String department;
 
     public String getSchedulingManagementId() {

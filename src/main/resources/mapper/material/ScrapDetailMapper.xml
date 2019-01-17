@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.material.dao.ScrapDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.material.entity.ScrapDetail" >
+    <id column="scrap_detail_id" property="scrapDetailId" jdbcType="VARCHAR" />
+    <result column="scrap_id" property="scrapId" jdbcType="VARCHAR" />
+    <result column="damaged_parts_detail_id" property="damagedPartsDetailId" jdbcType="VARCHAR" />
+    <result column="scrap_num" property="scrapNum" jdbcType="INTEGER" />
+    <result column="scrap_reason" property="scrapReason" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="stock_add_id" property="stockAddId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    scrap_detail_id, scrap_id, damaged_parts_detail_id, scrap_num, scrap_reason, remark, 
+    stock_add_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.ScrapDetailExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from scrap_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from scrap_detail
+    where scrap_detail_id = #{scrapDetailId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from scrap_detail
+    where scrap_detail_id = #{scrapDetailId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.material.entity.ScrapDetailExample" >
+    delete from scrap_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.material.entity.ScrapDetail" >
+    insert into scrap_detail (scrap_detail_id, scrap_id, damaged_parts_detail_id, 
+      scrap_num, scrap_reason, remark, 
+      stock_add_id)
+    values (#{scrapDetailId,jdbcType=VARCHAR}, #{scrapId,jdbcType=VARCHAR}, #{damagedPartsDetailId,jdbcType=VARCHAR}, 
+      #{scrapNum,jdbcType=INTEGER}, #{scrapReason,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{stockAddId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.material.entity.ScrapDetail" >
+    insert into scrap_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scrapDetailId != null" >
+        scrap_detail_id,
+      </if>
+      <if test="scrapId != null" >
+        scrap_id,
+      </if>
+      <if test="damagedPartsDetailId != null" >
+        damaged_parts_detail_id,
+      </if>
+      <if test="scrapNum != null" >
+        scrap_num,
+      </if>
+      <if test="scrapReason != null" >
+        scrap_reason,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="stockAddId != null" >
+        stock_add_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scrapDetailId != null" >
+        #{scrapDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="scrapId != null" >
+        #{scrapId,jdbcType=VARCHAR},
+      </if>
+      <if test="damagedPartsDetailId != null" >
+        #{damagedPartsDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="scrapNum != null" >
+        #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapReason != null" >
+        #{scrapReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddId != null" >
+        #{stockAddId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.material.entity.ScrapDetailExample" resultType="java.lang.Integer" >
+    select count(*) from scrap_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update scrap_detail
+    <set >
+      <if test="record.scrapDetailId != null" >
+        scrap_detail_id = #{record.scrapDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scrapId != null" >
+        scrap_id = #{record.scrapId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.damagedPartsDetailId != null" >
+        damaged_parts_detail_id = #{record.damagedPartsDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scrapNum != null" >
+        scrap_num = #{record.scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.scrapReason != null" >
+        scrap_reason = #{record.scrapReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockAddId != null" >
+        stock_add_id = #{record.stockAddId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update scrap_detail
+    set scrap_detail_id = #{record.scrapDetailId,jdbcType=VARCHAR},
+      scrap_id = #{record.scrapId,jdbcType=VARCHAR},
+      damaged_parts_detail_id = #{record.damagedPartsDetailId,jdbcType=VARCHAR},
+      scrap_num = #{record.scrapNum,jdbcType=INTEGER},
+      scrap_reason = #{record.scrapReason,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      stock_add_id = #{record.stockAddId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.material.entity.ScrapDetail" >
+    update scrap_detail
+    <set >
+      <if test="scrapId != null" >
+        scrap_id = #{scrapId,jdbcType=VARCHAR},
+      </if>
+      <if test="damagedPartsDetailId != null" >
+        damaged_parts_detail_id = #{damagedPartsDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="scrapNum != null" >
+        scrap_num = #{scrapNum,jdbcType=INTEGER},
+      </if>
+      <if test="scrapReason != null" >
+        scrap_reason = #{scrapReason,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="stockAddId != null" >
+        stock_add_id = #{stockAddId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where scrap_detail_id = #{scrapDetailId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.material.entity.ScrapDetail" >
+    update scrap_detail
+    set scrap_id = #{scrapId,jdbcType=VARCHAR},
+      damaged_parts_detail_id = #{damagedPartsDetailId,jdbcType=VARCHAR},
+      scrap_num = #{scrapNum,jdbcType=INTEGER},
+      scrap_reason = #{scrapReason,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      stock_add_id = #{stockAddId,jdbcType=VARCHAR}
+    where scrap_detail_id = #{scrapDetailId,jdbcType=VARCHAR}
+  </update>
+</mapper>

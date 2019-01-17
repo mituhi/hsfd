@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
  * <p> Title: DeleteUpdateOperatorSubmit </p>
  * <p>@Description: 删除值班人员</p>
  * 
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月6日 上午9:04:57
  * @version:V1.0
  */

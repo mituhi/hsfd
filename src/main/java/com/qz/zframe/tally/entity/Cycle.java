@@ -29,6 +29,11 @@ public class Cycle {
     @ApiModelProperty(value="周期",name="cycle",required=false)
     private String cycle;
 
+    private String trueId;
+    
+    @ApiModelProperty(value="单位转换名称",name="cycleUnitText",required=false)
+    private String cycleUnitText;
+
     public String getCycleId() {
         return cycleId;
     }
@@ -77,5 +82,21 @@ public class Cycle {
         this.cycle = cycle;
     }
 
+    public String getTrueId() {
+        return trueId;
+    }
 
+    public void setTrueId(String trueId) {
+        this.trueId = trueId;
+    }
+
+	public String getCycleUnitText() {
+		return cycleUnitText;
+	}
+
+	public void setCycleUnitText(String cycleUnitText) {
+		this.cycleUnitText = cycleUnitText;
+	}
+    
+    
 }

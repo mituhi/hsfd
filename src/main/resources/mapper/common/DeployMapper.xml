@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qz.zframe.common.dao.DeployDao">
+
+    <resultMap id="deployMainMap" type="com.qz.zframe.common.entity.DeployMain">
+        <id column="MAIN_ID" property="mainId"/>
+        <result column="MAIN_CODE" property="mainCode"/>
+        <result column="MAIN_DEPLOY_NAME" property="mainDeployName"/>
+        <result column="main_status" property="mainStatus"/>
+        <result column="main_coding" property="mainCoding"/>
+        <result column="main_num" property="mainNum"/>
+    </resultMap>
     
     <!-- 获取所有流程主表信息 -->
     <select id="findAllDeploy" resultType="com.qz.zframe.common.entity.DeployMain">
@@ -43,6 +52,12 @@
     <select id="queryDeployById" resultType="com.qz.zframe.common.entity.Deploy">
     	select DEPLOY_ID deployId,MAIN_ID mainId,DEPLOY_SORT deploySort,DEPLOY_NAME deployName
     	 from deploy where DEPLOY_ID = #{deployId}
+    </select>
+    
+    <!-- 根据mainId查询流程子表信息 -->
+    <select id="findDeployByMainId" resultType="com.qz.zframe.common.entity.Deploy">
+    	select DEPLOY_ID deployId,MAIN_ID mainId,DEPLOY_SORT deploySort,DEPLOY_NAME deployName
+    	 from deploy where MAIN_ID = #{mainId}
     </select>
     
     <!-- 根据流程步骤名称查询流程步骤 -->
@@ -96,7 +111,7 @@
 	</delete>
 	
 	<!-- 根据流程步骤id查询关联角色信息 -->
-    <select id="findRoleByDeployId" resultType="com.qz.zframe.isc.domain.IscRole">
+    <select id="findRoleByDeployId" resultType="com.qz.zframe.common.entity.Role">
     	select r.role_id roleId, r.role_name roleName from isc_role r,isc_role_deploy d 
     	where r.role_id = d.role_id and d.DEPLOY_ID = #{deployId}
     </select>

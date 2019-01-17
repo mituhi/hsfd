@@ -74,6 +74,54 @@
     work_content_id, day_id, week_id, content_number, work_place, work_task, staff, is_complete, 
     work_content_type
   </sql>
+
+
+
+
+
+
+
+
+
+
+  <select id="getToDayWorkContent" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from maintain_work_content
+    where work_content_type = '01' and day_id = #{dayId}
+    order by content_number
+  </select>
+  <select id="getYesterDayWorkContent" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from maintain_work_content
+    where work_content_type = '02' and day_id = #{dayId}
+    order by content_number
+  </select>
+  <select id="getThisWeekWorkContent" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from maintain_work_content
+    where work_content_type = '01' and week_id = #{weekId}
+    order by content_number
+  </select>
+  <select id="getLastWeekWorkContent" resultMap="BaseResultMap">
+    <include refid="Base_Column_List" />
+    from maintain_work_content
+    where work_content_type = '02' and week_id = #{weekId}
+    order by content_number
+  </select>
+
+
+
+
+
+
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.MaintainWorkContentExample" >
     select
     <if test="distinct" >

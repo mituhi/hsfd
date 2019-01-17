@@ -10,11 +10,12 @@
 		<result column="superior_classify_id" property="superiorClassifyId" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
-		<result column="sort" property="sort" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
 		<result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
 		<result column="creater" property="creater" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="superiorClassifyName" property="superiorClassifyName" jdbcType="VARCHAR" />
+		<result column="superClassifyDescribe" property="superClassifyDescribe" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Pagination_Sql">
 		<if test="isPage == 1">
@@ -92,7 +93,8 @@
 	</sql>
 	<select id="selectByExample" resultMap="BaseResultMap"
 		parameterType="com.qz.zframe.material.entity.MaterialClassifyExample">
-		select a.*,b.classify_name as superiorClassifyName
+		select a.*,b.classify_name as superiorClassifyName,b.classify_describe as superClassifyDescribe,
+		concat(a.classify_name,' ',a.classify_describe) as nameAndDescribe
 from material_classify a left join  material_classify b on a.superior_classify_id= b.material_classify_id 
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
@@ -104,8 +106,8 @@ from material_classify a left join  material_classify b on a.superior_classify_i
 	</select>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
-		select a.*,b.classify_name as superiorClassifyName
-        from material_classify a left join  material_classify b on a.superior_classify_id= b.material_classify_id 
+select a.*,b.classify_name as superiorClassifyName,b.classify_describe as superClassifyDescribe,concat(a.classify_name,' ',a.classify_describe) as nameAndDescribe
+from material_classify a left join  material_classify b on a.superior_classify_id= b.material_classify_id 
 		where a.material_classify_id = #{materialClassifyId,jdbcType=VARCHAR}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
@@ -192,7 +194,7 @@ from material_classify a left join  material_classify b on a.superior_classify_i
 				#{remark,jdbcType=VARCHAR},
 			</if>
 			<if test="sort != null">
-				#{sort,jdbcType=VARCHAR},
+				#{sort,jdbcType=INTEGER},
 			</if>
 			<if test="isDelete != null">
 				#{isDelete,jdbcType=VARCHAR},
@@ -206,7 +208,7 @@ from material_classify a left join  material_classify b on a.superior_classify_i
 	<select id="countByExample"
 		parameterType="com.qz.zframe.material.entity.MaterialClassifyExample"
 		resultType="java.lang.Integer">
-		select count(*) from material_classify a
+		select count(*) from material_classify a left join  material_classify b on a.superior_classify_id= b.material_classify_id 
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
@@ -236,7 +238,7 @@ from material_classify a left join  material_classify b on a.superior_classify_i
 				remark = #{record.remark,jdbcType=VARCHAR},
 			</if>
 			<if test="record.sort != null">
-				sort = #{record.sort,jdbcType=VARCHAR},
+				sort = #{record.sort,jdbcType=INTEGER},
 			</if>
 			<if test="record.isDelete != null">
 				is_delete = #{record.isDelete,jdbcType=VARCHAR},
@@ -291,7 +293,7 @@ from material_classify a left join  material_classify b on a.superior_classify_i
 				remark = #{remark,jdbcType=VARCHAR},
 			</if>
 			<if test="sort != null">
-				sort = #{sort,jdbcType=VARCHAR},
+				sort = #{sort,jdbcType=INTEGER},
 			</if>
 			<if test="isDelete != null">
 				is_delete = #{isDelete,jdbcType=VARCHAR},
@@ -305,6 +307,45 @@ from material_classify a left join  material_classify b on a.superior_classify_i
 		</set>
 		where material_classify_id = #{materialClassifyId,jdbcType=VARCHAR}
 	</update>
+	
+	
+	<update id="updateByIsTopSelective" parameterType="com.qz.zframe.material.entity.MaterialClassify">
+		update material_classify
+		<set>
+			<if test="classifyName != null">
+				classify_name = #{classifyName,jdbcType=VARCHAR},
+			</if>
+			<if test="classifyDescribe != null">
+				classify_describe = #{classifyDescribe,jdbcType=VARCHAR},
+			</if>
+			<if test="isTop != null">
+				is_top = #{isTop,jdbcType=VARCHAR},
+			</if>
+			<if test="superiorClassifyId != null">
+				superior_classify_id = #{superiorClassifyId,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				sort = #{sort,jdbcType=INTEGER},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=VARCHAR},
+			</if>
+			<if test="creater != null">
+				creater = #{creater,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where superior_classify_id = #{superiorClassifyId,jdbcType=VARCHAR}
+	</update>
+	
 	<update id="updateByPrimaryKey" parameterType="com.qz.zframe.material.entity.MaterialClassify">
 		update material_classify
 		set classify_name = #{classifyName,jdbcType=VARCHAR},

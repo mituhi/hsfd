@@ -6,9 +6,19 @@
     <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
     <result column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
     <result column="ticket_type_id" property="ticketTypeId" jdbcType="VARCHAR" />
-    <result column="safe_number" property="safeNumber" jdbcType="VARCHAR" />
+    <result column="safe_number" property="safeNumber" jdbcType="INTEGER" />
     <result column="safe_title" property="safeTitle" jdbcType="VARCHAR" />
     <result column="safe_content" property="safeContent" jdbcType="VARCHAR" />
+    <result column="safe_content_1" property="safeContent1" jdbcType="VARCHAR" />
+    <result column="safe_content_2" property="safeContent2" jdbcType="VARCHAR" />
+    <result column="safe_content_3" property="safeContent3" jdbcType="VARCHAR" />
+    <result column="safe_content_4" property="safeContent4" jdbcType="VARCHAR" />
+    <result column="safe_content_5" property="safeContent5" jdbcType="VARCHAR" />
+    <result column="safe_content_6" property="safeContent6" jdbcType="VARCHAR" />
+    <result column="safe_content_7" property="safeContent7" jdbcType="VARCHAR" />
+    <result column="safe_content_8" property="safeContent8" jdbcType="VARCHAR" />
+    <result column="safe_content_9" property="safeContent9" jdbcType="VARCHAR" />
+    <result column="safe_content_10" property="safeContent10" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -70,8 +80,41 @@
   </sql>
   <sql id="Base_Column_List" >
     safe_id, ticket_id, standard_ticket_id, ticket_type_id, safe_number, safe_title, 
-    safe_content
+    safe_content, safe_content_1, safe_content_2, safe_content_3, safe_content_4, safe_content_5, 
+    safe_content_6, safe_content_7, safe_content_8, safe_content_9, safe_content_10
   </sql>
+
+
+
+  <delete id="batchDeleteByWorkTicketTypeIds" parameterType="java.lang.String">
+    delete from work_ticket_safe_measure
+    where ticket_type_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByStandardTicketIds" parameterType="java.lang.String">
+    delete from work_ticket_safe_measure
+    where standard_ticket_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByTicketIds" parameterType="java.lang.String">
+    delete from work_ticket_safe_measure
+    where ticket_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasureExample" >
     select
     <if test="distinct" >
@@ -105,10 +148,16 @@
   <insert id="insert" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasure" >
     insert into work_ticket_safe_measure (safe_id, ticket_id, standard_ticket_id, 
       ticket_type_id, safe_number, safe_title, 
-      safe_content)
+      safe_content, safe_content_1, safe_content_2, 
+      safe_content_3, safe_content_4, safe_content_5, 
+      safe_content_6, safe_content_7, safe_content_8, 
+      safe_content_9, safe_content_10)
     values (#{safeId,jdbcType=VARCHAR}, #{ticketId,jdbcType=VARCHAR}, #{standardTicketId,jdbcType=VARCHAR}, 
-      #{ticketTypeId,jdbcType=VARCHAR}, #{safeNumber,jdbcType=VARCHAR}, #{safeTitle,jdbcType=VARCHAR}, 
-      #{safeContent,jdbcType=VARCHAR})
+      #{ticketTypeId,jdbcType=VARCHAR}, #{safeNumber,jdbcType=INTEGER}, #{safeTitle,jdbcType=VARCHAR}, 
+      #{safeContent,jdbcType=VARCHAR}, #{safeContent1,jdbcType=VARCHAR}, #{safeContent2,jdbcType=VARCHAR}, 
+      #{safeContent3,jdbcType=VARCHAR}, #{safeContent4,jdbcType=VARCHAR}, #{safeContent5,jdbcType=VARCHAR}, 
+      #{safeContent6,jdbcType=VARCHAR}, #{safeContent7,jdbcType=VARCHAR}, #{safeContent8,jdbcType=VARCHAR}, 
+      #{safeContent9,jdbcType=VARCHAR}, #{safeContent10,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.WorkTicketSafeMeasure" >
     insert into work_ticket_safe_measure
@@ -134,6 +183,36 @@
       <if test="safeContent != null" >
         safe_content,
       </if>
+      <if test="safeContent1 != null" >
+        safe_content_1,
+      </if>
+      <if test="safeContent2 != null" >
+        safe_content_2,
+      </if>
+      <if test="safeContent3 != null" >
+        safe_content_3,
+      </if>
+      <if test="safeContent4 != null" >
+        safe_content_4,
+      </if>
+      <if test="safeContent5 != null" >
+        safe_content_5,
+      </if>
+      <if test="safeContent6 != null" >
+        safe_content_6,
+      </if>
+      <if test="safeContent7 != null" >
+        safe_content_7,
+      </if>
+      <if test="safeContent8 != null" >
+        safe_content_8,
+      </if>
+      <if test="safeContent9 != null" >
+        safe_content_9,
+      </if>
+      <if test="safeContent10 != null" >
+        safe_content_10,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="safeId != null" >
@@ -149,13 +228,43 @@
         #{ticketTypeId,jdbcType=VARCHAR},
       </if>
       <if test="safeNumber != null" >
-        #{safeNumber,jdbcType=VARCHAR},
+        #{safeNumber,jdbcType=INTEGER},
       </if>
       <if test="safeTitle != null" >
         #{safeTitle,jdbcType=VARCHAR},
       </if>
       <if test="safeContent != null" >
         #{safeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent1 != null" >
+        #{safeContent1,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent2 != null" >
+        #{safeContent2,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent3 != null" >
+        #{safeContent3,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent4 != null" >
+        #{safeContent4,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent5 != null" >
+        #{safeContent5,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent6 != null" >
+        #{safeContent6,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent7 != null" >
+        #{safeContent7,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent8 != null" >
+        #{safeContent8,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent9 != null" >
+        #{safeContent9,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent10 != null" >
+        #{safeContent10,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -181,13 +290,43 @@
         ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
       </if>
       <if test="record.safeNumber != null" >
-        safe_number = #{record.safeNumber,jdbcType=VARCHAR},
+        safe_number = #{record.safeNumber,jdbcType=INTEGER},
       </if>
       <if test="record.safeTitle != null" >
         safe_title = #{record.safeTitle,jdbcType=VARCHAR},
       </if>
       <if test="record.safeContent != null" >
         safe_content = #{record.safeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent1 != null" >
+        safe_content_1 = #{record.safeContent1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent2 != null" >
+        safe_content_2 = #{record.safeContent2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent3 != null" >
+        safe_content_3 = #{record.safeContent3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent4 != null" >
+        safe_content_4 = #{record.safeContent4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent5 != null" >
+        safe_content_5 = #{record.safeContent5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent6 != null" >
+        safe_content_6 = #{record.safeContent6,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent7 != null" >
+        safe_content_7 = #{record.safeContent7,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent8 != null" >
+        safe_content_8 = #{record.safeContent8,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent9 != null" >
+        safe_content_9 = #{record.safeContent9,jdbcType=VARCHAR},
+      </if>
+      <if test="record.safeContent10 != null" >
+        safe_content_10 = #{record.safeContent10,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -200,9 +339,19 @@
       ticket_id = #{record.ticketId,jdbcType=VARCHAR},
       standard_ticket_id = #{record.standardTicketId,jdbcType=VARCHAR},
       ticket_type_id = #{record.ticketTypeId,jdbcType=VARCHAR},
-      safe_number = #{record.safeNumber,jdbcType=VARCHAR},
+      safe_number = #{record.safeNumber,jdbcType=INTEGER},
       safe_title = #{record.safeTitle,jdbcType=VARCHAR},
-      safe_content = #{record.safeContent,jdbcType=VARCHAR}
+      safe_content = #{record.safeContent,jdbcType=VARCHAR},
+      safe_content_1 = #{record.safeContent1,jdbcType=VARCHAR},
+      safe_content_2 = #{record.safeContent2,jdbcType=VARCHAR},
+      safe_content_3 = #{record.safeContent3,jdbcType=VARCHAR},
+      safe_content_4 = #{record.safeContent4,jdbcType=VARCHAR},
+      safe_content_5 = #{record.safeContent5,jdbcType=VARCHAR},
+      safe_content_6 = #{record.safeContent6,jdbcType=VARCHAR},
+      safe_content_7 = #{record.safeContent7,jdbcType=VARCHAR},
+      safe_content_8 = #{record.safeContent8,jdbcType=VARCHAR},
+      safe_content_9 = #{record.safeContent9,jdbcType=VARCHAR},
+      safe_content_10 = #{record.safeContent10,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -220,13 +369,43 @@
         ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
       </if>
       <if test="safeNumber != null" >
-        safe_number = #{safeNumber,jdbcType=VARCHAR},
+        safe_number = #{safeNumber,jdbcType=INTEGER},
       </if>
       <if test="safeTitle != null" >
         safe_title = #{safeTitle,jdbcType=VARCHAR},
       </if>
       <if test="safeContent != null" >
         safe_content = #{safeContent,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent1 != null" >
+        safe_content_1 = #{safeContent1,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent2 != null" >
+        safe_content_2 = #{safeContent2,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent3 != null" >
+        safe_content_3 = #{safeContent3,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent4 != null" >
+        safe_content_4 = #{safeContent4,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent5 != null" >
+        safe_content_5 = #{safeContent5,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent6 != null" >
+        safe_content_6 = #{safeContent6,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent7 != null" >
+        safe_content_7 = #{safeContent7,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent8 != null" >
+        safe_content_8 = #{safeContent8,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent9 != null" >
+        safe_content_9 = #{safeContent9,jdbcType=VARCHAR},
+      </if>
+      <if test="safeContent10 != null" >
+        safe_content_10 = #{safeContent10,jdbcType=VARCHAR},
       </if>
     </set>
     where safe_id = #{safeId,jdbcType=VARCHAR}
@@ -236,9 +415,19 @@
     set ticket_id = #{ticketId,jdbcType=VARCHAR},
       standard_ticket_id = #{standardTicketId,jdbcType=VARCHAR},
       ticket_type_id = #{ticketTypeId,jdbcType=VARCHAR},
-      safe_number = #{safeNumber,jdbcType=VARCHAR},
+      safe_number = #{safeNumber,jdbcType=INTEGER},
       safe_title = #{safeTitle,jdbcType=VARCHAR},
-      safe_content = #{safeContent,jdbcType=VARCHAR}
+      safe_content = #{safeContent,jdbcType=VARCHAR},
+      safe_content_1 = #{safeContent1,jdbcType=VARCHAR},
+      safe_content_2 = #{safeContent2,jdbcType=VARCHAR},
+      safe_content_3 = #{safeContent3,jdbcType=VARCHAR},
+      safe_content_4 = #{safeContent4,jdbcType=VARCHAR},
+      safe_content_5 = #{safeContent5,jdbcType=VARCHAR},
+      safe_content_6 = #{safeContent6,jdbcType=VARCHAR},
+      safe_content_7 = #{safeContent7,jdbcType=VARCHAR},
+      safe_content_8 = #{safeContent8,jdbcType=VARCHAR},
+      safe_content_9 = #{safeContent9,jdbcType=VARCHAR},
+      safe_content_10 = #{safeContent10,jdbcType=VARCHAR}
     where safe_id = #{safeId,jdbcType=VARCHAR}
   </update>
 </mapper>

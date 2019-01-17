@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.HandoverGoodsMapper" >
+
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.HandoverGoods" >
+    <id column="handover_goods_id" property="handoverGoodsId" jdbcType="VARCHAR" />
+    <result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="wind_code" property="windCode" jdbcType="VARCHAR" />
+    <result column="architecture_name" property="windName" jdbcType="VARCHAR" />
+    <result column="log_type_id" property="logTypeId" jdbcType="VARCHAR" />
+    <result column="log_name" property="logName" jdbcType="VARCHAR" />
+    <result column="maintain_user" property="maintainUser" jdbcType="VARCHAR" />
+    <result column="user_name" property="maintainUserName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="maintain_time" property="maintainTime" jdbcType="TIMESTAMP" />
+    <result column="good_num" property="goodNum" jdbcType="INTEGER" />
+  </resultMap>
+ 
+    <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</sql>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    handover_goods_id, serial_num, wind_id, wind_name, log_type, log_id, maintain_user, 
+    status, remark, maintain_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.HandoverGoodsExample" >
+    select distinct a.*,d.user_name,c.architecture_name,b.log_name
+    from handover_goods a 
+    left join log_type b on a.log_type_id = b.log_type_id
+    left join org_architecture c on a.wind_code=c.architecture_code
+    left join isc_user d on a.maintain_user=d.user_id
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+     and c.architecture_type='02'
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     <include refid="Pagination_Sql" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+     
+    select distinct a.*,d.user_name,c.architecture_name,b.log_name from handover_goods a 
+    left join log_type b on a.log_type_id = b.log_type_id
+    left join org_architecture c on a.wind_code=c.architecture_code
+    left join isc_user d on a.maintain_user=d.user_id
+    where a.handover_goods_id = #{handoverGoodsId,jdbcType=VARCHAR} and c.architecture_type='02'
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from handover_goods
+    where handover_goods_id = #{handoverGoodsId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.HandoverGoodsExample" >
+    delete from handover_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.HandoverGoods" >
+    insert into handover_goods (handover_goods_id, serial_num, wind_id, 
+      wind_name, log_type, log_id, 
+      maintain_user, status, remark, 
+      maintain_time)
+    values (#{handoverGoodsId,jdbcType=VARCHAR}, #{serialNum,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, 
+      #{windName,jdbcType=VARCHAR}, #{logType,jdbcType=VARCHAR}, #{logId,jdbcType=VARCHAR}, 
+      #{maintainUser,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{maintainTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.HandoverGoods" >
+    insert into handover_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="handoverGoodsId != null" >
+        handover_goods_id,
+      </if>
+      <if test="serialNum != null" >
+        serial_num,
+      </if>
+      <if test="windCode != null" >
+        wind_code,
+      </if>
+      <if test="logTypeId != null" >
+        log_type_id,
+      </if>
+      <if test="maintainUser != null" >
+        maintain_user,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time,
+      </if>
+       <if test="goodNum != null" >
+        good_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="handoverGoodsId != null" >
+        #{handoverGoodsId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="windCode != null" >
+        #{windCode,jdbcType=VARCHAR},
+      </if>
+      <if test="logTypeId != null" >
+        #{logTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainUser != null" >
+        #{maintainUser,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        #{maintainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodNum != null" >
+        #{goodNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.HandoverGoodsExample" resultType="java.lang.Integer" >
+    select count(distinct a.handover_goods_id) from handover_goods a 
+    left join log_type b on a.log_type_id = b.log_type_id
+    left join org_architecture c on a.wind_code=c.architecture_code
+    left join isc_user d on a.maintain_user=d.user_id
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+     and  c.architecture_type='02'
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update handover_goods
+    <set >
+      <if test="record.handoverGoodsId != null" >
+        handover_goods_id = #{record.handoverGoodsId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNum != null" >
+        serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windName != null" >
+        wind_name = #{record.windName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logType != null" >
+        log_type = #{record.logType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logId != null" >
+        log_id = #{record.logId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainUser != null" >
+        maintain_user = #{record.maintainUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainTime != null" >
+        maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update handover_goods
+    set handover_goods_id = #{record.handoverGoodsId,jdbcType=VARCHAR},
+      serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      wind_name = #{record.windName,jdbcType=VARCHAR},
+      log_type = #{record.logType,jdbcType=VARCHAR},
+      log_id = #{record.logId,jdbcType=VARCHAR},
+      maintain_user = #{record.maintainUser,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.HandoverGoods" >
+    update handover_goods
+    <set >
+      <if test="serialNum != null" >
+        serial_num = #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="windCode != null" >
+        wind_code = #{windCode,jdbcType=VARCHAR},
+      </if>
+      <if test="logTypeId != null" >
+        log_type_id = #{logTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainUser != null" >
+        maintain_user = #{maintainUser,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time = #{maintainTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="goodNum != null" >
+        good_num = #{goodNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where handover_goods_id = #{handoverGoodsId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.HandoverGoods" >
+    update handover_goods
+    set serial_num = #{serialNum,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      wind_name = #{windName,jdbcType=VARCHAR},
+      log_type = #{logType,jdbcType=VARCHAR},
+      log_id = #{logId,jdbcType=VARCHAR},
+      maintain_user = #{maintainUser,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      maintain_time = #{maintainTime,jdbcType=TIMESTAMP}
+    where handover_goods_id = #{handoverGoodsId,jdbcType=VARCHAR}
+  </update>
+  <!-- 查询最大序号 -->
+  <select id="selectMaxSeroalNum" resultType="java.lang.String">
+     select  MAX(serial_num) from handover_goods  
+  </select>
+    <delete id="deleteGoodsList" parameterType="java.util.List">
+         delete from goods where handover_goods_id in
+         <foreach item="item" collection="list" open="(" close=")" separator=",">
+             #{item}
+         </foreach>
+   </delete>
+   
+       <delete id="deleteHandoverGoodsList" parameterType="java.util.List">
+         delete from handover_goods where handover_goods_id in
+         <foreach item="item" collection="list" open="(" close=")" separator=",">
+             #{item}
+         </foreach>
+   </delete>
+  
+
+  
+</mapper>

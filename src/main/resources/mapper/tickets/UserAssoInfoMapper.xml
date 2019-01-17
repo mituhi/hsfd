@@ -6,6 +6,7 @@
     <result column="work_ticket_type_id" property="workTicketTypeId" jdbcType="VARCHAR" />
     <result column="oper_ticket_type_id" property="operTicketTypeId" jdbcType="VARCHAR" />
     <result column="user_numbet" property="userNumbet" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="user_work_number" property="userWorkNumber" jdbcType="VARCHAR" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="user_unit" property="userUnit" jdbcType="VARCHAR" />
@@ -70,9 +71,94 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    asso_id, work_ticket_type_id, oper_ticket_type_id, user_numbet, user_work_number, 
+    asso_id, work_ticket_type_id, oper_ticket_type_id, user_numbet, user_id, user_work_number, 
     user_name, user_unit, user_type
   </sql>
+
+
+
+
+
+
+
+
+  <delete id="batchDelete1" parameterType="java.lang.String">
+    delete from user_asso_info
+    where work_ticket_type_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <delete id="batchDelete2" parameterType="java.lang.String">
+    delete from user_asso_info
+    where oper_ticket_type_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.UserAssoVo" >
+    <id column="asso_id" property="assoId" jdbcType="VARCHAR" />
+    <result column="work_ticket_type_id" property="workTicketTypeId" jdbcType="VARCHAR" />
+    <result column="oper_ticket_type_id" property="operTicketTypeId" jdbcType="VARCHAR" />
+    <result column="user_numbet" property="userNumbet" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_work_number" property="userWorkNumber" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_unit" property="userUnit" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get1_Column_List" >
+    a.asso_id as asso_id, a.work_ticket_type_id as work_ticket_type_id, a.oper_ticket_type_id as oper_ticket_type_id,
+    a.user_numbet as user_numbet, a.user_id as user_id, a.user_work_number as user_work_number,
+    a.user_name as user_name, a.user_unit as user_unit, a.user_type as user_type,
+    d.architecture_name as department_name,f.architecture_name as company_name
+  </sql>
+
+  <select id="getUserAssoVoListByWorkTicketType" resultMap="GetResultMap">
+    select
+    <include refid="Get1_Column_List" />
+    from user_asso_info a
+    left join org_architecture_user b on a.user_id = b.user_id
+    left join org_architecture d on b.architecture_id = d.architecture_id
+    left join org_architecture e on d.super_competent_department = e.architecture_id
+    left join org_architecture f on e.super_competent_department = f.architecture_id
+    where a.work_ticket_type_id = #{workTicketTypeId} and a.user_type = #{userType}
+    order by a.user_numbet
+
+  </select>
+  <select id="getUserAssoVoListByOperTicketType" resultMap="GetResultMap">
+    select
+    <include refid="Get1_Column_List" />
+    from user_asso_info a
+    left join org_architecture_user b on a.user_id = b.user_id
+    left join org_architecture d on b.architecture_id = d.architecture_id
+    left join org_architecture e on d.super_competent_department = e.architecture_id
+    left join org_architecture f on e.super_competent_department = f.architecture_id
+    where a.oper_ticket_type_id = #{operTicketTypeId} and a.user_type = #{userType}
+    order by a.user_numbet
+
+  </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.UserAssoInfoExample" >
     select
     <if test="distinct" >
@@ -105,11 +191,13 @@
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.tickets.entity.UserAssoInfo" >
     insert into user_asso_info (asso_id, work_ticket_type_id, oper_ticket_type_id, 
-      user_numbet, user_work_number, user_name, 
-      user_unit, user_type)
+      user_numbet, user_id, user_work_number, 
+      user_name, user_unit, user_type
+      )
     values (#{assoId,jdbcType=VARCHAR}, #{workTicketTypeId,jdbcType=VARCHAR}, #{operTicketTypeId,jdbcType=VARCHAR}, 
-      #{userNumbet,jdbcType=VARCHAR}, #{userWorkNumber,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
-      #{userUnit,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR})
+      #{userNumbet,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{userWorkNumber,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{userUnit,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.UserAssoInfo" >
     insert into user_asso_info
@@ -125,6 +213,9 @@
       </if>
       <if test="userNumbet != null" >
         user_numbet,
+      </if>
+      <if test="userId != null" >
+        user_id,
       </if>
       <if test="userWorkNumber != null" >
         user_work_number,
@@ -151,6 +242,9 @@
       </if>
       <if test="userNumbet != null" >
         #{userNumbet,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
       </if>
       <if test="userWorkNumber != null" >
         #{userWorkNumber,jdbcType=VARCHAR},
@@ -187,6 +281,9 @@
       <if test="record.userNumbet != null" >
         user_numbet = #{record.userNumbet,jdbcType=VARCHAR},
       </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
       <if test="record.userWorkNumber != null" >
         user_work_number = #{record.userWorkNumber,jdbcType=VARCHAR},
       </if>
@@ -210,6 +307,7 @@
       work_ticket_type_id = #{record.workTicketTypeId,jdbcType=VARCHAR},
       oper_ticket_type_id = #{record.operTicketTypeId,jdbcType=VARCHAR},
       user_numbet = #{record.userNumbet,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
       user_work_number = #{record.userWorkNumber,jdbcType=VARCHAR},
       user_name = #{record.userName,jdbcType=VARCHAR},
       user_unit = #{record.userUnit,jdbcType=VARCHAR},
@@ -229,6 +327,9 @@
       </if>
       <if test="userNumbet != null" >
         user_numbet = #{userNumbet,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
       </if>
       <if test="userWorkNumber != null" >
         user_work_number = #{userWorkNumber,jdbcType=VARCHAR},
@@ -250,6 +351,7 @@
     set work_ticket_type_id = #{workTicketTypeId,jdbcType=VARCHAR},
       oper_ticket_type_id = #{operTicketTypeId,jdbcType=VARCHAR},
       user_numbet = #{userNumbet,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
       user_work_number = #{userWorkNumber,jdbcType=VARCHAR},
       user_name = #{userName,jdbcType=VARCHAR},
       user_unit = #{userUnit,jdbcType=VARCHAR},

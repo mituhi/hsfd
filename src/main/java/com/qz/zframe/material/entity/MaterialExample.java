@@ -242,6 +242,17 @@ public class MaterialExample extends PageExample{
             addCriterion("material_code between", value1, value2, "materialCode");
             return (Criteria) this;
         }
+        
+        public Criteria andArchitectuerBetween(String value1, String value2) {
+            addCriterion("e.architecture_code between", value1, value2, "materialCode");
+            return (Criteria) this;
+        }
+        
+        public Criteria andArchitectuerEqualTo(String value) {
+            addCriterion("e.architecture_code =", value ,"materialCode");
+            return (Criteria) this;
+        }
+        
 
         public Criteria andMaterialCodeNotBetween(String value1, String value2) {
             addCriterion("material_code not between", value1, value2, "materialCode");
@@ -509,7 +520,7 @@ public class MaterialExample extends PageExample{
         }
 
         public Criteria andMaterialGroupIdIn(List<String> values) {
-            addCriterion("material_group_id in", values, "materialGroupId");
+            addCriterion("a.material_group_id in", values, "materialGroupId");
             return (Criteria) this;
         }
 
@@ -539,7 +550,7 @@ public class MaterialExample extends PageExample{
         }
 
         public Criteria andMaterialClassifyIdEqualTo(String value) {
-            addCriterion("material_classify_id =", value, "materialClassifyId");
+            addCriterion("a.material_classify_id =", value, "materialClassifyId");
             return (Criteria) this;
         }
 
@@ -609,7 +620,7 @@ public class MaterialExample extends PageExample{
         }
 
         public Criteria andStatusEqualTo(String value) {
-            addCriterion("status =", value, "status");
+            addCriterion("a.status =", value, "status");
             return (Criteria) this;
         }
 
@@ -959,7 +970,7 @@ public class MaterialExample extends PageExample{
         }
 
         public Criteria andSupplierIdEqualTo(String value) {
-            addCriterion("supplier_id =", value, "supplierId");
+            addCriterion("a.supplier_id =", value, "supplierId");
             return (Criteria) this;
         }
 
@@ -1029,7 +1040,7 @@ public class MaterialExample extends PageExample{
         }
 
         public Criteria andWindIdEqualTo(String value) {
-            addCriterion("a.wind_id =", value, "windId");
+            addCriterion("a.architecture_id =", value, "windId");
             return (Criteria) this;
         }
 
@@ -1069,7 +1080,7 @@ public class MaterialExample extends PageExample{
         }
 
         public Criteria andWindIdIn(List<String> values) {
-            addCriterion("wind_id in", values, "windId");
+            addCriterion("a.architecture_id in", values, "windId");
             return (Criteria) this;
         }
 

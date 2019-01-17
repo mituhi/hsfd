@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.qz.zframe.isc.domain.IscRole;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +14,7 @@ public class Deploy {
 	@ApiModelProperty(value="流程主表id",name="mainId",required=true)
 	private String mainId;
 	@ApiModelProperty(value="所属流程步骤",name="deploySort",required=false)
-	private String deploySort;
+	private int deploySort;
 	@ApiModelProperty(value="流程步骤名称",name="deployName",required=true)
 	private String deployName;
 	@ApiModelProperty(value="创建人id",name="creater",required=false)
@@ -24,7 +23,7 @@ public class Deploy {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 	private Date createTime;
 	@ApiModelProperty(value="该流程包含的角色",name="roles",required=false)
-	private List<IscRole> roles;
+	private List<Role> roles;
 	@ApiModelProperty(value="角色id（用于新增修改时传绑定的角色id）",name="roleIds",required=false)
 	private List<String> roleIds;
 
@@ -44,11 +43,11 @@ public class Deploy {
 		this.mainId = mainId;
 	}
 
-	public String getDeploySort() {
+	public int getDeploySort() {
 		return deploySort;
 	}
 
-	public void setDeploySort(String deploySort) {
+	public void setDeploySort(int deploySort) {
 		this.deploySort = deploySort;
 	}
 
@@ -76,11 +75,11 @@ public class Deploy {
 		this.createTime = createTime;
 	}
 
-	public List<IscRole> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<IscRole> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 

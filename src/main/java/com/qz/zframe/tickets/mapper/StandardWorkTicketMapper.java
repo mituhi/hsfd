@@ -25,9 +25,9 @@ public interface StandardWorkTicketMapper {
     //详情查询
     StandardWorkTicketVo getStandardWorkTicketDetail(@Param("standardTicketId") String standardTicketId);
     //列表查询
-    List<StandardWorkTicketVo> getStandardWorkTicketList(@Param("map") Map<String,String> pageAndCondition);
+    List<StandardWorkTicketVo> getStandardWorkTicketList(@Param("map") Map<String,String> pageAndCondition,@Param("userId") String userId);
     //查询总记录数
-    int getTotal(@Param("map") Map<String,String> pageAndCondition);
+    int getTotal(@Param("map") Map<String,String> pageAndCondition,@Param("userId") String userId);
 
     List<StandardWorkTicket> selectByExample(StandardWorkTicketExample example);
 

@@ -9,7 +9,7 @@
     <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
-    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="maintain_date" property="maintainDate" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="flow_step" property="flowStep" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
@@ -99,11 +99,34 @@
 
 
 
-
-  <update id="batchDelete" parameterType="java.lang.String">
-    update operate_ticket set status = "0"
+  <delete id="batchDeleteTrue" parameterType="java.lang.String">
+    delete from operate_ticket
     where ticket_id in
-    <foreach collection="array" index="index" item="item"
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <update id="batchDeleteFalse" parameterType="java.lang.String">
+    update operate_ticket set status = '0'
+    where ticket_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+  <update id="batchDeleteFalseByWorkorderIds" parameterType="java.lang.String">
+    update operate_ticket set workorder_id = null
+    where workorder_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+  <update id="batchDeleteFalseByOrderIds" parameterType="java.lang.String">
+    update operate_ticket set order_id = null
+    where order_id in
+    <foreach collection="list" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
@@ -116,7 +139,7 @@
     <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
-    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="maintain_date" property="maintainDate" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="flow_step" property="flowStep" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
@@ -142,6 +165,14 @@
     <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
     <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
     <result column="typical_ticket_name" property="typicalTicketName" jdbcType="VARCHAR" />
+    <result column="flow_step_name" property="flowStatusName" jdbcType="VARCHAR" />
+    <result column="work_team_name" property="workTeamName" jdbcType="VARCHAR" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="VARCHAR" />
+    <result column="applicant_name" property="applicantName" jdbcType="VARCHAR" />
+    <result column="sender_name" property="senderName" jdbcType="VARCHAR" />
+    <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
+    <result column="executer_name" property="executerName" jdbcType="VARCHAR" />
+    <result column="supervisior_name" property="supervisiorName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Get_Column_List" >
     a.ticket_id as ticket_id, a.serial_number as serial_number, a.oper_ticket_type_id as oper_ticket_type_id,
@@ -153,78 +184,240 @@
     a.position_id as position_id, a.position_desc as position_desc, a.equipment_id as equipment_id, a.equipment_desc as equipment_desc,
     a.operate_content as operate_content,
     b.architecture_name as wind_name,d.crew_name as crew_name,e.position_name as position_name,f.equipment_name as equipment_name,
-    g.ticket_type_name as ticket_type_name,h.typical_ticket_name as typical_ticket_name
+    g.ticket_type_name as ticket_type_name,h.typical_ticket_name as typical_ticket_name,i.title as flow_step_name,j.architecture_name as work_team_name,
+    ua.user_name as maintainer_name,ub.user_name as applicant_name,uc.user_name as sender_name,ud.user_name as receiver_name,ue.user_name as executer_name,
+    uf.user_name as supervisior_name
   </sql>
   <select id="getOperateTicketDetail" resultMap="GetResultMap">
   select
   <include refid="Get_Column_List" />
   from operate_ticket a
-  left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+  left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
   left join crew_information d on a.crew_id = d.crew_id
   left join position_encode e on a.position_id = e.position_id
-  left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+  left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
   left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
   left join typical_operate_ticket h on a.typical_ticket_id = h.typical_ticket_id
+  left join sp_code i on (a.flow_step = i.name and i.code_type_id = '1046')
+  left join org_architecture j on a.work_team = j.architecture_id
+  left join isc_user ua on a.maintainer = ua.user_id
+  left join isc_user ub on a.applicant = ub.user_id
+  left join isc_user uc on a.sender = uc.user_id
+  left join isc_user ud on a.receiver = ud.user_id
+  left join isc_user ue on a.executer = ue.user_id
+  left join isc_user uf on a.supervisior = uf.user_id
   where a.status != '0' and a.ticket_id = #{ticketId}
   </select>
   <select id="getOperateTicketList" resultMap="GetResultMap">
     select
+    distinct
     <include refid="Get_Column_List" />
     from operate_ticket a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on (a.wind_id = b.architecture_code and b.architecture_type = '02')
     left join crew_information d on a.crew_id = d.crew_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
     left join typical_operate_ticket h on a.typical_ticket_id = h.typical_ticket_id
-    where a.status != '0'
-    <if test="map.operTicketTypeId != null">
+    left join sp_code i on (a.flow_step = i.name and i.code_type_id = '1046')
+    left join org_architecture j on a.work_team = j.architecture_id
+    left join isc_user ua on a.maintainer = ua.user_id
+    left join isc_user ub on a.applicant = ub.user_id
+    left join isc_user uc on a.sender = uc.user_id
+    left join isc_user ud on a.receiver = ud.user_id
+    left join isc_user ue on a.executer = ue.user_id
+    left join isc_user uf on a.supervisior = uf.user_id
+    left join process k on (a.ticket_id = k.order_id and k.process_status = '01')
+    left join process_detail l on (k.process_id = l.process_id and ((k.process_sort+1) = l.sort))
+    left join process_detail_role_rela m on l.process_detail_id = m.process_detail_id
+    left join approve_record n on a.ticket_id = n.order_id
+    left join isc_user ug on n.approve_user = ug.user_id
+    where 1=1
+    <if test="map.operTicketTypeId != null and map.operTicketTypeId != ''">
       and a.oper_ticket_type_id = #{map.operTicketTypeId}
     </if>
-    <if test="map.windId != null">
-      and a.wind_id = #{map.windId}
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.startWindId}
     </if>
-    <if test="map.status != null">
-      and a.status = #{map.status}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
     </if>
-    <if test="map.operateContent != null">
+    <if test="map.approveUser == null or map.approveUser == ''">
+      <if test="map.status == null or map.status == ''">
+        and ((a.status = '01' or a.status = '02' or a.status = '04') or (a.status = '03' and a.maintainer = #{userId}))
+      </if>
+      <if test="map.status == '01' or map.status =='02' or map.status == '04'">
+        and a.status = #{map.status}
+      </if>
+      <if test="map.status == '03'">
+        and (a.status = #{map.status} and a.maintainer = #{userId})
+      </if>
+    </if>
+    <if test="map.approveUser != null and map.approveUser != ''">
+      and (((a.flow_step = '01')
+      and (m.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>
+      or ug.user_name = #{map.approveUser}))
+      or ((a.flow_step = '02' or a.flow_step = '03') and ug.user_name = #{map.approveUser}))
+    </if>
+    <if test="map.operateContent != null and map.operateContent != ''">
       and a.operate_content like '%${map.operateContent}%'
     </if>
-    <if test="map.startTime != null">
-      and a.apply_time &gt;= #{map.startTime}
+    <if test="map.startTime != null and map.startTime != '' and (map.endTime == null and map.endTime == '')">
+      and a.apply_time = #{map.startTime}
     </if>
-    <if test="map.endTime != null">
-      and a.apply_time &lt;= #{map.endTime}
+    <if test="map.startTime != null and map.startTime != '' and map.endTime != null and map.endTime != ''">
+      and (a.apply_time between #{map.startTime} and #{map.endTime})
     </if>
-    order by a.serial_number desc
+    order by a.serial_number is null desc,a.serial_number desc,a.maintain_date desc
     limit ${map.start},${map.pageSize};
   </select>
   <select id="getTotal" resultType="java.lang.Integer">
     select
+    count(distinct a.ticket_id)
+    from operate_ticket a
+    left join org_architecture b on (a.wind_id = b.architecture_code and b.architecture_type = '02')
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+    left join typical_operate_ticket h on a.typical_ticket_id = h.typical_ticket_id
+    left join sp_code i on (a.flow_step = i.name and i.code_type_id = '1046')
+    left join org_architecture j on a.work_team = j.architecture_id
+    left join isc_user ua on a.maintainer = ua.user_id
+    left join isc_user ub on a.applicant = ub.user_id
+    left join isc_user uc on a.sender = uc.user_id
+    left join isc_user ud on a.receiver = ud.user_id
+    left join isc_user ue on a.executer = ue.user_id
+    left join isc_user uf on a.supervisior = uf.user_id
+    left join process k on (a.ticket_id = k.order_id and k.process_status = '01')
+    left join process_detail l on (k.process_id = l.process_id and ((k.process_sort+1) = l.sort))
+    left join process_detail_role_rela m on l.process_detail_id = m.process_detail_id
+    left join approve_record n on a.ticket_id = n.order_id
+    left join isc_user ug on n.approve_user = ug.user_id
+    where 1=1
+    <if test="map.operTicketTypeId != null and map.operTicketTypeId != ''">
+      and a.oper_ticket_type_id = #{map.operTicketTypeId}
+    </if>
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.startWindId}
+    </if>
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
+    </if>
+    <if test="map.approveUser == null or map.approveUser == ''">
+      <if test="map.status == null or map.status == ''">
+        and ((a.status = '01' or a.status = '02' or a.status = '04') or (a.status = '03' and a.maintainer = #{userId}))
+      </if>
+      <if test="map.status == '01' or map.status =='02' or map.status == '04'">
+        and a.status = #{map.status}
+      </if>
+      <if test="map.status == '03'">
+        and (a.status = #{map.status} and a.maintainer = #{userId})
+      </if>
+    </if>
+    <if test="map.approveUser != null and map.approveUser != ''">
+      and (((a.flow_step = '01')
+      and (m.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>
+      or ug.user_name = #{map.approveUser}))
+      or ((a.flow_step = '02' or a.flow_step = '03') and ug.user_name = #{map.approveUser}))
+    </if>
+    <if test="map.operateContent != null and map.operateContent != ''">
+      and a.operate_content like '%${map.operateContent}%'
+    </if>
+    <if test="map.startTime != null and map.startTime != '' and (map.endTime == null and map.endTime == '')">
+      and a.apply_time = #{map.startTime}
+    </if>
+    <if test="map.startTime != null and map.startTime != '' and map.endTime != null and map.endTime != ''">
+      and a.apply_time between #{map.startTime} and #{map.endTime}
+    </if>
+  </select>
+  <select id="getOperateTicketListForWorkorder" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from operate_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+    left join typical_operate_ticket h on a.typical_ticket_id = h.typical_ticket_id
+    left join sp_code i on (a.flow_step = i.name and i.code_type_id = '1046')
+    left join org_architecture j on a.work_team = j.architecture_id
+    left join isc_user ua on a.maintainer = ua.user_id
+    left join isc_user ub on a.applicant = ub.user_id
+    left join isc_user uc on a.sender = uc.user_id
+    left join isc_user ud on a.receiver = ud.user_id
+    left join isc_user ue on a.executer = ue.user_id
+    left join isc_user uf on a.supervisior = uf.user_id
+    where a.status = '01' and a.workorder_id is null and a.order_id is null
+    <if test="map.operTicketTypeId != null and map.operTicketTypeId != ''">
+      and a.oper_ticket_type_id = #{map.operTicketTypeId}
+    </if>
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.startWindId}
+    </if>
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
+    </if>
+    <if test="map.operateContent != null and map.operateContent != ''">
+      and a.operate_content like '%${map.operateContent}%'
+    </if>
+    <if test="map.startTime != null and map.startTime != '' and (map.endTime == null and map.endTime == '')">
+      and a.apply_time = #{map.startTime}
+    </if>
+    <if test="map.startTime != null and map.startTime != '' and map.endTime != null and map.endTime != ''">
+      and (a.apply_time between #{map.startTime} and #{map.endTime})
+    </if>
+    order by a.serial_number is null desc,a.serial_number desc,maintain_date desc
+    limit ${map.start},${map.pageSize};
+  </select>
+  <select id="getTotalForWorkorder" resultType="java.lang.Integer">
+    select
     count(*)
-    from operate_ticket
-    where status != '0'
-    <if test="map.operTicketTypeId != null">
-      and oper_ticket_type_id = #{map.operTicketTypeId}
+    from operate_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+    left join typical_operate_ticket h on a.typical_ticket_id = h.typical_ticket_id
+    left join sp_code i on (a.flow_step = i.name and i.code_type_id = '1046')
+    left join org_architecture j on a.work_team = j.architecture_id
+    left join isc_user ua on a.maintainer = ua.user_id
+    left join isc_user ub on a.applicant = ub.user_id
+    left join isc_user uc on a.sender = uc.user_id
+    left join isc_user ud on a.receiver = ud.user_id
+    left join isc_user ue on a.executer = ue.user_id
+    left join isc_user uf on a.supervisior = uf.user_id
+    where a.status = '01' and a.workorder_id is null and a.order_id is null
+    <if test="map.operTicketTypeId != null and map.operTicketTypeId != ''">
+      and a.oper_ticket_type_id = #{map.operTicketTypeId}
     </if>
-    <if test="map.windId != null">
-      and wind_id = #{map.windId}
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.startWindId}
     </if>
-    <if test="map.status != null">
-      and status = #{map.status}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
     </if>
-    <if test="map.operateContent != null">
-      and operate_content like '%${map.operateContent}%'
+    <if test="map.operateContent != null and map.operateContent != ''">
+      and a.operate_content like '%${map.operateContent}%'
     </if>
-    <if test="map.startTime != null">
-      and apply_time &gt;= #{map.startTime}
+    <if test="map.startTime != null and map.startTime != '' and (map.endTime == null and map.endTime == '')">
+      and a.apply_time = #{map.startTime}
     </if>
-    <if test="map.endTime != null">
-      and apply_time &lt;= #{map.endTime}
+    <if test="map.startTime != null and map.startTime != '' and map.endTime != null and map.endTime != ''">
+      and a.apply_time between #{map.startTime} and #{map.endTime}
     </if>
   </select>
   <resultMap id="OperateTicketStatisticsMap" type="com.qz.zframe.tickets.vo.TicketStatisticsRes">
-    <id column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="architecture_name" property="windName" jdbcType="VARCHAR" />
     <result column="apply_count" property="applyCount" jdbcType="VARCHAR" />
     <result column="in_process_count" property="inProcessCount" jdbcType="VARCHAR" />
     <result column="complete_count" property="completeCount" jdbcType="VARCHAR" />
@@ -232,20 +425,71 @@
     <result column="complete_rate" property="completeRate" jdbcType="VARCHAR" />
   </resultMap>
   <select id="getOperateTicketStatisticsList" resultMap="OperateTicketStatisticsMap">
-    select a.*,(a.complete_count/a.apply_count) as 'complete_rate'
+    select a.*,(a.complete_count/a.apply_count) as 'complete_rate',b.architecture_name
     from (select wind_id,count(*) as 'apply_count',
-    sum(IF(status = '1', 1, 0)) as 'in_process_count',
-    sum(IF(status = '2', 1, 0)) as 'complete_count',
-    sum(IF(status = '0', 1, 0)) as 'invalid_count'
+    sum(IF(status = '01', 1, 0)) as 'in_process_count',
+    sum(IF(status = '02', 1, 0)) as 'complete_count',
+    sum(IF(status = '04', 1, 0)) as 'invalid_count'
     from operate_ticket
     where 1=1
-    <if test="startTime != null">
-      and apply_time &gt;= #{startTime}
+    <if test="startWindCode != null and startWindCode != '' and (endWindCode == null or endWindCode == '')" >
+      and a.wind_id = #{startWindCode}
     </if>
-    <if test="endTime != null">
-      and apply_time &lt;= #{endTime}
+    <if test="startWindCode != null and startWindCode != '' and endWindCode != null and endWindCode != ''" >
+      and (a.wind_id between #{startWindCode} and #{endWindCode})
     </if>
-    group by wind_id) as a;
+    <if test="startTime != null and startTime !='' and (endTime == null or endTime == '' )">
+      and apply_time = #{startTime}
+    </if>
+    <if test="startTime != null and startTime !='' and endTime != null and endTime !=''">
+      and apply_time between #{startTime} and #{endTime}
+    </if>
+    group by wind_id) as a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+  </select>
+  <resultMap id="OperorderMap" type="com.qz.zframe.maintain.vo.OperateTicketForWorkorderVo">
+    <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="ticket_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="work_team" property="workTeam" jdbcType="VARCHAR" />
+    <result column="work_team_name" property="workTeamName" jdbcType="VARCHAR" />
+    <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="applicant_name" property="applicantName" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="DATE" />
+    <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Operorder_Column_List">
+    a.ticket_id as ticket_id,
+    a.serial_number as ticket_number,
+    a.work_team as work_team,
+    a.status as status,
+    d.architecture_name as work_team_name,
+    b.ticket_type_name as ticket_type_name,
+    a.applicant as applicant,
+    f.user_name as applicant_name,
+    a.apply_time as apply_time,
+    a.operate_content as operate_content
+  </sql>
+  <select id="getDefectOperTicketList" resultMap="OperorderMap">
+    select
+    <include refid="Operorder_Column_List"/>
+    from operate_ticket a
+    left join operate_ticket_type b on a.oper_ticket_type_id = b.oper_ticket_type_id
+    left join org_architecture d on a.work_team = d.architecture_id
+    left join isc_user f on a.applicant = f.user_id
+    where a.status != '0' and a.workorder_id = #{workorderId}
+    order by a.serial_number desc
+  </select>
+  <select id="getOrderOperTicketList" resultMap="OperorderMap">
+    select
+    <include refid="Operorder_Column_List"/>
+    from operate_ticket a
+    left join operate_ticket_type b on a.oper_ticket_type_id = b.oper_ticket_type_id
+    left join org_architecture d on a.work_team = d.architecture_id
+    left join isc_user f on a.applicant = f.user_id
+    where a.status != '0' and a.order_id = #{orderId}
+    order by a.serial_number desc
   </select>
 
 
@@ -300,7 +544,7 @@
       )
     values (#{ticketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{operTicketTypeId,jdbcType=VARCHAR}, 
       #{typicalTicketId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
-      #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, 
+      #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR},
       #{flowStep,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{crewId,jdbcType=VARCHAR}, 
       #{applicant,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, #{sender,jdbcType=VARCHAR}, 
       #{receiver,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, #{workTeam,jdbcType=VARCHAR}, 
@@ -312,10 +556,10 @@
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.OperateTicket" >
     insert into operate_ticket
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="ticketId != null" >
+      <if test="ticketId != null and ticketId != ''" >
         ticket_id,
       </if>
-      <if test="serialNumber != null" >
+      <if test="serialNumber != null and serialNumber != ''" >
         serial_number,
       </if>
       <if test="operTicketTypeId != null" >
@@ -395,10 +639,10 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="ticketId != null" >
+      <if test="ticketId != null and ticketId != ''" >
         #{ticketId,jdbcType=VARCHAR},
       </if>
-      <if test="serialNumber != null" >
+      <if test="serialNumber != null and serialNumber != ''" >
         #{serialNumber,jdbcType=VARCHAR},
       </if>
       <if test="operTicketTypeId != null" >
@@ -417,7 +661,7 @@
         #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="maintainDate != null" >
-        #{maintainDate,jdbcType=DATE},
+        #{maintainDate,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
@@ -509,7 +753,7 @@
         maintainer = #{record.maintainer,jdbcType=VARCHAR},
       </if>
       <if test="record.maintainDate != null" >
-        maintain_date = #{record.maintainDate,jdbcType=DATE},
+        maintain_date = #{record.maintainDate,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
@@ -582,7 +826,7 @@
       workorder_id = #{record.workorderId,jdbcType=VARCHAR},
       order_id = #{record.orderId,jdbcType=VARCHAR},
       maintainer = #{record.maintainer,jdbcType=VARCHAR},
-      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      maintain_date = #{record.maintainDate,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=VARCHAR},
       flow_step = #{record.flowStep,jdbcType=VARCHAR},
       wind_id = #{record.windId,jdbcType=VARCHAR},
@@ -609,7 +853,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.tickets.entity.OperateTicket" >
     update operate_ticket
     <set >
-      <if test="serialNumber != null" >
+      <if test="serialNumber != null and serialNumber != ''" >
         serial_number = #{serialNumber,jdbcType=VARCHAR},
       </if>
       <if test="operTicketTypeId != null" >
@@ -628,7 +872,7 @@
         maintainer = #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="maintainDate != null" >
-        maintain_date = #{maintainDate,jdbcType=DATE},
+        maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
@@ -698,7 +942,7 @@
       workorder_id = #{workorderId,jdbcType=VARCHAR},
       order_id = #{orderId,jdbcType=VARCHAR},
       maintainer = #{maintainer,jdbcType=VARCHAR},
-      maintain_date = #{maintainDate,jdbcType=DATE},
+      maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR},
       flow_step = #{flowStep,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},

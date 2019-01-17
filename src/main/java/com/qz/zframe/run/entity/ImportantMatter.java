@@ -2,6 +2,7 @@ package com.qz.zframe.run.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 public class ImportantMatter {
@@ -12,19 +13,29 @@ public class ImportantMatter {
 	@ApiModelProperty(value="日志类型id",name="logTypeId")
     private String logTypeId;
 
-	@ApiModelProperty(value="日志类型",name="logType",required = true)
-    private String logType;
+    @ApiModelProperty(value="日志类型编码",name="logCode")
+    private String logCode;
 
-	@ApiModelProperty(value="日志名称",name="logName",required = true)
+    @ApiModelProperty(value="日志类型名称",name="logTypeId")
     private String logName;
 
-	@ApiModelProperty(value="部门/风电场",name="department",required = true)
-    private String department;
+	@ApiModelProperty(value="风电场",name="windCode",required = true)
+    private String windCode;
 
-	@ApiModelProperty(value="主要事项",name="importantMatter")
+    @ApiModelProperty(value="风电场名称",name="windName",required = true)
+    private String windName;
+
+	@ApiModelProperty(value="重要事项",name="importantMatter")
     private String importantMatter;
 
-	@ApiModelProperty(value="更新时间",name="updateTime",required = true)
+    @ApiModelProperty(value="维护人",name="updatePerson",required = true)
+    private String updatePerson;
+
+    @ApiModelProperty(value="维护人姓名",name="updatePersonName",required = true)
+    private String updatePersonName;
+
+	@ApiModelProperty(value="维护时间",name="updateTime",required = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date updateTime;
 
     public String getMatterId() {
@@ -39,16 +50,16 @@ public class ImportantMatter {
         return logTypeId;
     }
 
+    public String getLogCode() {
+        return logCode;
+    }
+
+    public void setLogCode(String logCode) {
+        this.logCode = logCode;
+    }
+
     public void setLogTypeId(String logTypeId) {
         this.logTypeId = logTypeId == null ? null : logTypeId.trim();
-    }
-
-    public String getLogType() {
-        return logType;
-    }
-
-    public void setLogType(String logType) {
-        this.logType = logType == null ? null : logType.trim();
     }
 
     public String getLogName() {
@@ -56,15 +67,23 @@ public class ImportantMatter {
     }
 
     public void setLogName(String logName) {
-        this.logName = logName == null ? null : logName.trim();
+        this.logName = logName;
     }
 
-    public String getDepartment() {
-        return department;
+    public String getWindCode() {
+        return windCode;
     }
 
-    public void setDepartment(String department) {
-        this.department = department == null ? null : department.trim();
+    public void setWindCode(String windCode) {
+        this.windCode = windCode;
+    }
+
+    public String getWindName() {
+        return windName;
+    }
+
+    public void setWindName(String windName) {
+        this.windName = windName;
     }
 
     public String getImportantMatter() {
@@ -73,6 +92,22 @@ public class ImportantMatter {
 
     public void setImportantMatter(String importantMatter) {
         this.importantMatter = importantMatter == null ? null : importantMatter.trim();
+    }
+
+    public String getUpdatePerson() {
+        return updatePerson;
+    }
+
+    public void setUpdatePerson(String updatePerson) {
+        this.updatePerson = updatePerson;
+    }
+
+    public String getUpdatePersonName() {
+        return updatePersonName;
+    }
+
+    public void setUpdatePersonName(String updatePersonName) {
+        this.updatePersonName = updatePersonName;
     }
 
     public Date getUpdateTime() {

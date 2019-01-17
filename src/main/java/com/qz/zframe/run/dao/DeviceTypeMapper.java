@@ -22,6 +22,9 @@ public interface DeviceTypeMapper {
 
     List<DeviceType> selectByExample(DeviceTypeExample example);
 
+    //获取不重复设备类型名称列表
+    List<DeviceType> getDistinctDeviceTypeList();
+
     DeviceType selectByPrimaryKey(String typeId);
 
     int updateByExampleSelective(@Param("record") DeviceType record, @Param("example") DeviceTypeExample example);

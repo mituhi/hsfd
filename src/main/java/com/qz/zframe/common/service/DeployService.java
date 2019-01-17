@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.qz.zframe.common.entity.Deploy;
 import com.qz.zframe.common.entity.DeployMain;
+import com.qz.zframe.common.util.PageResultEntity;
 
 public interface DeployService {
 
@@ -28,7 +29,7 @@ public interface DeployService {
 	 * @return
 	 * @throws Exception 
 	 */
-	DeployMain addAndUpdateDeployMain(DeployMain deployMain) throws Exception;
+	PageResultEntity addAndUpdateDeployMain(DeployMain deployMain) throws Exception;
 
 	/**
 	 * 根据id查询流程步骤
@@ -44,7 +45,7 @@ public interface DeployService {
 	 * @return
 	 * @throws Exception 
 	 */
-	Deploy addAndUpdateDeploy(Deploy deploy) throws Exception;
+	PageResultEntity addAndUpdateDeploy(Deploy deploy) throws Exception;
 
 	/**
 	 * 删除流程步骤
@@ -52,6 +53,12 @@ public interface DeployService {
 	 * @return
 	 * @throws Exception 
 	 */
-	Integer deleteDeploy(List<String> deployIds) throws Exception;
+	PageResultEntity deleteDeploy(List<String> deployIds) throws Exception;
 
+	/**
+	 * 根据流程编号查询流程信息
+	 * @param mainCode
+	 * @return
+	 */
+    DeployMain queryDeployMainByCode(String mainCode) throws Exception;
 }

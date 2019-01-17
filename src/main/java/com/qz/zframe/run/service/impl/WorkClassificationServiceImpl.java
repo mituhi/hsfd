@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.qz.zframe.authentication.CurrentUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import com.qz.zframe.run.service.WorkClassificationService;
 /**
  * <p>Title: WorkClassificationServiceImpl</p>
  * <p>@Description: 工作分类接口实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月12日 上午11:22:40
  * @version:V1.0
  */
@@ -33,6 +34,9 @@ public class WorkClassificationServiceImpl implements WorkClassificationService 
 
 	@Autowired
 	private WorkClassificationMapper workClassificationMapper;
+
+	@Autowired
+	private CurrentUserService currentUserService;
 	
 	
 	/**
@@ -40,49 +44,31 @@ public class WorkClassificationServiceImpl implements WorkClassificationService 
 	 */
 	@Override
 	public ResultEntity saveWorkClassification(WorkClassification workClassification) {
-		
-		//如果没有id:设置
-		if(StringUtils.isEmpty(workClassification.getClassificationId())){
-			workClassification.setClassificationId(UUID.randomUUID().toString());
-		}
-		
-		//设置创建时间
-		Date date = new Date();
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		String dateString = format.format(date);
-		
-		try {
-			date = format.parse(dateString);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-		workClassification.setCreateTime(date);
-		
-		
-		//生成流水号格式： 20181112 1001
-		Date now = new Date();
-		int year = now.getYear();
-		int mouth = now.getMonth();
-		int day = now.getDay();
-		
-		String randomNum = "";
-		for (int i = 0; i < 4; i++) {
-			randomNum=randomNum+(int)(0+Math.random()*(10));
-		}
-		//设置流水号
-		workClassification.setClassificationCode(year+mouth+day+randomNum);
-		
-		
-		workClassificationMapper.insert(workClassification);
 		ResultEntity resultEntity = new ResultEntity();
+
+		//设置id
+		workClassification.setClassificationId(UUID.randomUUID().toString());
+		//设置创建人
+		workClassification.setCreater(currentUserService.getId());
+		//设置创建时间
+		workClassification.setCreateTime(new Date());
+		//设置维护人
+		workClassification.setMaintainer(currentUserService.getId());
+		//设置维护时间
+		workClassification.setMaintainTime(new Date());
+
+		//设置流水号
+		WorkClassificationExample workClassificationExample = new WorkClassificationExample();
+		workClassificationExample.createCriteria().andClassificationCodeIsNotNull();
+		int i = workClassificationMapper.countByExample(workClassificationExample);
+		workClassification.setClassificationCode(String.valueOf(10001+i));
+
+		workClassificationMapper.insertSelective(workClassification);
 		resultEntity.setCode(ErrorCode.SUCCESS);
-		resultEntity.setMsg("执行成功");
+		resultEntity.setMsg("信息已保存");
 		return resultEntity;
 	}
 
-
-	
 	/**
 	 * 批量获取
 	 */
@@ -94,11 +80,11 @@ public class WorkClassificationServiceImpl implements WorkClassificationService 
 
 
 	@Override
-	public void deleteWorkClassificationById(String classificationId) {
-		workClassificationMapper.deleteByPrimaryKey(classificationId);
+	public void deleteWorkClassificationById(List<String> classificationIds) {
+		WorkClassificationExample workClassificationExample = new WorkClassificationExample();
+		workClassificationExample.createCriteria().andClassificationIdIn(classificationIds);
+		workClassificationMapper.deleteByExample(workClassificationExample);
 	}
-
-
 
 	/**
 	 * 更新
@@ -106,12 +92,24 @@ public class WorkClassificationServiceImpl implements WorkClassificationService 
 	@Override
 	public ResultEntity editWorkClassification(WorkClassification workClassification) {
 		ResultEntity resultEntity = new ResultEntity();
-		
+
+		workClassification.setMaintainer(currentUserService.getId());
+		workClassification.setMaintainTime(new Date());
 		workClassificationMapper.updateByPrimaryKeySelective(workClassification);
 		
 		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("执行成功");
 		return resultEntity;
+	}
+
+
+	
+	/**
+	 * 获取
+	 */
+	@Override
+	public WorkClassification getWorkClassificationById(String workClassificationId) {
+		return workClassificationMapper.selectByPrimaryKey(workClassificationId);
 	}
 
 }

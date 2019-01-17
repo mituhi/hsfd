@@ -20,7 +20,7 @@ import com.qz.zframe.run.service.WorkTaskService;
 /**
  * <p>Title: WorkTaskServiceImpl</p>
  * <p>@Description: 定期任务表接口实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月12日 下午3:35:03
  * @version:V1.0
  */
@@ -107,6 +107,16 @@ public class WorkTaskServiceImpl implements WorkTaskService {
 		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("执行成功");
 		return resultEntity;
+	}
+
+
+	
+	/**
+	 * 通过id获取信息
+	 */
+	@Override
+	public WorkTask getWorkTaskById(String workTaskId) {
+		return workTaskMapper.selectByPrimaryKey(workTaskId);
 	}
 
 	

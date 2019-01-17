@@ -217,7 +217,7 @@ public class ValueTimeExample extends PageExample{
         }
 
         public Criteria andValueCodeLike(String value) {
-            addCriterion("value_code like", "%"+value+"%", "valueCode");
+            addCriterion("sl.value_code like", "%"+value+"%", "valueCode");
             return (Criteria) this;
         }
 
@@ -357,7 +357,7 @@ public class ValueTimeExample extends PageExample{
         }
 
         public Criteria andStatusLike(String value) {
-            addCriterion("status like", "%"+value+"%", "status");
+            addCriterion("sl.status like", "%"+value+"%", "status");
             return (Criteria) this;
         }
 

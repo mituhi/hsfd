@@ -2,6 +2,8 @@ package com.qz.zframe.run.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.List;
+
 public class SchedulingRule {
 	
 	@ApiModelProperty(value="排班规则id",name="schedulingRuleId")
@@ -13,23 +15,50 @@ public class SchedulingRule {
 	@ApiModelProperty(value="排班规则名称",name="schedulingRule",required = true)
     private String schedulingRule;
 
-	@ApiModelProperty(value="部门",name="department",required = true)
-    private String department;
+	@ApiModelProperty(value="风电场编码",name="department",required = true)
+    private String windCode;
 
-	@ApiModelProperty(value="排班班次",name="schedulingShift",required = true)
-    private String schedulingShift;
+    @ApiModelProperty(value="风电场名称",name="department",required = true)
+    private String windName;
 
 	@ApiModelProperty(value="轮换周期",name="rotationCycle",required = true)
     private String rotationCycle;
 
-	@ApiModelProperty(value="是否跨天",name="isAcrossDay",required = true)
-    private String isAcrossDay;
-
-	@ApiModelProperty(value="横跨天数",name="dayNum",required = true)
-    private String dayNum;
-
 	@ApiModelProperty(value="状态",name="status",required = true)
     private String status;
+
+    @ApiModelProperty(value="假删除",name="trueId",required = true)
+    private String trueId;
+
+    @ApiModelProperty(value="值次ids",name="valueIds",required = true)
+    private List<String> valueIds;
+
+    @ApiModelProperty(value="班次ids",name="shiftIds",required = true)
+    private List<String> shiftIds;
+
+    public List<String> getValueIds() {
+        return valueIds;
+    }
+
+    public void setValueIds(List<String> valueIds) {
+        this.valueIds = valueIds;
+    }
+
+    public List<String> getShiftIds() {
+        return shiftIds;
+    }
+
+    public void setShiftIds(List<String> shiftIds) {
+        this.shiftIds = shiftIds;
+    }
+
+    public String getTrueId() {
+        return trueId;
+    }
+
+    public void setTrueId(String trueId) {
+        this.trueId = trueId;
+    }
 
     public String getSchedulingRuleId() {
         return schedulingRuleId;
@@ -55,20 +84,12 @@ public class SchedulingRule {
         this.schedulingRule = schedulingRule == null ? null : schedulingRule.trim();
     }
 
-    public String getDepartment() {
-        return department;
+    public String getWindCode() {
+        return windCode;
     }
 
-    public void setDepartment(String department) {
-        this.department = department == null ? null : department.trim();
-    }
-
-    public String getSchedulingShift() {
-        return schedulingShift;
-    }
-
-    public void setSchedulingShift(String schedulingShift) {
-        this.schedulingShift = schedulingShift == null ? null : schedulingShift.trim();
+    public void setWindCode(String windCode) {
+        this.windCode = windCode;
     }
 
     public String getRotationCycle() {
@@ -79,22 +100,6 @@ public class SchedulingRule {
         this.rotationCycle = rotationCycle == null ? null : rotationCycle.trim();
     }
 
-    public String getIsAcrossDay() {
-        return isAcrossDay;
-    }
-
-    public void setIsAcrossDay(String isAcrossDay) {
-        this.isAcrossDay = isAcrossDay == null ? null : isAcrossDay.trim();
-    }
-
-    public String getDayNum() {
-        return dayNum;
-    }
-
-    public void setDayNum(String dayNum) {
-        this.dayNum = dayNum == null ? null : dayNum.trim();
-    }
-
     public String getStatus() {
         return status;
     }
@@ -102,4 +107,13 @@ public class SchedulingRule {
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
     }
+
+    public String getWindName() {
+        return windName;
+    }
+
+    public void setWindName(String windName) {
+        this.windName = windName;
+    }
+
 }

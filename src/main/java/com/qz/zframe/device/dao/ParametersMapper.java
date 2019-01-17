@@ -11,7 +11,9 @@ import com.qz.zframe.device.entity.ParametersExample;
 @Mapper
 public interface ParametersMapper extends BaseMapper<Parameters, ParametersExample, Long>{
     int countByExample(ParametersExample example);
-
+    int countByExample2(ParametersExample example);
+    int countByExample3(ParametersExample example);
+    
     int deleteByExample(ParametersExample example);
 
     int deleteByPrimaryKey(String parameterId);
@@ -21,8 +23,12 @@ public interface ParametersMapper extends BaseMapper<Parameters, ParametersExamp
     int insert(Parameters record);
 
     int insertSelective(Parameters record);
+    
+    Parameters   selectByParameterCode(String parameterCode);
 
     List<Parameters> selectByExample(ParametersExample example);
+    List<Parameters> selectByExample2(ParametersExample example);
+    List<Parameters> selectByExample3(ParametersExample example);
 
     Parameters selectByPrimaryKey(String parameterId);
 

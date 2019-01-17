@@ -2,9 +2,11 @@ package com.qz.zframe.material.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.qz.zframe.common.util.BaseJsonView;
+import com.qz.zframe.material.entity.MaterialClassify.ListView;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -34,6 +36,10 @@ public class MaterialClassify implements Serializable {
 	@ApiModelProperty(name="classifyDescribe",value="物资分类描述",required=true)
 	@JsonView({ ListView.class })
 	private String classifyDescribe;
+	
+	@ApiModelProperty(name="superClassifyDescribe",value="上级分类描述",required=true)
+	@JsonView({ ListView.class })
+	private String superClassifyDescribe;
 
 	@ApiModelProperty(name="isTop",value="是否顶级，01是，02否",required=true)
 	@JsonView({ ListView.class })
@@ -51,14 +57,18 @@ public class MaterialClassify implements Serializable {
 	@ApiModelProperty(name="status",value="状态，01启用，02停用",required=true)
 	@JsonView({ ListView.class })
 	private String status;
+	
+	@ApiModelProperty(name="statusText",value="状态转换文本",required=true)
+	@JsonView({ ListView.class })
+	private String statusText;
 
 	
 	@ApiModelProperty(name="remark",value="备注",required=false)
 	@JsonView({ ListView.class })
 	private String remark;
 
-	@ApiModelProperty(name="sort",value="sort",required=false)
-	private String sort;
+	@ApiModelProperty(name="sort",value="层级",required=false)
+	private Integer sort;
 
 	@ApiModelProperty(name="isDelete",value="删除状态，01是，02否",required=false)
 	private String isDelete;
@@ -68,6 +78,14 @@ public class MaterialClassify implements Serializable {
 
 	@ApiModelProperty(name="createTime",value="创建时间",required=false)
 	private Date createTime;
+	
+	@ApiModelProperty(name="materialClassifys",value="树形结构",required=false)
+	private List<MaterialClassify> materialClassifys;
+	
+	
+	@JsonView({ ListView.class })
+	@ApiModelProperty(name="nameAndDescribe",value="物资分类名称+描述",required=false)
+	private String nameAndDescribe;
 
 	public String getMaterialClassifyId() {
 		return materialClassifyId;
@@ -133,14 +151,6 @@ public class MaterialClassify implements Serializable {
 		this.isDelete = isDelete == null ? null : isDelete.trim();
 	}
 
-	public String getSort() {
-		return sort;
-	}
-
-	public void setSort(String sort) {
-		this.sort = sort;
-	}
-
 	public String getCreater() {
 		return creater;
 	}
@@ -164,6 +174,45 @@ public class MaterialClassify implements Serializable {
 	public void setSuperiorClassifyName(String superiorClassifyName) {
 		this.superiorClassifyName = superiorClassifyName;
 	}
-	
+
+	public String getSuperClassifyDescribe() {
+		return superClassifyDescribe;
+	}
+
+	public void setSuperClassifyDescribe(String superClassifyDescribe) {
+		this.superClassifyDescribe = superClassifyDescribe;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
+
+	public List<MaterialClassify> getMaterialClassifys() {
+		return materialClassifys;
+	}
+
+	public void setMaterialClassifys(List<MaterialClassify> materialClassifys) {
+		this.materialClassifys = materialClassifys;
+	}
+
+	public String getStatusText() {
+		return statusText;
+	}
+
+	public void setStatusText(String statusText) {
+		this.statusText = statusText;
+	}
+
+	public String getNameAndDescribe() {
+		return nameAndDescribe;
+	}
+
+	public void setNameAndDescribe(String nameAndDescribe) {
+		this.nameAndDescribe = nameAndDescribe;
+	}
 	
 }

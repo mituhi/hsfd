@@ -1,22 +1,22 @@
 package com.qz.zframe.tickets.entity;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 public class OperateItem {
 
-    @ApiParam(name="itemId",value="操作项id",required=false)
+    @ApiModelProperty(name="itemId",value="操作项id",required=false)
     private String itemId;
 
-    @ApiParam(name="ticketId",value="操作票id",required=false)
+    @ApiModelProperty(name="ticketId",value="操作票id",required=false)
     private String ticketId;
 
-    @ApiParam(name="typicalTicketId",value="典型操作票id",required=false)
+    @ApiModelProperty(name="typicalTicketId",value="典型操作票id",required=false)
     private String typicalTicketId;
 
-    @ApiParam(name="itemNumber",value="操作项编号",required=false)
-    private String itemNumber;
+    @ApiModelProperty(name="itemNumber",value="操作项编号",required=false)
+    private Integer itemNumber;
 
-    @ApiParam(name="itemContent",value="操作项内容",required=false)
+    @ApiModelProperty(name="itemContent",value="操作项内容",required=false)
     private String itemContent;
 
     public String getItemId() {
@@ -43,12 +43,12 @@ public class OperateItem {
         this.typicalTicketId = typicalTicketId == null ? null : typicalTicketId.trim();
     }
 
-    public String getItemNumber() {
+    public Integer getItemNumber() {
         return itemNumber;
     }
 
-    public void setItemNumber(String itemNumber) {
-        this.itemNumber = itemNumber == null ? null : itemNumber.trim();
+    public void setItemNumber(Integer itemNumber) {
+        this.itemNumber = itemNumber;
     }
 
     public String getItemContent() {

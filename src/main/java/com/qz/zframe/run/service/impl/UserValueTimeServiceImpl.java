@@ -18,7 +18,7 @@ import com.qz.zframe.run.service.UserValueTimeService;
 /**
  * <p>Title: UserValueTimeServiceImpl</p>
  * <p>@Description: 人员值次关联表接口实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月2日 上午10:29:40
  * @version:V1.0
  */
@@ -36,12 +36,11 @@ public class UserValueTimeServiceImpl implements UserValueTimeService {
 	 */
 	@Override
 	public ResultEntity saveUserValueTime(UserValueTime userValueTime) {
-		
 		ResultEntity resultEntity = new ResultEntity();
-		//生成id
-		String id = UUID.randomUUID().toString();
+		//1.1生成id
+		String id = (UUID.randomUUID()+"").replaceAll("-","");
 		userValueTime.setId(id);
-		//执行插入操作
+		//1.2执行插入操作
 		userValueTimeMapper.insert(userValueTime);
 		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("执行成功");

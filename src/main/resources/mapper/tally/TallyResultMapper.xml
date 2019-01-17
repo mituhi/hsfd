@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyResultDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.TallyResult" >
+        <id column="result_id" property="resultId" />
+        <result column="result_name" property="resultName" />
+        <result column="many_choose" property="manyChoose"/>
+        <result column="result_code" property="resultCode" />
+        <result column="is_delete" property="isDelete" />
+    </resultMap>
+    <resultMap id="BaseResultMap2" type="com.qz.zframe.tally.entity.TallyResultChoose" >
+        <id column="result_id" property="resultId" />
+        <result column="choose_id" property="chooseId" />
+        <result column="alarm_level" property="alarmLevel"/>
+        <result column="result_choose" property="resultChoose"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+       result_id,result_name,many_choose,result_choose
+    </sql>
+
+
+    <select id="findAllTallyResult" resultMap="BaseResultMap">
+        SELECT
+        r.result_id,
+        r.result_name,
+        r.many_choose,
+        r.result_code,
+        a.resultChoose
+        FROM
+        tally_result r LEFT JOIN
+        ( SELECT result_id, GROUP_CONCAT( result_choose ) AS resultChoose FROM tally_result_choose GROUP BY result_id ) a
+        ON r.result_id = a.result_id
+        WHERE r.is_delete="01"
+        <if test="resultCode !=null">
+            and r.result_code like "%"#{resultCode}"%"
+        </if>
+        <if test="resultName !=null">
+            and r.result_name like "%"#{resultName}"%"
+        </if>
+        limit #{firstIndex},#{lastIndex}
+    </select>
+
+    <select id="countTallyResult" resultType="int">
+        SELECT
+        COUNT( r.result_id )
+        FROM
+        tally_result r LEFT JOIN
+        ( SELECT result_id, GROUP_CONCAT( result_choose ) AS resultChroose FROM tally_result_choose GROUP BY result_id ) a
+        ON r.result_id = a.result_id
+        WHERE r.is_delete="01"
+        <if test="resultCode !=null">
+            and r.result_code like "%"#{resultCode}"%"
+        </if>
+        <if test="resultName !=null">
+            and r.result_name like "%"#{resultName}"%"
+        </if>
+    </select>
+
+
+    <!-- 新增 -->
+    <insert id="addTallyResult">
+        INSERT INTO tally_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resultId!=null and resultId!=''">result_id,</if>
+            <if test="resultName!=null and resultName!=''">result_name,</if>
+            <if test="manyChoose!=null and manyChoose!=''">many_choose,</if>
+            <if test="resultCode!=null and resultCode!=''">result_code,</if>
+            <if test="isDelete!=null and isDelete!=''">is_delete,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="resultId!=null and resultId!=''">#{resultId},</if>
+            <if test="resultName!=null and resultName!=''">#{resultName},</if>
+            <if test="manyChoose!=null and manyChoose!=''">#{manyChoose},</if>
+            <if test="resultCode!=null and resultCode!=''">#{resultCode},</if>
+            <if test="isDelete!=null and isDelete!=''">#{isDelete},</if>
+        </trim>
+    </insert>
+
+    <select id="findserialNum" resultType="int" >
+        select
+        COUNT(*)
+        from tally_result
+    </select>
+
+    <!-- 新增 -->
+    <insert id="addTallyResultChoose">
+        INSERT INTO tally_result_choose(choose_id,result_id,result_choose,alarm_level)
+        values
+        <foreach collection ="list" item="tallyResultChooseList" separator =",">
+            (#{tallyResultChooseList.chooseId}, #{tallyResultChooseList.resultId}, #{tallyResultChooseList.resultChoose}, #{tallyResultChooseList.alarmLevel})
+        </foreach >
+    </insert>
+
+    <!-- 更新 -->
+    <update id="updateTallyResult">
+        UPDATE tally_result
+        <set>
+            <if test="resultName!=null and resultName!=''">result_name=#{resultName},</if>
+            <if test="manyChoose!=null and manyChoose!=''">many_choose=#{manyChoose},</if>
+            <if test="resultCode!=null and resultCode!=''">result_code=#{resultCode},</if>
+        </set>
+        WHERE result_id=#{resultId}
+    </update>
+
+    <!-- 更新 -->
+    <update id="updateTallyResultChoose">
+        UPDATE tally_result_choose
+        <set>
+            <if test="resultChoose!=null and resultChoose!=''">result_choose=#{resultChoose},</if>
+            <if test="alarmLevel!=null and alarmLevel!=''">alarm_level=#{alarmLevel},</if>
+        </set>
+        WHERE choose_id=#{chooseId}
+    </update>
+
+    <!-- 假删除 -->
+    <update id="updateTallyResultIsDelete">
+        UPDATE tally_result
+        set is_delete='02'
+        WHERE result_id IN
+        <foreach collection="resultIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <delete id="deleteTallyResult">
+        DELETE tally_result.*,tally_result_choose.*
+        FROM tally_result,tally_result_choose
+        WHERE tally_result.result_id IN
+        <foreach collection="resultIds" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and tally_result.result_id=tally_result_choose.result_id
+    </delete>
+
+    <select id="findTallyResultByResultId" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+         result_id,result_name,many_choose,result_code
+         FROM tally_result
+         WHERE result_id=#{resultId}
+    </select>
+
+    <select id="findTallyResultChooseByResultId" parameterType="string" resultMap="BaseResultMap2">
+        SELECT
+            r.choose_id,
+            r.result_id,
+            r.result_choose,
+            r.alarm_level,
+            s.title alarmLevelText
+        FROM
+            tally_result_choose r
+            LEFT JOIN ( SELECT c.`name`, c.title FROM sp_code_type t, sp_code c WHERE t.id = c.code_type_id AND t.`name` = 'ALARM_LEVEL' ) s ON r.alarm_level = s.`name`
+        WHERE r.result_id=#{resultId}
+    </select>
+
+    <!-- 根据编号查询结果选项分组选项 -->
+    <select id="findTallyResultByResultCode" resultMap="BaseResultMap">
+        SELECT
+        result_id,result_name,many_choose,result_code
+        FROM tally_result
+        WHERE result_code = #{resultCode}
+        and is_delete = '01'
+    </select>
+
+    <!-- 根据编号查询结果选项分组选项(不包括自己) -->
+    <select id="findTallyResultByResultCodeNotId" resultMap="BaseResultMap">
+        SELECT
+        result_id,result_name,many_choose,result_code
+        FROM tally_result
+        WHERE result_code = #{resultCode}
+        and result_id != #{resultId}
+        and is_delete = '01'
+    </select>
+
+    <!-- 根据结果选项分组id删除结果选项 -->
+    <delete id="deletetallyResultChooseList" parameterType="string">
+        delete from tally_result_choose
+	    where result_id = #{resultId}
+    </delete>
+
+</mapper>

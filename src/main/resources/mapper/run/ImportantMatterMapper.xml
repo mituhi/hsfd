@@ -4,10 +4,13 @@
   <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.ImportantMatter" >
     <id column="matter_id" property="matterId" jdbcType="VARCHAR" />
     <result column="log_type_id" property="logTypeId" jdbcType="VARCHAR" />
-    <result column="log_type" property="logType" jdbcType="VARCHAR" />
+    <result column="log_code" property="logCode" jdbcType="VARCHAR" />
     <result column="log_name" property="logName" jdbcType="VARCHAR" />
-    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="wind_code" property="windCode" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
     <result column="important_matter" property="importantMatter" jdbcType="VARCHAR" />
+    <result column="update_person" property="updatePerson" jdbcType="TIMESTAMP" />
+    <result column="user_name" property="updatePersonName" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -69,21 +72,33 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    matter_id, log_type_id, log_type, log_name, department, important_matter, update_time
+    matter_id, log_type_id, wind_code, important_matter, update_person, update_time
   </sql>
+
+  <sql id="Get_Column_List" >
+    a.matter_id as matter_id, a.log_type_id as log_type_id, b.log_code as log_code, b.log_name as log_name, a.wind_code as wind_code, d.architecture_name as wind_name,
+    a.important_matter as important_matter, a.update_person as update_person, e.user_name as user_name, a.update_time as update_time
+  </sql>
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.ImportantMatterExample" >
     select
-    <if test="distinct" >
+    <include refid="Get_Column_List" />
+    from
+    (select
+    <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List"/>
     from important_matter
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
       order by ${orderByClause}
-    </if>
+    </if>) a
+    left join log_type b on a.log_type_id = b.log_type_id
+    left join org_architecture d on (a.wind_Code = d.architecture_code and d.architecture_type = '02')
+    left join isc_user e on a.update_person = e.user_id
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -102,12 +117,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.run.entity.ImportantMatter" >
-    insert into important_matter (matter_id, log_type_id, log_type, 
-      log_name, department, important_matter, 
-      update_time)
-    values (#{matterId,jdbcType=VARCHAR}, #{logTypeId,jdbcType=VARCHAR}, #{logType,jdbcType=VARCHAR}, 
-      #{logName,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{importantMatter,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into important_matter (matter_id, log_type_id, wind_code, 
+      important_matter, update_person, update_time
+      )
+    values (#{matterId,jdbcType=VARCHAR}, #{logTypeId,jdbcType=VARCHAR}, #{windCode,jdbcType=VARCHAR}, 
+      #{importantMatter,jdbcType=VARCHAR}, #{updatePerson,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.ImportantMatter" >
     insert into important_matter
@@ -118,17 +133,14 @@
       <if test="logTypeId != null" >
         log_type_id,
       </if>
-      <if test="logType != null" >
-        log_type,
-      </if>
-      <if test="logName != null" >
-        log_name,
-      </if>
-      <if test="department != null" >
-        department,
+      <if test="windCode != null" >
+        wind_code,
       </if>
       <if test="importantMatter != null" >
         important_matter,
+      </if>
+      <if test="updatePerson != null" >
+        update_person,
       </if>
       <if test="updateTime != null" >
         update_time,
@@ -141,17 +153,14 @@
       <if test="logTypeId != null" >
         #{logTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="logType != null" >
-        #{logType,jdbcType=VARCHAR},
-      </if>
-      <if test="logName != null" >
-        #{logName,jdbcType=VARCHAR},
-      </if>
-      <if test="department != null" >
-        #{department,jdbcType=VARCHAR},
+      <if test="windCode != null" >
+        #{windCode,jdbcType=VARCHAR},
       </if>
       <if test="importantMatter != null" >
         #{importantMatter,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePerson != null" >
+        #{updatePerson,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
@@ -173,17 +182,14 @@
       <if test="record.logTypeId != null" >
         log_type_id = #{record.logTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="record.logType != null" >
-        log_type = #{record.logType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.logName != null" >
-        log_name = #{record.logName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.department != null" >
-        department = #{record.department,jdbcType=VARCHAR},
+      <if test="record.windCode != null" >
+        wind_code = #{record.windCode,jdbcType=VARCHAR},
       </if>
       <if test="record.importantMatter != null" >
         important_matter = #{record.importantMatter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updatePerson != null" >
+        update_person = #{record.updatePerson,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -197,10 +203,9 @@
     update important_matter
     set matter_id = #{record.matterId,jdbcType=VARCHAR},
       log_type_id = #{record.logTypeId,jdbcType=VARCHAR},
-      log_type = #{record.logType,jdbcType=VARCHAR},
-      log_name = #{record.logName,jdbcType=VARCHAR},
-      department = #{record.department,jdbcType=VARCHAR},
+      wind_code = #{record.windCode,jdbcType=VARCHAR},
       important_matter = #{record.importantMatter,jdbcType=VARCHAR},
+      update_person = #{record.updatePerson,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -212,17 +217,14 @@
       <if test="logTypeId != null" >
         log_type_id = #{logTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="logType != null" >
-        log_type = #{logType,jdbcType=VARCHAR},
-      </if>
-      <if test="logName != null" >
-        log_name = #{logName,jdbcType=VARCHAR},
-      </if>
-      <if test="department != null" >
-        department = #{department,jdbcType=VARCHAR},
+      <if test="windCode != null" >
+        wind_code = #{windCode,jdbcType=VARCHAR},
       </if>
       <if test="importantMatter != null" >
         important_matter = #{importantMatter,jdbcType=VARCHAR},
+      </if>
+      <if test="updatePerson != null" >
+        update_person = #{updatePerson,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -233,10 +235,9 @@
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.ImportantMatter" >
     update important_matter
     set log_type_id = #{logTypeId,jdbcType=VARCHAR},
-      log_type = #{logType,jdbcType=VARCHAR},
-      log_name = #{logName,jdbcType=VARCHAR},
-      department = #{department,jdbcType=VARCHAR},
+      wind_code = #{windCode,jdbcType=VARCHAR},
       important_matter = #{importantMatter,jdbcType=VARCHAR},
+      update_person = #{updatePerson,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where matter_id = #{matterId,jdbcType=VARCHAR}
   </update>

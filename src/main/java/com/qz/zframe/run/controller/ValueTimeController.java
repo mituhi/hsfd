@@ -1,6 +1,9 @@
 package com.qz.zframe.run.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,20 +17,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageInfo;
 import com.qz.zframe.common.util.ErrorCode;
+import com.qz.zframe.common.util.ExcelUtil;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.run.entity.ValueTime;
 import com.qz.zframe.run.entity.ValueTimeExample;
+import com.qz.zframe.run.entity.ValueTimeExample.Criteria;
 import com.qz.zframe.run.service.ValueTimeService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * <p>Title: ValueTimeController </p>
  * <p>@Description: 值次表相关操作</p>
- * 
- * @author 陈汇奇
+ * @author 
  * @date 2018年10月30日 下午3:22:13
  * @version:V1.0
  */
@@ -49,24 +54,39 @@ public class ValueTimeController {
 	 */
 	@RequestMapping(value = "/getValueTimeList", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "批量获取值次表信息", notes = "批量获取值次表信息")
-	public PageResultEntity getValueTimeList(@RequestParam(required = false) String searchKey,
-			@RequestParam(required = false, defaultValue = "1") Integer pageNo,
+	public PageResultEntity getValueTimeList(@RequestParam(required = false)  @ApiParam(name="searchKey",value="关键字查询") String searchKey,
+			@RequestParam(required = false) @ApiParam(name="status",value="状态") String status,
+			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
 			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
 
 		PageResultEntity pageResultEntity = new PageResultEntity();
 		
 		ValueTimeExample example = new ValueTimeExample();
 		
+		Criteria criteria = example.createCriteria();
+		
+		//选择了状态
+		if(StringUtils.isNotBlank(status)){
+			criteria.andStatusEqualTo(status);
+		}
+
+		
 		if(StringUtils.isNotBlank(searchKey)){
 			//设置模糊查询
-			example.or().andValueCodeLike(searchKey);
-			example.or().andValueNameLike(searchKey);
-			example.or().andStatusLike(searchKey);
+			criteria.andValueCodeLike(searchKey);
+			
+			Criteria criteria2 = example.createCriteria();
+			
+			criteria2.andStatusEqualTo(status);
+			criteria2.andValueNameLike(searchKey);
+			example.or(criteria2);
 		}
 		
 		
+		
+		example.setOrderByClause("sort asc");
 		//执行查询
-		List<ValueTime> list = valueTimeService.ListValueTime(example, pageNo, pageSize);
+		List<ValueTime> list = valueTimeService.ListValueTime(example, pageNum, pageSize);
 		//设置返回结果
 		PageInfo<ValueTime> pageInfo = new PageInfo<ValueTime>(list);
 
@@ -78,26 +98,38 @@ public class ValueTimeController {
 	}
 	
 	
-	
-	
-//	@RequestMapping(value = "/getValueTimeList", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//	@ApiOperation(value = "批量获取值次表信息", notes = "批量获取值次表信息")
-//	public PageResultEntity getValueTimeList(@RequestBody(required = false) ValueTime valueTime,
-//			@RequestParam(required = false, defaultValue = "1") Integer pageNum,
-//			@RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-//		
-//		PageResultEntity resultEntity = new PageResultEntity();
-//		
-//		PageHelper.startPage(pageNum, pageSize);
-//		// 执行查询
-//		List<ValueTime> list = valueTimeService.ListValueTime(valueTime);
-//		// 设置返回结果
-//		PageInfo<ValueTime> pageInfo = new PageInfo<ValueTime>(list);
-//		resultEntity.setRows(list);
-//		resultEntity.setTotal((int) pageInfo.getTotal());
-//		resultEntity.setCode(ErrorCode.SUCCESS);
-//		return resultEntity;
-//	}
+	@RequestMapping(value="/toExcel",method=RequestMethod.GET,produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "导出EXCEL", notes = "导出EXCEL")
+	public void toExcel(@RequestParam(required = false)  @ApiParam(name="searchKey",value="关键字查询") String searchKey,
+			HttpServletResponse response) {
+		
+		ValueTimeExample example = new ValueTimeExample();
+		
+		if(StringUtils.isNotBlank(searchKey)){
+			//设置模糊查询
+			example.or().andValueCodeLike(searchKey);
+			example.or().andValueNameLike(searchKey);
+			example.or().andStatusLike(searchKey);
+		}
+		
+		example.setOrderByClause("sort");
+		
+		List<ValueTime> list = valueTimeService.ListValueTime(example , 0, 0);
+		
+		LinkedHashMap<String, String> testMap = new LinkedHashMap<String, String>();
+		testMap.put("valueCode", "值次编码");
+		testMap.put("valueName", "值次名称");
+		testMap.put("status", "状态");
+		testMap.put("sort", "排序");
+		
+		try {
+			String fileName = ExcelUtil.listToExcel2(list, testMap, "值次管理", 65535, response);
+			System.out.println(fileName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	/**
 	 * @Description: 新增值次表信息
@@ -112,17 +144,29 @@ public class ValueTimeController {
 		
 		ResultEntity resultEntity = new ResultEntity();
 		
-		/* aop测试 ：  业务先注释掉*/
 		// 判断字段是否异常（为空）
-		if (StringUtils.isBlank(valueTime.getSort().toString()) || StringUtils.isBlank(valueTime.getStatus())
-				|| StringUtils.isBlank(valueTime.getValueCode()) || StringUtils.isBlank(valueTime.getValueName())) {
+		if (StringUtils.isBlank(valueTime.getSort().toString()) ) {
 			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少字段");
-		} else {
-			// 调用接口保存信息
-			resultEntity = valueTimeService.saveValueTime(valueTime);
+			resultEntity.setMsg("缺少值次序号字段");
+			return resultEntity;
 		}
-		
+		if( StringUtils.isBlank(valueTime.getStatus())) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("缺少值次状态字段");
+			return resultEntity;
+		}
+				
+		if( StringUtils.isBlank(valueTime.getValueCode())) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("缺少值次编码字段");
+			return resultEntity;
+		} 
+		if( StringUtils.isBlank(valueTime.getValueName())) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("缺少值次名称字段");
+			return resultEntity;
+		}
+		resultEntity = valueTimeService.saveValueTime(valueTime);
 		return resultEntity;
 	}
 
@@ -135,10 +179,9 @@ public class ValueTimeController {
 	 */
 	@RequestMapping(value = "/removeValueTimes", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "批量删除值次表信息", notes = "批量删除值次表信息")
-	public ResultEntity removeValueTimes(@RequestParam List<String> ids) {
+	public ResultEntity removeValueTimes(@RequestParam @ApiParam(name="ids",value="勾选的ids") List<String> ids) {
 		
 		ResultEntity resultEntity = new ResultEntity();
-		/* aop测试 ：  业务先注释掉*/
 		resultEntity = valueTimeService.removeValueTimes(ids);
 		
 		return resultEntity;
@@ -157,7 +200,6 @@ public class ValueTimeController {
 		
 		ResultEntity resultEntity = new ResultEntity();
 
-		/* aop测试 ：  业务先注释掉*/
 		//检查字段完整性
 		if(CollectionUtils.isEmpty(valueTimes)){
 			//如果为空返回
@@ -179,7 +221,27 @@ public class ValueTimeController {
 	 /*************************    点击编辑：获取对应信息               ***************************/
 	@RequestMapping(value="/getValueTime" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value="点击编辑：获取对应信息 ", notes="点击编辑：获取对应信息")
-	public ResultEntity getValueTime(@RequestParam String valueTimeId){
+	public ResultEntity getValueTime(@RequestParam @ApiParam(name="valueTimeId",value="勾选的ids") String valueTimeId){
+		
+		ResultEntity resultEntity = new ResultEntity();
+		
+		//如果数据不为空
+		if(StringUtils.isNotBlank(valueTimeId)){
+			ValueTime valueTime = valueTimeService.getValueTimeById(valueTimeId);
+			resultEntity.setCode(ErrorCode.SUCCESS);
+			resultEntity.setMsg("执行成功");
+			resultEntity.setData(valueTime);
+			return resultEntity ;
+		}
+		resultEntity.setCode(ErrorCode.ERROR);
+		resultEntity.setMsg("缺少字段");
+		return resultEntity;
+	}
+
+	/*************************    点击查看：获取对应信息               ***************************/
+	@RequestMapping(value="/viewValueTime" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value="点击查看：获取对应信息详情 ", notes="点击查看：获取对应信息详情")
+	public ResultEntity viewValueTime(@RequestParam @ApiParam(name="valueTimeId",value="勾选的id") String valueTimeId){
 		
 		ResultEntity resultEntity = new ResultEntity();
 		
@@ -197,6 +259,18 @@ public class ValueTimeController {
 	}
 	
 	
+	/************************   获取值次下拉框值           ************************************/
+	@RequestMapping(value="/getValueSelect" , method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value="获取值次下拉框值 ", notes="获取值次下拉框值")
+	public ResultEntity getValueSelect(){
+		ResultEntity resultEntity = new ResultEntity();
+		
+		ValueTimeExample example = new ValueTimeExample();
+		List<ValueTime> list = valueTimeService.ListValueTime(example , 0, 0);
+		resultEntity.setData(list);
+		
+		return resultEntity;
+	}
 	
 	
 	
@@ -206,7 +280,7 @@ public class ValueTimeController {
 	@ApiOperation(value="获取排序数字 ", notes="获取排序数字  ")
 	public ResultEntity getSort(){
 		ResultEntity resultEntity = new ResultEntity();
-		resultEntity = valueTimeService.getMaxSort();
+		resultEntity= valueTimeService.getMaxSort();
 		return resultEntity;
 	}
 	

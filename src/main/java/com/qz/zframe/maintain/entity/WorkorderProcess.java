@@ -1,40 +1,40 @@
 package com.qz.zframe.maintain.entity;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 public class WorkorderProcess {
 
-    @ApiParam(name="processId",value="工序id",required=false)
+    @ApiModelProperty(name="processId",value="工序id",required=false)
     private String processId;
 
-    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    @ApiModelProperty(name="workorderId",value="缺陷工单id",required=false)
     private String workorderId;
 
-    @ApiParam(name="knowledgeId",value="故障知识id",required=false)
+    @ApiModelProperty(name="knowledgeId",value="故障知识id",required=false)
     private String knowledgeId;
 
-    @ApiParam(name="orderId",value="工单id",required=false)
+    @ApiModelProperty(name="orderId",value="工单id",required=false)
     private String orderId;
 
-    @ApiParam(name="processNumber",value="序号",required=true)
+    @ApiModelProperty(name="processNumber",value="编号",required=true)
     private String processNumber;
 
-    @ApiParam(name="processDesc",value="工序描述",required=true)
+    @ApiModelProperty(name="processDesc",value="工序描述",required=true)
     private String processDesc;
 
-    @ApiParam(name="processExternal",value="外部",required=false)
+    @ApiModelProperty(name="processExternal",value="外部",required=false)
     private String processExternal;
 
-    @ApiParam(name="processPlanWorkHours",value="计划工时",required=false)
+    @ApiModelProperty(name="processPlanWorkHours",value="计划工时",required=false)
     private String processPlanWorkHours;
 
-    @ApiParam(name="processPlanPersonNum",value="计划人数",required=false)
+    @ApiModelProperty(name="processPlanPersonNum",value="计划人数",required=false)
     private String processPlanPersonNum;
 
-    @ApiParam(name="processActualWorkHours",value="实际工时",required=false)
+    @ApiModelProperty(name="processActualWorkHours",value="实际工时",required=false)
     private String processActualWorkHours;
 
-    @ApiParam(name="processActualPersonNum",value="实际人数",required=false)
+    @ApiModelProperty(name="processActualPersonNum",value="实际人数",required=false)
     private String processActualPersonNum;
 
     public String getProcessId() {

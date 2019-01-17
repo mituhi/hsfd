@@ -100,9 +100,9 @@
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.run.entity.RuleShiftValue" >
     insert into rule_shift_value (id, scheduling_rule_id, shift_id, 
-      value_id)
+      value_id, day_id)
     values (#{id,jdbcType=VARCHAR}, #{schedulingRuleId,jdbcType=VARCHAR}, #{shiftId,jdbcType=VARCHAR}, 
-      #{valueId,jdbcType=VARCHAR})
+      #{valueId,jdbcType=VARCHAR} , #{dayId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.RuleShiftValue" >
     insert into rule_shift_value
@@ -140,6 +140,15 @@
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+  </select>
+  <select id="getRuleShiftValuesBySchedulingRuleId" parameterType="string" resultType="com.qz.zframe.run.entity.RuleShiftValue">
+    SELECT id as id,
+    scheduling_rule_id as schedulingRuleId,
+    shift_id as shiftId,
+    value_id as valueId,
+    day_id as dayId
+    FROM rule_shift_value
+    WHERE scheduling_rule_id=#{schedulingRuleId}
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
     update rule_shift_value

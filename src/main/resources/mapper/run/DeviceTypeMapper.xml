@@ -5,6 +5,7 @@
     <id column="type_id" property="typeId" jdbcType="VARCHAR" />
     <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
     <result column="device_status" property="deviceStatus" jdbcType="VARCHAR" />
+    <result column="status_name" property="statusName" jdbcType="VARCHAR" />
     <result column="sort" property="sort" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
@@ -70,17 +71,43 @@
   <sql id="Base_Column_List" >
     type_id, device_type, device_status, sort, update_time, remark
   </sql>
+
+  <sql id="Get_Column_List" >
+    a.type_id as type_id, a.device_type as device_type, a.device_status as device_status, a.sort as sort,
+    a.update_time as update_time, a.remark as remark,e.title as status_name
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.DeviceTypeExample" >
     select
-    <if test="distinct" >
+    <include refid="Get_Column_List"/>
+    from
+    (select
+    <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List"/>
     from device_type
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>) a
+    left join sp_code_type d on d.name = 'DEVICE_TYPE_STATUS'
+    left join sp_code e on (e.code_type_id = d.id and e.name = a.device_status)
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="getDistinctDeviceTypeList" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.DeviceTypeExample" >
+    select
+    distinct
+    type_id,
+    device_type
+    from device_type
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
+    </if>
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>

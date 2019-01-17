@@ -272,73 +272,73 @@ public class DefectWorkorderExample {
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeIsNull() {
-            addCriterion("workorder_code is null");
+        public Criteria andBreakdownIdIsNull() {
+            addCriterion("breakdown_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeIsNotNull() {
-            addCriterion("workorder_code is not null");
+        public Criteria andBreakdownIdIsNotNull() {
+            addCriterion("breakdown_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeEqualTo(String value) {
-            addCriterion("workorder_code =", value, "workorderCode");
+        public Criteria andBreakdownIdEqualTo(String value) {
+            addCriterion("breakdown_id =", value, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeNotEqualTo(String value) {
-            addCriterion("workorder_code <>", value, "workorderCode");
+        public Criteria andBreakdownIdNotEqualTo(String value) {
+            addCriterion("breakdown_id <>", value, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeGreaterThan(String value) {
-            addCriterion("workorder_code >", value, "workorderCode");
+        public Criteria andBreakdownIdGreaterThan(String value) {
+            addCriterion("breakdown_id >", value, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeGreaterThanOrEqualTo(String value) {
-            addCriterion("workorder_code >=", value, "workorderCode");
+        public Criteria andBreakdownIdGreaterThanOrEqualTo(String value) {
+            addCriterion("breakdown_id >=", value, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeLessThan(String value) {
-            addCriterion("workorder_code <", value, "workorderCode");
+        public Criteria andBreakdownIdLessThan(String value) {
+            addCriterion("breakdown_id <", value, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeLessThanOrEqualTo(String value) {
-            addCriterion("workorder_code <=", value, "workorderCode");
+        public Criteria andBreakdownIdLessThanOrEqualTo(String value) {
+            addCriterion("breakdown_id <=", value, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeLike(String value) {
-            addCriterion("workorder_code like", value, "workorderCode");
+        public Criteria andBreakdownIdLike(String value) {
+            addCriterion("breakdown_id like", value, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeNotLike(String value) {
-            addCriterion("workorder_code not like", value, "workorderCode");
+        public Criteria andBreakdownIdNotLike(String value) {
+            addCriterion("breakdown_id not like", value, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeIn(List<String> values) {
-            addCriterion("workorder_code in", values, "workorderCode");
+        public Criteria andBreakdownIdIn(List<String> values) {
+            addCriterion("breakdown_id in", values, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeNotIn(List<String> values) {
-            addCriterion("workorder_code not in", values, "workorderCode");
+        public Criteria andBreakdownIdNotIn(List<String> values) {
+            addCriterion("breakdown_id not in", values, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeBetween(String value1, String value2) {
-            addCriterion("workorder_code between", value1, value2, "workorderCode");
+        public Criteria andBreakdownIdBetween(String value1, String value2) {
+            addCriterion("breakdown_id between", value1, value2, "breakdownId");
             return (Criteria) this;
         }
 
-        public Criteria andWorkorderCodeNotBetween(String value1, String value2) {
-            addCriterion("workorder_code not between", value1, value2, "workorderCode");
+        public Criteria andBreakdownIdNotBetween(String value1, String value2) {
+            addCriterion("breakdown_id not between", value1, value2, "breakdownId");
             return (Criteria) this;
         }
 
@@ -682,6 +682,76 @@ public class DefectWorkorderExample {
             return (Criteria) this;
         }
 
+        public Criteria andFlowStatusIsNull() {
+            addCriterion("flow_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusIsNotNull() {
+            addCriterion("flow_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusEqualTo(String value) {
+            addCriterion("flow_status =", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusNotEqualTo(String value) {
+            addCriterion("flow_status <>", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusGreaterThan(String value) {
+            addCriterion("flow_status >", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("flow_status >=", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusLessThan(String value) {
+            addCriterion("flow_status <", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusLessThanOrEqualTo(String value) {
+            addCriterion("flow_status <=", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusLike(String value) {
+            addCriterion("flow_status like", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusNotLike(String value) {
+            addCriterion("flow_status not like", value, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusIn(List<String> values) {
+            addCriterion("flow_status in", values, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusNotIn(List<String> values) {
+            addCriterion("flow_status not in", values, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusBetween(String value1, String value2) {
+            addCriterion("flow_status between", value1, value2, "flowStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusNotBetween(String value1, String value2) {
+            addCriterion("flow_status not between", value1, value2, "flowStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andWindIdIsNull() {
             addCriterion("wind_id is null");
             return (Criteria) this;
@@ -819,6 +889,76 @@ public class DefectWorkorderExample {
 
         public Criteria andCompanyNotBetween(String value1, String value2) {
             addCriterion("company not between", value1, value2, "company");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIsNull() {
+            addCriterion("department is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIsNotNull() {
+            addCriterion("department is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentEqualTo(String value) {
+            addCriterion("department =", value, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentNotEqualTo(String value) {
+            addCriterion("department <>", value, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentGreaterThan(String value) {
+            addCriterion("department >", value, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentGreaterThanOrEqualTo(String value) {
+            addCriterion("department >=", value, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentLessThan(String value) {
+            addCriterion("department <", value, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentLessThanOrEqualTo(String value) {
+            addCriterion("department <=", value, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentLike(String value) {
+            addCriterion("department like", value, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentNotLike(String value) {
+            addCriterion("department not like", value, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentIn(List<String> values) {
+            addCriterion("department in", values, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentNotIn(List<String> values) {
+            addCriterion("department not in", values, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentBetween(String value1, String value2) {
+            addCriterion("department between", value1, value2, "department");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepartmentNotBetween(String value1, String value2) {
+            addCriterion("department not between", value1, value2, "department");
             return (Criteria) this;
         }
 

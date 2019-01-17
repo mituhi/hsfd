@@ -1,63 +1,128 @@
 package com.qz.zframe.tally.entity;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import io.swagger.annotations.ApiModelProperty;
 
-/*
-二维码配置
+/**
+ * 二维码配置信息
+ * 
+ * @author sn
+ * @date 2018年12月4日下午2:50:57
+ *
  */
-public class QrCode {
-    //二维码id
-    @ApiModelProperty(value="二维码id",name="qrCodeId",required=false)
+public class QrCode implements Serializable {
+	
+
+	private static final long serialVersionUID = -7607599166627703971L;
+
+	@ApiModelProperty(name="qrId",value="二维码主键Id",required=true)
+    private String qrId;
+
+	@ApiModelProperty(name="qrCodeId",value="二维码编码Id",required=false)
     private String qrCodeId;
-    //编号
-    @ApiModelProperty(value="编号",name="code",required=false)
-    private String code;
-    //所属风电场
-    @ApiModelProperty(value="所属风电场",name="windId",required=false)
-    private String windId;
-    //位置名称
-    @ApiModelProperty(value="位置名称",name="addressName",required=false)
-    private String addressName;
-    @ApiModelProperty(value="风电场",name="windCode",required=false)
-    private String windCode;
+
+	@ApiModelProperty(name="positionId",value="位置编码Id",required=true)
+    private String positionId;
+	
+	@ApiModelProperty(name="positionCode",value="位置编码",required=false)
+	private String positionCode;
+	
+	@ApiModelProperty(name="positionName",value="位置编码名称",required=false)
+	private String positionName;
+	
+	@ApiModelProperty(name="architectureCode",value="风电场编码",required=false)
+	private String windCode;
+	
+	@ApiModelProperty(name="windName",value="风电场名称",required=false)
+	private String windName;
+	
+	@ApiModelProperty(name="creater",value="创建人Id",required=false)
+	private String creater;
+	
+	@ApiModelProperty(name="createTime",value="创建时间",required=false)
+	private Date createTime;
+
+	private String url;
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getQrId() {
+        return qrId;
+    }
+
+    public void setQrId(String qrId) {
+        this.qrId = qrId == null ? null : qrId.trim();
+    }
 
     public String getQrCodeId() {
         return qrCodeId;
     }
 
     public void setQrCodeId(String qrCodeId) {
-        this.qrCodeId = qrCodeId;
+        this.qrCodeId = qrCodeId == null ? null : qrCodeId.trim();
     }
 
-    public String getCode() {
-        return code;
+    public String getPositionId() {
+        return positionId;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setPositionId(String positionId) {
+        this.positionId = positionId == null ? null : positionId.trim();
     }
 
-    public String getWindId() {
-        return windId;
-    }
+	public String getPositionCode() {
+		return positionCode;
+	}
 
-    public void setWindId(String windId) {
-        this.windId = windId;
-    }
+	public void setPositionCode(String positionCode) {
+		this.positionCode = positionCode;
+	}
 
-    public String getAddressName() {
-        return addressName;
-    }
+	public String getPositionName() {
+		return positionName;
+	}
 
-    public void setAddressName(String addressName) {
-        this.addressName = addressName;
-    }
+	public void setPositionName(String positionName) {
+		this.positionName = positionName;
+	}
 
-    public String getWindCode() {
-        return windCode;
-    }
+	public String getWindCode() {
+		return windCode;
+	}
 
-    public void setWindCode(String windCode) {
-        this.windCode = windCode;
-    }
+	public void setWindCode(String windCode) {
+		this.windCode = windCode;
+	}
+
+	public String getWindName() {
+		return windName;
+	}
+
+	public void setWindName(String windName) {
+		this.windName = windName;
+	}
+
+	public String getCreater() {
+		return creater;
+	}
+
+	public void setCreater(String creater) {
+		this.creater = creater;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 }

@@ -53,6 +53,16 @@ public class TallyStandard {
     private String upperlimitMileage;
     //里程下限
     private String lowerlimitMileage;
+    //真假删除
+    private String trueId;
+
+    public String getTrueId() {
+        return trueId;
+    }
+
+    public void setTrueId(String trueId) {
+        this.trueId = trueId;
+    }
 
     public String getStandardId() {
         return standardId;

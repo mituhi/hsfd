@@ -21,5 +21,7 @@ public interface MaterialMapper extends BaseMapper<Material, MaterialExample, Lo
 	 * @throws
 	 */
 	public int updateIsdete(Map<String, Object> params);
+
+	public String selectMaxMaterialCode();
    
 }

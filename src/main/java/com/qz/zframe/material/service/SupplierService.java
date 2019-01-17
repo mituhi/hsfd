@@ -1,9 +1,8 @@
 package com.qz.zframe.material.service;
-
 import java.util.List;
-
-import com.qz.zframe.common.util.PageResultEntity;
+import com.qz.zframe.common.util.NewPageResult;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.common.util.ResultEntityDetail;
 import com.qz.zframe.material.entity.Supplier;
 import com.qz.zframe.material.entity.SupplierExample;
 
@@ -17,7 +16,7 @@ public interface SupplierService {
 	 * @return PageResultEntity    返回类型
 	 * @throws
 	 */
-	public PageResultEntity getSupplierList(SupplierExample example);
+	public NewPageResult<Supplier> getSupplierList(SupplierExample example);
 
 	/**
 	 * @新增供应商
@@ -37,7 +36,7 @@ public interface SupplierService {
 	 * @return PageResultEntity    返回类型
 	 * @throws
 	 */
-	public ResultEntity getSupplierDetail(String supplierId);
+	public ResultEntityDetail<Supplier> getSupplierDetail(String supplierId);
 
 	/**
 	 * 编辑供应商信息

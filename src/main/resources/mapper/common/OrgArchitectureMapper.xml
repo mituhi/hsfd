@@ -86,6 +86,15 @@
         and rr.role_id = r.role_id and architecture_id = #{architectureId}
     </select>
     
+    <!-- 根据组织架构id查询关联班组人员信息 -->
+    <select id="findOrgArchitectureCenterByArchitectureId" resultType="com.qz.zframe.common.entity.OrgArchitectureTeam">
+        select au.rela_id relaId,au.architecture_id architectureId,au.user_id userId,
+        u.user_name userName,r.role_name roleName 
+        from org_architecture_center au,isc_user u ,isc_role r,isc_role_user_rela rr
+        where au.user_id = u.user_id and u.user_id = rr.user_id 
+        and rr.role_id = r.role_id and architecture_id = #{architectureId}
+    </select>
+    
     <!-- 根据编号或名称查询组织架构信息 -->
     <select id="findOrgArchitectureByCodeOrName" resultType="com.qz.zframe.common.entity.OrgArchitecture">
         select architecture_id architectureId, architecture_code architectureCode, 
@@ -96,8 +105,26 @@
         set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
         email email,phone phone,fax fax,work_content workContent,remark remark 
         from org_architecture 
-        where architecture_code = #{architectureCode} 
+        where architecture_type = #{architectureType} 
+        and architecture_code = #{architectureCode} 
         or architecture_name = #{architectureName} 
+    </select>
+    
+    <!-- 根据编号或名称查询组织架构信息不包括自己 -->
+    <select id="findOrgArchitectureByCodeOrNameNotMe" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark 
+        from org_architecture 
+        where 
+        architecture_type = #{architectureType} 
+        and architecture_code = #{architectureCode} 
+        or architecture_name = #{architectureName} 
+        and architecture_id <![CDATA[ <> ]]> #{architectureId} 
     </select>
     
     <!-- 新增组织架构信息 -->
@@ -150,6 +177,16 @@
     	</foreach >
     </insert>
     
+    <!-- 批量新增成本中心关联关系 -->
+    <insert id="addOrgArchitectureCenters" parameterType="com.qz.zframe.common.entity.OrgArchitectureCenter">
+        insert into org_architecture_center (rela_id, architecture_id, user_id)
+        values
+        <foreach collection ="list" item="orgArchitectureCenters" separator =",">
+         (#{orgArchitectureCenters.relaId},#{orgArchitectureCenters.architectureId},
+         #{orgArchitectureCenters.userId})
+    	</foreach >
+    </insert>
+    
     <!-- 批量删除组织架构 -->
     <delete id="deleteOrgArchitecture" parameterType="java.util.List" >
 	    delete from org_architecture
@@ -189,6 +226,15 @@
 	<!-- 删除班组关联关系 -->
     <delete id="deleteOrgArchitectureTeam" parameterType="java.util.List" >
 	    delete from org_architecture_team
+	    where architecture_id in 
+	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+		#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 删除成本中心关联关系 -->
+    <delete id="deleteOrgArchitectureCenter" parameterType="java.util.List" >
+	    delete from org_architecture_center
 	    where architecture_id in 
 	    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
 		#{item}
@@ -242,4 +288,151 @@
         is_valuable = #{isValuable},remark = #{remark}
         where wind_id = #{windId}
     </update>
+     <!--  查询风电场信息 -->
+    <select id="findWind" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName ,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark 
+        from org_architecture 
+        where architecture_type ='02'
+    </select>
+    
+    <!--  查询公司信息 -->
+    <select id="findCompany" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark 
+        from org_architecture 
+        where architecture_type ='01' 
+    </select>
+    
+    <!--  查询部门信息 -->
+    <select id="findSection" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark 
+        from org_architecture 
+        where architecture_type ='03'
+    </select>
+    
+    
+    <!--  查询班组信息 -->
+    <select id="findTeamGroup" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark
+        from org_architecture 
+        where architecture_type ='04'
+    </select>
+    
+    <!-- 查询组织架构信息列表 -->
+    <select id="queryOrgArchitectureList" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, 
+	        architecture_code architectureCode, 
+	        architecture_name architectureName,
+	        architecture_describe architectureDescribe,
+	        architecture_type architectureType,
+	        is_top isTop,
+	        is_disable isDisable,
+	        is_virtual_org isVirtualOrg,
+	        super_competent_department superCompetentDepartment,
+	        charge_leadership chargeLeadership,
+	        header header,
+	        department_compile departmentCompile,
+	        set_up_time setUpTime,
+	        undo_time undoTime,
+	        security_level securityLevel,
+	        email email,
+	        phone phone,
+	        fax fax,
+	        work_content workContent,
+	        remark remark,
+	        concat_ws('  ',architecture_code,architecture_name) codeAndName
+        from org_architecture 
+        <where>
+	        <if test="architectureName != null and architectureName != ''">
+	        and architecture_name = #{architectureName} 
+	        </if>
+	        <if test="architectureType != null and architectureType != ''">
+	        and architecture_type = #{architectureType} 
+	        </if>
+	        <if test="architectureId != null and architectureId != ''">
+	        and architecture_id = #{architectureId}
+	        </if>
+	        <if test="superCompetentDepartment != null and superCompetentDepartment != ''">
+	        and super_competent_department = #{superCompetentDepartment}
+	        </if>
+        </where>
+        order by architecture_code
+    </select>
+    
+    <!-- 根据userId删除部门用户关联信息 -->
+    <delete id="deleteRaleOrgArchitectureUser" parameterType="string">
+        delete from org_architecture_user where user_id = #{userId}
+    </delete>
+    
+    <!-- 根据父id查询组织架构信息 -->
+    <select id="findOrgArchitectureByFid" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId, architecture_code architectureCode, 
+        architecture_name architectureName,architecture_describe architectureDescribe,
+        architecture_type architectureType,is_top isTop,is_disable isDisable,
+        is_virtual_org isVirtualOrg,super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,header header,department_compile departmentCompile,
+        set_up_time setUpTime,undo_time undoTime,security_level securityLevel,
+        email email,phone phone,fax fax,work_content workContent,remark remark 
+        from org_architecture 
+        <where>
+	        <if test="architectureId != null and architectureId != ''">
+	        and super_competent_department = #{architectureId} 
+	        </if>
+        </where>
+    </select>
+    
+    <select id="getWindIdByCode" parameterType="string" resultType="string">
+        select architecture_id from org_architecture where architecture_type='02' and architecture_code=#{architectureCode}
+    </select>
+
+    <!-- 查询组织架构信息列表 -->
+    <select id="queryOrgArchitectureListByCode" resultType="com.qz.zframe.common.entity.OrgArchitecture">
+        select architecture_id architectureId,
+        architecture_code architectureCode,
+        architecture_name architectureName,
+        architecture_describe architectureDescribe,
+        architecture_type architectureType,
+        is_top isTop,
+        is_disable isDisable,
+        is_virtual_org isVirtualOrg,
+        super_competent_department superCompetentDepartment,
+        charge_leadership chargeLeadership,
+        header header,
+        department_compile departmentCompile,
+        set_up_time setUpTime,
+        undo_time undoTime,
+        security_level securityLevel,
+        email email,
+        phone phone,
+        fax fax,
+        work_content workContent,
+        remark remark,
+        concat_ws('  ',architecture_code,architecture_name) codeAndName
+        from org_architecture
+        where architecture_type = '03'
+        and architecture_code = #{architectureCode}
+    </select>
 </mapper>

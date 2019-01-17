@@ -1,14 +1,17 @@
 package com.qz.zframe.tally.controller;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.qz.zframe.authentication.CurrentUserService;
 import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.PageBean;
+import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.tally.entity.PeriodTime;
 import com.qz.zframe.tally.entity.TallyRoute;
 import com.qz.zframe.tally.entity.TallyStandard;
 import com.qz.zframe.tally.service.PeriodTimeService;
+import com.qz.zframe.tally.service.TallyPlanService;
 import com.qz.zframe.tally.service.TallyRouterService;
 import com.qz.zframe.tally.service.TallyStandardService;
 import com.qz.zframe.tally.vo.TallyPlanVO;
@@ -25,7 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -50,74 +57,88 @@ public class PlanController {
     @Autowired
     PeriodTimeService periodTimeService;
 
+    @Autowired
+    TallyPlanService tallyPlanService;
+
     @ApiOperation(value="巡检计划查询", notes="根据线路，负责人，风机场，开始时间，结束时间" ,httpMethod="GET")
     @RequestMapping("list")
     @ResponseBody
-    public ResultEntity listStandard(String routeName,
-                                     String maintenancer,
-                                     String windId,
-                                     Date startTime,
-                                     Date endTime,
-                                     @RequestParam(value = "currentPage",defaultValue = "1")int currentPage,
-                                     @RequestParam(value = "pageSize",defaultValue = "5")  int pageSize) {
-        ResultEntity resultEntity=new ResultEntity();
+    public PageResultEntity listPlan(String currentUserId,
+                                     @RequestParam(value = "pageNum",defaultValue = "1")int pageNum,
+                                     @RequestParam(value = "pageSize",defaultValue = "10")  int pageSize) throws ParseException {
+        PageResultEntity resultEntity=new PageResultEntity();
+        PageHelper.startPage(pageNum,pageSize);
 
-        PageHelper.startPage(currentPage,pageSize);
-
-        //1.先查询所有点检标准表需要的字段
-       //List<TallyRoute> tallyRouteList=tallyRouterService.findTallyRouteByPlan(routeName, maintenancer, windId, startTime, endTime);
-        List<TallyPlanVO> tallyPlanVOList=tallyRouterService.findTallyPlanVOByPlan(routeName, maintenancer, windId, startTime, endTime);
-
-        //List<TallyPlanVO> tallyPlanVOList=new ArrayList<TallyPlanVO>();
-
-        /*for (TallyRoute tallyRoute:tallyRouteList){
-            TallyPlanVO tallyPlanVO=new TallyPlanVO();
-
-            tallyPlanVO.setRouteName(tallyRoute.getRouteName());
-            tallyPlanVO.setMaintenancer(tallyRoute.getMaintenancer());
-
-            //获取RouteName 根据routeid
-            List<PeriodTime> periodTimeList=tallyRouterService.findPeriodTimeByPlan(tallyRoute.getRouteId());
-            for (PeriodTime periodTime:periodTimeList){
-                tallyPlanVO.setStartTime(periodTime.getStartTime());
-                tallyPlanVO.setEndTime(periodTime.getEndTime());
-
-                tallyPlanVOList.add(tallyPlanVO);
+        List<TallyPlanVO> tallyPlanVOList=tallyPlanService.findAllTallyPlanVO(currentUserId);
+        if (tallyPlanVOList==null||tallyPlanVOList.isEmpty()){
+            resultEntity.setCode(ErrorCode.ERROR);
+            resultEntity.setMsg("没有巡检计划!");
+            return resultEntity;
+        }
+        List<TallyPlanVO> tallyPlanVOList2=new ArrayList<TallyPlanVO>();
+        for (TallyPlanVO tallyPlanVO:tallyPlanVOList){
+            List<String> userNames=tallyPlanService.findUserNamesByRouteId(tallyPlanVO.getRouteId());
+            if (userNames==null||userNames.isEmpty()){
+                resultEntity.setCode(ErrorCode.ERROR);
+                resultEntity.setMsg("巡检计划没有配置人员!");
+                return resultEntity;
             }
 
+            if (tallyPlanVO.getCycleUnit().equals("01")){
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(tallyPlanVO.getStartTime());
+                calendar.add(Calendar.YEAR,new Integer(tallyPlanVO.getCycle()));
+                tallyPlanVO.setEndTime(calendar.getTime());
+                //tallyPlanVO.setEndTime(new Date(tallyPlanVO.getStartTime().getTime()+new Integer(tallyPlanVO.getCycle())*365*24*60*60*1000));
+            }else if (tallyPlanVO.getCycleUnit().equals("02")){
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(tallyPlanVO.getStartTime());
+                calendar.add(Calendar.MONTH,new Integer(tallyPlanVO.getCycle()));
+                tallyPlanVO.setEndTime(calendar.getTime());
+                //tallyPlanVO.setEndTime(new Date(tallyPlanVO.getStartTime().getTime()+new Integer(tallyPlanVO.getCycle())*30*24*60*60*1000));
+            }else if (tallyPlanVO.getCycleUnit().equals("03")){
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(tallyPlanVO.getStartTime());
+                calendar.add(Calendar.DATE,7*(new Integer(tallyPlanVO.getCycle())));
+                tallyPlanVO.setEndTime(calendar.getTime());
+                //tallyPlanVO.setEndTime(new Date(tallyPlanVO.getStartTime().getTime()+new Integer(tallyPlanVO.getCycle())*7*24*60*60*1000));
+            } else if (tallyPlanVO.getCycleUnit().equals("04")){
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(tallyPlanVO.getStartTime());
+                calendar.add(Calendar.DATE,new Integer(tallyPlanVO.getCycle()));
+                tallyPlanVO.setEndTime(calendar.getTime());
+                //tallyPlanVO.setEndTime(new Date(tallyPlanVO.getStartTime().getTime()+new Integer(tallyPlanVO.getCycle())*24*60*60*1000));
+            }else if (tallyPlanVO.getCycleUnit().equals("05")){
+                Calendar calendar=Calendar.getInstance();
+                calendar.setTime(tallyPlanVO.getStartTime());
+                calendar.add(Calendar.HOUR,new Integer(tallyPlanVO.getCycle()));
+                tallyPlanVO.setEndTime(calendar.getTime());
+                //tallyPlanVO.setEndTime(new Date(tallyPlanVO.getStartTime().getTime()+new Integer(tallyPlanVO.getCycle())*60*60*1000));
+            }
 
+            Date date=new Date();
+            DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateS=format1.format(date);
+            Date date2=format1.parse(dateS);
+            long diff=tallyPlanVO.getEndTime().getTime()-date2.getTime();
+            long days = diff / (1000 * 60 * 60 * 24);
+            long hours = (diff-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);
+            long minutes = (diff-days*(1000 * 60 * 60 * 24)-hours*(1000* 60 * 60))/(1000* 60);
+            String surplusTime=""+days+"天"+hours+"小时"+minutes+"分";
+            tallyPlanVO.setSurplusTime(surplusTime);
+            tallyPlanVO.setUserNames(userNames);
+            tallyPlanVOList2.add(tallyPlanVO);
+        }
 
-        }*/
+        PageInfo<TallyPlanVO> pageDate=new PageInfo<>(tallyPlanVOList2);
 
-        PageBean<TallyPlanVO> pageDate=new PageBean<TallyPlanVO>(currentPage,pageSize,tallyPlanVOList.size());
-        pageDate.setItems(tallyPlanVOList);
+        resultEntity.setRows(tallyPlanVOList2);
 
         resultEntity.setCode(ErrorCode.SUCCESS);
         resultEntity.setMsg("巡检计划查询成功");
-        resultEntity.setData(pageDate);
+        resultEntity.setTotal((int) pageDate.getTotal());
         return resultEntity;
 
     }
 
-    @ApiOperation(value="巡检计划删除", notes="根据传入的list进行删除" ,httpMethod="DELETE")
-    @RequestMapping("delete")
-    @ResponseBody
-    public ResultEntity tallyDelete(@RequestBody List<TallyPlanVO> tallyPlanVOList) {
-        ResultEntity resultEntity=new ResultEntity();
-
-        if (tallyPlanVOList==null||tallyPlanVOList.size()==0){
-            resultEntity.setCode(ErrorCode.ERROR);
-            resultEntity.setMsg("请选择要删除的计划!");
-
-            return resultEntity;
-        }
-
-
-
-
-        resultEntity.setCode(ErrorCode.SUCCESS);
-        resultEntity.setMsg("删除成功!");
-
-        return resultEntity;
-    }
 }

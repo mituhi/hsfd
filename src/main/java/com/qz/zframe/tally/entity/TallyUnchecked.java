@@ -9,11 +9,8 @@ public class TallyUnchecked {
     //路线id
     private  String routeId;
 
-    //开始时间
-    private  Date startTime;
-
-    //结束时间
-    private  Date endTime;
+    //完成时间
+    private  Date finishTime;
 
     //实机执行人
     private  String actualExecutor;
@@ -33,17 +30,8 @@ public class TallyUnchecked {
     //已备注数量
     private  String volumeRemarks;
 
-    //日期
-    private  Date date;
-
-    //漏检原因
-    private  String causeLeak;
-
-    //漏检数量
-    private  String leakageQuantity;
-
-    //部门名称
-    private  String departmentName;
+    //备注详情
+    private  String volumeDetails;
 
 
     public  String  getUncheckedId(){
@@ -60,18 +48,11 @@ public class TallyUnchecked {
         this.routeId=routeId;
     }
 
-    public  Date  getStartTime(){
-        return  this.startTime;
+    public  Date  getFinishTime(){
+        return  this.finishTime;
     };
-    public  void  setStartTime(Date startTime){
-        this.startTime=startTime;
-    }
-
-    public  Date  getEndTime(){
-        return  this.endTime;
-    };
-    public  void  setEndTime(Date endTime){
-        this.endTime=endTime;
+    public  void  setFinishTime(Date finishTime){
+        this.finishTime=finishTime;
     }
 
     public  String  getActualExecutor(){
@@ -116,31 +97,10 @@ public class TallyUnchecked {
         this.volumeRemarks=volumeRemarks;
     }
 
-    public Date getDate(){
-        return  this.date;
+    public  String  getVolumeDetails(){
+        return  this.volumeDetails;
     };
-    public  void  setDate(Date date){
-        this.date=date;
-    }
-
-    public  String  getCauseLeak(){
-        return  this.causeLeak;
-    };
-    public  void  setCauseLeak(String causeLeak){
-        this.causeLeak=causeLeak;
-    }
-
-    public  String  getLeakageQuantity(){
-        return  this.leakageQuantity;
-    };
-    public  void  setLeakageQuantity(String leakageQuantity){
-        this.leakageQuantity=leakageQuantity;
-    }
-
-    public  String  getDepartmentName(){
-        return  this.departmentName;
-    };
-    public  void  setDepartmentName(String departmentName){
-        this.departmentName=departmentName;
+    public  void  setVolumeDetails(String volumeDetails){
+        this.volumeDetails=volumeDetails;
     }
 }

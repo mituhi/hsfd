@@ -1,54 +1,54 @@
 package com.qz.zframe.maintain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class WorkorderWorktype {
 
-    @ApiParam(name="worktypeId",value="工种id",required=false)
+    @ApiModelProperty(name="worktypeId",value="工种id",required=false)
     private String worktypeId;
 
-    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    @ApiModelProperty(name="workorderId",value="缺陷工单id",required=false)
     private String workorderId;
 
-    @ApiParam(name="knowledgeId",value="故障知识id",required=false)
+    @ApiModelProperty(name="knowledgeId",value="故障知识id",required=false)
     private String knowledgeId;
 
-    @ApiParam(name="orderId",value="工单id",required=false)
+    @ApiModelProperty(name="orderId",value="工单id",required=false)
     private String orderId;
 
-    @ApiParam(name="worktypeNumber",value="工种编号",required=false)
+    @ApiModelProperty(name="worktypeNumber",value="工种编号",required=false)
     private String worktypeNumber;
 
-    @ApiParam(name="worktypeName",value="工种名称",required=false)
+    @ApiModelProperty(name="worktypeName",value="工种名称",required=false)
     private String worktypeName;
 
-    @ApiParam(name="worktypeNeedNum",value="需求人数",required=false)
+    @ApiModelProperty(name="worktypeNeedNum",value="需求人数",required=false)
     private String worktypeNeedNum;
 
-    @ApiParam(name="worktypePlanStartTime",value="计划开始时间",required=false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    @ApiModelProperty(name="worktypePlanStartTime",value="计划开始时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date worktypePlanStartTime;
 
-    @ApiParam(name="worktypePlanEndTime",value="计划结束时间",required=false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+    @ApiModelProperty(name="worktypePlanEndTime",value="计划结束时间",required=false)
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date worktypePlanEndTime;
 
-    @ApiParam(name="worktypeStandardRate",value="标准费率",required=false)
+    @ApiModelProperty(name="worktypeStandardRate",value="标准费率",required=false)
     private String worktypeStandardRate;
 
-    @ApiParam(name="worktypePlanUseHour",value="计划用时",required=false)
+    @ApiModelProperty(name="worktypePlanUseHour",value="计划用时",required=false)
     private String worktypePlanUseHour;
 
-    @ApiParam(name="worktypePlanFee",value="计划费用",required=false)
+    @ApiModelProperty(name="worktypePlanFee",value="计划费用",required=false)
     private String worktypePlanFee;
 
-    @ApiParam(name="worktypeActualUseHour",value="实际用时",required=false)
+    @ApiModelProperty(name="worktypeActualUseHour",value="实际用时",required=false)
     private String worktypeActualUseHour;
 
-    @ApiParam(name="worktypeActualFee",value="实际费用",required=false)
+    @ApiModelProperty(name="worktypeActualFee",value="实际费用",required=false)
     private String worktypeActualFee;
 
     public String getWorktypeId() {

@@ -1,6 +1,7 @@
 package com.qz.zframe.tally.dao;
 
 import com.qz.zframe.tally.entity.PeriodTime;
+import com.qz.zframe.tally.vo.TallyPlanVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -26,6 +27,18 @@ public interface TallyPlanDao {
     void deletePeriodTimeByRouteNames(@Param("routeName") String routeName, @Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
 
+    /**
+     * 查巡检计划
+     * @return
+     */
+    List<TallyPlanVO> findAllTallyPlanVO(@Param("currentUserId")String currentUserId);
+
+    /**
+     * 查计划巡检人们
+     * @param routeId
+     * @return
+     */
+    List<String> findUserNamesByRouteId(String routeId);
 
 
 }

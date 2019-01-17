@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyRecordDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.TallyRecord" >
+        <id column="record_id" property="recordId" />
+        <result column="route_id" property="routeId" />
+        <result column="practitioner_name" property="practitionerName"/>
+        <result column="standard_quantity" property="standardQuantity" />
+        <result column="record_number" property="recordNumber"/>
+        <result column="alarm_number" property="alarmNumber" />
+        <result column="processed_alerts" property="processedAlerts"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.qz.zframe.tally.dto.TallyRecordDto" >
+        <id column="record_id" property="recordId" />
+        <result column="route_id" property="routeId" />
+        <result column="practitioner_name" property="practitionerName"/>
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime"/>
+        <result column="standard_quantity" property="standardQuantity" />
+        <result column="record_number" property="recordNumber"/>
+        <result column="alarm_number" property="alarmNumber" />
+        <result column="processed_alerts" property="processedAlerts"/>
+        <result column="wind_id" property="windId"/>
+        <result column="route_name" property="routeName"/>
+    </resultMap>
+    <resultMap id="BaseResultMap3" type="com.qz.zframe.tally.vo.TallyRecordVO" >
+        <id column="wind_id" property="windId" />
+        <result column="route_id" property="routeId" />
+        <result column="route_name" property="routeName" />
+        <result column="benchmark_date" property="benchmarkDate"/>
+        <result column="cycle_unit" property="cycleUnit"/>
+        <result column="cycle" property="cycle"/>
+        <result column="practitioner_name" property="practitionerName"/>
+        <result column="standard_quantity" property="standardQuantity" />
+        <result column="record_number" property="recordNumber"/>
+        <result column="alarm_number" property="alarmNumber" />
+        <result column="processed_alerts" property="processedAlerts"/>
+        <result column="check_result" property="checkResult"/>
+    </resultMap>
+    <resultMap id="BaseResultMap4" type="com.qz.zframe.tally.vo.TallyDetailVO" >
+        <id column="equipment_belonging" property="equipmentBelonging" />
+        <result column="practitioner_name" property="practitionerName" />
+        <result column="architecture_name" property="architectureName" />
+        <result column="check_content" property="checkContent"/>
+        <result column="standard_judgment" property="standardJudgment"/>
+        <result column="check_result" property="checkResult"/>
+        <result column="finish_time" property="finishTime"/>
+        <result column="benchmark_date" property="benchmarkDate"/>
+        <result column="cycle" property="cycle"/>
+        <result column="cycle_unit" property="cycleUnit"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        record_id,route_id,practitioner_name,start_time,end_time,standard_quantity,record_number,alarm_number,processed_alerts
+    </sql>
+
+    <select id="findAllTallyRecord" resultMap="BaseResultMap2">
+        SELECT
+         tally_record.record_id,tally_record.route_id,tally_record.practitioner_name,tally_record.start_time,tally_record.end_time,
+         tally_record.standard_quantity,tally_record.record_number,tally_record.alarm_number,tally_record.processed_alerts,
+         tally_route.wind_id,tally_route.route_name
+        FROM tally_route,tally_record
+        WHERE 1=1
+        <if test="windId !=null">
+            and tally_route.wind_id=#{windId}
+        </if>
+        <if test="routeName !=null">
+            and tally_route.route_name=#{routeName}
+        </if>
+        <if test="practitioners !=null">
+            and tally_record.practitioner_name =#{practitioners}
+        </if>
+        <if test="startTime !=null">
+            and tally_record.start_time =#{startTime}
+        </if>
+        <if test="endTime !=null">
+            and tally_record.end_time =#{endTime}
+        </if>
+        and tally_route.route_id=tally_record.route_id
+    </select>
+
+    <select id="findAllTallyRecordVO" resultMap="BaseResultMap3">
+          SELECT tally_route.wind_id,tally_route.route_id,tally_route.route_name,
+          cycle.benchmark_date,cycle.cycle_unit,cycle.cycle,
+          tally_record.practitioner_name,tally_record.standard_quantity,
+          tally_record.record_number,tally_record.alarm_number,
+          tally_record.processed_alerts
+          FROM tally_route,cycle,tally_record
+          WHERE tally_route.route_id=cycle.route_id
+          AND tally_route.route_id=tally_record.route_id
+    </select>
+
+    <select id="findTallyDetailVOByRouteId" parameterType="string" resultMap="BaseResultMap4">
+        SELECT
+        tally_standard.equipment_belonging,tally_record.practitioner_name,org_architecture.architecture_name,
+        tally_standard.check_content,tally_standard.standard_judgment,
+        tally_record.check_result,
+        cycle.benchmark_date,cycle.cycle,cycle.cycle_unit
+        FROM tally_standard,tally_record,org_architecture,cycle,tally_route,route_user,isc_user,org_architecture_user
+        WHERE tally_route.route_id=#{routeId}
+        and tally_route.route_id=tally_standard.route_id
+        and tally_route.route_id=route_user.route_id
+        and route_user.user_id=isc_user.user_id
+        and isc_user.user_id=org_architecture_user.user_id
+        and org_architecture_user.architecture_id=org_architecture.architecture_id
+        and tally_route.route_id=tally_record.route_id
+        and tally_route.route_id=cycle.route_id
+    </select>
+
+</mapper>

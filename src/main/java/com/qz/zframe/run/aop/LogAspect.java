@@ -42,11 +42,10 @@ public class LogAspect {
         HttpServletRequest request = attributes.getRequest();
         
         //用户id
-        //String userId = currentUserService.getId();
-        maintainLog.setUserId("chen");
+        String userId = currentUserService.getId();
+        maintainLog.setUserId(userId);
         //用户名
-        //maintainLog.setUsername(currentUserService.getUsername());
-        maintainLog.setUsername("chq1");
+        maintainLog.setUsername(currentUserService.getUsername());
         //访问的url
         maintainLog.setUrl(request.getRequestURL().toString());
         //执行的方法

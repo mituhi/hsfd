@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper  namespace="com.qz.zframe.question.dao.QuestionFileMapper">
+<resultMap type="com.qz.zframe.question.entity.QuestionFile" id="BaseResultMap">
+    <id column="question_file_id" property="questionFileId" jdbcType="VARCHAR" />
+    <result column="question_id" property="questionId" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+</resultMap>
+<select id="select"  resultMap="BaseResultMap" parameterType="java.lang.String">
+   select  qf.*  from  question_file  qf  where qf.question_id=#{questionId,jdbcType=VARCHAR} 
+
+</select>
+
+<select id="selectFileId"  resultMap="BaseResultMap" parameterType="java.lang.String">
+   select  qf.*  from  question_file  qf  where qf.file_id=#{fileId,jdbcType=VARCHAR} 
+
+</select>
+
+<insert id="insert" parameterType="com.qz.zframe.question.entity.QuestionFile" >
+   insert into question_file  (question_file_id,question_id,file_id) 
+   values(#{questionFileId,jdbcType=VARCHAR},#{questionId,jdbcType=VARCHAR},#{fileId,jdbcType=VARCHAR})
+</insert>
+
+<!-- 根据文件id删除关联表中的数据 -->
+<delete id="delete"  parameterType="java.lang.String" >
+
+  delete  from  question_file  
+   <where> 
+      file_id  in
+   <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>   
+</where>
+</delete>
+</mapper>

@@ -13,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.qz.zframe.common.util.ErrorCode;
 import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.run.dao.ValueTimeMapper;
+import com.qz.zframe.run.entity.Shift;
 import com.qz.zframe.run.entity.ValueTime;
 import com.qz.zframe.run.entity.ValueTimeExample;
 import com.qz.zframe.run.service.ValueTimeService;
@@ -20,7 +21,7 @@ import com.qz.zframe.run.service.ValueTimeService;
 /**
  * <p>Title: ValueTimeServiceImpl</p>
  * <p>@Description: 值次实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月1日 下午12:46:49
  * @version:V1.0
  */
@@ -45,7 +46,13 @@ public class ValueTimeServiceImpl implements ValueTimeService {
 			PageHelper.startPage(pageNo, pageSize);
 			//查出记录
 			valueTimes =valueTimeMapper.selectByExample(example);
+		}else{
+			valueTimes =valueTimeMapper.selectByExample(example);
 		}
+		
+		/*for(ValueTime  vt:valueTimes) {
+			vt.setStatusName(statusName(vt.getStatus()));
+		}*/
 		return valueTimes;
 		
 	}
@@ -87,7 +94,16 @@ public class ValueTimeServiceImpl implements ValueTimeService {
 
 	@Override
 	public ResultEntity removeValueTimes(List<String> ids) {
-		return null;
+		
+		ResultEntity resultEntity = new ResultEntity();
+		
+		for (String id : ids) {
+			valueTimeMapper.deleteByPrimaryKey(id);
+		}
+		
+		resultEntity.setCode(ErrorCode.SUCCESS);
+		resultEntity.setMsg("执行成功");
+		return resultEntity;
 	}
 
 
@@ -115,30 +131,40 @@ public class ValueTimeServiceImpl implements ValueTimeService {
 
 		return resultEntity;
 	}
-
 	@Override
 	public ResultEntity getMaxSort() {
 		ResultEntity resultEntity = new ResultEntity();
 		//设置初始值为0
 		int sort = 0 ;
-		try {
-			 ValueTime valueTime = valueTimeMapper.selectMaxSort();
-			 sort = valueTime.getSort();
-		} catch (Exception e) {
-			//捕获异常：则为系统第一次录入返回1
-		}
-		resultEntity.setMsg((sort+1)+"");
-		resultEntity.setCode(ErrorCode.SUCCESS);
-		return resultEntity;
+			int value = valueTimeMapper.selectCount();
+			if(value==0) {
+				sort=1;
+				resultEntity.setCode(ErrorCode.SUCCESS);
+				resultEntity.setMsg("排序序号生成成功");
+				resultEntity.setData(sort);
+			}else {
+				sort=value+1;
+				ValueTime values= valueTimeMapper.selectSort(sort);
+				if(values!=null) {
+					sort=sort+1;
+				}
+				resultEntity.setCode(ErrorCode.SUCCESS);
+				resultEntity.setMsg("排序序号生成成功");
+				resultEntity.setData(sort);
+			}
+		  return resultEntity;
 	}
-
 
 	/**
 	 * 根据id查询字段
 	 */
 	@Override
 	public ValueTime getValueTimeById(String id) {
-		return valueTimeMapper.selectByPrimaryKey(id);
+		ValueTime valueTime= valueTimeMapper.selectByPrimaryKey(id);
+		/*if(valueTime!=null) {
+			valueTime.setStatusName(statusName(valueTime.getStatus()));
+		}*/
+		return  valueTime;
 	}
 
 
@@ -189,7 +215,13 @@ public class ValueTimeServiceImpl implements ValueTimeService {
 		return list;
 	}
 
-
+	public String statusName(String status) {
+		if("01".equals(status)) {
+		   return "启用";
+		}else {
+			return "停用";
+		}
+	}
 	
 
 }

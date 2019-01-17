@@ -3,13 +3,16 @@
 <mapper namespace="com.qz.zframe.run.dao.WorkClassificationMapper" >
   <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.WorkClassification" >
     <id column="classification_id" property="classificationId" jdbcType="VARCHAR" />
+    <result column="is_top" property="isTop" jdbcType="VARCHAR" />
+    <result column="superior_classification_id" property="superiorClassificationId" jdbcType="VARCHAR" />
     <result column="classification_code" property="classificationCode" jdbcType="VARCHAR" />
     <result column="classification_name" property="classificationName" jdbcType="VARCHAR" />
     <result column="task_properties" property="taskProperties" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_time" property="maintainTime" jdbcType="TIMESTAMP" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="fat_classification_id" property="fatClassificationId" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -71,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    classification_id, classification_code, classification_name, task_properties, status, 
-    user_id, create_time, fat_classification_id, remark
+    classification_id, is_top, superior_classification_id, classification_code, classification_name, 
+    task_properties, status, maintainer, maintain_time, creater, create_time, remark
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.WorkClassificationExample" >
     select
@@ -105,13 +108,15 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.run.entity.WorkClassification" >
-    insert into work_classification (classification_id, classification_code, 
-      classification_name, task_properties, status, 
-      user_id, create_time, fat_classification_id, 
+    insert into work_classification (classification_id, is_top, superior_classification_id, 
+      classification_code, classification_name, 
+      task_properties, status, maintainer, 
+      maintain_time, creater, create_time, 
       remark)
-    values (#{classificationId,jdbcType=VARCHAR}, #{classificationCode,jdbcType=VARCHAR}, 
-      #{classificationName,jdbcType=VARCHAR}, #{taskProperties,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{userId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{fatClassificationId,jdbcType=VARCHAR}, 
+    values (#{classificationId,jdbcType=VARCHAR}, #{isTop,jdbcType=VARCHAR}, #{superiorClassificationId,jdbcType=VARCHAR}, 
+      #{classificationCode,jdbcType=VARCHAR}, #{classificationName,jdbcType=VARCHAR}, 
+      #{taskProperties,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, 
+      #{maintainTime,jdbcType=TIMESTAMP}, #{creater,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.WorkClassification" >
@@ -119,6 +124,12 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="classificationId != null" >
         classification_id,
+      </if>
+      <if test="isTop != null" >
+        is_top,
+      </if>
+      <if test="superiorClassificationId != null" >
+        superior_classification_id,
       </if>
       <if test="classificationCode != null" >
         classification_code,
@@ -132,14 +143,17 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="userId != null" >
-        user_id,
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time,
+      </if>
+      <if test="creater != null" >
+        creater,
       </if>
       <if test="createTime != null" >
         create_time,
-      </if>
-      <if test="fatClassificationId != null" >
-        fat_classification_id,
       </if>
       <if test="remark != null" >
         remark,
@@ -148,6 +162,12 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="classificationId != null" >
         #{classificationId,jdbcType=VARCHAR},
+      </if>
+      <if test="isTop != null" >
+        #{isTop,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorClassificationId != null" >
+        #{superiorClassificationId,jdbcType=VARCHAR},
       </if>
       <if test="classificationCode != null" >
         #{classificationCode,jdbcType=VARCHAR},
@@ -161,14 +181,17 @@
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
       </if>
-      <if test="userId != null" >
-        #{userId,jdbcType=VARCHAR},
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        #{maintainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="fatClassificationId != null" >
-        #{fatClassificationId,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -187,6 +210,12 @@
       <if test="record.classificationId != null" >
         classification_id = #{record.classificationId,jdbcType=VARCHAR},
       </if>
+      <if test="record.isTop != null" >
+        is_top = #{record.isTop,jdbcType=VARCHAR},
+      </if>
+      <if test="record.superiorClassificationId != null" >
+        superior_classification_id = #{record.superiorClassificationId,jdbcType=VARCHAR},
+      </if>
       <if test="record.classificationCode != null" >
         classification_code = #{record.classificationCode,jdbcType=VARCHAR},
       </if>
@@ -199,14 +228,17 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
       </if>
-      <if test="record.userId != null" >
-        user_id = #{record.userId,jdbcType=VARCHAR},
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainTime != null" >
+        maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creater != null" >
+        creater = #{record.creater,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.fatClassificationId != null" >
-        fat_classification_id = #{record.fatClassificationId,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -219,13 +251,16 @@
   <update id="updateByExample" parameterType="map" >
     update work_classification
     set classification_id = #{record.classificationId,jdbcType=VARCHAR},
+      is_top = #{record.isTop,jdbcType=VARCHAR},
+      superior_classification_id = #{record.superiorClassificationId,jdbcType=VARCHAR},
       classification_code = #{record.classificationCode,jdbcType=VARCHAR},
       classification_name = #{record.classificationName,jdbcType=VARCHAR},
       task_properties = #{record.taskProperties,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
-      user_id = #{record.userId,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP},
+      creater = #{record.creater,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      fat_classification_id = #{record.fatClassificationId,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -234,6 +269,12 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.WorkClassification" >
     update work_classification
     <set >
+      <if test="isTop != null" >
+        is_top = #{isTop,jdbcType=VARCHAR},
+      </if>
+      <if test="superiorClassificationId != null" >
+        superior_classification_id = #{superiorClassificationId,jdbcType=VARCHAR},
+      </if>
       <if test="classificationCode != null" >
         classification_code = #{classificationCode,jdbcType=VARCHAR},
       </if>
@@ -246,14 +287,17 @@
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
       </if>
-      <if test="userId != null" >
-        user_id = #{userId,jdbcType=VARCHAR},
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time = #{maintainTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creater != null" >
+        creater = #{creater,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="fatClassificationId != null" >
-        fat_classification_id = #{fatClassificationId,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -263,13 +307,16 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.WorkClassification" >
     update work_classification
-    set classification_code = #{classificationCode,jdbcType=VARCHAR},
+    set is_top = #{isTop,jdbcType=VARCHAR},
+      superior_classification_id = #{superiorClassificationId,jdbcType=VARCHAR},
+      classification_code = #{classificationCode,jdbcType=VARCHAR},
       classification_name = #{classificationName,jdbcType=VARCHAR},
       task_properties = #{taskProperties,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
-      user_id = #{userId,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_time = #{maintainTime,jdbcType=TIMESTAMP},
+      creater = #{creater,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      fat_classification_id = #{fatClassificationId,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR}
     where classification_id = #{classificationId,jdbcType=VARCHAR}
   </update>

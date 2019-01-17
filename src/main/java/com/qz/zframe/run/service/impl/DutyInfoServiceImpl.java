@@ -15,7 +15,7 @@ import com.qz.zframe.run.service.DutyInfoService;
 /**
  * <p>Title: DutyInfoServiceImpl</p>
  * <p>@Description: 值班信息接口实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月8日 下午3:45:34
  * @version:V1.0
  */
@@ -42,6 +42,12 @@ public class DutyInfoServiceImpl implements DutyInfoService {
 		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("执行成功");
 		return resultEntity;
+	}
+
+
+	@Override
+	public void deleteDutyInfoById(String dutyInfoId) {
+		dutyInfoMapper.deleteByPrimaryKey(dutyInfoId);
 	}
 
 }

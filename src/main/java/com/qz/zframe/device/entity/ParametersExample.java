@@ -427,7 +427,7 @@ public class ParametersExample extends PageExample{
         }
 
         public Criteria andParameterNameLike(String value) {
-            addCriterion("parameter_name like", "%"+value+"%", "parameterName");
+            addCriterion("p.parameter_name like", "%"+value+"%", "parameterName");
             return (Criteria) this;
         }
 

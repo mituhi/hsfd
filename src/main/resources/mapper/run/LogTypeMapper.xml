@@ -3,11 +3,16 @@
 <mapper namespace="com.qz.zframe.run.dao.LogTypeMapper" >
   <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.LogType" >
     <id column="log_type_id" property="logTypeId" jdbcType="VARCHAR" />
+    <result column="wind_code" property="windCode" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
     <result column="department" property="department" jdbcType="VARCHAR" />
     <result column="log_type" property="logType" jdbcType="VARCHAR" />
     <result column="log_code" property="logCode" jdbcType="VARCHAR" />
     <result column="log_name" property="logName" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="status_name" property="statusName" jdbcType="TIMESTAMP" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_time" property="maintainTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,19 +73,35 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    log_type_id, department, log_type, log_code, log_name, status
+    log_type_id, wind_code, department, log_type, log_code, log_name, status, maintainer, 
+    maintain_time
+  </sql>
+
+  <sql id="Get_Column_List" >
+    a.log_type_id as log_type_id, a.wind_code as wind_code, a.department as department, a.log_type as log_type,
+    a.log_code as log_code, a.log_name as log_name, a.status as status, a.maintainer as maintainer,
+    a.maintain_time as maintain_time,b.architecture_name as wind_name,e.title as status_name
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.LogTypeExample" >
     select
-    <if test="distinct" >
+    <include refid="Get_Column_List"/>
+    from
+    (select
+    <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
+    <include refid="Base_Column_List"/>
     from log_type
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
     </if>
-    <if test="orderByClause != null" >
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>) a
+    left join org_architecture b on (a.wind_code = b.architecture_code and architecture_type = '02')
+    left join sp_code_type d on d.name = 'LOG_TYPE_STATUS'
+    left join sp_code e on (e.code_type_id = d.id and e.name = a.status)
+    <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
@@ -101,18 +122,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.run.entity.LogType" >
-    insert into log_type (log_type_id, department, log_type, 
-      log_code, log_name, status
+    insert into log_type (log_type_id, wind_code, department, 
+      log_type, log_code, log_name, 
+      status, maintainer, maintain_time
       )
-    values (#{logTypeId,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{logType,jdbcType=VARCHAR}, 
-      #{logCode,jdbcType=VARCHAR}, #{logName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}
+    values (#{logTypeId,jdbcType=VARCHAR}, #{windCode,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{logType,jdbcType=VARCHAR}, #{logCode,jdbcType=VARCHAR}, #{logName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.LogType" >
     insert into log_type
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="logTypeId != null" >
+      <if test="logTypeId != null and logTypeId != ''" >
         log_type_id,
+      </if>
+      <if test="windCode != null" >
+        wind_code,
       </if>
       <if test="department != null" >
         department,
@@ -120,7 +146,7 @@
       <if test="logType != null" >
         log_type,
       </if>
-      <if test="logCode != null" >
+      <if test="logCode != null and logCode != ''" >
         log_code,
       </if>
       <if test="logName != null" >
@@ -129,10 +155,19 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="maintainer != null" >
+        maintainer,
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="logTypeId != null" >
+      <if test="logTypeId != null and logTypeId != ''" >
         #{logTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="windCode != null" >
+        #{windCode,jdbcType=VARCHAR},
       </if>
       <if test="department != null" >
         #{department,jdbcType=VARCHAR},
@@ -140,7 +175,7 @@
       <if test="logType != null" >
         #{logType,jdbcType=VARCHAR},
       </if>
-      <if test="logCode != null" >
+      <if test="logCode != null and logCode != ''" >
         #{logCode,jdbcType=VARCHAR},
       </if>
       <if test="logName != null" >
@@ -148,6 +183,12 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainer != null" >
+        #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        #{maintainTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -162,6 +203,9 @@
     <set >
       <if test="record.logTypeId != null" >
         log_type_id = #{record.logTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windCode != null" >
+        wind_code = #{record.windCode,jdbcType=VARCHAR},
       </if>
       <if test="record.department != null" >
         department = #{record.department,jdbcType=VARCHAR},
@@ -178,6 +222,12 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
       </if>
+      <if test="record.maintainer != null" >
+        maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maintainTime != null" >
+        maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -186,11 +236,14 @@
   <update id="updateByExample" parameterType="map" >
     update log_type
     set log_type_id = #{record.logTypeId,jdbcType=VARCHAR},
+      wind_code = #{record.windCode,jdbcType=VARCHAR},
       department = #{record.department,jdbcType=VARCHAR},
       log_type = #{record.logType,jdbcType=VARCHAR},
       log_code = #{record.logCode,jdbcType=VARCHAR},
       log_name = #{record.logName,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR}
+      status = #{record.status,jdbcType=VARCHAR},
+      maintainer = #{record.maintainer,jdbcType=VARCHAR},
+      maintain_time = #{record.maintainTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -198,13 +251,16 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.LogType" >
     update log_type
     <set >
+      <if test="windCode != null" >
+        wind_code = #{windCode,jdbcType=VARCHAR},
+      </if>
       <if test="department != null" >
         department = #{department,jdbcType=VARCHAR},
       </if>
       <if test="logType != null" >
         log_type = #{logType,jdbcType=VARCHAR},
       </if>
-      <if test="logCode != null" >
+      <if test="logCode != null and logCode != ''" >
         log_code = #{logCode,jdbcType=VARCHAR},
       </if>
       <if test="logName != null" >
@@ -213,16 +269,25 @@
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
       </if>
+      <if test="maintainer != null" >
+        maintainer = #{maintainer,jdbcType=VARCHAR},
+      </if>
+      <if test="maintainTime != null" >
+        maintain_time = #{maintainTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where log_type_id = #{logTypeId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.LogType" >
     update log_type
-    set department = #{department,jdbcType=VARCHAR},
+    set wind_code = #{windCode,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
       log_type = #{logType,jdbcType=VARCHAR},
       log_code = #{logCode,jdbcType=VARCHAR},
       log_name = #{logName,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR}
+      status = #{status,jdbcType=VARCHAR},
+      maintainer = #{maintainer,jdbcType=VARCHAR},
+      maintain_time = #{maintainTime,jdbcType=TIMESTAMP}
     where log_type_id = #{logTypeId,jdbcType=VARCHAR}
   </update>
 </mapper>

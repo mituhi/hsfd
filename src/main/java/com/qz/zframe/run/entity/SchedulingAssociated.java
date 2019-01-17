@@ -6,29 +6,31 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class SchedulingAssociated {
 	@ApiModelProperty(value="排班关联表id",name="id")
-    private String id;
+    private String associatedId;
 
 	@ApiModelProperty(value="排版管理表id",name="schedulingManagementId")
     private String schedulingManagementId;
 
-	@ApiModelProperty(value="排班规则表id",name="schedulingRuleId")
+	@ApiModelProperty(value="排班规则表id",name="schedulingRuleId",required = true)
     private String schedulingRuleId;
 
-	@ApiModelProperty(value="开始时间",name="startTime")
+	@ApiModelProperty(value="开始时间",name="startTime",required = true)
     private Date startTime;
 
-	@ApiModelProperty(value="结束时间",name="endTime")
+	@ApiModelProperty(value="结束时间",name="endTime",required = true)
     private Date endTime;
 
-    public String getId() {
-        return id;
-    }
+    
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
+    public String getAssociatedId() {
+		return associatedId;
+	}
 
-    public String getSchedulingManagementId() {
+	public void setAssociatedId(String associatedId) {
+		this.associatedId = associatedId;
+	}
+
+	public String getSchedulingManagementId() {
         return schedulingManagementId;
     }
 

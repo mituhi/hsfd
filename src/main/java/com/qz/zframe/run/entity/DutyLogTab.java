@@ -1,6 +1,9 @@
 package com.qz.zframe.run.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 public class DutyLogTab {
 	
@@ -15,6 +18,13 @@ public class DutyLogTab {
 
 	@ApiModelProperty(value="值班日志TAB表Url链接",name="url")
     private String url;
+
+    @ApiModelProperty(value="值班日志TAB表Url链接",name="url")
+	private String maintainer;
+
+    @ApiModelProperty(value="值班日志TAB表Url链接",name="url")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+	private Date maintainTime;
 
     public String getTabId() {
         return tabId;
@@ -46,5 +56,21 @@ public class DutyLogTab {
 
     public void setUrl(String url) {
         this.url = url == null ? null : url.trim();
+    }
+
+    public String getMaintainer() {
+        return maintainer;
+    }
+
+    public void setMaintainer(String maintainer) {
+        this.maintainer = maintainer;
+    }
+
+    public Date getMaintainTime() {
+        return maintainTime;
+    }
+
+    public void setMaintainTime(Date maintainTime) {
+        this.maintainTime = maintainTime;
     }
 }

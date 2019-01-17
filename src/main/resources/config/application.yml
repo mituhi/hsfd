@@ -1,6 +1,6 @@
 server:
   display-name: hsfd
-  port: 8000
+  port: 18080
   servlet.context-path: /hsfd
 
 
@@ -27,7 +27,30 @@ jwt:
       path: login
       refresh: refresh
       
-mybatis:
-  mapper-locations: classpath:mapper/*/*.xml
-  type-aliases-package: com.qz.zframe.*.*.entity
+  
+multipart:
+  maxFileSize: 1024MB
+  maxRequestSize: 1024MB
 
+#本地开发
+ftp:
+  type: sftp
+  hostname: 47.96.169.132
+  port: 22
+  username: root
+  password: LFa01PjLhOj2xXlr
+  rootPath: /apps/hsfd/file
+
+#华东院部署
+#ftp:
+#  type: sftp
+#  hostname: 10.215.142.139
+#  port: 22
+#  username: project
+#  password: PROpro@2019
+#  rootPath: /data/hsfd/file
+
+#logo图片路径
+logoSite: C:\Users\45476\Desktop\1\qm2.jpg
+#生成后图片的输出地址
+noteSite: C:\Users\45476\Desktop\1\新建文件夹\

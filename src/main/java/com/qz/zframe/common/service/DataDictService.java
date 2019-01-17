@@ -16,14 +16,14 @@ public interface DataDictService {
 	 * @return
 	 */
 	PageResultEntity queryCode(String codeType, Integer page, Integer size);
-
+	
 	/**
 	 * 新增及修改标准代码分类
 	 * @param dataDictType
 	 * @return
 	 * @throws Exception 
 	 */
-	DataDictType addAndUpdateCodeType(DataDictType dataDictType) throws Exception;
+	PageResultEntity addAndUpdateCodeType(DataDictType dataDictType) throws Exception;
 
 	/**
 	 * 删除标准代码分类及其子类
@@ -31,7 +31,7 @@ public interface DataDictService {
 	 * @return
 	 * @throws Exception 
 	 */
-	Integer deleteCodeType(List<String> ids) throws Exception;
+	PageResultEntity deleteCodeType(List<String> ids) throws Exception;
 	
 	/**
 	 * 删除标准代码
@@ -39,7 +39,7 @@ public interface DataDictService {
 	 * @return
 	 * @throws Exception 
 	 */
-	Integer deleteCode(List<String> ids) throws Exception;
+	PageResultEntity deleteCode(List<String> ids) throws Exception;
 
 	/**
 	 * 根据类型查询标准代码分类
@@ -56,7 +56,7 @@ public interface DataDictService {
 	 * @return
 	 * @throws Exception 
 	 */
-	DataDict addAndUpdateCode(DataDict dataDict) throws Exception;
+	PageResultEntity addAndUpdateCode(DataDict dataDict) throws Exception;
 
 	/**
 	 * 根据id查询编码
@@ -74,4 +74,27 @@ public interface DataDictService {
 	 */
 	DataDictType queryCodeTypeById(String id) throws Exception;
 
+	/**
+	 * 根据标准代码类型查询标准代码
+	 * @param codeTypes
+	 * @return
+	 * @throws Exception 
+	 */
+	List<DataDict> findDataDictsByCodeType(List<String> codeTypes) throws Exception;
+
+	/**
+	 * 根据类型查询编码列表
+	 * @param codeType
+	 * @return
+	 */
+	List<DataDict> queryCodeList(String codeType);
+	
+	/**
+	 * 根据分类编码和资源id查询编码
+	 * @param codeType 分类编码
+	 * @param name 资源id
+	 * @return
+	 * @throws Exception 
+	 */
+	DataDict findDataDictByCodeAndType(String codeType, String name) throws Exception;
 }

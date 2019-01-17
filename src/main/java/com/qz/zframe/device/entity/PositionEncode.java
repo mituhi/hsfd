@@ -1,6 +1,11 @@
 package com.qz.zframe.device.entity;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,6 +26,10 @@ public class PositionEncode {
 	@ApiModelProperty(name = "superiorPosition", value = "上级位置", required = true)
 
 	private String superiorPosition;
+	@ApiModelProperty(name = "superiorPositionName", value = "上级位置名称", required = true)
+
+	private String superiorPositionName;
+	
 
 	@ApiModelProperty(name = "windId", value = "风电场", required = true)
 
@@ -62,7 +71,7 @@ public class PositionEncode {
 	@Transient
 	private  String windName;
 	
-	@ApiModelProperty(name = "isToplevel", value = "机组名称", required = false)
+	@ApiModelProperty(name = "crewName", value = "机组名称", required = false)
 	@Transient
 	private  String crewName;
 	
@@ -73,6 +82,31 @@ public class PositionEncode {
 	@ApiModelProperty(name = "isTopLevelName", value = "是否顶级名称", required = false)
 	@Transient
 	private String isToplevelName;
+	
+	@ApiModelProperty(name = "companyCodeName", value = "公司代码名称", required = false)
+	@Transient
+	private String companyCodeName;
+	
+	@ApiModelProperty(name = "maintenanceTeamName", value = "维护班组名称", required = false)
+	@Transient
+	private String maintenanceTeamName;
+	
+	@ApiModelProperty(name = "costCenterName", value = "成本中心名称", required = false)
+	@Transient
+	private String costCenterName;
+	
+	@ApiModelProperty(name = "departmentName", value = "部门", required = false)
+	@Transient
+	private String departmentName;
+
+	
+	@ApiModelProperty(name = "hierarchyName", value = "层级名称", required = false)
+	@Transient
+	private String hierarchyName;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+	private Date  createTime;
+	@ApiModelProperty(name = "positionEncodes", value = "子数据", required = false)
+	private List<PositionEncode> positionEncodes;
 
 	public String getPositionId() {
 		return positionId;
@@ -106,12 +140,14 @@ public class PositionEncode {
 		this.superiorPosition = superiorPosition == null ? null : superiorPosition.trim();
 	}
 
+	
+
 	public String getWindId() {
 		return windId;
 	}
 
 	public void setWindId(String windId) {
-		this.windId = windId == null ? null : windId.trim();
+		this.windId = windId;
 	}
 
 	public String getDepartment() {
@@ -209,5 +245,70 @@ public class PositionEncode {
 	public void setIsToplevelName(String isToplevelName) {
 		this.isToplevelName = isToplevelName;
 	}
+	@Transient
+	public String getCompanyCodeName() {
+		return companyCodeName;
+	}
+	@Transient
+	public void setCompanyCodeName(String companyCodeName) {
+		this.companyCodeName = companyCodeName;
+	}
+	@Transient
+	public String getMaintenanceTeamName() {
+		return maintenanceTeamName;
+	}
+	@Transient
+	public void setMaintenanceTeamName(String maintenanceTeamName) {
+		this.maintenanceTeamName = maintenanceTeamName;
+	}
+	@Transient
+	public String getCostCenterName() {
+		return costCenterName;
+	}
+	@Transient
+	public void setCostCenterName(String costCenterName) {
+		this.costCenterName = costCenterName;
+	}
+	@Transient
+	public String getHierarchyName() {
+		return hierarchyName;
+	}
+	@Transient
+	public void setHierarchyName(String hierarchyName) {
+		this.hierarchyName = hierarchyName;
+	}
 
+	public String getSuperiorPositionName() {
+		return superiorPositionName;
+	}
+
+	public void setSuperiorPositionName(String superiorPositionName) {
+		this.superiorPositionName = superiorPositionName;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	@Transient
+	public String getDepartmentName() {
+		return departmentName;
+	}
+	@Transient
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	public List<PositionEncode> getPositionEncodes() {
+		return positionEncodes;
+	}
+
+	public void setPositionEncodes(List<PositionEncode> positionEncodes) {
+		this.positionEncodes = positionEncodes;
+	}
+  
+	
 }

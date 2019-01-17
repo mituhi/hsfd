@@ -1,7 +1,8 @@
 package com.qz.zframe.device.entity;
 
+import java.util.Date;
 import javax.persistence.Transient;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 public class EquipmentClassification {
 	@ApiModelProperty(name = "equipmentId", value = "设备分类id", required = false)
@@ -49,10 +50,21 @@ public class EquipmentClassification {
 	@Transient
 	private String statusName;
 	
-	@ApiModelProperty(name = "isTopLevelName", value = "是否顶级名称", required = false)
+	@ApiModelProperty(name = "isToplevelName", value = "是否顶级名称", required = false)
 	@Transient
 	private String isToplevelName;
-
+	
+	@Transient
+	private  Parameters  runParameters;
+	
+	@Transient
+	private  Parameters  outputParameters;
+     
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
+	private  Date  createTime;
+	
+	
+	
 	public String getEquipmentId() {
 		return equipmentId;
 	}
@@ -148,13 +160,39 @@ public class EquipmentClassification {
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
 	}
+	
 	@Transient
 	public String getIsToplevelName() {
 		return isToplevelName;
 	}
 	@Transient
-	public void setIsTopLevelName(String isToplevelName) {
+	public void setIsToplevelName(String isToplevelName) {
 		this.isToplevelName = isToplevelName;
 	}
 
+	@Transient
+	public Parameters getRunParameters() {
+		return runParameters;
+	}
+	@Transient
+	public void setRunParameters(Parameters runParameters) {
+		this.runParameters = runParameters;
+	}
+	@Transient
+	public Parameters getOutputParameters() {
+		return outputParameters;
+	}
+	@Transient
+	public void setOutputParameters(Parameters outputParameters) {
+		this.outputParameters = outputParameters;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	
 }

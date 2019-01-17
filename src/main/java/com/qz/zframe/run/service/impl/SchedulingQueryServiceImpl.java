@@ -26,7 +26,17 @@ public class SchedulingQueryServiceImpl implements SchedulingQueryService {
 		List<SchedulingQuery> list = schedulingQueryMapper.selectSchedulingQuery(schedulingQuery);
 		return list;
 	}
-
+	
+	
+	
+	@Override
+	public List<SchedulingQuery> listSchedulingQueryWithUserName(SchedulingQuery schedulingQuery) {
+		List<SchedulingQuery> list = schedulingQueryMapper.selectSchedulingQueryWithUserName(schedulingQuery);
+		return list;
+	}
+	
+	
+	
 
 	/**
 	 * 值班人员修改首页
@@ -46,5 +56,8 @@ public class SchedulingQueryServiceImpl implements SchedulingQueryService {
 		schedulingQuery.setUserId(userId);
 		return schedulingQueryMapper.updateOperator(schedulingQuery);
 	}
+
+
+
 
 }

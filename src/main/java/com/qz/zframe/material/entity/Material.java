@@ -26,18 +26,18 @@ public class Material implements Serializable{
 	@ApiModelProperty(name="materialId",value="物资id",required=true)
 	@JsonView({ ListView.class })
 	private String materialId;
-
 	
-	@ApiModelProperty(name="materialCode",value="物资编码",required=true)
-	@JsonView({ ListView.class })
-    private String materialCode;
-
 	
 	@ApiModelProperty(name="materialName",value="物资名称",required=true)
 	@JsonView({ ListView.class })
     private String materialName;
 
 	
+	@ApiModelProperty(name="materialCode",value="物资编码",required=true)
+	@JsonView({ ListView.class })
+    private String materialCode;
+
+
 	@ApiModelProperty(name="specifications",value="型号规格",required=true)
 	@JsonView({ ListView.class })
     private String specifications;
@@ -58,13 +58,17 @@ public class Material implements Serializable{
     private String materialGroupName;
 
     
-	@ApiModelProperty(name="materialClassifyId",value="物资分类",required=true)
+	@ApiModelProperty(name="materialClassifyId",value="物资分类id",required=true)
     private String materialClassifyId;
     
     
 	@ApiModelProperty(name="materialClassifyName",value="物资分类名称",required=false)
     @JsonView({ ListView.class })
     private String materialClassifyName;
+	
+	@ApiModelProperty(name="materialClassifyDescribe",value="物资分类描述",required=false)
+    @JsonView({ ListView.class })
+    private String materialClassifyDescribe;
 
    
 	@ApiModelProperty(name="status",value="状态，01启用，02停用",required=true)
@@ -83,9 +87,13 @@ public class Material implements Serializable{
 	@ApiModelProperty(name="materialTexture",value="材质",required=false)
     private String materialTexture;
 
-	@ApiModelProperty(name="measuringUnit",value="基本计量单位",required=true)
-    @JsonView({ ListView.class })
+	@ApiModelProperty(name="measuringUnit",value="基本计量单位id",required=true)
     private String measuringUnit;
+	
+	
+	@ApiModelProperty(name="measuringUnitName",value="基本计量单位名称",required=true)
+	@JsonView({ ListView.class })
+	private String measuringUnitName;
 
    
     @ApiModelProperty(name="supplierId",value="供应商id",required=true)
@@ -96,12 +104,12 @@ public class Material implements Serializable{
     private String supplierName;
 
     
-    @ApiModelProperty(name="windId",value="风电场id",required=true)
-    private String windId;
+    @ApiModelProperty(name="architectureCode",value="风电场编码",required=true)
+    private String architectureCode;
     
    
-    @ApiModelProperty(name="windName",value="风电场名称",required=true)
-    private String windName;
+    @ApiModelProperty(name="architectureName",value="风电场名称",required=true)
+    private String architectureName;
 
     
     @ApiModelProperty(name="isGuarantee",value="是否有保质期，01时，02否",required=true)
@@ -137,7 +145,7 @@ public class Material implements Serializable{
     private Integer currentStock;
 
     @ApiModelProperty(name="averagePrice",value="移动平均价",required=false)
-    private BigDecimal averagePrice;
+    private BigDecimal averagePrice=BigDecimal.ZERO;
 
     private String isDelete;
 
@@ -152,6 +160,9 @@ public class Material implements Serializable{
     private String extend3;
 
     private String extend4;
+    
+    @ApiModelProperty(name="nameAndDescribe",value="物资分类+描述拼接",required=false)
+    private String nameAndDescribe;
 
     public String getMaterialId() {
         return materialId;
@@ -255,14 +266,6 @@ public class Material implements Serializable{
 
     public void setSupplierId(String supplierId) {
         this.supplierId = supplierId == null ? null : supplierId.trim();
-    }
-
-    public String getWindId() {
-        return windId;
-    }
-
-    public void setWindId(String windId) {
-        this.windId = windId == null ? null : windId.trim();
     }
 
     public String getIsGuarantee() {
@@ -417,13 +420,46 @@ public class Material implements Serializable{
 		this.supplierName = supplierName;
 	}
 
-	public String getWindName() {
-		return windName;
+	public String getMeasuringUnitName() {
+		return measuringUnitName;
 	}
 
-	public void setWindName(String windName) {
-		this.windName = windName;
+	public void setMeasuringUnitName(String measuringUnitName) {
+		this.measuringUnitName = measuringUnitName;
 	}
-    
+
+	public String getArchitectureCode() {
+		return architectureCode;
+	}
+
+	public void setArchitectureCode(String architectureCode) {
+		this.architectureCode = architectureCode;
+	}
+
+	public String getArchitectureName() {
+		return architectureName;
+	}
+
+	public void setArchitectureName(String architectureName) {
+		this.architectureName = architectureName;
+	}
+
+	public String getMaterialClassifyDescribe() {
+		return materialClassifyDescribe;
+	}
+
+	public void setMaterialClassifyDescribe(String materialClassifyDescribe) {
+		this.materialClassifyDescribe = materialClassifyDescribe;
+	}
+
+	public String getNameAndDescribe() {
+		return nameAndDescribe;
+	}
+
+	public void setNameAndDescribe(String nameAndDescribe) {
+		this.nameAndDescribe = nameAndDescribe;
+	}   
+	
+	
     
 }

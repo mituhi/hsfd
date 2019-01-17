@@ -8,7 +8,7 @@ import com.qz.zframe.run.entity.ImportantMatterExample;
 /**
  * <p>Title: ImportantMatterService</p>
  * <p>@Description:重要事项登记表接口声明  </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月7日 下午4:57:25
  * @version:V1.0
  */

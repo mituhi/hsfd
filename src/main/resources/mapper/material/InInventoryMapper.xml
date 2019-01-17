@@ -7,11 +7,9 @@
     <result column="goods_described" property="goodsDescribed" jdbcType="VARCHAR" />
     <result column="stock_add_id" property="stockAddId" jdbcType="VARCHAR" />
     <result column="stock_add_name" property="stockAddName" jdbcType="VARCHAR" />
-    <result column="goods_type" property="goodsTypeId" jdbcType="VARCHAR" />
+    <result column="goods_type" property="typeCode" jdbcType="VARCHAR" />
     <result column="goodsTypeName" property="goodsTypeName" jdbcType="VARCHAR" />
     <result column="in_inventory_time" property="inInventoryTime" jdbcType="DATE" />
-    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
-    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
     <result column="contract_number" property="contractNumber" jdbcType="VARCHAR" />
     <result column="company_id" property="companyId" jdbcType="VARCHAR" />
     <result column="in_inventory_type" property="inInventoryType" jdbcType="VARCHAR" />
@@ -22,6 +20,10 @@
     <result column="supplier_id" property="supplierId" jdbcType="VARCHAR" />
     <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
     <result column="user_name" property="createName" jdbcType="VARCHAR" />
+    <result column="approval_opinion" property="approvalOpinion" jdbcType="VARCHAR" />  
+    <result column="architecture_id" property="architectureId" jdbcType="VARCHAR" />
+    <result column="architecture_name" property="architectureName" jdbcType="VARCHAR" />
+    <result column="companyName" property="companyName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Pagination_Sql">
 		<if test="isPage == 1">
@@ -94,9 +96,13 @@
     status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.InInventoryExample" >
-    select a.*,b.wind_name,c.stock_add_name,d.supplier_name,e.user_name,f.type_name as goodsTypeName  from in_inventory a left join wind_field b on a.wind_id=b.wind_id
-    left join stock_address c on a.stock_add_id = c.stock_add_id left join supplier d on a.supplier_id=d.supplier_id
-    left join isc_user e on a.creater=e.user_id left join storehouse_type f on a.goods_type=f.type_id
+    select distinct a.*,b.architecture_name,c.stock_add_name,d.supplier_name,e.user_name,f.type_name as goodsTypeName,g.architecture_name as companyName
+    from in_inventory a
+    left join org_architecture b on a.architecture_id=b.architecture_id 
+    left join stock_address c on a.stock_add_id = c.stock_add_id
+    left join supplier d on a.supplier_id=d.supplier_id
+    left join isc_user e on a.creater=e.user_id left join storehouse_type f on a.goods_type=f.type_code
+    left join org_architecture g on a.company_id=g.architecture_id
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -105,11 +111,25 @@
     </if>
     <include refid="Pagination_Sql" />
   </select>
+  <select id="countByExample" parameterType="com.qz.zframe.material.entity.InInventoryExample" resultType="java.lang.Integer" >
+    select count(distinct a.in_inventory_id) from in_inventory a  left join org_architecture b on a.architecture_id=b.architecture_id
+    left join stock_address c on a.stock_add_id = c.stock_add_id
+    left join supplier d on a.supplier_id=d.supplier_id
+    left join isc_user e on a.creater=e.user_id left join storehouse_type f on a.goods_type=f.type_code
+    left join org_architecture g on a.company_id=g.architecture_id
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
-    <include refid="Base_Column_List" />
-    from in_inventory
-    where in_inventory_id = #{inInventoryId,jdbcType=VARCHAR}
+   select distinct a.*,b.architecture_name,c.stock_add_name,d.supplier_name,e.user_name,f.type_name as goodsTypeName,g.architecture_name as companyName
+    from in_inventory a
+    left join org_architecture b on a.architecture_id=b.architecture_id 
+    left join stock_address c on a.stock_add_id = c.stock_add_id
+    left join supplier d on a.supplier_id=d.supplier_id
+    left join isc_user e on a.creater=e.user_id left join storehouse_type f on a.goods_type=f.type_code
+    left join org_architecture g on a.company_id=g.architecture_id
+    where a.in_inventory_id = #{inInventoryId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from in_inventory
@@ -124,13 +144,13 @@
   <insert id="insert" parameterType="com.qz.zframe.material.entity.InInventory" >
     insert into in_inventory (in_inventory_id, in_inventory_order, 
       goods_described, stock_add_id, goods_type, 
-      in_inventory_time, wind_id, contract_number, 
+      in_inventory_time, architecture_id, contract_number, 
       company_id, in_inventory_type, is_delete, 
       creater, create_time, status
       )
     values (#{inInventoryId,jdbcType=VARCHAR}, #{inInventoryOrder,jdbcType=VARCHAR}, 
-      #{goodsDescribed,jdbcType=VARCHAR}, #{stockAddId,jdbcType=VARCHAR}, #{goodsTypeId,jdbcType=VARCHAR}, 
-      #{inInventoryTime,jdbcType=DATE}, #{windId,jdbcType=VARCHAR}, #{contractNumber,jdbcType=VARCHAR}, 
+      #{goodsDescribed,jdbcType=VARCHAR}, #{stockAddId,jdbcType=VARCHAR}, #{typeCode,jdbcType=VARCHAR},
+      #{inInventoryTime,jdbcType=DATE}, #{architectureId,jdbcType=VARCHAR}, #{contractNumber,jdbcType=VARCHAR}, 
       #{companyId,jdbcType=VARCHAR}, #{inInventoryType,jdbcType=VARCHAR}, #{isDelete,jdbcType=VARCHAR}, 
       #{creater,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
       )
@@ -150,14 +170,14 @@
       <if test="stockAddId != null" >
         stock_add_id,
       </if>
-      <if test="goodsTypeId != null" >
+      <if test="typeCode != null" >
         goods_type,
       </if>
       <if test="inInventoryTime != null" >
         in_inventory_time,
       </if>
-      <if test="windId != null" >
-        wind_id,
+      <if test="architectureId != null" >
+        architecture_id,
       </if>
       <if test="contractNumber != null" >
         contract_number,
@@ -174,7 +194,9 @@
       <if test="creater != null" >
         creater,
       </if>
+      <if test="createTime !=null">
         create_time,
+      </if> 
       <if test="status != null" >
         status,
       </if>
@@ -195,14 +217,14 @@
       <if test="stockAddId != null" >
         #{stockAddId,jdbcType=VARCHAR},
       </if>
-      <if test="goodsTypeId != null" >
-        #{goodsTypeId,jdbcType=VARCHAR},
+      <if test="typeCode != null" >
+        #{typeCode,jdbcType=VARCHAR},
       </if>
       <if test="inInventoryTime != null" >
         #{inInventoryTime,jdbcType=DATE},
       </if>
-      <if test="windId != null" >
-        #{windId,jdbcType=VARCHAR},
+      <if test="architectureId != null" >
+        #{architectureId,jdbcType=VARCHAR},
       </if>
       <if test="contractNumber != null" >
         #{contractNumber,jdbcType=VARCHAR},
@@ -219,7 +241,9 @@
       <if test="creater != null" >
         #{creater,jdbcType=VARCHAR},
       </if>
-     now(),
+     <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
       </if>
@@ -228,14 +252,8 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.qz.zframe.material.entity.InInventoryExample" resultType="java.lang.Integer" >
-    select count(*) from in_inventory a
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update in_inventory
+    update in_inventory a
     <set >
       <if test="record.inInventoryId != null" >
         in_inventory_id = #{record.inInventoryId,jdbcType=VARCHAR},
@@ -249,14 +267,14 @@
       <if test="record.stockAddId != null" >
         stock_add_id = #{record.stockAddId,jdbcType=VARCHAR},
       </if>
-      <if test="record.goodsTypeId != null" >
-        goods_type = #{record.goodsTypeId,jdbcType=VARCHAR},
+      <if test="record.typeCode != null" >
+        goods_type = #{record.typeCode,jdbcType=VARCHAR},
       </if>
       <if test="record.inInventoryTime != null" >
         in_inventory_time = #{record.inInventoryTime,jdbcType=DATE},
       </if>
-      <if test="record.windId != null" >
-        wind_id = #{record.windId,jdbcType=VARCHAR},
+      <if test="record.architectureId != null" >
+        architecture_id = #{record.architectureId,jdbcType=VARCHAR},
       </if>
       <if test="record.contractNumber != null" >
         contract_number = #{record.contractNumber,jdbcType=VARCHAR},
@@ -282,6 +300,9 @@
        <if test="record.supplierId != null" >
         supplier_id = #{record.supplierId,jdbcType=VARCHAR},
       </if>
+      <if test="record.approvalOpinion != null" >
+        approval_opinion = #{record.approvalOpinion,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -293,7 +314,7 @@
       in_inventory_order = #{record.inInventoryOrder,jdbcType=VARCHAR},
       goods_described = #{record.goodsDescribed,jdbcType=VARCHAR},
       stock_add_id = #{record.stockAddId,jdbcType=VARCHAR},
-      goods_type = #{record.goodsTypeId,jdbcType=VARCHAR},
+      goods_type = #{record.typeCode,jdbcType=VARCHAR},
       in_inventory_time = #{record.inInventoryTime,jdbcType=DATE},
       wind_id = #{record.windId,jdbcType=INTEGER},
       contract_number = #{record.contractNumber,jdbcType=VARCHAR},
@@ -319,14 +340,14 @@
       <if test="stockAddId != null" >
         stock_add_id = #{stockAddId,jdbcType=VARCHAR},
       </if>
-      <if test="goodsTypeId != null" >
-        goods_type = #{goodsTypeId,jdbcType=VARCHAR},
+      <if test="typeCode != null" >
+        goods_type = #{typeCode,jdbcType=VARCHAR},
       </if>
       <if test="inInventoryTime != null" >
         in_inventory_time = #{inInventoryTime,jdbcType=DATE},
       </if>
-      <if test="windId != null" >
-        wind_id = #{windId,jdbcType=VARCHAR},
+      <if test="architectureId != null" >
+        architecture_id = #{architectureId,jdbcType=VARCHAR},
       </if>
       <if test="contractNumber != null" >
         contract_number = #{contractNumber,jdbcType=VARCHAR},
@@ -352,7 +373,9 @@
       <if test="supplierId != null" >
         supplier_id = #{supplierId,jdbcType=VARCHAR},
       </if>
-      
+       <if test="approvalOpinion != null" >
+        approval_opinion = #{approvalOpinion,jdbcType=VARCHAR},
+      </if>  
     </set>
     where in_inventory_id = #{inInventoryId,jdbcType=VARCHAR}
   </update>
@@ -361,7 +384,7 @@
     set in_inventory_order = #{inInventoryOrder,jdbcType=VARCHAR},
       goods_described = #{goodsDescribed,jdbcType=VARCHAR},
       stock_add_id = #{stockAddId,jdbcType=VARCHAR},
-      goods_type = #{goodsTypeId,jdbcType=VARCHAR},
+      goods_type = #{typeCode,jdbcType=VARCHAR},
       in_inventory_time = #{inInventoryTime,jdbcType=DATE},
       wind_id = #{windId,jdbcType=INTEGER},
       contract_number = #{contractNumber,jdbcType=VARCHAR},
@@ -382,9 +405,16 @@
   <delete id="deleteByIds" parameterType="java.util.List">
          delete from in_inventory where in_inventory_id in
          <foreach item="inInventoryIds" collection="list" open="(" close=")" separator=",">
-             #{inInventoryIds}
+           #{inInventoryIds}
          </foreach>
  </delete>
   
+  <select id="getMaxInInventoryOrder" resultType="java.lang.String"  parameterType= "java.lang.String">
+   select max(in_inventory_order) from in_inventory where in_inventory_type=#{inInventoryType}
+  </select>
+  
+  <select id="getNegativeByTypeCode" resultType="java.lang.String">
+    select is_negative from storehouse_type where type_code = #{typeCode} and is_delete = '01'
+  </select>
   
 </mapper>

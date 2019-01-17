@@ -1,12 +1,11 @@
 package com.qz.zframe.material.service;
 
 import java.util.List;
-
-import com.qz.zframe.common.util.PageResultEntity;
+import com.qz.zframe.common.util.NewPageResult;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.common.util.ResultEntityDetail;
 import com.qz.zframe.material.entity.MaterialClassify;
 import com.qz.zframe.material.entity.MaterialClassifyExample;
-
 public interface MaterialClassifyService {
 
 	/**
@@ -17,7 +16,7 @@ public interface MaterialClassifyService {
 	 * @return PageResultEntity    返回类型
 	 * @throws
 	 */
-	public PageResultEntity getClassifyList(MaterialClassifyExample example);
+	public NewPageResult<MaterialClassify> getClassifyList(MaterialClassifyExample example)throws Exception;
 
 	/**
 	 * 新增物资分类
@@ -37,7 +36,7 @@ public interface MaterialClassifyService {
 	 * @return ResultEntity    返回类型
 	 * @throws
 	 */
-	public ResultEntity getClassifyDetail(String materialClassifyId);
+	public ResultEntityDetail<MaterialClassify> getClassifyDetail(String materialClassifyId) throws Exception;
 
 	/**
 	 * 编辑物资分类信息
@@ -58,5 +57,9 @@ public interface MaterialClassifyService {
 	 * @throws
 	 */
 	public ResultEntity delClassify(List<String> materialClassifyIds);
+
+	NewPageResult<MaterialClassify> getClassifyListAll(MaterialClassifyExample example);
+
+
 
 }

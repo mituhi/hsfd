@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.qz.zframe.common.entity.Deploy;
 import com.qz.zframe.common.entity.DeployMain;
 import com.qz.zframe.common.service.DeployService;
+import com.qz.zframe.common.util.PageResultEntity;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,19 +54,18 @@ public class DeployController {
 	
 	@ApiOperation(value = "新增流程", notes = "新增流程")
 	@RequestMapping(value = "addDeployMain", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<DeployMain> addDeployMain(@RequestBody DeployMain deployMain)
+	public PageResultEntity addDeployMain(@RequestBody DeployMain deployMain)
 			throws Exception {
 		logger.info("===== 新增流程 DeployController.addDeployMain ===== deployMain:"+deployMain);
-		return new ResponseEntity<DeployMain>(deployService.addAndUpdateDeployMain(deployMain), HttpStatus.OK);
+		return deployService.addAndUpdateDeployMain(deployMain);
 	}
 	
 	@ApiOperation(value = "修改流程", notes = "修改流程")
 	@RequestMapping(value = "updateDeployMain", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<DeployMain> updateCodeType(@RequestBody DeployMain deployMain)
+	public PageResultEntity updateCodeType(@RequestBody DeployMain deployMain)
 			throws Exception {
 		logger.info("===== 修改流程 DeployController.updateDeployMain ===== updateDeployMain:"+deployMain);
-		return new ResponseEntity<DeployMain>(deployService.addAndUpdateDeployMain(deployMain),
-				HttpStatus.OK);
+		return deployService.addAndUpdateDeployMain(deployMain);
 	}
 	
 	@ApiOperation(value = "根据id查询流程步骤", notes = "根据id查询流程步骤")
@@ -80,26 +80,34 @@ public class DeployController {
 	
 	@ApiOperation(value = "新增流程步骤", notes = "新增流程步骤")
 	@RequestMapping(value = "addDeploy", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Deploy> addDeploy(@RequestBody Deploy deploy)
+	public PageResultEntity addDeploy(@RequestBody Deploy deploy)
 			throws Exception {
 		logger.info("===== 新增流程步骤 DeployController.addDeploy ===== deploy:"+deploy);
-		return new ResponseEntity<Deploy>(deployService.addAndUpdateDeploy(deploy), HttpStatus.OK);
+		return deployService.addAndUpdateDeploy(deploy);
 	}
 	
 	@ApiOperation(value = "修改流程步骤", notes = "修改流程步骤")
 	@RequestMapping(value = "updateDeploy", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Deploy> updateDeploy(@RequestBody Deploy deploy)
+	public PageResultEntity updateDeploy(@RequestBody Deploy deploy)
 			throws Exception {
 		logger.info("===== 修改流程步骤 DeployController.updateDeploy ===== deploy:"+deploy);
-		return new ResponseEntity<Deploy>(deployService.addAndUpdateDeploy(deploy),
-				HttpStatus.OK);
+		return deployService.addAndUpdateDeploy(deploy);
 	}
 	
 	@ApiOperation(value = "删除流程步骤", notes = "删除流程步骤")
 	@RequestMapping(value = "deleteDeploy", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Integer> deleteDeploy(@RequestParam(required = true) List<String> deployIds) throws Exception {
+	public PageResultEntity deleteDeploy(@RequestParam(required = true) List<String> deployIds) throws Exception {
 		logger.info("===== 删除流程步骤 DeployController.deleteDeploy ===== deployIds:"+deployIds);
-		return new ResponseEntity<Integer>(deployService.deleteDeploy(deployIds), HttpStatus.OK);
+		return deployService.deleteDeploy(deployIds);
 	}
-		
+
+	@ApiOperation(value = "根据流程编号查询流程信息", notes = "根据流程编号查询流程信息")
+	@RequestMapping(value = "queryDeployMainByCode", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<DeployMain> queryDeployMainByCode(
+			@RequestParam(required = false)
+			@ApiParam(name="mainCode",value="流程编号",required=true)String mainCode) throws Exception {
+		logger.info("===== 根据流程编号查询流程信息 DeployController.queryDeployMainByCode ===== mainCode:"+mainCode);
+		DeployMain deployMain = deployService.queryDeployMainByCode(mainCode);
+		return new ResponseEntity<DeployMain>(deployMain, HttpStatus.OK);
+	}
 }

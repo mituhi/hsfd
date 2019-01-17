@@ -9,7 +9,7 @@ import com.qz.zframe.run.entity.WorkClassificationExample;
 /**
  * <p>Title: WorkClassificationService</p>
  * <p>@Description: 工作分类表接口声明 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月12日 上午11:21:30
  * @version:V1.0
  */
@@ -38,7 +38,7 @@ public interface WorkClassificationService {
 	 * @param: @param classificationId   
 	 * @return: void
 	 */
-	void deleteWorkClassificationById(String classificationId);
+	void deleteWorkClassificationById(List<String> classificationIds);
 	
 	
 	
@@ -51,5 +51,11 @@ public interface WorkClassificationService {
 	ResultEntity editWorkClassification(WorkClassification workClassification);
 	
 	
-	
+	/**
+	 * @Description:通过id获取对象
+	 * @param: @param workClassificationId
+	 * @param: @return   
+	 * @return: WorkClassification
+	 */
+	WorkClassification getWorkClassificationById(String workClassificationId);
 }

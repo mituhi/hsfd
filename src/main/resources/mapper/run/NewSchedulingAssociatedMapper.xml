@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.NewSchedulingAssociatedMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.NewSchedulingAssociated" >
+    <id column="associated_id" property="associatedId" jdbcType="VARCHAR" />
+    <result column="associated_code" property="associatedCode" jdbcType="VARCHAR" />
+    <result column="associated_name" property="associatedName" jdbcType="VARCHAR" />
+    <result column="wind_code" property="windCode" jdbcType="VARCHAR" />
+    <result column="windName" property="windName" jdbcType="VARCHAR" />
+    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <!-- 排班管理详情 -->
+    <result column="associated_detail_id" property="associatedDetailId" jdbcType="VARCHAR" />
+     <result column="scheduling_rule_id" property="schedulingRuleId" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="remart" property="remart" jdbcType="VARCHAR" /> 
+    <!-- 排班管理详情 关联排班规则信息 -->
+	<result column="scheduling_rule_code" property="schedulingRuleCode" jdbcType="VARCHAR" />
+	<result column="scheduling_rule" property="schedulingRule" jdbcType="VARCHAR" /> 
+  </resultMap>
+  
+  <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</sql>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    associated_id, associated_code, associated_name, wind_code,  is_delete, creater, 
+    create_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.NewSchedulingAssociatedExample" >
+    select distinct a.*,b.associated_detail_id,b.scheduling_rule_id,b.start_date,b.end_date,b.sort,b.remark,b.sort,
+    c.scheduling_rule_code,c.scheduling_rule,d.architecture_name as windName
+    from scheduling_associated a left join scheduling_associated_detail b on a.associated_id = b.associated_id
+    left join scheduling_rule c on b.scheduling_rule_id=c.scheduling_rule_id
+    left join org_architecture d on a.wind_code=d.architecture_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    and d.architecture_type='02'
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+       <include refid="Pagination_Sql" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select  a.* ,d.architecture_name as windName
+    from scheduling_associated a left join  org_architecture d on a.wind_code=d.architecture_code
+    where a.associated_id = #{associatedId,jdbcType=VARCHAR} and d.architecture_type='02'
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from scheduling_associated
+    where associated_id = #{associatedId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.NewSchedulingAssociatedExample" >
+    delete from scheduling_associated
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.NewSchedulingAssociated" >
+    insert into scheduling_associated (associated_id, associated_code, associated_name, 
+      wind_code,  is_delete, 
+      creater, create_time)
+    values (#{associatedId,jdbcType=VARCHAR}, #{associatedCode,jdbcType=VARCHAR}, #{associatedName,jdbcType=VARCHAR}, 
+      #{windCode,jdbcType=VARCHAR}, #{isDelete,jdbcType=VARCHAR}, 
+      #{creater,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.NewSchedulingAssociated" >
+    insert into scheduling_associated
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="associatedId != null" >
+        associated_id,
+      </if>
+      <if test="associatedCode != null" >
+        associated_code,
+      </if>
+      <if test="associatedName != null" >
+        associated_name,
+      </if>
+      <if test="windCode != null" >
+        wind_code,
+      </if>
+      <if test="isDelete != null" >
+        is_delete,
+      </if>
+      <if test="creater != null" >
+        creater,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="associatedId != null" >
+        #{associatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="associatedCode != null" >
+        #{associatedCode,jdbcType=VARCHAR},
+      </if>
+      <if test="associatedName != null" >
+        #{associatedName,jdbcType=VARCHAR},
+      </if>
+      <if test="windCode != null" >
+        #{windCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.NewSchedulingAssociatedExample" resultType="java.lang.Integer" >
+    select count(distinct b.associated_detail_id) from scheduling_associated a left join scheduling_associated_detail b on a.associated_id = b.associated_id
+    left join scheduling_rule c on b.scheduling_rule_id=c.scheduling_rule_id
+    left join org_architecture d on a.wind_code=d.architecture_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+     and d.architecture_type='02'
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update scheduling_associated
+    <set >
+      <if test="record.associatedId != null" >
+        associated_id = #{record.associatedId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.associatedCode != null" >
+        associated_code = #{record.associatedCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.associatedName != null" >
+        associated_name = #{record.associatedName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windCode != null" >
+        wind_code = #{record.windCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isDelete != null" >
+        is_delete = #{record.isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creater != null" >
+        creater = #{record.creater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update scheduling_associated
+    set associated_id = #{record.associatedId,jdbcType=VARCHAR},
+      associated_code = #{record.associatedCode,jdbcType=VARCHAR},
+      associated_name = #{record.associatedName,jdbcType=VARCHAR},
+      wind_code = #{record.windCode,jdbcType=VARCHAR},
+      is_delete = #{record.isDelete,jdbcType=VARCHAR},
+      creater = #{record.creater,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.NewSchedulingAssociated" >
+    update scheduling_associated
+    <set >
+      <if test="associatedCode != null" >
+        associated_code = #{associatedCode,jdbcType=VARCHAR},
+      </if>
+      <if test="associatedName != null" >
+        associated_name = #{associatedName,jdbcType=VARCHAR},
+      </if>
+      <if test="windCode != null" >
+        wind_code = #{windCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null" >
+        is_delete = #{isDelete,jdbcType=VARCHAR},
+      </if>
+      <if test="creater != null" >
+        creater = #{creater,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where associated_id = #{associatedId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.NewSchedulingAssociated" >
+    update scheduling_associated
+    set associated_code = #{associatedCode,jdbcType=VARCHAR},
+      associated_name = #{associatedName,jdbcType=VARCHAR},
+      wind_code = #{windCode,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=VARCHAR},
+      creater = #{creater,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where associated_id = #{associatedId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectMaxCoder" resultType="java.lang.String"  >
+   select MAX(associated_code) from scheduling_associated where is_delete='01'
+  </select>
+  
+   <update id="updateIsDelete" parameterType="java.util.List">
+         update scheduling_associated set is_delete='02' where associated_id in
+         <foreach item="item" collection="list" open="(" close=")" separator=",">
+             #{item}
+         </foreach>
+ </update>
+  
+  
+</mapper>

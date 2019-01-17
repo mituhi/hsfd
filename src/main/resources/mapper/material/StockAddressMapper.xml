@@ -6,10 +6,10 @@
     <result column="stock_add_code" property="stockAddCode" jdbcType="VARCHAR" />
     <result column="stock_add_name" property="stockAddName" jdbcType="VARCHAR" />
     <result column="stock_add_attr" property="stockAddAttr" jdbcType="VARCHAR" />
-    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="architecture_id" property="architectureCode" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="architecture_name" property="architectureName" jdbcType="VARCHAR" />
     <result column="creater" property="creater" jdbcType="VARCHAR" />
     <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -83,20 +83,21 @@
     creater, create_time,is_delete
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.StockAddressExample" >
-    select a.*,b.wind_name
-    from stock_address a left join wind_field b on a.wind_id = b.wind_id
+    select a.*,b.architecture_name
+    from stock_address a left join org_architecture b on a.architecture_id = b.architecture_code
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+    and b.architecture_type='02'
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
      <include refid="Pagination_Sql" />
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-     select a.*,b.wind_name
-    from stock_address a left join wind_field b on a.wind_id = b.wind_id
-    where a.stock_add_id = #{stockAddId,jdbcType=VARCHAR}
+     select a.*,b.architecture_name
+    from stock_address a left join org_architecture b on a.architecture_id = b.architecture_code
+    where  b.architecture_type='02' and  a.stock_add_id = #{stockAddId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from stock_address
@@ -133,8 +134,8 @@
       <if test="stockAddAttr != null" >
         stock_add_attr,
       </if>
-      <if test="windId != null" >
-        wind_id,
+      <if test="architectureCode != null" >
+       architecture_id,
       </if>
       <if test="status != null" >
         status,
@@ -163,8 +164,8 @@
       <if test="stockAddAttr != null" >
         #{stockAddAttr,jdbcType=VARCHAR},
       </if>
-      <if test="windId != null" >
-        #{windId,jdbcType=VARCHAR},
+      <if test="architectureCode != null" >
+        #{architectureCode,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
@@ -182,10 +183,11 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qz.zframe.material.entity.StockAddressExample" resultType="java.lang.Integer" >
-    select count(*) from stock_address a
+    select count(*) from stock_address a  left join org_architecture b on a.architecture_id = b.architecture_code
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+     and b.architecture_type='02'
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
     update stock_address
@@ -249,8 +251,8 @@
       <if test="stockAddAttr != null" >
         stock_add_attr = #{stockAddAttr,jdbcType=VARCHAR},
       </if>
-      <if test="windId != null" >
-        wind_id = #{windId,jdbcType=VARCHAR},
+      <if test="architectureCode != null" >
+        architecture_id = #{architectureCode,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},

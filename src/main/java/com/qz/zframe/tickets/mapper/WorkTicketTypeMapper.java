@@ -22,12 +22,16 @@ public interface WorkTicketTypeMapper {
     int insertSelective(WorkTicketType record);
     //批量删除
     int batchDelete(@Param("array") String[] ids);
+
+    //详情查询
+    String getNameById(@Param("workTicketTypeId")String workTicketTypeId);
+
     //详情查询
     WorkTicketTypeVo getWorkTicketTypeDetail(@Param("workTicketTypeId")String workTicketTypeId);
     //列表查询
     List<WorkTicketTypeVo> getWorkTicketTypeList(@Param("map")Map<String,String> pageAndCondition);
     //查询总记录数
-    int getTotal();
+    int getTotal(@Param("map")Map<String,String> pageAndCondition);
 
     List<WorkTicketType> selectByExample(WorkTicketTypeExample example);
 
@@ -40,4 +44,8 @@ public interface WorkTicketTypeMapper {
     int updateByPrimaryKeySelective(WorkTicketType record);
 
     int updateByPrimaryKey(WorkTicketType record);
+
+    void deleteChildMsgByWorkTicketTypeId(@Param("workTicketTypeId") String workTicketTypeId);
+
+    void deleteWorkSafeByWorkTicketTypeId(@Param("workTicketTypeId") String workTicketTypeId);
 }

@@ -72,6 +72,65 @@
     measure_id, ticket_id, standard_ticket_id, measure_number, danger_point, measure, 
     measure_executor
   </sql>
+
+
+
+
+
+  <delete id="batchDeleteByTicketIds" parameterType="java.lang.String">
+    delete from work_ticket_risk_control
+    where ticket_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByStandardTicketIds" parameterType="java.lang.String">
+    delete from work_ticket_risk_control
+    where standard_ticket_id in
+    <foreach collection="array" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.WorkTicketRiskControlVo" >
+    <id column="measure_id" property="measureId" jdbcType="VARCHAR" />
+    <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="standard_ticket_id" property="standardTicketId" jdbcType="VARCHAR" />
+    <result column="measure_number" property="measureNumber" jdbcType="VARCHAR" />
+    <result column="danger_point" property="dangerPoint" jdbcType="VARCHAR" />
+    <result column="measure" property="measure" jdbcType="VARCHAR" />
+    <result column="measure_executor" property="measureExecutor" jdbcType="VARCHAR" />
+    <result column="measure_executor_name" property="measureExecutorName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.measure_id as measure_id, a.ticket_id as ticket_id, a.standard_ticket_id as standard_ticket_id, a.measure_number as measure_number,
+    a.danger_point as danger_point, a.measure as measure,
+    a.measure_executor as measure_executor,b.user_name as measure_executor_name
+  </sql>
+  <select id="getWorkTicketRiskControlList" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from work_ticket_risk_control a
+    left join isc_user b on a.measure_executor = b.user_id
+    where a.ticket_id = #{ticketId}
+    order by measure_number
+  </select>
+  <select id="getStandardWorkTicketRiskControlList" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from work_ticket_risk_control a
+    left join isc_user b on a.measure_executor = b.user_id
+    where a.standard_ticket_id = #{standardTicketId}
+    order by measure_number
+  </select>
+
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.WorkTicketRiskControlExample" >
     select
     <if test="distinct" >

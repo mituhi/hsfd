@@ -23,7 +23,7 @@ import com.qz.zframe.run.service.SchedulingAssociatedService;
 /**
  * <p>Title: SchedulingAssociatedServiceImpl</p>
  * <p>@Description: 排班关联表接口实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月2日 下午5:24:12
  * @version:V1.0
  */
@@ -44,10 +44,10 @@ public class SchedulingAssociatedServiceImpl implements SchedulingAssociatedServ
 	public ResultEntity saveSchedulingAssociated(SchedulingAssociated schedulingAssociated) {
 		
 		//如果为空 生成主键
-		if (StringUtils.isBlank(schedulingAssociated.getId())) {
+		if (StringUtils.isBlank(schedulingAssociated.getAssociatedId())) {
 			//生成主键id
 			String schedulingAssociatedId = UUID.randomUUID().toString();
-			schedulingAssociated.setId(schedulingAssociatedId);
+			schedulingAssociated.setAssociatedId(schedulingAssociatedId);
 		}
 		
 		//执行插入操作
@@ -87,6 +87,11 @@ public class SchedulingAssociatedServiceImpl implements SchedulingAssociatedServ
 		return count;
 	}
 
+	
+	
+	
+	
+	
 	
 	/**
 	 * 通过id删除信息
@@ -132,6 +137,16 @@ public class SchedulingAssociatedServiceImpl implements SchedulingAssociatedServ
 		//执行更新
 		schedulingAssociatedMapper.updateByPrimaryKeySelective(schedulingAssociated);
 		
+		resultEntity.setCode(ErrorCode.SUCCESS);
+		resultEntity.setMsg("执行成功");
+		return resultEntity;
+	}
+
+
+	@Override
+	public ResultEntity deleteScheduling(String schedulingAssociated) {
+		ResultEntity resultEntity = new ResultEntity();
+		schedulingAssociatedMapper.deleteByPrimaryKey(schedulingAssociated);
 		resultEntity.setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("执行成功");
 		return resultEntity;

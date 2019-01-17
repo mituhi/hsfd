@@ -45,10 +45,10 @@ public class DutyLog {
 	@ApiModelProperty(value="备注",name="remark",required = true)
     private String remark;
 
-	@ApiModelProperty(value="当班记事表id",name="dutyRememberId")
+	@ApiModelProperty(value="当班记事表id，因为是1对多，用‘,’隔开",name="dutyRememberId")
     private String dutyRememberId;
 
-	@ApiModelProperty(value="日志TAB表id",name="tabId",required = true)
+	@ApiModelProperty(value="日志TAB表id，因为是1对多，用‘,’隔开",name="tabId",required = true)
     private String tabId;
 
 	@ApiModelProperty(value="维护人",name="maintainUser")

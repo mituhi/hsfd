@@ -38,6 +38,10 @@ public class MaterialGroup implements Serializable {
 	@ApiModelProperty(name="status",value="物资分组状态，01启用，02停用",required=true)
 	@JsonView({ ListView.class })
 	private String status;
+	
+	@ApiModelProperty(name="groupStatusText",value="物资分组状态文本",required=false)
+	@JsonView({ ListView.class })
+	private String groupStatusText;
 
 	@ApiModelProperty(name="remark",value="备注",required=false)
 	@JsonView({ ListView.class })
@@ -128,4 +132,14 @@ public class MaterialGroup implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+
+	public String getGroupStatusText() {
+		return groupStatusText;
+	}
+
+	public void setGroupStatusText(String groupStatusText) {
+		this.groupStatusText = groupStatusText;
+	}
+	
+	
 }

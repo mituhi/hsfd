@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,10 @@ import com.qz.zframe.common.dao.DeployDao;
 import com.qz.zframe.common.entity.Deploy;
 import com.qz.zframe.common.entity.DeployMain;
 import com.qz.zframe.common.entity.DeployRole;
+import com.qz.zframe.common.entity.Role;
 import com.qz.zframe.common.service.DeployService;
-import com.qz.zframe.isc.domain.IscRole;
+import com.qz.zframe.common.util.ErrorCode;
+import com.qz.zframe.common.util.PageResultEntity;
 
 @Service
 public class DeployServiceImpl implements DeployService {
@@ -50,31 +53,54 @@ public class DeployServiceImpl implements DeployService {
 		if (StringUtils.isBlank(id)) {
 			throw new Exception("请选择流程!");
 		}
-		return deployDao.queryDeployMainById(id);
+		DeployMain deployMain = deployDao.queryDeployMainById(id);
+		List<Deploy> deploys = deployDao.findDeployByMainId(deployMain.getMainId());
+		if (CollectionUtils.isNotEmpty(deploys)) {
+			deployMain.setDeploys(deploys);
+			for (Deploy deploy:deploys) {
+				List<Role> roles = deployDao.findRoleByDeployId(deploy.getDeployId());
+				if (CollectionUtils.isNotEmpty(roles)) {
+					deploy.setRoles(roles);
+				}
+			}
+		}
+		return deployMain;
 	}
 
 	@Override
-	public DeployMain addAndUpdateDeployMain(DeployMain deployMain) throws Exception {
+	public PageResultEntity addAndUpdateDeployMain(DeployMain deployMain) throws Exception {
+		PageResultEntity pageResultEntity = new PageResultEntity();
 		if (deployMain == null) {
-			throw new Exception("对象为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("对象为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(deployMain.getMainCode())) {
-			throw new Exception("流程编号为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("流程编号为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(deployMain.getMainDeployName())) {
-			throw new Exception("流程名称为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("流程名称为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(deployMain.getMainId())) {
 			DeployMain dm = deployDao.findDeployMainByCodeOrName(deployMain.getMainCode(), deployMain.getMainDeployName());
 			if (dm != null) {
-				throw new Exception("流程编号或流程名称已存在!");
+				pageResultEntity.setCode(ErrorCode.ERROR);
+				pageResultEntity.setMsg("流程编号或流程名称已存在!");
+				return pageResultEntity;
 			}
-			deployMain.setMainId(UUID.randomUUID().toString());
+			deployMain.setMainId(UUID.randomUUID().toString().replaceAll("-", ""));
 			deployDao.addDeployMain(deployMain);
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			return pageResultEntity;
 		}else {
 			deployDao.updateDeployMain(deployMain);
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			return pageResultEntity;
 		}
-		return deployMain;
 	}
 
 	@Override
@@ -84,7 +110,7 @@ public class DeployServiceImpl implements DeployService {
 		}
 		Deploy deploy = deployDao.queryDeployById(deployId);
 		if (deploy != null) {
-			List<IscRole> roles = deployDao.findRoleByDeployId(deployId);
+			List<Role> roles = deployDao.findRoleByDeployId(deployId);
 			deploy.setRoles(roles);
 		}
 		return deploy;
@@ -92,22 +118,31 @@ public class DeployServiceImpl implements DeployService {
 
 	@Override
 	@Transactional
-	public Deploy addAndUpdateDeploy(Deploy deploy) throws Exception {
+	public PageResultEntity addAndUpdateDeploy(Deploy deploy) throws Exception {
+		PageResultEntity pageResultEntity = new PageResultEntity();
 		if (deploy == null) {
-			throw new Exception("对象为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("对象为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(deploy.getDeployName())) {
-			throw new Exception("流程编号为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("流程编号为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(deploy.getDeployName())) {
-			throw new Exception("流程名称为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("流程名称为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(deploy.getDeployId())) {
 			Deploy d = deployDao.findDeployByDeployName(deploy.getDeployName());
 			if (d != null) {
-				throw new Exception("流程步骤名称已存在!");
+				pageResultEntity.setCode(ErrorCode.ERROR);
+				pageResultEntity.setMsg("流程步骤名称已存在!");
+				return pageResultEntity;
 			}
-			deploy.setDeployId(UUID.randomUUID().toString());
+			deploy.setDeployId(UUID.randomUUID().toString().replaceAll("-", ""));
 			deploy.setCreater(currentUserService.getId());
 			deploy.setCreateTime(new Date());
 			deployDao.addDeploy(deploy);
@@ -127,18 +162,36 @@ public class DeployServiceImpl implements DeployService {
 			}
 			deployDao.addDeployRole(deployRoles);
 		}
-		return deploy;
+		pageResultEntity.setCode(ErrorCode.SUCCESS);
+		return pageResultEntity;
 	}
 
 	@Override
 	@Transactional
-	public Integer deleteDeploy(List<String> deployIds) throws Exception {
+	public PageResultEntity deleteDeploy(List<String> deployIds) throws Exception {
+		PageResultEntity pageResultEntity = new PageResultEntity();
 		if (deployIds == null ) {
-			throw new Exception("请选择需要删除的流程步骤");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("请选择需要删除的流程步骤!");
+			return pageResultEntity;
 		}
 		deployDao.deleteDeploy(deployIds);
 		deployDao.deleteDeployRoles(deployIds);
-		return 1;
+		pageResultEntity.setCode(ErrorCode.SUCCESS);
+		return pageResultEntity;
 	}
 
+	/**
+	 * 根据流程编号查询流程信息
+	 * @param mainCode
+	 * @return
+	 */
+	@Override
+	public DeployMain queryDeployMainByCode(String mainCode) throws Exception {
+		if (StringUtils.isBlank(mainCode)) {
+			throw new Exception("流程编号不能为空!");
+		}
+		DeployMain deployMain = deployDao.queryDeployMainByCode(mainCode);
+		return deployMain;
+	}
 }

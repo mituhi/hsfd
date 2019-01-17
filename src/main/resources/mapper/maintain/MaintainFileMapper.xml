@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.maintain.mapper.MaintainFileMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.maintain.entity.MaintainFile" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="asso_id" property="assoId" jdbcType="VARCHAR" />
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, asso_id, file_id, type
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from maintain_file
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from maintain_file
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.qz.zframe.maintain.entity.MaintainFile" >
+    insert into maintain_file (id, asso_id, file_id, 
+      type)
+    values (#{id,jdbcType=VARCHAR}, #{assoId,jdbcType=VARCHAR}, #{fileId,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.MaintainFile" >
+    insert into maintain_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="assoId != null" >
+        asso_id,
+      </if>
+      <if test="fileId != null" >
+        file_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="assoId != null" >
+        #{assoId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.MaintainFile" >
+    update maintain_file
+    <set >
+      <if test="assoId != null" >
+        asso_id = #{assoId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileId != null" >
+        file_id = #{fileId,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.maintain.entity.MaintainFile" >
+    update maintain_file
+    set asso_id = #{assoId,jdbcType=VARCHAR},
+      file_id = #{fileId,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+
+
+  <insert id="insertList" parameterType="com.qz.zframe.maintain.entity.MaintainFile" >
+    insert into maintain_file (id, asso_id, file_id,type)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id,jdbcType=VARCHAR}, #{item.assoId,jdbcType=VARCHAR}, #{item.fileId,jdbcType=VARCHAR},#{item.type,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+  <select id="getMaintainFileListByAssoId" resultType="java.lang.String" parameterType="java.lang.String" >
+    select
+    file_id
+    from maintain_file
+    where asso_id = #{assoId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getMaintainFileList" resultType="java.lang.String" parameterType="java.lang.String" >
+    select
+    file_id
+    from maintain_file
+    where asso_id = #{assoId,jdbcType=VARCHAR} and type = #{type}
+  </select>
+
+  <delete id="batchDeleteByAssoId" parameterType="java.lang.String">
+    delete from maintain_file
+    where asso_id = #{assoId,jdbcType=VARCHAR} and type = #{type}
+  </delete>
+
+  <delete id="deleteByFileId" parameterType="java.lang.String">
+    delete from maintain_file
+    where file_id = #{fileId,jdbcType=VARCHAR}
+  </delete>
+
+</mapper>

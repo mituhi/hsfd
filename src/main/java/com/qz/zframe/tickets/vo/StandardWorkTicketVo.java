@@ -1,34 +1,43 @@
 package com.qz.zframe.tickets.vo;
 
 import com.qz.zframe.tickets.entity.StandardWorkTicket;
-import com.qz.zframe.tickets.entity.UserAssoInfo;
-import com.qz.zframe.tickets.entity.WorkTicketRiskControl;
 import com.qz.zframe.tickets.entity.WorkTicketSafeMeasure;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StandardWorkTicketVo extends StandardWorkTicket {
 
-    @ApiParam(name="windName",value="风电场名称",required=false)
+    @ApiModelProperty(name="windName",value="风电场名称",required=false)
     private String windName;
 
-    @ApiParam(name="crewName",value="机组名称",required=false)
+    @ApiModelProperty(name="crewName",value="机组名称",required=false)
     private String crewName;
 
-    @ApiParam(name="positionName",value="位置名称",required=false)
+    @ApiModelProperty(name="positionName",value="位置名称",required=false)
     private String positionName;
 
-    @ApiParam(name="equipmentName",value="设备名称",required=false)
+    @ApiModelProperty(name="equipmentName",value="设备名称",required=false)
     private String equipmentName;
 
-    @ApiParam(name="ticketTypeName",value="工作票类型名称",required=false)
+    @ApiModelProperty(name="ticketTypeName",value="工作票类型名称",required=false)
     private String ticketTypeName;
 
+    @ApiModelProperty(name="workTeamName",value="工作班组名称",required=false)
+    private String workTeamName;
+
+    @ApiModelProperty(name="statusName",value="工作班组名称",required=false)
+    private String statusName;
+
+    @ApiModelProperty(name="maintainerName",value="维护人姓名",required=false)
+    private String maintainerName;
+
+    @ApiModelProperty(name="safeMeasureList",value="安全措施list",required=false)
     private List<WorkTicketSafeMeasure> safeMeasureList = new ArrayList<>();
 
-   private List<WorkTicketRiskControl> riskControlList= new ArrayList<>();
+    @ApiModelProperty(name="riskControlList",value="危险因素控制措施list",required=false)
+    private List<WorkTicketRiskControlVo> riskControlList= new ArrayList<>();
 
     public String getWindName() {
         return windName;
@@ -70,6 +79,30 @@ public class StandardWorkTicketVo extends StandardWorkTicket {
         this.ticketTypeName = ticketTypeName;
     }
 
+    public String getWorkTeamName() {
+        return workTeamName;
+    }
+
+    public void setWorkTeamName(String workTeamName) {
+        this.workTeamName = workTeamName;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public String getMaintainerName() {
+        return maintainerName;
+    }
+
+    public void setMaintainerName(String maintainerName) {
+        this.maintainerName = maintainerName;
+    }
+
     public List<WorkTicketSafeMeasure> getSafeMeasureList() {
         return safeMeasureList;
     }
@@ -78,11 +111,11 @@ public class StandardWorkTicketVo extends StandardWorkTicket {
         this.safeMeasureList = safeMeasureList;
     }
 
-    public List<WorkTicketRiskControl> getRiskControlList() {
+    public List<WorkTicketRiskControlVo> getRiskControlList() {
         return riskControlList;
     }
 
-    public void setRiskControlList(List<WorkTicketRiskControl> riskControlList) {
+    public void setRiskControlList(List<WorkTicketRiskControlVo> riskControlList) {
         this.riskControlList = riskControlList;
     }
 }

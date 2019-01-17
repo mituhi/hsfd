@@ -219,7 +219,7 @@ public class EquipmentAssetLedgerExample extends PageExample{
         }
 
         public Criteria andEquipmentCodeLike(String value) {
-            addCriterion("equipment_code like", value, "equipmentCode");
+            addCriterion("e.equipment_code like", "%"+value+"%", "equipmentCode");
             return (Criteria) this;
         }
 
@@ -319,72 +319,72 @@ public class EquipmentAssetLedgerExample extends PageExample{
         }
 
         public Criteria andPositionCodeIsNull() {
-            addCriterion("position_code is null");
+            addCriterion("position_id is null");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeIsNotNull() {
-            addCriterion("position_code is not null");
+            addCriterion("position_id is not null");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeEqualTo(String value) {
-            addCriterion("e.position_code =", value, "positionCode");
+            addCriterion("e.position_id =", value, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeNotEqualTo(String value) {
-            addCriterion("position_code <>", value, "positionCode");
+            addCriterion("position_id <>", value, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeGreaterThan(String value) {
-            addCriterion("position_code >", value, "positionCode");
+            addCriterion("position_id >", value, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeGreaterThanOrEqualTo(String value) {
-            addCriterion("position_code >=", value, "positionCode");
+            addCriterion("position_id >=", value, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeLessThan(String value) {
-            addCriterion("position_code <", value, "positionCode");
+            addCriterion("position_id <", value, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeLessThanOrEqualTo(String value) {
-            addCriterion("position_code <=", value, "positionCode");
+            addCriterion("position_id <=", value, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeLike(String value) {
-            addCriterion("position_code like", value, "positionCode");
+            addCriterion("position_id like", value, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeNotLike(String value) {
-            addCriterion("position_code not like", value, "positionCode");
+            addCriterion("position_id not like", value, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeIn(List<String> values) {
-            addCriterion("position_code in", values, "positionCode");
+            addCriterion("position_id in", values, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeNotIn(List<String> values) {
-            addCriterion("position_code not in", values, "positionCode");
+            addCriterion("position_id not in", values, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeBetween(String value1, String value2) {
-            addCriterion("position_code between", value1, value2, "positionCode");
+            addCriterion("position_id between", value1, value2, "positionId");
             return (Criteria) this;
         }
 
         public Criteria andPositionCodeNotBetween(String value1, String value2) {
-            addCriterion("position_code not between", value1, value2, "positionCode");
+            addCriterion("position_id not between", value1, value2, "positionId");
             return (Criteria) this;
         }
 

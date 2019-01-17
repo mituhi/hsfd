@@ -19,18 +19,32 @@ public class OrgArchitecture {
 	private String architectureDescribe;
 	@ApiModelProperty(value="组织类型",name="architectureType",required=true)
 	private String architectureType;
+	@ApiModelProperty(value="组织类型名称",name="architectureTypeText",required=false)
+	private String architectureTypeText;
 	@ApiModelProperty(value="是否顶级",name="isTop",required=true)
 	private String isTop;
+	@ApiModelProperty(value="是否顶级名称",name="isTopText",required=true)
+	private String isTopText;
 	@ApiModelProperty(value="是否停用",name="isDisable",required=true)
 	private String isDisable;
+	@ApiModelProperty(value="是否停用名称",name="isDisableText",required=false)
+	private String isDisableText;
 	@ApiModelProperty(value="是否虚拟组织",name="isVirtualOrg",required=true)
 	private String isVirtualOrg;
+	@ApiModelProperty(value="是否虚拟组织名称",name="isVirtualOrgText",required=false)
+	private String isVirtualOrgText;
 	@ApiModelProperty(value="上级主管部门",name="superCompetentDepartment",required=false)
 	private String superCompetentDepartment;
+	@ApiModelProperty(value="上级主管部门名称",name="superCompetentDepartmentName",required=false)
+	private String superCompetentDepartmentName;
 	@ApiModelProperty(value="分管领导",name="chargeLeadership",required=false)
 	private String chargeLeadership;
+	@ApiModelProperty(value="分管领导名称",name="chargeLeadershipName",required=false)
+	private String chargeLeadershipName;
 	@ApiModelProperty(value="负责人",name="header",required=false)
 	private String header;
+	@ApiModelProperty(value="负责人名称",name="headerheaderName",required=false)
+	private String headerName;
 	@ApiModelProperty(value="部门编制",name="departmentCompile",required=false)
 	private String departmentCompile;
 	@ApiModelProperty(value="成立日期",name="setUpTime",required=false)
@@ -60,7 +74,12 @@ public class OrgArchitecture {
 	private List<OrgArchitectureUser> orgArchitectureUsers;
 	@ApiModelProperty(value="班组信息",name="orgArchitectureTeams",required=false)
 	private List<OrgArchitectureTeam> orgArchitectureTeams;
-
+	@ApiModelProperty(value="成本中心",name="orgArchitectureCenters",required=false)
+	private List<OrgArchitectureCenter> orgArchitectureCenters;
+	
+	@ApiModelProperty(value="编号加名称",name="codeAndName",required=false)
+	private String codeAndName;
+	
 	public String getArchitectureId() {
 		return architectureId;
 	}
@@ -253,4 +272,76 @@ public class OrgArchitecture {
 		this.orgArchitectureTeams = orgArchitectureTeams;
 	}
 
+	public List<OrgArchitectureCenter> getOrgArchitectureCenters() {
+		return orgArchitectureCenters;
+	}
+
+	public void setOrgArchitectureCenters(List<OrgArchitectureCenter> orgArchitectureCenters) {
+		this.orgArchitectureCenters = orgArchitectureCenters;
+	}
+
+	public String getArchitectureTypeText() {
+		return architectureTypeText;
+	}
+
+	public void setArchitectureTypeText(String architectureTypeText) {
+		this.architectureTypeText = architectureTypeText;
+	}
+
+	public String getIsTopText() {
+		return isTopText;
+	}
+
+	public void setIsTopText(String isTopText) {
+		this.isTopText = isTopText;
+	}
+
+	public String getIsDisableText() {
+		return isDisableText;
+	}
+
+	public void setIsDisableText(String isDisableText) {
+		this.isDisableText = isDisableText;
+	}
+
+	public String getIsVirtualOrgText() {
+		return isVirtualOrgText;
+	}
+
+	public void setIsVirtualOrgText(String isVirtualOrgText) {
+		this.isVirtualOrgText = isVirtualOrgText;
+	}
+
+	public String getHeaderName() {
+		return headerName;
+	}
+
+	public void setHeaderName(String headerName) {
+		this.headerName = headerName;
+	}
+
+	public String getChargeLeadershipName() {
+		return chargeLeadershipName;
+	}
+
+	public void setChargeLeadershipName(String chargeLeadershipName) {
+		this.chargeLeadershipName = chargeLeadershipName;
+	}
+
+	public String getCodeAndName() {
+		return codeAndName;
+	}
+
+	public void setCodeAndName(String codeAndName) {
+		this.codeAndName = codeAndName;
+	}
+
+	public String getSuperCompetentDepartmentName() {
+		return superCompetentDepartmentName;
+	}
+
+	public void setSuperCompetentDepartmentName(String superCompetentDepartmentName) {
+		this.superCompetentDepartmentName = superCompetentDepartmentName;
+	}
+	
 }

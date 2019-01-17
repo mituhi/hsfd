@@ -2,6 +2,8 @@ package com.qz.zframe.device.entity;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Transient;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class Components {
@@ -10,7 +12,7 @@ public class Components {
     private String componentId;
 	
 	@ApiModelProperty(name = "equipmentAssetId", value = "设备资产台账id", required = false)
-
+	@Transient
     private String equipmentAssetId;
 	
 	@ApiModelProperty(name = "componentCode", value = "部件编号", required = false)
@@ -37,6 +39,7 @@ public class Components {
 
     private String remarks;
 
+	
     public String getComponentId() {
         return componentId;
     }
@@ -44,11 +47,11 @@ public class Components {
     public void setComponentId(String componentId) {
         this.componentId = componentId == null ? null : componentId.trim();
     }
-
+    @Transient
     public String getEquipmentAssetId() {
         return equipmentAssetId;
     }
-
+    @Transient
     public void setEquipmentAssetId(String equipmentAssetId) {
         this.equipmentAssetId = equipmentAssetId == null ? null : equipmentAssetId.trim();
     }

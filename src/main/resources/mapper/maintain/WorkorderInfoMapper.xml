@@ -8,10 +8,12 @@
     <result column="workorder_type_id" property="workorderTypeId" jdbcType="VARCHAR" />
     <result column="workorder_desc" property="workorderDesc" jdbcType="VARCHAR" />
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
-    <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
+    <result column="maintain_date" property="maintainDate" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="flow_status" property="flowStatus" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
     <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
     <result column="duty_team" property="dutyTeam" jdbcType="VARCHAR" />
     <result column="duty_head" property="dutyHead" jdbcType="VARCHAR" />
@@ -94,10 +96,10 @@
   </sql>
   <sql id="Base_Column_List" >
     order_id, serial_number, workorder_code, workorder_type_id, workorder_desc, maintainer, 
-    maintain_date, status, wind_id, company, crew_id, duty_team, duty_head, fill_person, 
-    scheme_time, unit_member, other_unit_member, position_id, position_desc, equipment_id, 
-    equipment_desc, plan_start_time, plan_end_time, plan_work_hour, plan_material_fee, 
-    plan_service_fee, actual_complete_time, attachment, equipment_status_requirement_1, 
+    maintain_date, status, flow_status, wind_id, company, department, crew_id, duty_team, 
+    duty_head, fill_person, scheme_time, unit_member, other_unit_member, position_id, 
+    position_desc, equipment_id, equipment_desc, plan_start_time, plan_end_time, plan_work_hour, 
+    plan_material_fee, plan_service_fee, actual_complete_time, attachment, equipment_status_requirement_1, 
     equipment_status_requirement_2, other_requirement
   </sql>
 
@@ -105,57 +107,74 @@
 
 
 
-  <update id="batchDelete" parameterType="java.lang.String">
-    update workorder_info set status = "0"
+
+<delete id="batchDeleteTrue" parameterType="java.lang.String">
+  delete from workorder_info
+  where order_id in
+  <foreach collection="list" index="index" item="item"
+           open="(" separator="," close=")">
+    #{item}
+  </foreach>
+</delete>
+  <update id="batchDeleteFalse" parameterType="java.lang.String">
+    update workorder_info set status = '0'
     where order_id in
-    <foreach collection="array" index="index" item="item"
+    <foreach collection="list" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
   </update>
-
-    <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.WorkorderVo" >
-      <id column="order_id" property="orderId" jdbcType="VARCHAR" />
-      <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
-      <result column="workorder_code" property="workorderCode" jdbcType="VARCHAR" />
-      <result column="workorder_type_id" property="workorderTypeId" jdbcType="VARCHAR" />
-      <result column="workorder_desc" property="workorderDesc" jdbcType="VARCHAR" />
-      <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
-      <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
-      <result column="status" property="status" jdbcType="VARCHAR" />
-      <result column="wind_id" property="windId" jdbcType="VARCHAR" />
-      <result column="company" property="company" jdbcType="VARCHAR" />
-      <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
-      <result column="duty_team" property="dutyTeam" jdbcType="VARCHAR" />
-      <result column="duty_head" property="dutyHead" jdbcType="VARCHAR" />
-      <result column="fill_person" property="fillPerson" jdbcType="VARCHAR" />
-      <result column="scheme_time" property="schemeTime" jdbcType="TIMESTAMP" />
-      <result column="unit_member" property="unitMember" jdbcType="VARCHAR" />
-      <result column="other_unit_member" property="otherUnitMember" jdbcType="VARCHAR" />
-      <result column="position_id" property="positionId" jdbcType="VARCHAR" />
-      <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
-      <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
-      <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
-      <result column="plan_start_time" property="planStartTime" jdbcType="TIMESTAMP" />
-      <result column="plan_end_time" property="planEndTime" jdbcType="TIMESTAMP" />
-      <result column="plan_work_hour" property="planWorkHour" jdbcType="VARCHAR" />
-      <result column="plan_material_fee" property="planMaterialFee" jdbcType="VARCHAR" />
-      <result column="plan_service_fee" property="planServiceFee" jdbcType="VARCHAR" />
-      <result column="actual_complete_time" property="actualCompleteTime" jdbcType="TIMESTAMP" />
-      <result column="attachment" property="attachment" jdbcType="VARCHAR" />
-      <result column="equipment_status_requirement_1" property="equipmentStatusRequirement1" jdbcType="VARCHAR" />
-      <result column="equipment_status_requirement_2" property="equipmentStatusRequirement2" jdbcType="VARCHAR" />
-      <result column="other_requirement" property="otherRequirement" jdbcType="VARCHAR" />
-      <result column="wind_name" property="windName" jdbcType="VARCHAR" />
-      <result column="position_name" property="positionName" jdbcType="VARCHAR" />
-      <result column="crew_name" property="crewName" jdbcType="VARCHAR" />
-      <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
-      <result column="workorder_type_name" property="workorderTypeName" jdbcType="VARCHAR" />
-    </resultMap>
+  <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.WorkorderVo" >
+    <id column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="workorder_code" property="workorderCode" jdbcType="VARCHAR" />
+    <result column="workorder_type_id" property="workorderTypeId" jdbcType="VARCHAR" />
+    <result column="workorder_desc" property="workorderDesc" jdbcType="VARCHAR" />
+    <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
+    <result column="maintain_date" property="maintainDate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="flow_status" property="flowStatus" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="department" property="department" jdbcType="VARCHAR" />
+    <result column="crew_id" property="crewId" jdbcType="VARCHAR" />
+    <result column="duty_team" property="dutyTeam" jdbcType="VARCHAR" />
+    <result column="duty_head" property="dutyHead" jdbcType="VARCHAR" />
+    <result column="fill_person" property="fillPerson" jdbcType="VARCHAR" />
+    <result column="scheme_time" property="schemeTime" jdbcType="TIMESTAMP" />
+    <result column="unit_member" property="unitMember" jdbcType="VARCHAR" />
+    <result column="other_unit_member" property="otherUnitMember" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="position_desc" property="positionDesc" jdbcType="VARCHAR" />
+    <result column="equipment_id" property="equipmentId" jdbcType="VARCHAR" />
+    <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
+    <result column="plan_start_time" property="planStartTime" jdbcType="TIMESTAMP" />
+    <result column="plan_end_time" property="planEndTime" jdbcType="TIMESTAMP" />
+    <result column="plan_work_hour" property="planWorkHour" jdbcType="VARCHAR" />
+    <result column="plan_material_fee" property="planMaterialFee" jdbcType="VARCHAR" />
+    <result column="plan_service_fee" property="planServiceFee" jdbcType="VARCHAR" />
+    <result column="actual_complete_time" property="actualCompleteTime" jdbcType="TIMESTAMP" />
+    <result column="attachment" property="attachment" jdbcType="VARCHAR" />
+    <result column="equipment_status_requirement_1" property="equipmentStatusRequirement1" jdbcType="VARCHAR" />
+    <result column="equipment_status_requirement_2" property="equipmentStatusRequirement2" jdbcType="VARCHAR" />
+    <result column="other_requirement" property="otherRequirement" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
+    <result column="position_name" property="positionName" jdbcType="VARCHAR" />
+    <result column="crew_name" property="crewName" jdbcType="VARCHAR" />
+    <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
+    <result column="workorder_type_name" property="workorderTypeName" jdbcType="VARCHAR" />
+    <result column="flow_status_name" property="flowStatusName" jdbcType="VARCHAR" />
+    <result column="duty_team_name" property="dutyTeamName" jdbcType="VARCHAR" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="VARCHAR" />
+    <result column="duty_head_name" property="dutyHeadName" jdbcType="VARCHAR" />
+    <result column="fill_person_name" property="fillPersonName" jdbcType="VARCHAR" />
+    <result column="process_sort" property="flowSort" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Get_Column_List" >
     a.order_id as order_id, a.serial_number as serial_number, a.workorder_code as workorder_code, a.workorder_type_id as workorder_type_id,
     a.workorder_desc as workorder_desc, a.maintainer as maintainer, a.maintain_date as maintain_date, a.status as status, a.wind_id as wind_id,
-    a.company as company, a.crew_id as crew_id, a.duty_team as duty_team, a.duty_head as duty_head, a.fill_person as fill_person,
+    a.company as company, a.department as department, a.crew_id as crew_id, a.duty_team as duty_team, a.duty_head as duty_head, a.fill_person as fill_person,
     a.scheme_time as scheme_time, a.unit_member as unit_member, a.other_unit_member as other_unit_member, a.position_id as position_id,
     a.position_desc as position_desc, a.equipment_id as equipment_id, a.equipment_desc as equipment_desc, a.plan_start_time as plan_start_time,
     a.plan_end_time as plan_end_time, a.plan_work_hour as plan_work_hour, a.plan_material_fee as plan_material_fee,
@@ -163,68 +182,189 @@
     a.equipment_status_requirement_1 as equipment_status_requirement_1, a.equipment_status_requirement_2 as equipment_status_requirement_2,
     a.other_requirement as other_requirement,
     b.architecture_name as wind_name,d.crew_name as crew_name,e.position_name as position_name,f.equipment_name as equipment_name,
-    g.workorder_type_name as workorder_type_name
+    g.workorder_type_name as workorder_type_name,h.title as flow_status_name,i.architecture_name as duty_team_name,
+    j.user_name as maintainer_name,k.user_name as duty_head_name,l.user_name as fill_person_name,m.architecture_name as department_name,
+    u.process_sort as process_sort
   </sql>
   <select id="getWorkorderDetail" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from workorder_info a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
     left join crew_information d on a.crew_id = d.crew_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join workorder_type g on a.workorder_type_id = g.workorder_type_id
+    left join sp_code h on (a.flow_status = h.name and h.code_type_id = '1046')
+    left join org_architecture i on a.duty_team = i.architecture_id
+    left join isc_user j on a.maintainer = j.user_id
+    left join isc_user k on a.duty_head = k.user_id
+    left join isc_user l on a.fill_person = l.user_id
+    left join org_architecture m on a.department = m.architecture_id
+    left join process u on a.order_id = u.order_id
     where a.status != '0' and a.order_id = #{orderId}
   </select>
   <select id="getWorkorderList" resultMap="GetResultMap">
     select
+    distinct
     <include refid="Get_Column_List" />
     from workorder_info a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
     left join crew_information d on a.crew_id = d.crew_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join workorder_type g on a.workorder_type_id = g.workorder_type_id
-    where a.status != '0'
-    <if test="map.windId != null" >
+    left join sp_code h on (a.flow_status = h.name and h.code_type_id = '1046')
+    left join org_architecture i on a.duty_team = i.architecture_id
+    left join isc_user j on a.maintainer = j.user_id
+    left join isc_user k on a.duty_head = k.user_id
+    left join isc_user l on a.fill_person = l.user_id
+    left join org_architecture m on a.department = m.architecture_id
+    left join process u on (a.order_id = u.order_id and u.process_sort = '01')
+    left join process_detail v on (u.process_id = v.process_id and ((u.process_sort+1) = v.sort))
+    left join process_detail_role_rela w on v.process_detail_id = w.process_detail_id
+    left join approve_record x on a.order_id = x.order_id
+    left join isc_user y on x.approve_user = y.user_id
+    where 1=1
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
       and a.wind_id = #{map.windId}
     </if>
-    <if test="map.crewId != null" >
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
+    </if>
+    <if test="map.crewId != null and map.crewId != ''" >
       and a.crew_id = #{map.crewId}
     </if>
-    <if test="map.workorderTypeId != null" >
+    <if test="map.workorderTypeId != null and map.workorderTypeId != ''" >
       and a.workorder_type_id = #{map.workorderTypeId}
     </if>
-    <if test="map.status != null" >
-      and a.status = #{map.status}
+    <if test="map.approveUser == null or map.approveUser == ''">
+      <if test="map.status == null or map.status == ''">
+        and ((a.status = '01' or a.status = '02' or a.status = '04') or (a.status = '03' and a.maintainer = #{userId}))
+      </if>
+      <if test="map.status == '01' or map.status =='02' or map.status == '04'">
+        and a.status = #{map.status}
+      </if>
+      <if test="map.status == '03'">
+        and (a.status = #{map.status} and a.maintainer = #{userId})
+      </if>
     </if>
-    <if test="map.workorderDesc != null" >
+    <if test="map.approveUser != null and map.approveUser != ''">
+      and (((a.flow_status = '01')
+      and (w.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>
+      or y.user_name = #{map.approveUser}))
+      or ((a.flow_status = '02' or a.flow_status = '03') and y.user_name = #{map.approveUser}))
+    </if>
+    <if test="map.workorderDesc != null and map.workorderDesc != ''" >
       and a.workorder_desc like '%${map.workorderDesc}%'
     </if>
-    order by a.serial_number desc
+    order by a.serial_number is null desc,a.serial_number desc,a.maintain_date desc
     limit ${map.start},${map.pageSize}
   </select>
   <select id="getTotal" resultType="java.lang.Integer">
     select
-    count(*)
-    from workorder_info
-    where status != '0'
-    <if test="map.windId != null" >
-      and wind_id = #{map.windId}
+    count(distinct a.order_id)
+    from workorder_info a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join workorder_type g on a.workorder_type_id = g.workorder_type_id
+    left join sp_code h on (a.flow_status = h.name and h.code_type_id = '1046')
+    left join org_architecture i on a.duty_team = i.architecture_id
+    left join isc_user j on a.maintainer = j.user_id
+    left join isc_user k on a.duty_head = k.user_id
+    left join isc_user l on a.fill_person = l.user_id
+    left join process u on (a.order_id = u.order_id and u.process_sort = '01')
+    left join process_detail v on (u.process_id = v.process_id and ((u.process_sort+1) = v.sort))
+    left join process_detail_role_rela w on v.process_detail_id = w.process_detail_id
+    left join approve_record x on a.order_id = x.order_id
+    left join isc_user y on x.approve_user = y.user_id
+    where 1=1
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.windId}
     </if>
-    <if test="map.crewId != null" >
-      and crew_id = #{map.crewId}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
     </if>
-    <if test="map.workorderTypeId != null" >
-      and workorder_type_id = #{map.workorderTypeId}
+    <if test="map.crewId != null and map.crewId != ''" >
+      and a.crew_id = #{map.crewId}
     </if>
-    <if test="map.status != null" >
-      and status = #{map.status}
+    <if test="map.workorderTypeId != null and map.workorderTypeId != ''" >
+      and a.workorder_type_id = #{map.workorderTypeId}
     </if>
-    <if test="map.workorderDesc != null" >
-      and workorder_desc like '%${map.workorderDesc}%'
+    <if test="map.approveUser == null or map.approveUser == ''">
+      <if test="map.status == null or map.status == ''">
+        and ((a.status = '01' or a.status = '02' or a.status = '04') or (a.status = '03' and a.maintainer = #{userId}))
+      </if>
+      <if test="map.status == '01' or map.status =='02' or map.status == '04'">
+        and a.status = #{map.status}
+      </if>
+      <if test="map.status == '03'">
+        and (a.status = #{map.status} and a.maintainer = #{userId})
+      </if>
+    </if>
+    <if test="map.approveUser != null and map.approveUser != ''">
+      and (((a.flow_status = '01')
+      and (w.role_id in
+      <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        #{item.roleId}
+      </foreach>
+      or y.user_name = #{map.approveUser}))
+      or ((a.flow_status = '02' or a.flow_status = '03') and y.user_name = #{map.approveUser}))
+    </if>
+    <if test="map.workorderDesc != null and map.workorderDesc != ''" >
+      and a.workorder_desc like '%${map.workorderDesc}%'
     </if>
   </select>
+
+  <resultMap id="Get2ResultMap" type="com.qz.zframe.maintain.vo.WorkorderVoForMaterial" >
+    <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="workorder_desc" property="workorderDesc" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="department_id" property="departmentId" jdbcType="VARCHAR" />
+    <result column="department_name" property="departmentName" jdbcType="VARCHAR" />
+    <result column="applicant" property="applicant" jdbcType="VARCHAR" />
+    <result column="applicant_name" property="applicantName" jdbcType="VARCHAR" />
+    <result column="apply_time" property="applyTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get2_Column_List" >
+    a.serial_number as serial_number,
+    a.workorder_desc as workorder_desc,
+    a.wind_id as wind_id,
+    b.architecture_name as wind_name,
+    a.department as department_id,
+    d.architecture_name as department_name,
+    a.fill_person as applicant,
+    a.scheme_time as apply_time,
+    e.user_name as applicant_name
+  </sql>
+  <select id="getWorkorderBySerialNumber" resultMap="Get2ResultMap">
+    select
+    <include refid="Get2_Column_List" />
+    from workorder_info a
+    left join org_architecture b on (a.wind_id = b.architecture_code and b.architecture_type = '02')
+    left join org_architecture d on a.department = d.architecture_id
+    left join isc_user e on a.fill_person = e.user_id
+    where a.status != '0' and a.serial_number = #{serialNumber}
+  </select>
+  <select id="getIdBySerialNumber" resultType="java.lang.String">
+    select order_id
+    from workorder_info
+    where serial_number = #{serialNumber}
+  </select>
+
+
+
+
+
+
+
+
 
 
 
@@ -264,36 +404,36 @@
   <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderInfo" >
     insert into workorder_info (order_id, serial_number, workorder_code, 
       workorder_type_id, workorder_desc, maintainer, 
-      maintain_date, status, wind_id, 
-      company, crew_id, duty_team, 
-      duty_head, fill_person, scheme_time, 
-      unit_member, other_unit_member, position_id, 
-      position_desc, equipment_id, equipment_desc, 
-      plan_start_time, plan_end_time, plan_work_hour, 
-      plan_material_fee, plan_service_fee, actual_complete_time, 
-      attachment, equipment_status_requirement_1, 
-      equipment_status_requirement_2, other_requirement
-      )
+      maintain_date, status, flow_status, 
+      wind_id, company, department, 
+      crew_id, duty_team, duty_head, 
+      fill_person, scheme_time, unit_member, 
+      other_unit_member, position_id, position_desc, 
+      equipment_id, equipment_desc, plan_start_time, 
+      plan_end_time, plan_work_hour, plan_material_fee, 
+      plan_service_fee, actual_complete_time, attachment, 
+      equipment_status_requirement_1, equipment_status_requirement_2, 
+      other_requirement)
     values (#{orderId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{workorderCode,jdbcType=VARCHAR}, 
       #{workorderTypeId,jdbcType=VARCHAR}, #{workorderDesc,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, 
-      #{maintainDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, 
-      #{company,jdbcType=VARCHAR}, #{crewId,jdbcType=VARCHAR}, #{dutyTeam,jdbcType=VARCHAR}, 
-      #{dutyHead,jdbcType=VARCHAR}, #{fillPerson,jdbcType=VARCHAR}, #{schemeTime,jdbcType=TIMESTAMP}, 
-      #{unitMember,jdbcType=VARCHAR}, #{otherUnitMember,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}, 
-      #{positionDesc,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR}, #{equipmentDesc,jdbcType=VARCHAR}, 
-      #{planStartTime,jdbcType=TIMESTAMP}, #{planEndTime,jdbcType=TIMESTAMP}, #{planWorkHour,jdbcType=VARCHAR}, 
-      #{planMaterialFee,jdbcType=VARCHAR}, #{planServiceFee,jdbcType=VARCHAR}, #{actualCompleteTime,jdbcType=TIMESTAMP}, 
-      #{attachment,jdbcType=VARCHAR}, #{equipmentStatusRequirement1,jdbcType=VARCHAR}, 
-      #{equipmentStatusRequirement2,jdbcType=VARCHAR}, #{otherRequirement,jdbcType=VARCHAR}
-      )
+      #{maintainDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{flowStatus,jdbcType=VARCHAR},
+      #{windId,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
+      #{crewId,jdbcType=VARCHAR}, #{dutyTeam,jdbcType=VARCHAR}, #{dutyHead,jdbcType=VARCHAR}, 
+      #{fillPerson,jdbcType=VARCHAR}, #{schemeTime,jdbcType=TIMESTAMP}, #{unitMember,jdbcType=VARCHAR}, 
+      #{otherUnitMember,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}, #{positionDesc,jdbcType=VARCHAR}, 
+      #{equipmentId,jdbcType=VARCHAR}, #{equipmentDesc,jdbcType=VARCHAR}, #{planStartTime,jdbcType=TIMESTAMP}, 
+      #{planEndTime,jdbcType=TIMESTAMP}, #{planWorkHour,jdbcType=VARCHAR}, #{planMaterialFee,jdbcType=VARCHAR}, 
+      #{planServiceFee,jdbcType=VARCHAR}, #{actualCompleteTime,jdbcType=TIMESTAMP}, #{attachment,jdbcType=VARCHAR}, 
+      #{equipmentStatusRequirement1,jdbcType=VARCHAR}, #{equipmentStatusRequirement2,jdbcType=VARCHAR}, 
+      #{otherRequirement,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderInfo" >
     insert into workorder_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
+      <if test="orderId != null and orderId != ''" >
         order_id,
       </if>
-      <if test="serialNumber != null" >
+      <if test="serialNumber != null and serialNumber != ''" >
         serial_number,
       </if>
       <if test="workorderCode != null" >
@@ -314,11 +454,17 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="flowStatus != null" >
+        flow_status,
+      </if>
       <if test="windId != null" >
         wind_id,
       </if>
       <if test="company != null" >
         company,
+      </if>
+      <if test="department != null" >
+        department,
       </if>
       <if test="crewId != null" >
         crew_id,
@@ -385,10 +531,10 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="orderId != null" >
+      <if test="orderId != null and orderId != ''" >
         #{orderId,jdbcType=VARCHAR},
       </if>
-      <if test="serialNumber != null" >
+      <if test="serialNumber != null and serialNumber != ''" >
         #{serialNumber,jdbcType=VARCHAR},
       </if>
       <if test="workorderCode != null" >
@@ -404,16 +550,22 @@
         #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="maintainDate != null" >
-        #{maintainDate,jdbcType=DATE},
+        #{maintainDate,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStatus != null" >
+        #{flowStatus,jdbcType=VARCHAR},
       </if>
       <if test="windId != null" >
         #{windId,jdbcType=VARCHAR},
       </if>
       <if test="company != null" >
         #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
       </if>
       <if test="crewId != null" >
         #{crewId,jdbcType=VARCHAR},
@@ -508,16 +660,22 @@
         maintainer = #{record.maintainer,jdbcType=VARCHAR},
       </if>
       <if test="record.maintainDate != null" >
-        maintain_date = #{record.maintainDate,jdbcType=DATE},
+        maintain_date = #{record.maintainDate,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flowStatus != null" >
+        flow_status = #{record.flowStatus,jdbcType=VARCHAR},
       </if>
       <if test="record.windId != null" >
         wind_id = #{record.windId,jdbcType=VARCHAR},
       </if>
       <if test="record.company != null" >
         company = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.department != null" >
+        department = #{record.department,jdbcType=VARCHAR},
       </if>
       <if test="record.crewId != null" >
         crew_id = #{record.crewId,jdbcType=VARCHAR},
@@ -595,10 +753,12 @@
       workorder_type_id = #{record.workorderTypeId,jdbcType=VARCHAR},
       workorder_desc = #{record.workorderDesc,jdbcType=VARCHAR},
       maintainer = #{record.maintainer,jdbcType=VARCHAR},
-      maintain_date = #{record.maintainDate,jdbcType=DATE},
+      maintain_date = #{record.maintainDate,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=VARCHAR},
+      flow_status = #{record.flowStatus,jdbcType=VARCHAR},
       wind_id = #{record.windId,jdbcType=VARCHAR},
       company = #{record.company,jdbcType=VARCHAR},
+      department = #{record.department,jdbcType=VARCHAR},
       crew_id = #{record.crewId,jdbcType=VARCHAR},
       duty_team = #{record.dutyTeam,jdbcType=VARCHAR},
       duty_head = #{record.dutyHead,jdbcType=VARCHAR},
@@ -627,7 +787,7 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.maintain.entity.WorkorderInfo" >
     update workorder_info
     <set >
-      <if test="serialNumber != null" >
+      <if test="serialNumber != null and serialNumber != ''" >
         serial_number = #{serialNumber,jdbcType=VARCHAR},
       </if>
       <if test="workorderCode != null" >
@@ -643,16 +803,22 @@
         maintainer = #{maintainer,jdbcType=VARCHAR},
       </if>
       <if test="maintainDate != null" >
-        maintain_date = #{maintainDate,jdbcType=DATE},
+        maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStatus != null" >
+        flow_status = #{flowStatus,jdbcType=VARCHAR},
       </if>
       <if test="windId != null" >
         wind_id = #{windId,jdbcType=VARCHAR},
       </if>
       <if test="company != null" >
         company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null" >
+        department = #{department,jdbcType=VARCHAR},
       </if>
       <if test="crewId != null" >
         crew_id = #{crewId,jdbcType=VARCHAR},
@@ -727,10 +893,12 @@
       workorder_type_id = #{workorderTypeId,jdbcType=VARCHAR},
       workorder_desc = #{workorderDesc,jdbcType=VARCHAR},
       maintainer = #{maintainer,jdbcType=VARCHAR},
-      maintain_date = #{maintainDate,jdbcType=DATE},
+      maintain_date = #{maintainDate,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR},
+      flow_status = #{flowStatus,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},
       company = #{company,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
       crew_id = #{crewId,jdbcType=VARCHAR},
       duty_team = #{dutyTeam,jdbcType=VARCHAR},
       duty_head = #{dutyHead,jdbcType=VARCHAR},

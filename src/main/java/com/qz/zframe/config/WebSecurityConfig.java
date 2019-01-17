@@ -66,8 +66,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 				.antMatchers("/api/status").permitAll()
 				.antMatchers("/api/user").permitAll()
-				.antMatchers("/api/support/auth/login").permitAll()
-				
+				.antMatchers("/api/support/auth/login").permitAll()	
+				//导出问题数据
+				.antMatchers("/api/support/question/ExportExcl").permitAll()
 				// auth
 				.antMatchers(HttpMethod.POST, "/api/auth").permitAll()
 

@@ -16,29 +16,37 @@
     <result column="department" property="department" jdbcType="VARCHAR" />
     <result column="log_type" property="logType" jdbcType="VARCHAR" />
     <result column="log_name" property="logName" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
   </resultMap>
   
   
   <!-- 封装查询语句 -->
   <select id="listDeviceAssociationResult" resultMap="DeviceAssociationResultMap" parameterType="com.qz.zframe.run.entity.MainEquipment">
   
-  		SELECT  
-			device_association.device_association_id ,
-			main_equipment.main_equipment_id,
-			main_equipment_info.main_equipment_info_id,
-			department, 
-			main_equipment.log_type,
-			main_equipment.log_name 
-		FROM
-			device_association,main_equipment,main_equipment_info,device_type
-		where 
-			device_association.main_equipment_id = main_equipment.main_equipment_id
-			and device_association.main_equipment_info_id = main_equipment_info.main_equipment_info_id
-			and device_association.device_type_id = device_type.type_id
-			
-			<if test="department != null">
+SELECT
+	device_association.device_association_id,
+	main_equipment.main_equipment_id,
+	main_equipment_info.main_equipment_info_id,
+	department,
+	main_equipment.log_type,
+	main_equipment.log_name ,
+	org_architecture.architecture_name as wind_name
+FROM
+	device_association
+	LEFT JOIN main_equipment ON device_association.main_equipment_id = main_equipment.main_equipment_id
+	LEFT JOIN main_equipment_info ON device_association.main_equipment_info_id = main_equipment_info.main_equipment_info_id
+	LEFT JOIN device_type ON device_association.device_type_id = device_type.type_id
+	LEFT JOIN (
+SELECT
+	* 
+FROM
+	org_architecture 
+WHERE
+	architecture_type = '02') org_architecture ON org_architecture.architecture_code = main_equipment.department
+    <if test="department != null">
 				and main_equipment.department like #{department}
-			</if>
+   </if>
+   group by main_equipment_id
   </select>
   
   
@@ -124,9 +132,15 @@
     from device_association
     where device_association_id = #{deviceAssociationId,jdbcType=VARCHAR}
   </select>
+<!--   批量删除关联表数据 -->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from device_association
-    where device_association_id = #{deviceAssociationId,jdbcType=VARCHAR}
+    <where> 
+    device_association_id in
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach> 
+    </where>
   </delete>
   <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.DeviceAssociationExample" >
     delete from device_association
@@ -134,6 +148,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+  <!-- 添加关联表数据 -->
   <insert id="insert" parameterType="com.qz.zframe.run.entity.DeviceAssociation" >
     insert into device_association (device_association_id, main_equipment_id, 
       main_equipment_info_id, device_type_id)
@@ -229,4 +244,11 @@
       device_type_id = #{deviceTypeId,jdbcType=VARCHAR}
     where device_association_id = #{deviceAssociationId,jdbcType=VARCHAR}
   </update>
+  <!-- 查询三表关联数据 -->
+  <select id="selectByMainEquipmentId" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.result.DeviceAssociationResult">
+  select d.*  from  device_association  d 
+  left join  main_equipment   me  on me.main_equipment_id=d.main_equipment_id
+  left join    main_equipment_info      mei on mei.main_equipment_info_id=d.main_equipment_info_id  
+  where d.main_equipment_id=#{mainEquipmentId jdbcType=VARCHAR}
+  </select>
 </mapper>

@@ -1,9 +1,13 @@
 package com.qz.zframe.tally.service;
 
+import com.qz.zframe.common.util.PageResultEntity;
+import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.tally.dto.PostDto;
 import com.qz.zframe.tally.dto.TallyRouterDto;
 import com.qz.zframe.tally.dto.UserDto;
 import com.qz.zframe.tally.entity.*;
+import com.qz.zframe.tally.vo.PeriodTimeVO;
+import com.qz.zframe.tally.vo.RouteUserVO;
 import com.qz.zframe.tally.vo.TallyPlanVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -56,7 +60,7 @@ public interface TallyRouterService {
      * 通过路线id数组删除点检路线
      * @param routeIds
      */
-    void deleteTallyRouteByRouteId(String[] routeIds);
+    void deleteTallyRouteByRouteId(List<String> routeIds);
 
     /**
      * 查找目前最大流水号
@@ -275,6 +279,8 @@ public interface TallyRouterService {
      */
     List<TallyRoute> findTallyRouteByWindIdAndRouteName(String routeName,String windId);
 
+    List<TallyRoute> findTallyRouteByWindIdAndRouteName(String routeName,String windId11,String windId22);
+
     /**
      * 根据路线名称和风电场id计算
      * @param routeName
@@ -301,10 +307,55 @@ public interface TallyRouterService {
      */
     List<UserDto> findAllUserDto();
 
+    /**
+     * 先删除时间段表
+     * @param cycleId
+     */
+    void deletePeriodTimeByCycleId(String cycleId);
+
+    /**
+     *
+     * 根据id查询巡检路线
+     * @param routeId
+     * @return
+     */
+    TallyRoute findTallyRouteByRouteId(String routeId);
+
+    /**
+     * 根据路线id查周期
+     * @param routeId
+     * @return
+     */
+    Cycle findCycleByRouteId(String routeId);
+
+    /**
+     *查时间段
+     * @param cycleId
+     * @return
+     */
+    List<PeriodTimeVO> findPeriodTimeVOByCycleId(String cycleId);
 
 
+    /**
+     * 路线人员关联表的序号
+     * @return
+     */
+    String findRouteUserId();
+
+    /**
+     * 根据路线id查相关人员
+     * @param routeId
+     * @return
+     */
+    List<RouteUserVO> findRouteUserByrouteId(String routeId);
+
+    String findWindIdByCode(String windId1);
 
 
+    PageResultEntity getArchitectureAndMemberByWindId(String windId,PageResultEntity resultEntity);
 
 
+    ResultEntity findAllTallyRouteName(ResultEntity resultEntity);
+
+	void deleteUserByRouteId(String routeId);
 }

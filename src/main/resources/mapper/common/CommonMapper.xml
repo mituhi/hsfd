@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.CommonDao">
+	
+	<resultMap id="fileUploadMap" type="com.qz.zframe.common.entity.SpFileUpload">
+        <id column="file_id" property="fileId"/>
+        <result column="business_id" property="businessId"/>
+        <result column="business_type" property="businessType"/>
+        <result column="relative_path" property="relativePath"/>
+        <result column="original_name" property="originalName"/>
+        <result column="storage_name" property="storageName"/>
+        <result column="remark" property="remark"/>
+        <result column="file_size" property="fileSize"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user" property="createUser"/>
+    </resultMap>
+
+    <!-- 批量获取文件上传信息 -->
+    <select id="findfileUploadList" parameterType="com.qz.zframe.common.entity.SpFileUpload" resultMap="fileUploadMap">
+        select
+        file_id,
+        business_id,
+        business_type,
+        relative_path,
+        original_name,
+        storage_name,
+        remark,
+        file_size,
+        create_time,
+        create_user
+        from sp_file_upload
+        <where>
+            <if test="fileId != null">
+                file_id = #{fileId}
+            </if>
+            <if test="businessId != null">
+                and business_id = #{businessId}
+            </if>
+            <if test="businessType != null">
+                and business_type = #{businessType}
+            </if>
+            <if test="relativePath != null">
+                and relative_path = concat(#{relativePath}, '%')
+            </if>
+            <if test="originalName != null">
+                and original_name = concat('%', #{originalName}, '%')
+            </if>
+            <if test="storageName != null">
+                and storage_name = concat('%', #{storageName}, '%')
+            </if>
+            <if test="createUser != null">
+                and create_user = #{createUser}
+            </if>
+        </where>
+    </select>
+
+    <!-- 删除文件上传信息 -->
+    <delete id="deleteFileUpload" parameterType="com.qz.zframe.common.entity.SpFileUpload">
+        delete from sp_file_upload where
+        <if test="fileId != null">
+            file_id = #{fileId}
+        </if>
+        <if test="businessId != null">
+            and business_id = #{businessId}
+        </if>
+    </delete>
+
+    <!-- 新增文件上传信息 -->
+    <insert id="addFileUpload" parameterType="com.qz.zframe.common.entity.SpFileUpload">
+        insert into sp_file_upload (file_id, business_id, business_type, relative_path, original_name, storage_name, remark, file_size, create_time, create_user)
+        values (#{fileId}, #{businessId}, #{businessType}, #{relativePath}, #{originalName}, #{storageName}, #{remark}, #{fileSize}, #{createTime}, #{createUser})
+    </insert>
+
+    <!-- 根据文件id获取文件信息 -->
+    <select id="findByFileId" resultMap="fileUploadMap">
+        select
+        file_id,
+        business_id,
+        business_type,
+        relative_path,
+        original_name,
+        storage_name,
+        remark,
+        file_size,
+        create_time,
+        create_user
+        from sp_file_upload
+        where  file_id = #{fileId}
+    </select>
+
+    <select id="findDeptMsgByUserId" parameterType="string" resultType="com.qz.zframe.common.entity.Common">
+        SELECT
+            o.architecture_id deptId,
+            o.architecture_code deptCode,
+            o.architecture_name deptName,
+            o.architecture_type deptType,
+            a.architecture_id windId,
+            a.architecture_code windCode,
+            a.architecture_name windName,
+            a.architecture_type windType,
+            oa.architecture_id companyId,
+            oa.architecture_code companyCode,
+            oa.architecture_name companyName,
+            oa.architecture_type companyType
+        FROM
+            org_architecture_user u
+            LEFT JOIN org_architecture o ON o.architecture_id = u.architecture_id
+            LEFT JOIN org_architecture a ON a.architecture_id = o.super_competent_department
+            LEFT JOIN org_architecture oa ON oa.architecture_id = a.super_competent_department
+        WHERE
+            u.user_id = #{userId}
+    </select>
+
+    <select id="findTeamMsgByUserId" parameterType="string" resultType="com.qz.zframe.common.entity.Common">
+        SELECT
+            o.architecture_id teamId,
+            o.architecture_code teamCode,
+            o.architecture_name teamName,
+            o.architecture_type teamType
+        FROM
+            org_architecture_team u
+            LEFT JOIN org_architecture o ON o.architecture_id = u.architecture_id
+        WHERE
+            u.user_id = #{userId}
+    </select>
+
+    <!-- 根据用户id获取基本信息 -->
+    <select id="findUserBaseMsg" parameterType="string" resultType="com.qz.zframe.common.entity.Common">
+        SELECT
+            i.user_id userId,
+            i.user_name userName,
+            o.architecture_id deptId,
+            o.architecture_code deptCode,
+            o.architecture_name deptName,
+            o.architecture_type deptType,
+            a.architecture_id windId,
+            a.architecture_code windCode,
+            a.architecture_name windName,
+            a.architecture_type windType,
+            oa.architecture_id companyId,
+            oa.architecture_code companyCode,
+            oa.architecture_name companyName,
+            oa.architecture_type companyType
+        FROM
+            isc_user i
+            LEFT JOIN org_architecture_user u ON i.user_id = u.user_id
+            LEFT JOIN org_architecture o ON o.architecture_id = u.architecture_id
+            LEFT JOIN org_architecture a ON a.architecture_id = o.super_competent_department
+            LEFT JOIN org_architecture oa ON oa.architecture_id = a.super_competent_department
+        WHERE
+            i.user_id = #{userId}
+    </select>
+</mapper>

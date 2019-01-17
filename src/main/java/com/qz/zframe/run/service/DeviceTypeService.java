@@ -9,7 +9,7 @@ import com.qz.zframe.run.entity.DeviceTypeExample;
 /**
  * <p>Title: DeviceTypeService</p>
  * <p>@Description: 设备类型状态表接口声明 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月6日 下午4:28:25
  * @version:V1.0
  */
@@ -39,7 +39,7 @@ public interface DeviceTypeService {
 	 * @param: @param typeId   
 	 * @return: void
 	 */
-	void removeDeviceTypeById(String typeId);
+	void removeDeviceTypeById(List<String> typeIds);
 	
 	
 	/**
@@ -51,7 +51,13 @@ public interface DeviceTypeService {
 	 * @return: List<DeviceType>
 	 */
 	List<DeviceType> listDeviceType(DeviceTypeExample example,int pageNo , int pageSize);
-	
+
+	/**
+	 * 查询设备类型
+	 * @return
+	 */
+	List<DeviceType> distinctListDeviceType();
+
 	
 	/**
 	 * @Description:根据主键进行修改操作

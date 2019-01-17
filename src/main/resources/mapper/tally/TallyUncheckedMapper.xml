@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyUncheckedDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.TallyUnchecked" >
+        <id column="unchecked_id" property="uncheckedId" />
+        <result column="route_id" property="routeId" />
+        <result column="actual_executor" property="actualExecutor" />
+        <result column="unchecked_quantity" property="uncheckedQuantity"/>
+        <result column="checked_quantity" property="checkedQuantity" />
+        <result column="total" property="total"/>
+        <result column="leakage_rate" property="leakageRate"/>
+        <result column="volume_remarks" property="volumeRemarks"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.qz.zframe.tally.vo.TallyUnCheckedVO" >
+        <id column="wind_id" property="windId" />
+        <result column="route_name" property="routeName" />
+        <result column="benchmark_date" property="benchmarkDate" />
+        <result column="practitioner_name" property="practitionerName" />
+        <result column="unchecked_quantity" property="uncheckedQuantity"/>
+        <result column="checked_quantity" property="checkedQuantity" />
+        <result column="volume_remarks" property="volumeRemarks"/>
+        <result column="volume_details" property="volumeDetails"/>
+        <result column="cycle" property="cycle"/>
+        <result column="cycle_unit" property="cycleUnit"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        unchecked_id,route_id,start_time,end_time,actual_executor,unchecked_quantity,checked_quantity,total,leakage_rate,volume_remarks,date_time,cause_leak,leakage_quantity,department_name
+    </sql>
+
+    <select id="findAllUncheckedVO" resultMap="BaseResultMap2">
+      SELECT tally_route.wind_id,tally_route.route_name,
+      cycle.benchmark_date,cycle.cycle,cycle.cycle_unit,
+      tally_record.practitioner_name,
+      tally_unchecked.unchecked_quantity,tally_unchecked.checked_quantity,
+      tally_unchecked.volume_remarks,
+      tally_unchecked.volume_details
+      FROM tally_route,cycle,tally_record,tally_unchecked
+      WHERE
+      tally_route.route_id=cycle.route_id
+      AND  tally_route.route_id=tally_record.route_id
+      AND tally_route.route_id=tally_unchecked.route_id
+    </select>
+
+</mapper>

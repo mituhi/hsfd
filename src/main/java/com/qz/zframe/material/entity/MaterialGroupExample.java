@@ -218,7 +218,7 @@ public class MaterialGroupExample extends PageExample{
         }
 
         public Criteria andGroupCodeLike(String value) {
-            addCriterion("group_code like", value, "groupCode");
+            addCriterion("group_code like", "%"+value+"%", "groupCode");
             return (Criteria) this;
         }
 
@@ -288,7 +288,7 @@ public class MaterialGroupExample extends PageExample{
         }
 
         public Criteria andGroupNameLike(String value) {
-            addCriterion("group_name like", value, "groupName");
+            addCriterion("group_name like", "%"+value+"%", "groupName");
             return (Criteria) this;
         }
 

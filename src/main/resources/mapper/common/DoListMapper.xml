@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.DoListDao">
+	
+	<resultMap id="doListMap" type="com.qz.zframe.common.entity.DoList">
+        <id column="do_id" property="doId"/>
+        <result column="task_id" property="taskId"/>
+        <result column="task_code" property="taskCode"/>
+        <result column="task_describe" property="taskDescribe"/>
+        <result column="task_type" property="taskType"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <resultMap id="doRoleRelaMap" type="com.qz.zframe.common.entity.DoRoleRela">
+        <id column="rela_id" property="relaId"/>
+        <result column="do_id" property="doId"/>
+        <result column="role_id" property="roleId"/>
+    </resultMap>
+
+    <!-- 新增待办信息 -->
+    <insert id="addDoList" parameterType="com.qz.zframe.common.entity.DoList">
+        INSERT INTO do_list (do_id, task_id, task_code, task_describe, task_type, create_time)
+        VALUES(#{doId}, #{taskId}, #{taskCode}, #{taskDescribe}, #{taskType}, #{createTime})
+    </insert>
+
+    <!-- 新增待办关联角色信息 -->
+    <insert id="addDoRoleRelas" parameterType="com.qz.zframe.common.entity.DoRoleRela">
+        INSERT INTO do_role_rela (rela_id, do_id, role_id)
+        VALUES
+        <foreach collection ="list" item="doRoleRelas" separator="," >
+            (#{doRoleRelas.relaId}, #{doRoleRelas.doId}, #{doRoleRelas.roleId})
+        </foreach >
+    </insert>
+
+    <!-- 新增待办角色关联信息 -->
+    <delete id="deleteDoRoleRelas" parameterType="com.qz.zframe.common.entity.DoRoleRela" >
+        delete from do_role_rela
+        where rela_id in
+        <foreach item="item" index="index" collection="doRoleRelas" open="(" separator="," close=")">
+            #{item.relaId}
+        </foreach>
+    </delete>
+
+    <!-- 根据待办id查询关联角色 -->
+    <select id="findDoRoleRelaByRelaId" parameterType="string" resultMap="doRoleRelaMap">
+        select * from do_role_rela where do_id = #{doId}
+    </select>
+
+    <!-- 根据待办id查询关联角色 -->
+    <select id="findDoListByTaskId" parameterType="string" resultMap="doListMap">
+        select * from do_list where task_id = #{taskId}
+    </select>
+
+    <!-- 根据角色id查询待办信息 -->
+    <select id="findDoListByRole" parameterType="java.util.List" resultMap="doListMap">
+        SELECT
+            d.do_id,
+            d.task_id,
+            d.task_code,
+            d.task_describe,
+            d.task_type,
+            s.title taskTypeText,
+            d.create_time
+        FROM
+            do_role_rela r,
+            do_list d
+            LEFT JOIN (SELECT c.`name`,c.title FROM sp_code_type s,sp_code c WHERE s.id = c.code_type_id AND s.`name`='TASK_TYPE') s
+            ON d.task_type = s.NAME
+        WHERE
+            d.do_id = r.do_id
+        and r.role_id in
+        <foreach item="item" index="index" collection="roles" open="(" separator="," close=")">
+            #{item.roleId}
+        </foreach>
+        order by d.create_time
+    </select>
+    
+    
+   <delete id="deleteByDoId" parameterType="java.lang.String" >
+   delete from do_role_rela where do_id=(select do_id from do_list where task_id=#{taskId,jdbcType=VARCHAR})
+  </delete>
+    
+</mapper>

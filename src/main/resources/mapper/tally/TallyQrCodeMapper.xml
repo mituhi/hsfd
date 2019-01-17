@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyQrCodeDao" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.QrCode" >
+    <id column="qr_id" property="qrId" jdbcType="VARCHAR" />
+    <result column="qr_code_id" property="qrCodeId" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="creater" property="creater" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <!--  关联查询  -->
+    <result column="position_code" property="positionCode" jdbcType="VARCHAR" />
+	<result column="position_name" property="positionName" jdbcType="VARCHAR" />
+	<result column="wind_id" property="windCode" jdbcType="VARCHAR" />
+	<result column="windName" property="windName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  	<sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</sql>
+  
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    qr_id, qr_code_id, position_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tally.entity.QrCodeExample" >
+    select a.*,b.position_code,b.position_name,b.wind_id ,c.architecture_name,c.architecture_name as windName
+    from qr_code a left join position_encode b on a.position_id=b.position_id left join org_architecture c on b.wind_id=c.architecture_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     <include refid="Pagination_Sql" />
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from qr_code
+    where qr_id = #{qrId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from qr_code
+    where qr_id = #{qrId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.tally.entity.QrCodeExample" >
+    delete from qr_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.tally.entity.QrCode" >
+    insert into qr_code (qr_id, qr_code_id, position_id
+      )
+    values (#{qrId,jdbcType=VARCHAR}, #{qrCodeId,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.tally.entity.QrCode" >
+    insert into qr_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="qrId != null" >
+        qr_id,
+      </if>
+      <if test="qrCodeId != null" >
+        qr_code_id,
+      </if>
+      <if test="positionId != null" >
+        position_id,
+      </if>
+        <if test="creater != null" >
+        creater,
+      </if>
+        <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="qrId != null" >
+        #{qrId,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCodeId != null" >
+        #{qrCodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null" >
+        #{positionId,jdbcType=VARCHAR},
+      </if>
+        <if test="creater != null" >
+        #{creater,jdbcType=VARCHAR},
+      </if>
+        <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.tally.entity.QrCodeExample" resultType="java.lang.Integer" >
+    select count(*) from qr_code a left join position_encode b on a.position_id=b.position_id left join org_architecture c on b.wind_id=c.architecture_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update qr_code
+    <set >
+      <if test="record.qrId != null" >
+        qr_id = #{record.qrId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qrCodeId != null" >
+        qr_code_id = #{record.qrCodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionId != null" >
+        position_id = #{record.positionId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update qr_code
+    set qr_id = #{record.qrId,jdbcType=VARCHAR},
+      qr_code_id = #{record.qrCodeId,jdbcType=VARCHAR},
+      position_id = #{record.positionId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.tally.entity.QrCode" >
+    update qr_code
+    <set >
+      <if test="qrCodeId != null" >
+        qr_code_id = #{qrCodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null" >
+        position_id = #{positionId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where qr_id = #{qrId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.tally.entity.QrCode" >
+    update qr_code
+    set qr_code_id = #{qrCodeId,jdbcType=VARCHAR},
+      position_id = #{positionId,jdbcType=VARCHAR}
+    where qr_id = #{qrId,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="getMaxQrcode" resultType="java.lang.String"  parameterType= "java.lang.String">
+   select max(qr_code_id) from qr_code 
+  </select>
+  
+    <!-- 新增 -->
+    <insert id="insertByCodes">
+        INSERT INTO qr_code
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="qrCodeId!=null and qrCodeId!=''">qr_code_id,</if>
+            <if test="code!=null and code!=''">code,</if>
+            <if test="windId!=null and windId!=''">wind_id,</if>
+            <if test="addressName!=null and addressName!=''">address_name,</if>
+            <if test="windCode!=null and windCode!=''">wind_code,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="qrCodeId!=null and qrCodeId!=''">#{qrCodeId},</if>
+            <if test="code!=null and code!=''">#{code},</if>
+            <if test="windId!=null and windId!=''">#{windId},</if>
+            <if test="addressName!=null and addressName!=''">#{addressName},</if>
+            <if test="windCode!=null and windCode!=''">#{windCode},</if>
+        </trim>
+    </insert>
+
+    <select id="countByCodes" resultType="int">
+        SELECT
+        COUNT(code)
+        FROM qr_code
+        WHERE code BETWEEN #{code1} and #{code2}
+    </select>
+
+
+
+    <select id="findQrCodeByCode" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+         qr_code.qr_code_id,qr_code.code,qr_code.wind_id,qr_code.address_name,qr_code.wind_code
+         FROM qr_code
+         WHERE qr_code.code=#{code}
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateQrCodeByCode">
+        UPDATE qr_code
+        <set>
+            <if test="qrCodeId!=null and qrCodeId!=''">code=#{code},</if>
+            <if test="windId!=null and windId!=''">wind_id=#{windId},</if>
+            <if test="addressName!=null and addressName!=''">address_name=#{addressName},</if>
+            <if test="windCode!=null and windCode!=''">wind_code=#{windCode},</if>
+        </set>
+        WHERE
+        qr_code_id=#{qrCodeId}
+    </update>
+
+    <delete id="deleteQrCodeByQrId">
+        DELETE
+        FROM qr_code
+        WHERE qr_id IN
+       <foreach item="qrIds" collection="list" open="(" close=")" separator=",">
+            #{qrIds}
+        </foreach>
+    </delete>
+
+  <select id="findAllPositionCodes" resultType="string">
+    SELECT p.position_code
+    FROM position_encode p,qr_code q
+    WHERE p.position_id=q.position_id
+  </select>
+
+  <select id="findPositonIdByPositionCode" parameterType="string" resultType="string">
+    SELECT position_id
+    FROM position_encode
+    WHERE position_code=#{positionCode}
+  </select>
+
+  <select id="findPositionIdAndPositionCode" resultMap="BaseResultMap">
+    SELECT position_id,position_code
+    FROM position_encode
+  </select>
+  
+  
+</mapper>

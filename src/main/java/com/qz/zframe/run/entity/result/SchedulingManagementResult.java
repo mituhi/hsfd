@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * <p>Title: SchedulingManagementResult</p>
  * <p> @Description: 排班表首页查询字段返回包装类</p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月2日 下午6:25:09
  * @version:V1.0
  */
@@ -36,6 +36,31 @@ public class SchedulingManagementResult {
 
 	@ApiModelProperty(value="结束日期",name="endTime",required=true)
 	private Date endTime;
+
+	@ApiModelProperty(value="开始日期（导出Excel用到）",name="startTimeExcel",required=true)
+	private String startTimeExcel;				
+	
+	@ApiModelProperty(value="结束日期（导出Excel用到）",name="endTimeExcel",required=true)
+	private String endTimeExcel;
+
+	
+	
+	
+	public String getStartTimeExcel() {
+		return startTimeExcel;
+	}
+
+	public void setStartTimeExcel(String startTimeExcel) {
+		this.startTimeExcel = startTimeExcel;
+	}
+
+	public String getEndTimeExcel() {
+		return endTimeExcel;
+	}
+
+	public void setEndTimeExcel(String endTimeExcel) {
+		this.endTimeExcel = endTimeExcel;
+	}
 
 	public String getSchedulingAssociatedId() {
 		return schedulingAssociatedId;

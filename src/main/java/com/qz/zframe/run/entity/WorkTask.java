@@ -8,7 +8,7 @@ public class WorkTask {
 	@ApiModelProperty(value="工作任务表id",name="workTaskId")
     private String workTaskId;
 
-	@ApiModelProperty(value="工作分类表id",name="classificationId",required = true)
+	@ApiModelProperty(value="工作分类表id(任务分类下拉获取)",name="classificationId",required = true)
     private String classificationId;
 
 	@ApiModelProperty(value="流水号/计划编号",name="serialNum")
@@ -42,9 +42,9 @@ public class WorkTask {
     private Date startTime;
 
     @ApiModelProperty(value="频率时间/工作周期",name="rateTime",required = true)
-    private Date rateTime;
+    private String rateTime;
 
-    @ApiModelProperty(value="失效时间",name="failureTime")
+    @ApiModelProperty(value="失效时间",name="failureTime",required = true)
     private Date failureTime;
 
     @ApiModelProperty(value="任务提前期",name="leadTime",required = true)
@@ -116,6 +116,14 @@ public class WorkTask {
         this.userId = userId == null ? null : userId.trim();
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username == null ? null : username.trim();
+    }
+
     public String getWorkName() {
         return workName;
     }
@@ -164,12 +172,12 @@ public class WorkTask {
         this.startTime = startTime;
     }
 
-    public Date getRateTime() {
+    public String getRateTime() {
         return rateTime;
     }
 
-    public void setRateTime(Date rateTime) {
-        this.rateTime = rateTime;
+    public void setRateTime(String rateTime) {
+        this.rateTime = rateTime == null ? null : rateTime.trim();
     }
 
     public Date getFailureTime() {
@@ -210,14 +218,6 @@ public class WorkTask {
 
     public void setFileId(String fileId) {
         this.fileId = fileId == null ? null : fileId.trim();
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
     }
 
     public Date getCreateTime() {

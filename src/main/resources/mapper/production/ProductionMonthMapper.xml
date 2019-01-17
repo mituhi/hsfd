@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.production.dao.ProductionMonthMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.production.entity.ProductionMonth" >
+    <result column="month_id" property="monthId" jdbcType="VARCHAR" />
+    <result column="month_start" property="monthStart" jdbcType="DATE" />
+    <result column="full_consumption" property="fullConsumption" jdbcType="VARCHAR" />
+    <result column="number_shutdowns" property="numberShutdowns" jdbcType="VARCHAR" />
+    <result column="wind_speed" property="windSpeed" jdbcType="VARCHAR" />
+    <result column="average_wind_speed" property="averageWindSpeed" jdbcType="VARCHAR" />
+    <result column="maximum_wind_speed" property="maximumWindSpeed" jdbcType="VARCHAR" />
+    <result column="average_available_hours" property="averageAvailableHours" jdbcType="VARCHAR" />
+    <result column="average_availability_rate" property="averageAvailabilityRate" jdbcType="VARCHAR" />
+    <result column="purchased_electricity" property="purchasedElectricity" jdbcType="VARCHAR" />
+    <result column="comprehensive_wind_power" property="comprehensiveWindPower" jdbcType="VARCHAR" />
+    <result column="power_generation" property="powerGeneration" jdbcType="VARCHAR" />
+    <result column="month_capacity" property="monthCapacity" jdbcType="VARCHAR" />
+    <result column="generation_planning" property="generationPlanning" jdbcType="VARCHAR" />
+    <result column="next_week_plan" property="nextWeekPlan" jdbcType="VARCHAR" />
+    <result column="estimated_wind_next_week" property="estimatedWindNextWeek" jdbcType="VARCHAR" />
+    <result column="plan_completion_rate" property="planCompletionRate" jdbcType="VARCHAR" />
+    <result column="abandoned_wind_power" property="abandonedWindPower" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+		</sql>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    month_id, month_start, full_consumption, number_shutdowns, wind_speed, average_wind_speed, 
+    maximum_wind_speed, average_available_hours, average_availability_rate, purchased_electricity, 
+    comprehensive_wind_power, power_generation, weekly_capacity, generation_planning, 
+    next_week_plan, estimated_wind_next_week, plan_completion_rate, abandoned_wind_power, 
+    wind_id, year
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.production.entity.ProductionMonthExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from production_month
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+     <include refid="Pagination_Sql" />
+  </select>
+  
+  
+  <select id="selectByYearAndWindId" resultType="com.qz.zframe.production.entity.MonthStatistics">
+    select a.* from (
+    SELECT
+    m.wind_id,
+	m.wind_name,
+	m.wind_code,
+	sum(fullConsumption) as fullConsumption, 
+	sum(numberShutdowns) as numberShutdowns,
+	sum(windSpeed) as windSpeed,
+	sum(averageWindSpeed) as averageWindSpeed,
+	sum(averageAvailableHours) asaverageAvailableHours,
+	sum(averageAvailabilityRate) as averageAvailabilityRate,
+	sum(unscheduled_shutdown) as G,
+	sum(scheduling_service) as H,
+	sum(annual_energy_production) as J,
+	sum(power_next) as K,
+	sum(daily_average_temperature) as L
+    FROM
+	production_month m 
+    WHERE
+	m.YEAR =#{year}
+	AND m.wind_id =#{windId}  and 
+    QUARTER(month_start)=QUARTER(now()))a
+   </select>
+
+  <delete id="deleteByExample" parameterType="com.qz.zframe.production.entity.ProductionMonthExample" >
+    delete from production_month
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <delete id="deleteByPrimaryKeyList" parameterType="java.util.List">
+    delete from production_month
+    <where> 
+    month_id  in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach> 
+    </where>
+   </delete>
+  <insert id="insert" parameterType="com.qz.zframe.production.entity.ProductionMonth" >
+    insert into production_month (month_id, month_start, full_consumption, 
+      number_shutdowns, wind_speed, average_wind_speed, 
+      maximum_wind_speed, average_available_hours, 
+      average_availability_rate, purchased_electricity, 
+      comprehensive_wind_power, power_generation, 
+      month_capacity, generation_planning, next_week_plan, 
+      estimated_wind_next_week, plan_completion_rate, 
+      abandoned_wind_power, wind_id, year
+      )
+    values (#{monthId,jdbcType=VARCHAR}, #{monthStart,jdbcType=DATE}, #{fullConsumption,jdbcType=VARCHAR}, 
+      #{numberShutdowns,jdbcType=VARCHAR}, #{windSpeed,jdbcType=VARCHAR}, #{averageWindSpeed,jdbcType=VARCHAR}, 
+      #{maximumWindSpeed,jdbcType=VARCHAR}, #{averageAvailableHours,jdbcType=VARCHAR}, 
+      #{averageAvailabilityRate,jdbcType=VARCHAR}, #{purchasedElectricity,jdbcType=VARCHAR}, 
+      #{comprehensiveWindPower,jdbcType=VARCHAR}, #{powerGeneration,jdbcType=VARCHAR}, 
+      #{monthCapacity,jdbcType=VARCHAR}, #{generationPlanning,jdbcType=VARCHAR}, #{nextWeekPlan,jdbcType=VARCHAR}, 
+      #{estimatedWindNextWeek,jdbcType=VARCHAR}, #{planCompletionRate,jdbcType=VARCHAR}, 
+      #{abandonedWindPower,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{year,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.production.entity.ProductionMonth" >
+    insert into production_month
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="monthId != null" >
+        month_id,
+      </if>
+      <if test="monthStart != null" >
+        month_start,
+      </if>
+      <if test="fullConsumption != null" >
+        full_consumption,
+      </if>
+      <if test="numberShutdowns != null" >
+        number_shutdowns,
+      </if>
+      <if test="windSpeed != null" >
+        wind_speed,
+      </if>
+      <if test="averageWindSpeed != null" >
+        average_wind_speed,
+      </if>
+      <if test="maximumWindSpeed != null" >
+        maximum_wind_speed,
+      </if>
+      <if test="averageAvailableHours != null" >
+        average_available_hours,
+      </if>
+      <if test="averageAvailabilityRate != null" >
+        average_availability_rate,
+      </if>
+      <if test="purchasedElectricity != null" >
+        purchased_electricity,
+      </if>
+      <if test="comprehensiveWindPower != null" >
+        comprehensive_wind_power,
+      </if>
+      <if test="powerGeneration != null" >
+        power_generation,
+      </if>
+      <if test="weeklyCapacity != null" >
+        weekly_capacity,
+      </if>
+      <if test="generationPlanning != null" >
+        generation_planning,
+      </if>
+      <if test="nextWeekPlan != null" >
+        next_week_plan,
+      </if>
+      <if test="estimatedWindNextWeek != null" >
+        estimated_wind_next_week,
+      </if>
+      <if test="planCompletionRate != null" >
+        plan_completion_rate,
+      </if>
+      <if test="abandonedWindPower != null" >
+        abandoned_wind_power,
+      </if>
+      <if test="windId != null" >
+        wind_id,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="monthId != null" >
+        #{monthId,jdbcType=VARCHAR},
+      </if>
+      <if test="monthStart != null" >
+        #{monthStart,jdbcType=DATE},
+      </if>
+      <if test="fullConsumption != null" >
+        #{fullConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="numberShutdowns != null" >
+        #{numberShutdowns,jdbcType=VARCHAR},
+      </if>
+      <if test="windSpeed != null" >
+        #{windSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="averageWindSpeed != null" >
+        #{averageWindSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="maximumWindSpeed != null" >
+        #{maximumWindSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="averageAvailableHours != null" >
+        #{averageAvailableHours,jdbcType=VARCHAR},
+      </if>
+      <if test="averageAvailabilityRate != null" >
+        #{averageAvailabilityRate,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasedElectricity != null" >
+        #{purchasedElectricity,jdbcType=VARCHAR},
+      </if>
+      <if test="comprehensiveWindPower != null" >
+        #{comprehensiveWindPower,jdbcType=VARCHAR},
+      </if>
+      <if test="powerGeneration != null" >
+        #{powerGeneration,jdbcType=VARCHAR},
+      </if>
+      <if test="weeklyCapacity != null" >
+        #{weeklyCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="generationPlanning != null" >
+        #{generationPlanning,jdbcType=VARCHAR},
+      </if>
+      <if test="nextWeekPlan != null" >
+        #{nextWeekPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="estimatedWindNextWeek != null" >
+        #{estimatedWindNextWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="planCompletionRate != null" >
+        #{planCompletionRate,jdbcType=VARCHAR},
+      </if>
+      <if test="abandonedWindPower != null" >
+        #{abandonedWindPower,jdbcType=VARCHAR},
+      </if>
+      <if test="windId != null" >
+        #{windId,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.production.entity.ProductionMonthExample" resultType="java.lang.Integer" >
+    select count(*) from production_month
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update production_month
+    <set >
+      <if test="record.monthId != null" >
+        month_id = #{record.monthId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.monthStart != null" >
+        month_start = #{record.monthStart,jdbcType=DATE},
+      </if>
+      <if test="record.fullConsumption != null" >
+        full_consumption = #{record.fullConsumption,jdbcType=VARCHAR},
+      </if>
+      <if test="record.numberShutdowns != null" >
+        number_shutdowns = #{record.numberShutdowns,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windSpeed != null" >
+        wind_speed = #{record.windSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.averageWindSpeed != null" >
+        average_wind_speed = #{record.averageWindSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.maximumWindSpeed != null" >
+        maximum_wind_speed = #{record.maximumWindSpeed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.averageAvailableHours != null" >
+        average_available_hours = #{record.averageAvailableHours,jdbcType=VARCHAR},
+      </if>
+      <if test="record.averageAvailabilityRate != null" >
+        average_availability_rate = #{record.averageAvailabilityRate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchasedElectricity != null" >
+        purchased_electricity = #{record.purchasedElectricity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comprehensiveWindPower != null" >
+        comprehensive_wind_power = #{record.comprehensiveWindPower,jdbcType=VARCHAR},
+      </if>
+      <if test="record.powerGeneration != null" >
+        power_generation = #{record.powerGeneration,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weeklyCapacity != null" >
+        weekly_capacity = #{record.weeklyCapacity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.generationPlanning != null" >
+        generation_planning = #{record.generationPlanning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nextWeekPlan != null" >
+        next_week_plan = #{record.nextWeekPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="record.estimatedWindNextWeek != null" >
+        estimated_wind_next_week = #{record.estimatedWindNextWeek,jdbcType=VARCHAR},
+      </if>
+      <if test="record.planCompletionRate != null" >
+        plan_completion_rate = #{record.planCompletionRate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.abandonedWindPower != null" >
+        abandoned_wind_power = #{record.abandonedWindPower,jdbcType=VARCHAR},
+      </if>
+      <if test="record.windId != null" >
+        wind_id = #{record.windId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.year != null" >
+        year = #{record.year,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update production_month
+    set month_id = #{record.monthId,jdbcType=VARCHAR},
+      month_start = #{record.monthStart,jdbcType=DATE},
+      full_consumption = #{record.fullConsumption,jdbcType=VARCHAR},
+      number_shutdowns = #{record.numberShutdowns,jdbcType=VARCHAR},
+      wind_speed = #{record.windSpeed,jdbcType=VARCHAR},
+      average_wind_speed = #{record.averageWindSpeed,jdbcType=VARCHAR},
+      maximum_wind_speed = #{record.maximumWindSpeed,jdbcType=VARCHAR},
+      average_available_hours = #{record.averageAvailableHours,jdbcType=VARCHAR},
+      average_availability_rate = #{record.averageAvailabilityRate,jdbcType=VARCHAR},
+      purchased_electricity = #{record.purchasedElectricity,jdbcType=VARCHAR},
+      comprehensive_wind_power = #{record.comprehensiveWindPower,jdbcType=VARCHAR},
+      power_generation = #{record.powerGeneration,jdbcType=VARCHAR},
+      weekly_capacity = #{record.weeklyCapacity,jdbcType=VARCHAR},
+      generation_planning = #{record.generationPlanning,jdbcType=VARCHAR},
+      next_week_plan = #{record.nextWeekPlan,jdbcType=VARCHAR},
+      estimated_wind_next_week = #{record.estimatedWindNextWeek,jdbcType=VARCHAR},
+      plan_completion_rate = #{record.planCompletionRate,jdbcType=VARCHAR},
+      abandoned_wind_power = #{record.abandonedWindPower,jdbcType=VARCHAR},
+      wind_id = #{record.windId,jdbcType=VARCHAR},
+      year = #{record.year,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.production.entity.ProductionMonth">
+   update production_month
+    set
+      month_start = #{record.monthStart,jdbcType=DATE},
+      full_consumption = #{fullConsumption,jdbcType=VARCHAR},
+      number_shutdowns = #{numberShutdowns,jdbcType=VARCHAR},
+      wind_speed = #{windSpeed,jdbcType=VARCHAR},
+      average_wind_speed = #{averageWindSpeed,jdbcType=VARCHAR},
+      maximum_wind_speed = #{maximumWindSpeed,jdbcType=VARCHAR},
+      average_available_hours = #{averageAvailableHours,jdbcType=VARCHAR},
+      average_availability_rate = #{averageAvailabilityRate,jdbcType=VARCHAR},
+      purchased_electricity = #{purchasedElectricity,jdbcType=VARCHAR},
+      comprehensive_wind_power = #{comprehensiveWindPower,jdbcType=VARCHAR},
+      power_generation = #{powerGeneration,jdbcType=VARCHAR},
+      month_capacity = #{monthCapacity,jdbcType=VARCHAR},
+      generation_planning = #{generationPlanning,jdbcType=VARCHAR},
+      next_week_plan = #{nextWeekPlan,jdbcType=VARCHAR},
+      estimated_wind_next_week = #{estimatedWindNextWeek,jdbcType=VARCHAR},
+      plan_completion_rate = #{planCompletionRate,jdbcType=VARCHAR},
+      abandoned_wind_power = #{abandonedWindPower,jdbcType=VARCHAR},
+      wind_id = #{windId,jdbcType=VARCHAR},
+      year = #{year,jdbcType=VARCHAR}
+     where  month_id = #{monthId,jdbcType=VARCHAR}
+  </update>
+  </mapper>

@@ -218,7 +218,7 @@ public class SupplierExample extends PageExample{
         }
 
         public Criteria andSupplierCodeLike(String value) {
-            addCriterion("supplier_code like", value, "supplierCode");
+            addCriterion("supplier_code like","%"+ value+"%", "supplierCode");
             return (Criteria) this;
         }
 
@@ -288,7 +288,7 @@ public class SupplierExample extends PageExample{
         }
 
         public Criteria andSupplierNameLike(String value) {
-            addCriterion("supplier_name like", value, "supplierName");
+            addCriterion("supplier_name like","%"+ value+"%", "supplierName");
             return (Criteria) this;
         }
 

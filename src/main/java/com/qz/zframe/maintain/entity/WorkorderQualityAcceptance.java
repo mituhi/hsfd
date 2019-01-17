@@ -1,22 +1,22 @@
 package com.qz.zframe.maintain.entity;
 
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 public class WorkorderQualityAcceptance {
 
-    @ApiParam(name="qualityAcceptanceId",value="质量验收id",required=false)
+    @ApiModelProperty(name="qualityAcceptanceId",value="质量验收id",required=false)
     private String qualityAcceptanceId;
 
-    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    @ApiModelProperty(name="workorderId",value="缺陷工单id",required=false)
     private String workorderId;
 
-    @ApiParam(name="orderId",value="工单id",required=false)
+    @ApiModelProperty(name="orderId",value="工单id",required=false)
     private String orderId;
 
-    @ApiParam(name="acceptanceEvaluation",value="验收评价",required=false)
+    @ApiModelProperty(name="acceptanceEvaluation",value="验收评价",required=false)
     private String acceptanceEvaluation;
 
-    @ApiParam(name="acceptanceRemark",value="备注",required=false)
+    @ApiModelProperty(name="acceptanceRemark",value="备注",required=false)
     private String acceptanceRemark;
 
     public String getQualityAcceptanceId() {

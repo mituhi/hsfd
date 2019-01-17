@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.qz.zframe.run.dao.SchedulingAssociatedMapper" >
   <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.SchedulingAssociated" >
-    <id column="id" property="id" jdbcType="VARCHAR" />
+    <id column="associated_id" property="associatedId" jdbcType="VARCHAR" />
     <result column="scheduling_management_id" property="schedulingManagementId" jdbcType="VARCHAR" />
     <result column="scheduling_rule_id" property="schedulingRuleId" jdbcType="VARCHAR" />
     <result column="start_time" property="startTime" jdbcType="DATE" />
@@ -67,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, scheduling_management_id, scheduling_rule_id, start_time, end_time
+    associated_id, scheduling_management_id, scheduling_rule_id, start_time, end_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.SchedulingAssociatedExample" >
     select
@@ -87,11 +87,11 @@
     select 
     <include refid="Base_Column_List" />
     from scheduling_associated
-    where id = #{id,jdbcType=VARCHAR}
+    where associated_id = #{associatedId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from scheduling_associated
-    where id = #{id,jdbcType=VARCHAR}
+    where associated_id = #{associatedId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.SchedulingAssociatedExample" >
     delete from scheduling_associated
@@ -100,9 +100,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.run.entity.SchedulingAssociated" >
-    insert into scheduling_associated (id, scheduling_management_id, scheduling_rule_id, 
+    insert into scheduling_associated (associated_id, scheduling_management_id, scheduling_rule_id, 
       start_time, end_time)
-    values (#{id,jdbcType=VARCHAR}, #{schedulingManagementId,jdbcType=VARCHAR}, #{schedulingRuleId,jdbcType=VARCHAR}, 
+    values (#{associatedId,jdbcType=VARCHAR}, #{schedulingManagementId,jdbcType=VARCHAR}, #{schedulingRuleId,jdbcType=VARCHAR}, 
       #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.SchedulingAssociated" >
@@ -206,6 +206,6 @@
       scheduling_rule_id = #{schedulingRuleId,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=DATE},
       end_time = #{endTime,jdbcType=DATE}
-    where id = #{id,jdbcType=VARCHAR}
+    where associated_id = #{associatedId,jdbcType=VARCHAR}
   </update>
 </mapper>

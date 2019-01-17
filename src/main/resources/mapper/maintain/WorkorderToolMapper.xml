@@ -73,6 +73,41 @@
     tool_id, workorder_id, knowledge_id, order_id, tool_number, tool_desc, tool_plan_amount, 
     tool_unit
   </sql>
+
+
+
+
+
+  <delete id="batchDeleteByWorkOrderIds" parameterType="java.lang.String">
+    delete from workorder_tool
+    where workorder_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByOrderIds" parameterType="java.lang.String">
+    delete from workorder_tool
+    where workorder_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByKnowledgeIds" parameterType="java.lang.String">
+    delete from workorder_tool
+    where workorder_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderToolExample" >
     select
     <if test="distinct" >

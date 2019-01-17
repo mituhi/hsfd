@@ -1,9 +1,8 @@
 package com.qz.zframe.run.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import com.qz.zframe.material.entity.MaterialExample.Criteria;
 
 public class DutyLogTabExample {
     protected String orderByClause;
@@ -107,213 +106,212 @@ public class DutyLogTabExample {
         }
 
         public Criteria andTabIdIsNull() {
-            addCriterion("TAB_id is null");
+            addCriterion("tab_id is null");
             return (Criteria) this;
         }
 
         public Criteria andTabIdIsNotNull() {
-            addCriterion("TAB_id is not null");
+            addCriterion("tab_id is not null");
             return (Criteria) this;
         }
 
         public Criteria andTabIdEqualTo(String value) {
-            addCriterion("TAB_id =", value, "tabId");
+            addCriterion("tab_id =", value, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdNotEqualTo(String value) {
-            addCriterion("TAB_id <>", value, "tabId");
+            addCriterion("tab_id <>", value, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdGreaterThan(String value) {
-            addCriterion("TAB_id >", value, "tabId");
+            addCriterion("tab_id >", value, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdGreaterThanOrEqualTo(String value) {
-            addCriterion("TAB_id >=", value, "tabId");
+            addCriterion("tab_id >=", value, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdLessThan(String value) {
-            addCriterion("TAB_id <", value, "tabId");
+            addCriterion("tab_id <", value, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdLessThanOrEqualTo(String value) {
-            addCriterion("TAB_id <=", value, "tabId");
+            addCriterion("tab_id <=", value, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdLike(String value) {
-            addCriterion("TAB_id like", value, "tabId");
+            addCriterion("tab_id like", value, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdNotLike(String value) {
-            addCriterion("TAB_id not like", value, "tabId");
+            addCriterion("tab_id not like", value, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdIn(List<String> values) {
-            addCriterion("TAB_id in", values, "tabId");
+            addCriterion("tab_id in", values, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdNotIn(List<String> values) {
-            addCriterion("TAB_id not in", values, "tabId");
+            addCriterion("tab_id not in", values, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdBetween(String value1, String value2) {
-            addCriterion("TAB_id between", value1, value2, "tabId");
+            addCriterion("tab_id between", value1, value2, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabIdNotBetween(String value1, String value2) {
-            addCriterion("TAB_id not between", value1, value2, "tabId");
+            addCriterion("tab_id not between", value1, value2, "tabId");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeIsNull() {
-            addCriterion("TAB_code is null");
+            addCriterion("tab_code is null");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeIsNotNull() {
-            addCriterion("TAB_code is not null");
+            addCriterion("tab_code is not null");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeEqualTo(String value) {
-            addCriterion("TAB_code =", value, "tabCode");
+            addCriterion("tab_code =", value, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeNotEqualTo(String value) {
-            addCriterion("TAB_code <>", value, "tabCode");
+            addCriterion("tab_code <>", value, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeGreaterThan(String value) {
-            addCriterion("TAB_code >", value, "tabCode");
+            addCriterion("tab_code >", value, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeGreaterThanOrEqualTo(String value) {
-            addCriterion("TAB_code >=", value, "tabCode");
+            addCriterion("tab_code >=", value, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeLessThan(String value) {
-            addCriterion("TAB_code <", value, "tabCode");
+            addCriterion("tab_code <", value, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeLessThanOrEqualTo(String value) {
-            addCriterion("TAB_code <=", value, "tabCode");
+            addCriterion("tab_code <=", value, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeLike(String value) {
-        	 addCriterion("TAB_code like","%"+value+"%", "tabCode");
+            addCriterion("tab_code like", value, "tabCode");
             return (Criteria) this;
         }
-        
 
         public Criteria andTabCodeNotLike(String value) {
-            addCriterion("TAB_code not like", value, "tabCode");
+            addCriterion("tab_code not like", value, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeIn(List<String> values) {
-            addCriterion("TAB_code in", values, "tabCode");
+            addCriterion("tab_code in", values, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeNotIn(List<String> values) {
-            addCriterion("TAB_code not in", values, "tabCode");
+            addCriterion("tab_code not in", values, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeBetween(String value1, String value2) {
-            addCriterion("TAB_code between", value1, value2, "tabCode");
+            addCriterion("tab_code between", value1, value2, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabCodeNotBetween(String value1, String value2) {
-            addCriterion("TAB_code not between", value1, value2, "tabCode");
+            addCriterion("tab_code not between", value1, value2, "tabCode");
             return (Criteria) this;
         }
 
         public Criteria andTabNameIsNull() {
-            addCriterion("TAB_name is null");
+            addCriterion("tab_name is null");
             return (Criteria) this;
         }
 
         public Criteria andTabNameIsNotNull() {
-            addCriterion("TAB_name is not null");
+            addCriterion("tab_name is not null");
             return (Criteria) this;
         }
 
         public Criteria andTabNameEqualTo(String value) {
-            addCriterion("TAB_name =", value, "tabName");
+            addCriterion("tab_name =", value, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameNotEqualTo(String value) {
-            addCriterion("TAB_name <>", value, "tabName");
+            addCriterion("tab_name <>", value, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameGreaterThan(String value) {
-            addCriterion("TAB_name >", value, "tabName");
+            addCriterion("tab_name >", value, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameGreaterThanOrEqualTo(String value) {
-            addCriterion("TAB_name >=", value, "tabName");
+            addCriterion("tab_name >=", value, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameLessThan(String value) {
-            addCriterion("TAB_name <", value, "tabName");
+            addCriterion("tab_name <", value, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameLessThanOrEqualTo(String value) {
-            addCriterion("TAB_name <=", value, "tabName");
+            addCriterion("tab_name <=", value, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameLike(String value) {
-            addCriterion("TAB_name like", "%"+value+"%", "tabName");
+            addCriterion("tab_name like", value, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameNotLike(String value) {
-            addCriterion("TAB_name not like", value, "tabName");
+            addCriterion("tab_name not like", value, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameIn(List<String> values) {
-            addCriterion("TAB_name in", values, "tabName");
+            addCriterion("tab_name in", values, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameNotIn(List<String> values) {
-            addCriterion("TAB_name not in", values, "tabName");
+            addCriterion("tab_name not in", values, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameBetween(String value1, String value2) {
-            addCriterion("TAB_name between", value1, value2, "tabName");
+            addCriterion("tab_name between", value1, value2, "tabName");
             return (Criteria) this;
         }
 
         public Criteria andTabNameNotBetween(String value1, String value2) {
-            addCriterion("TAB_name not between", value1, value2, "tabName");
+            addCriterion("tab_name not between", value1, value2, "tabName");
             return (Criteria) this;
         }
 
@@ -358,7 +356,7 @@ public class DutyLogTabExample {
         }
 
         public Criteria andUrlLike(String value) {
-            addCriterion("url like","%"+ value+"%", "url");
+            addCriterion("url like", value, "url");
             return (Criteria) this;
         }
 
@@ -384,6 +382,136 @@ public class DutyLogTabExample {
 
         public Criteria andUrlNotBetween(String value1, String value2) {
             addCriterion("url not between", value1, value2, "url");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerIsNull() {
+            addCriterion("maintainer is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerIsNotNull() {
+            addCriterion("maintainer is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerEqualTo(String value) {
+            addCriterion("maintainer =", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerNotEqualTo(String value) {
+            addCriterion("maintainer <>", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerGreaterThan(String value) {
+            addCriterion("maintainer >", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerGreaterThanOrEqualTo(String value) {
+            addCriterion("maintainer >=", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerLessThan(String value) {
+            addCriterion("maintainer <", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerLessThanOrEqualTo(String value) {
+            addCriterion("maintainer <=", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerLike(String value) {
+            addCriterion("maintainer like", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerNotLike(String value) {
+            addCriterion("maintainer not like", value, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerIn(List<String> values) {
+            addCriterion("maintainer in", values, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerNotIn(List<String> values) {
+            addCriterion("maintainer not in", values, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerBetween(String value1, String value2) {
+            addCriterion("maintainer between", value1, value2, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainerNotBetween(String value1, String value2) {
+            addCriterion("maintainer not between", value1, value2, "maintainer");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeIsNull() {
+            addCriterion("maintain_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeIsNotNull() {
+            addCriterion("maintain_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeEqualTo(Date value) {
+            addCriterion("maintain_time =", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeNotEqualTo(Date value) {
+            addCriterion("maintain_time <>", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeGreaterThan(Date value) {
+            addCriterion("maintain_time >", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("maintain_time >=", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeLessThan(Date value) {
+            addCriterion("maintain_time <", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeLessThanOrEqualTo(Date value) {
+            addCriterion("maintain_time <=", value, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeIn(List<Date> values) {
+            addCriterion("maintain_time in", values, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeNotIn(List<Date> values) {
+            addCriterion("maintain_time not in", values, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeBetween(Date value1, Date value2) {
+            addCriterion("maintain_time between", value1, value2, "maintainTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaintainTimeNotBetween(Date value1, Date value2) {
+            addCriterion("maintain_time not between", value1, value2, "maintainTime");
             return (Criteria) this;
         }
     }

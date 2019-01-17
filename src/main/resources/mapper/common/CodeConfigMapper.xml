@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.CodeConfigDao">
+
+    <resultMap id="codeConfigMap" type="com.qz.zframe.common.entity.CodeConfig">
+        <id column="config_id" property="configId"/>
+        <result column="config_type" property="configType"/>
+        <result column="business_code" property="businessCode"/>
+        <result column="config_value" property="configValue"/>
+        <result column="status" property="status"/>
+        <result column="creater" property="creater"/>
+        <result column="create_time" property="createTime"/>
+        <result column="disp_order" property="dispOrder"/>
+    </resultMap>
+
+    <!-- 分页查询编码配置信息 -->
+    <select id="queryCodeConfig" resultMap="codeConfigMap">
+        SELECT
+            c.config_id,
+            c.config_type,
+            s.title configTypeName,
+            c.business_code,
+            c.config_value,
+            c.`status`,
+            sc.title statusName,
+            c.creater,
+            u.user_name createrName,
+            c.create_time,
+            c.disp_order
+        FROM
+            code_config c,
+            ( SELECT c.`name`, c.title FROM sp_code_type s, sp_code c WHERE s.id = c.code_type_id AND s.`name` = 'CODE_TYPE' ) s,
+            ( SELECT c.`name`, c.title FROM sp_code_type s, sp_code c WHERE s.id = c.code_type_id AND s.`name` = 'CODE_STATUS' ) sc,
+            isc_user u
+        WHERE
+            c.config_type = s.`name`
+            AND c.`status` = sc.`name`
+            AND c.creater = u.user_id
+        <if test="configType != null and configType != ''">
+            AND c.config_type = #{configType}
+        </if>
+        ORDER BY c.status, c.config_type, c.business_code
+        limit #{firstIndex},#{lastIndex}
+    </select>
+
+    <!-- 查询编码配置信息条数 -->
+    <select id="queryCodeConfigNum" resultType="Integer">
+        SELECT
+            count(config_id)
+        FROM
+            code_config c,
+            ( SELECT c.`name`, c.title FROM sp_code_type s, sp_code c WHERE s.id = c.code_type_id AND s.`name` = 'CODE_TYPE' ) s,
+            ( SELECT c.`name`, c.title FROM sp_code_type s, sp_code c WHERE s.id = c.code_type_id AND s.`name` = 'CODE_STATUS' ) sc,
+            isc_user u
+        WHERE
+            c.config_type = s.`name`
+            AND c.`status` = sc.`name`
+            AND c.creater = u.user_id
+        <if test="configType != null and configType != ''">
+            AND c.config_type = #{configType}
+        </if>
+    </select>
+
+    <!-- 根据id编码配置信息 -->
+    <select id="queryCodeConfigById" parameterType="string" resultMap="codeConfigMap">
+        SELECT
+            c.config_id,
+            c.config_type,
+            s.title configTypeName,
+            c.business_code,
+            c.config_value,
+            c.`status`,
+            sc.title statusName,
+            c.creater,
+            u.user_name createrName,
+            c.create_time,
+            c.disp_order
+        FROM
+            code_config c,
+            ( SELECT c.`name`, c.title FROM sp_code_type s, sp_code c WHERE s.id = c.code_type_id AND s.`name` = 'CODE_TYPE' ) s,
+            ( SELECT c.`name`, c.title FROM sp_code_type s, sp_code c WHERE s.id = c.code_type_id AND s.`name` = 'CODE_STATUS' ) sc,
+            isc_user u
+        WHERE
+            c.config_type = s.`name`
+            AND c.`status` = sc.`name`
+            AND c.creater = u.user_id
+            AND c.config_id = #{configId}
+    </select>
+
+    <!-- 新增编码配置 -->
+    <insert id="addCodeConfig" parameterType="com.qz.zframe.common.entity.CodeConfig">
+        INSERT INTO code_config (config_id, config_type, business_code, config_value, status, creater, create_time, disp_order)
+        VALUES(#{configId}, #{configType}, #{businessCode}, #{configValue}, #{status}, #{creater}, #{createTime}, #{dispOrder})
+    </insert>
+
+    <!-- 修改编码配置 -->
+    <update id="updateCodeConfig" parameterType="com.qz.zframe.common.entity.CodeConfig">
+        UPDATE
+            code_config
+        SET
+            config_type = #{configType},
+            business_code = #{businessCode},
+            config_value = #{configValue},
+            status = #{status}
+        WHERE
+            config_id = #{configId}
+    </update>
+
+    <!-- 删除编码配置 -->
+    <delete id="deleteCodeConfig" parameterType="com.qz.zframe.common.entity.CodeConfig" >
+        delete from code_config
+        where config_id in
+        <foreach item="item" index="index" collection="configIds" open="(" separator="," close=")">
+            #{item.configId}
+        </foreach>
+    </delete>
+
+    <!-- 根据条件查询编码配置信息 -->
+    <select id="findConfigByMsg" parameterType="string" resultMap="codeConfigMap">
+        SELECT
+            config_id,
+            config_type,
+            business_code,
+            config_value,
+            status,
+            creater,
+            create_time,
+            disp_order
+        FROM
+            code_config
+        WHERE
+            status = '01'
+            AND config_type = #{configType}
+            <if test="businessCode != null and businessCode !=''">
+                AND business_code = #{businessCode}
+            </if>
+    </select>
+</mapper>

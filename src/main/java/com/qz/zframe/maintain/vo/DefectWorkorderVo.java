@@ -1,123 +1,135 @@
 package com.qz.zframe.maintain.vo;
 
+import com.qz.zframe.common.entity.SpFileUpload;
 import com.qz.zframe.maintain.entity.*;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DefectWorkorderVo extends DefectWorkorder {
 
-    @ApiParam(name = "windName", value = "风电场名称", required = false)
+    @ApiModelProperty(name = "flowSort", value = "流程步数", required = false)
+    private String flowSort;
+
+    @ApiModelProperty(name = "pictureList", value = "图片数组", required = false)
+    private List<FileInfo> pictureList;
+
+    @ApiModelProperty(name = "attachmentList", value = "附件数组", required = false)
+    private List<FileInfo> attachmentList;
+
+    @ApiModelProperty(name = "unitMemberNames", value = "本单位工作组人员姓名", required = false)
+    private String unitMemberNames;
+
+    @ApiModelProperty(name = "unitMemberArray", value = "本单位工作组人员id数组", required = false)
+    private String[] unitMemberArray;
+
+    @ApiModelProperty(name = "fileIds", value = "文件id数组", required = false)
+    private String[] fileIds;
+
+    @ApiModelProperty(name = "windName", value = "风电场名称", required = false)
     private String windName;
 
-    @ApiParam(name = "positionName", value = "位置名称", required = false)
+    @ApiModelProperty(name = "positionName", value = "位置名称", required = false)
     private String positionName;
 
-    @ApiParam(name = "crewName", value = "机组名称", required = false)
+    @ApiModelProperty(name = "crewName", value = "机组名称", required = false)
     private String crewName;
 
-    @ApiParam(name = "equipmentName", value = "设备名称", required = false)
+    @ApiModelProperty(name = "equipmentName", value = "设备名称", required = false)
     private String equipmentName;
 
-    @ApiParam(name = "workorderTypeName", value = "工单类型名称", required = false)
+    @ApiModelProperty(name = "workorderTypeName", value = "工单类型名称", required = false)
     private String workorderTypeName;
 
-    @ApiParam(name = "breakdownLocationTitle", value = "故障位置名称", required = false)
+    @ApiModelProperty(name = "breakdownLocationTitle", value = "故障位置名称", required = false)
     private String breakdownLocationTitle;
 
-    @ApiParam(name = "breakdownAttributeTitle", value = "故障属性名称", required = false)
+    @ApiModelProperty(name = "breakdownAttributeTitle", value = "故障属性名称", required = false)
     private String breakdownAttributeTitle;
 
-    @ApiParam(name = "dealModeTitle", value = "工单类型名称", required = false)
+    @ApiModelProperty(name = "dealModeTitle", value = "工单类型名称", required = false)
     private String dealModeTitle;
 
-    @ApiParam(name = "workorderProcessList", value = "工序List", required = true)
-    private List<WorkorderProcess> workorderProcessList = new ArrayList<>();
+    @ApiModelProperty(name = "statusName", value = "状态名称", required = false)
+    private String statusName;
 
-    @ApiParam(name = "workorderMaterialList", value = "物资List", required = false)
-    private List<WorkorderMaterial> workorderMaterialList = new ArrayList<>();
+    @ApiModelProperty(name = "flowStatusName", value = "流程节点名称", required = false)
+    private String flowStatusName;
 
-    @ApiParam(name = "workorderServiceList", value = "服务List", required = false)
-    private List<WorkorderService> workorderServiceList = new ArrayList<>();
+    @ApiModelProperty(name = "examAndApprOpinion", value = "审批意见", required = false)
+    private String examAndApprOpinion;
 
-    @ApiParam(name = "workorderToolList", value = "工器具List", required = false)
-    private List<WorkorderTool> workorderToolList = new ArrayList<>();
+    @ApiModelProperty(name = "maintainerName", value = "维护人姓名", required = false)
+    private String maintainerName;
 
-    @ApiParam(name = "workorderWorktypeList", value = "工种List", required = false)
-    private List<WorkorderWorktype> workorderWorktypeList = new ArrayList<>();
+    @ApiModelProperty(name = "dutyHeadName", value = "负责人姓名", required = false)
+    private String dutyHeadName;
 
-    @ApiParam(name = "workorderQualityAcceptance", value = "质量验收", required = false)
+    @ApiModelProperty(name = "fillPersonName", value = "填报人姓名", required = false)
+    private String fillPersonName;
+
+    @ApiModelProperty(name = "workorderQualityAcceptance", value = "质量验收", required = false)
     private WorkorderQualityAcceptance workorderQualityAcceptance;
 
-    @ApiParam(name = "workorderDangerPointList", value = "危险点控制List", required = false)
+    @ApiModelProperty(name = "workorderDangerPointList", value = "危险点控制List", required = false)
     private List<WorkorderDangerPoint> workorderDangerPointList = new ArrayList<>();
 
-    @ApiParam(name = "workorderSummary", value = "工单总结", required = false)
+    @ApiModelProperty(name = "companyName", value = "公司名称", required = false)
+    private String companyName;
+
+    @ApiModelProperty(name = "departmentName", value = "部门名称", required = false)
+    private String departmentName;
+
+    @ApiModelProperty(name = "dutyTeamName", value = "负责班组名称", required = false)
+    private String dutyTeamName;
+
+    @ApiModelProperty(name = "workorderProcessList", value = "工序List", required = true)
+    private List<WorkorderProcess> workorderProcessList = new ArrayList<>();
+
+    @ApiModelProperty(name = "workorderMaterialList", value = "物资List", required = false)
+    private List<WorkorderMaterialVo> workorderMaterialList = new ArrayList<>();
+
+    @ApiModelProperty(name = "workorderServiceList", value = "服务List", required = false)
+    private List<WorkorderService> workorderServiceList = new ArrayList<>();
+
+    @ApiModelProperty(name = "workorderToolList", value = "工器具List", required = false)
+    private List<WorkorderTool> workorderToolList = new ArrayList<>();
+
+    @ApiModelProperty(name = "workorderWorktypeList", value = "工种List", required = false)
+    private List<WorkorderWorktype> workorderWorktypeList = new ArrayList<>();
+
+    @ApiModelProperty(name = "workorderSummary", value = "工单总结", required = false)
     private WorkorderSummary workorderSummary;
 
-    public List<WorkorderProcess> getWorkorderProcessList() {
-        return workorderProcessList;
+    @ApiModelProperty(name = "workTicketForWorkorederVoList", value = "关联工作票list", required = false)
+    private List<WorkTicketForWorkorederVo> workTicketForWorkorederVoList = new ArrayList<>();
+
+    @ApiModelProperty(name = "operateTicketForWorkorderVoList", value = "关联操作票list", required = false)
+    private List<OperateTicketForWorkorderVo> operateTicketForWorkorderVoList = new ArrayList<>();
+
+    public String getUnitMemberNames() {
+        return unitMemberNames;
     }
 
-    public void setWorkorderProcessList(List<WorkorderProcess> workorderProcessList) {
-        this.workorderProcessList = workorderProcessList;
+    public void setUnitMemberNames(String unitMemberNames) {
+        this.unitMemberNames = unitMemberNames;
     }
 
-    public List<WorkorderMaterial> getWorkorderMaterialList() {
-        return workorderMaterialList;
+    public String[] getUnitMemberArray() {
+        return unitMemberArray;
     }
 
-    public void setWorkorderMaterialList(List<WorkorderMaterial> workorderMaterialList) {
-        this.workorderMaterialList = workorderMaterialList;
+    public void setUnitMemberArray(String[] unitMemberArray) {
+        this.unitMemberArray = unitMemberArray;
     }
 
-    public List<WorkorderService> getWorkorderServiceList() {
-        return workorderServiceList;
+    public String[] getFileIds() {
+        return fileIds;
     }
 
-    public void setWorkorderServiceList(List<WorkorderService> workorderServiceList) {
-        this.workorderServiceList = workorderServiceList;
-    }
-
-    public List<WorkorderTool> getWorkorderToolList() {
-        return workorderToolList;
-    }
-
-    public void setWorkorderToolList(List<WorkorderTool> workorderToolList) {
-        this.workorderToolList = workorderToolList;
-    }
-
-    public List<WorkorderWorktype> getWorkorderWorktypeList() {
-        return workorderWorktypeList;
-    }
-
-    public void setWorkorderWorktypeList(List<WorkorderWorktype> workorderWorktypeList) {
-        this.workorderWorktypeList = workorderWorktypeList;
-    }
-
-    public WorkorderQualityAcceptance getWorkorderQualityAcceptance() {
-        return workorderQualityAcceptance;
-    }
-
-    public void setWorkorderQualityAcceptance(WorkorderQualityAcceptance workorderQualityAcceptance) {
-        this.workorderQualityAcceptance = workorderQualityAcceptance;
-    }
-
-    public List<WorkorderDangerPoint> getWorkorderDangerPointList() {
-        return workorderDangerPointList;
-    }
-
-    public void setWorkorderDangerPointList(List<WorkorderDangerPoint> workorderDangerPointList) {
-        this.workorderDangerPointList = workorderDangerPointList;
-    }
-
-    public WorkorderSummary getWorkorderSummary() {
-        return workorderSummary;
-    }
-
-    public void setWorkorderSummary(WorkorderSummary workorderSummary) {
-        this.workorderSummary = workorderSummary;
+    public void setFileIds(String[] fileIds) {
+        this.fileIds = fileIds;
     }
 
     public String getWindName() {
@@ -182,5 +194,181 @@ public class DefectWorkorderVo extends DefectWorkorder {
 
     public void setDealModeTitle(String dealModeTitle) {
         this.dealModeTitle = dealModeTitle;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public String getFlowStatusName() {
+        return flowStatusName;
+    }
+
+    public void setFlowStatusName(String flowStatusName) {
+        this.flowStatusName = flowStatusName;
+    }
+
+    public String getExamAndApprOpinion() {
+        return examAndApprOpinion;
+    }
+
+    public void setExamAndApprOpinion(String examAndApprOpinion) {
+        this.examAndApprOpinion = examAndApprOpinion;
+    }
+
+    public String getMaintainerName() {
+        return maintainerName;
+    }
+
+    public void setMaintainerName(String maintainerName) {
+        this.maintainerName = maintainerName;
+    }
+
+    public String getDutyHeadName() {
+        return dutyHeadName;
+    }
+
+    public void setDutyHeadName(String dutyHeadName) {
+        this.dutyHeadName = dutyHeadName;
+    }
+
+    public String getFillPersonName() {
+        return fillPersonName;
+    }
+
+    public void setFillPersonName(String fillPersonName) {
+        this.fillPersonName = fillPersonName;
+    }
+
+    public WorkorderQualityAcceptance getWorkorderQualityAcceptance() {
+        return workorderQualityAcceptance;
+    }
+
+    public void setWorkorderQualityAcceptance(WorkorderQualityAcceptance workorderQualityAcceptance) {
+        this.workorderQualityAcceptance = workorderQualityAcceptance;
+    }
+
+    public List<WorkorderDangerPoint> getWorkorderDangerPointList() {
+        return workorderDangerPointList;
+    }
+
+    public void setWorkorderDangerPointList(List<WorkorderDangerPoint> workorderDangerPointList) {
+        this.workorderDangerPointList = workorderDangerPointList;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getDutyTeamName() {
+        return dutyTeamName;
+    }
+
+    public void setDutyTeamName(String dutyTeamName) {
+        this.dutyTeamName = dutyTeamName;
+    }
+
+    public List<WorkorderProcess> getWorkorderProcessList() {
+        return workorderProcessList;
+    }
+
+    public void setWorkorderProcessList(List<WorkorderProcess> workorderProcessList) {
+        this.workorderProcessList = workorderProcessList;
+    }
+
+    public List<WorkorderMaterialVo> getWorkorderMaterialList() {
+        return workorderMaterialList;
+    }
+
+    public void setWorkorderMaterialList(List<WorkorderMaterialVo> workorderMaterialList) {
+        this.workorderMaterialList = workorderMaterialList;
+    }
+
+    public List<WorkorderService> getWorkorderServiceList() {
+        return workorderServiceList;
+    }
+
+    public void setWorkorderServiceList(List<WorkorderService> workorderServiceList) {
+        this.workorderServiceList = workorderServiceList;
+    }
+
+    public List<WorkorderTool> getWorkorderToolList() {
+        return workorderToolList;
+    }
+
+    public void setWorkorderToolList(List<WorkorderTool> workorderToolList) {
+        this.workorderToolList = workorderToolList;
+    }
+
+    public List<WorkorderWorktype> getWorkorderWorktypeList() {
+        return workorderWorktypeList;
+    }
+
+    public void setWorkorderWorktypeList(List<WorkorderWorktype> workorderWorktypeList) {
+        this.workorderWorktypeList = workorderWorktypeList;
+    }
+
+    public WorkorderSummary getWorkorderSummary() {
+        return workorderSummary;
+    }
+
+    public void setWorkorderSummary(WorkorderSummary workorderSummary) {
+        this.workorderSummary = workorderSummary;
+    }
+
+    public List<WorkTicketForWorkorederVo> getWorkTicketForWorkorederVoList() {
+        return workTicketForWorkorederVoList;
+    }
+
+    public void setWorkTicketForWorkorederVoList(List<WorkTicketForWorkorederVo> workTicketForWorkorederVoList) {
+        this.workTicketForWorkorederVoList = workTicketForWorkorederVoList;
+    }
+
+    public List<OperateTicketForWorkorderVo> getOperateTicketForWorkorderVoList() {
+        return operateTicketForWorkorderVoList;
+    }
+
+    public void setOperateTicketForWorkorderVoList(List<OperateTicketForWorkorderVo> operateTicketForWorkorderVoList) {
+        this.operateTicketForWorkorderVoList = operateTicketForWorkorderVoList;
+    }
+
+    public List<FileInfo> getPictureList() {
+        return pictureList;
+    }
+
+    public void setPictureList(List<FileInfo> pictureList) {
+        this.pictureList = pictureList;
+    }
+
+    public List<FileInfo> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<FileInfo> attachmentList) {
+        this.attachmentList = attachmentList;
+    }
+
+    public String getFlowSort() {
+        return flowSort;
+    }
+
+    public void setFlowSort(String flowSort) {
+        this.flowSort = flowSort;
     }
 }

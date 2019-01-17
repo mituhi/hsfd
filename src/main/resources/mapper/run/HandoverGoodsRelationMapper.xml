@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.HandoverGoodsRelationMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.HandoverGoodsRelation" >
+    <id column="handover_goods_relation_id" property="handoverGoodsRelationId" jdbcType="VARCHAR" />
+    <result column="handover_goods_id" property="handoverGoodsId" jdbcType="VARCHAR" />
+    <result column="goods_id" property="goodsId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    handover_goods_relation_id, handover_goods_id, goods_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.HandoverGoodsRelationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from handover_goods_relation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from handover_goods_relation
+    where handover_goods_relation_id = #{handoverGoodsRelationId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from handover_goods_relation
+    where handover_goods_relation_id = #{handoverGoodsRelationId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.HandoverGoodsRelationExample" >
+    delete from handover_goods_relation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.HandoverGoodsRelation" >
+    insert into handover_goods_relation (handover_goods_relation_id, handover_goods_id, 
+      goods_id)
+    values (#{handoverGoodsRelationId,jdbcType=VARCHAR}, #{handoverGoodsId,jdbcType=VARCHAR}, 
+      #{goodsId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.HandoverGoodsRelation" >
+    insert into handover_goods_relation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="handoverGoodsRelationId != null" >
+        handover_goods_relation_id,
+      </if>
+      <if test="handoverGoodsId != null" >
+        handover_goods_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="handoverGoodsRelationId != null" >
+        #{handoverGoodsRelationId,jdbcType=VARCHAR},
+      </if>
+      <if test="handoverGoodsId != null" >
+        #{handoverGoodsId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.HandoverGoodsRelationExample" resultType="java.lang.Integer" >
+    select count(*) from handover_goods_relation
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update handover_goods_relation
+    <set >
+      <if test="record.handoverGoodsRelationId != null" >
+        handover_goods_relation_id = #{record.handoverGoodsRelationId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.handoverGoodsId != null" >
+        handover_goods_id = #{record.handoverGoodsId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goodsId != null" >
+        goods_id = #{record.goodsId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update handover_goods_relation
+    set handover_goods_relation_id = #{record.handoverGoodsRelationId,jdbcType=VARCHAR},
+      handover_goods_id = #{record.handoverGoodsId,jdbcType=VARCHAR},
+      goods_id = #{record.goodsId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.run.entity.HandoverGoodsRelation" >
+    update handover_goods_relation
+    <set >
+      <if test="handoverGoodsId != null" >
+        handover_goods_id = #{handoverGoodsId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where handover_goods_relation_id = #{handoverGoodsRelationId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.run.entity.HandoverGoodsRelation" >
+    update handover_goods_relation
+    set handover_goods_id = #{handoverGoodsId,jdbcType=VARCHAR},
+      goods_id = #{goodsId,jdbcType=VARCHAR}
+    where handover_goods_relation_id = #{handoverGoodsRelationId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <!-- 自定义结果封装映射 -->
+   <resultMap id="SearchHandoverMap" type="com.qz.zframe.run.entity.result.HandoverResult" >
+    <id column="handover_goods_relation_id" property="handoverGoodsRelationId" jdbcType="VARCHAR" />
+    <result column="handover_goods_id" property="handoverGoodsId" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="log_name" property="logName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="maintain_user" property="maintainUser" jdbcType="VARCHAR" />
+    <result column="maintain_time" property="maintainTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- 自定义查询物品交接查询sql -->
+  <select id="searchHandoverList" parameterType="com.qz.zframe.run.entity.submit.HandoverSearchSubmit" resultMap="SearchHandoverMap">
+  	
+  	SELECT
+		handover_goods_relation_id,handover_goods.handover_goods_id,
+		wind_name, 
+		log_type.log_name,
+		handover_goods.remark,handover_goods.`status`,handover_goods.maintain_user,handover_goods.maintain_time
+	FROM `handover_goods_relation`,handover_goods,goods,log_type
+	<where>
+		handover_goods_relation.handover_goods_id = handover_goods.handover_goods_id
+		and handover_goods_relation.goods_id = goods.goods_id
+		and handover_goods.log_id = log_type.log_type_id
+		<if test="windNames != null">
+			and wind_name in
+			<foreach collection="windNames" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="searchKey !=null and searchKey !=''">
+			and wind_name like #{searchKey} 
+		</if>
+		
+	</where>	  	
+  
+  </select>
+  
+  
+  
+  
+  
+  
+</mapper>

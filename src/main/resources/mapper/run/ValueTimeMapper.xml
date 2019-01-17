@@ -7,6 +7,7 @@
     <result column="value_name" property="valueName" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="status_name" property="statusName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,15 +68,20 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    value_id, value_code, value_name, status, sort
+    value_id, value_code, value_name, status, sort, status_name
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.ValueTimeExample" >
     select
-    <if test="distinct" >
+   <!--  <if test="distinct" >
       distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from value_time
+    </if> -->
+   <include refid="Base_Column_List" /> 
+    from ( select
+    v.*,a.title  as status_name
+    from value_time  v
+    left  join  sp_code  a  on  v.status=a.name
+    left  join  sp_code_type  b on a.code_type_id=b.id
+    where b.name='SHIFT_VALUE') sl
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -85,9 +91,13 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
-    <include refid="Base_Column_List" />
-    from value_time
-    where value_id = #{valueId,jdbcType=VARCHAR}
+    <!-- <include refid="Base_Column_List" /> -->
+     v.*,a.title  as status_name
+    from value_time v
+    left  join  sp_code  a  on  v.status=a.name
+    left  join  sp_code_type  b on a.code_type_id=b.id
+    where b.name='POSITION_STATUS'
+    and value_id = #{valueId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from value_time
@@ -252,6 +262,15 @@
   
   <select id="selectMaxSort" resultMap="BaseResultMap">
   	SELECT MAX(sort) as sort FROM `value_time` 
+  </select>
+  
+  <select id="selectCount" resultType="java.lang.Integer">
+   select count(*) from value_time
+  </select>
+  <select id="selectSort" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.ValueTime">
+   select  
+   <include refid="Base_Column_List" />
+   from value_time  where  sort=#{sort,jdbcType=INTEGER}
   </select>
   
   

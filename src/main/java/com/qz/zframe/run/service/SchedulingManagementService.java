@@ -9,7 +9,7 @@ import com.qz.zframe.run.entity.SchedulingManagementExample;
 /**
  * <p>Title: SchedulingManagementService</p>
  * <p>@Description: 接口声明 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月1日 下午12:27:54
  * @version:V1.0
  */
@@ -51,7 +51,7 @@ public interface SchedulingManagementService {
 	
 	
 	/**
-	 * @Description:根据部门名称查询对应排班管理表信息
+	 * @Description:根据部门名称查询对应排班管理表信息（更新为：根据风电场名称查询对应排版管理表信息）
 	 * @param: @param departments
 	 * @param: @return   
 	 * @return: List<SchedulingManagement>

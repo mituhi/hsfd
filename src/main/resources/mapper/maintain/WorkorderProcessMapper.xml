@@ -76,6 +76,41 @@
     process_id, workorder_id, knowledge_id, order_id, process_number, process_desc, process_external, 
     process_plan_work_hours, process_plan_person_num, process_actual_work_hours, process_actual_person_num
   </sql>
+
+
+
+
+
+  <delete id="batchDeleteByWorkOrderIds" parameterType="java.lang.String">
+    delete from workorder_process
+    where workorder_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByOrderIds" parameterType="java.lang.String">
+    delete from workorder_process
+    where order_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByKnowledgeIds" parameterType="java.lang.String">
+    delete from workorder_process
+    where knowledge_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderProcessExample" >
     select
     <if test="distinct" >

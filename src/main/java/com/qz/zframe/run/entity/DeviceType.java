@@ -2,6 +2,8 @@ package com.qz.zframe.run.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class DeviceType {
@@ -15,16 +17,32 @@ public class DeviceType {
 	@ApiModelProperty(value="设备状态",name="deviceStatus")
     private String deviceStatus;
 
+    @ApiModelProperty(value="状态名称",name="statusName")
+    private String statusName;
+
 	@ApiModelProperty(value="排序",name="sort")
     private Integer sort;
 
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value="更新时间",name="updateTime")
     private Date updateTime;
 
 	@ApiModelProperty(value="备注",name="remark")
     private String remark;
+	
+	@ApiModelProperty(value="更新时间(用于导出Excel:无需理会)",name="updateTime")
+    private String updateTimeStr;
+	
 
-    public String getTypeId() {
+    public String getUpdateTimeStr() {
+		return updateTimeStr;
+	}
+
+	public void setUpdateTimeStr(String updateTimeStr) {
+		this.updateTimeStr = updateTimeStr;
+	}
+
+	public String getTypeId() {
         return typeId;
     }
 
@@ -46,6 +64,14 @@ public class DeviceType {
 
     public void setDeviceStatus(String deviceStatus) {
         this.deviceStatus = deviceStatus == null ? null : deviceStatus.trim();
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
 
     public Integer getSort() {

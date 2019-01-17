@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.common.dao.ProcessMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.common.entity.Process" >
+    <id column="process_id" property="processId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="process_sort" property="processSort" jdbcType="INTEGER" />
+    <result column="process_type" property="processType" jdbcType="VARCHAR" />
+    <result column="process_status" property="processStatus" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    process_id, order_id, process_sort, process_type, process_status, create_time
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from process
+    where process_id = #{processId,jdbcType=VARCHAR}
+  </select>
+  <select id="getProcessByOrderIdAndType" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from process
+    where order_id = #{orderId,jdbcType=VARCHAR}
+    <if test="processType != null and processType != ''" >
+      and process_type = #{processType,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from process
+    where process_id = #{processId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.qz.zframe.common.entity.Process" >
+    insert into process (process_id, order_id, process_sort, 
+      process_type, process_status, create_time
+      )
+    values (#{processId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{processSort,jdbcType=INTEGER}, 
+      #{processType,jdbcType=VARCHAR}, #{processStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.common.entity.Process" >
+    insert into process
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="processId != null" >
+        process_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="processSort != null" >
+        process_sort,
+      </if>
+      <if test="processType != null" >
+        process_type,
+      </if>
+      <if test="processStatus != null" >
+        process_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="processId != null" >
+        #{processId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="processSort != null" >
+        #{processSort,jdbcType=INTEGER},
+      </if>
+      <if test="processType != null" >
+        #{processType,jdbcType=VARCHAR},
+      </if>
+      <if test="processStatus != null" >
+        #{processStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.common.entity.Process" >
+    update process
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="processSort != null" >
+        process_sort = #{processSort,jdbcType=INTEGER},
+      </if>
+      <if test="processType != null" >
+        process_type = #{processType,jdbcType=VARCHAR},
+      </if>
+      <if test="processStatus != null" >
+        process_status = #{processStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where process_id = #{processId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.common.entity.Process" >
+    update process
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      process_sort = #{processSort,jdbcType=INTEGER},
+      process_type = #{processType,jdbcType=VARCHAR},
+      process_status = #{processStatus,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where process_id = #{processId,jdbcType=VARCHAR}
+  </update>
+</mapper>

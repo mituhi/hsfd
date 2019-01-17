@@ -1,5 +1,6 @@
 package com.qz.zframe.device.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import com.qz.zframe.common.util.ResultEntity;
 import com.qz.zframe.common.util.UUIdUtil;
 import com.qz.zframe.device.dao.OutputParametersMapper;
 import com.qz.zframe.device.dao.RunParametersMapper;
+import com.qz.zframe.device.entity.CrewInformation;
 import com.qz.zframe.device.entity.OutputParameters;
 import com.qz.zframe.device.entity.OutputParametersExample;
 import com.qz.zframe.device.entity.RunParameters;
@@ -152,6 +154,38 @@ public class OutputRunServiceImpl implements OutputRunService {
 				resultEntity.setCode(ErrorCode.SUCCESS);
 				resultEntity.setMsg("修改成功");
 			}
+		}
+		return resultEntity;
+	}
+
+	@Override
+	public PageResultEntity findRunById(String runId) {
+		PageResultEntity resultEntity = new PageResultEntity();
+		List<RunParameters > list = new ArrayList<RunParameters >();
+		RunParameters run = runParametersMapper.selectByPrimaryKey(runId);
+		if (run == null) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("查询结果有误");
+		} else {
+			list.add(run);
+			resultEntity.setCode(ErrorCode.SUCCESS);
+			resultEntity.setRows(list);
+		}
+		return resultEntity;
+	}
+
+	@Override
+	public PageResultEntity findOutputById(String outputId) {
+		PageResultEntity resultEntity = new PageResultEntity();
+		List<OutputParameters> list = new ArrayList<OutputParameters>();
+		OutputParameters out = outputParametersMapper.selectByPrimaryKey(outputId);
+		if (out == null) {
+			resultEntity.setCode(ErrorCode.ERROR);
+			resultEntity.setMsg("查询结果有误");
+		} else {
+			list.add(out);
+			resultEntity.setCode(ErrorCode.SUCCESS);
+			resultEntity.setRows(list);
 		}
 		return resultEntity;
 	}

@@ -1,69 +1,72 @@
 package com.qz.zframe.maintain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class BreakdownKnowledgeBase {
 
-    @ApiParam(name = "knowledgeId", value = "故障id", required = false)
+    @ApiModelProperty(name = "knowledgeId", value = "故障id", required = false)
     private String knowledgeId;
 
-    @ApiParam(name = "serialNumber", value = "故障知识编码", required = false)
+    @ApiModelProperty(name = "serialNumber", value = "故障知识编码(流水号)", required = false)
     private String serialNumber;
 
-    @ApiParam(name = "knowledgeDesc", value = "故障知识描述", required = true)
+    @ApiModelProperty(name = "knowledgeDesc", value = "故障知识描述", required = false)
     private String knowledgeDesc;
 
-    @ApiParam(name = "knowledgeName", value = "故障知识名称", required = false)
+    @ApiModelProperty(name = "knowledgeName", value = "故障知识名称", required = false)
     private String knowledgeName;
 
-    @ApiParam(name = "maintainer", value = "维护人", required = false)
+    @ApiModelProperty(name = "maintainer", value = "维护人id", required = true)
     private String maintainer;
 
-    @ApiParam(name = "maintainDate", value = "维护日期", required = false)
+    @ApiModelProperty(name = "maintainDate", value = "维护日期", required = true)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name = "breakdownLocation", value = "故障位置id", required = true)
+    @ApiModelProperty(name = "status", value = "状态", required = false)
+    private String status;
+
+    @ApiModelProperty(name = "flowStatus", value = "流程状态", required = false)
+    private String flowStatus;
+
+    @ApiModelProperty(name = "breakdownLocation", value = "故障位置id", required = true)
     private String breakdownLocation;
 
-    @ApiParam(name = "breakdownAttribute", value = "故障属性id", required = true)
+    @ApiModelProperty(name = "breakdownAttribute", value = "故障属性id", required = true)
     private String breakdownAttribute;
 
-    @ApiParam(name = "breakdownCode", value = "故障代码", required = true)
+    @ApiModelProperty(name = "breakdownCode", value = "故障代码", required = true)
     private String breakdownCode;
 
-    @ApiParam(name = "breakdownDesc", value = "故障描述", required = true)
+    @ApiModelProperty(name = "breakdownDesc", value = "故障描述", required = true)
     private String breakdownDesc;
 
-    @ApiParam(name = "windId", value = "风电场id", required = true)
+    @ApiModelProperty(name = "windId", value = "风电场id", required = true)
     private String windId;
 
-    @ApiParam(name = "applicant", value = "申请人", required = true)
+    @ApiModelProperty(name = "applicant", value = "申请人id", required = true)
     private String applicant;
 
-    @ApiParam(name = "applyTime", value = "申请时间", required = false)
+    @ApiModelProperty(name = "applyTime", value = "申请时间", required = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date applyTime;
 
-    @ApiParam(name = "status", value = "状态", required = false)
-    private String status;
-
-    @ApiParam(name = "defectPhenomenon", value = "缺陷现象", required = true)
+    @ApiModelProperty(name = "defectPhenomenon", value = "缺陷现象", required = true)
     private String defectPhenomenon;
 
-    @ApiParam(name = "causeAnalysis", value = "原因分析", required = true)
+    @ApiModelProperty(name = "causeAnalysis", value = "原因分析", required = true)
     private String causeAnalysis;
 
-    @ApiParam(name = "repairProcessDesc", value = "处理过程描述", required = true)
+    @ApiModelProperty(name = "repairProcessDesc", value = "处理过程描述", required = true)
     private String repairProcessDesc;
 
-    @ApiParam(name = "solution", value = "解决方案", required = true)
+    @ApiModelProperty(name = "solution", value = "解决方案", required = true)
     private String solution;
 
-    @ApiParam(name = "remark", value = "备注", required = false)
+    @ApiModelProperty(name = "remark", value = "备注", required = false)
     private String remark;
 
     public String getKnowledgeId() {
@@ -112,6 +115,14 @@ public class BreakdownKnowledgeBase {
 
     public void setMaintainDate(Date maintainDate) {
         this.maintainDate = maintainDate;
+    }
+
+    public String getFlowStatus() {
+        return flowStatus;
+    }
+
+    public void setFlowStatus(String flowStatus) {
+        this.flowStatus = flowStatus;
     }
 
     public String getBreakdownLocation() {

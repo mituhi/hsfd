@@ -22,5 +22,8 @@ public class UUIdUtil {
 		long id = new Long(str);
 		return id;
 	}
+	public static void main(String[] args) {
+		
+	}
 	
 }

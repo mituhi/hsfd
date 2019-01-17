@@ -358,7 +358,7 @@ public class ComponentsExample extends PageExample{
         }
 
         public Criteria andComponentNameLike(String value) {
-            addCriterion("component_name like", value, "componentName");
+            addCriterion("component_name like","%"+ value+"%", "componentName");
             return (Criteria) this;
         }
 

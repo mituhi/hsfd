@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.qz.zframe.authentication.CurrentUserService;
 import com.qz.zframe.authentication.domain.UserInfo;
 import com.qz.zframe.common.util.ErrorCode;
+import com.qz.zframe.common.util.NewPageResult;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.common.util.ResultEntityDetail;
 import com.qz.zframe.material.entity.DamagedParts;
 import com.qz.zframe.material.entity.DamagedPartsExample;
 import com.qz.zframe.material.entity.DamagedPartsExample.Criteria;
@@ -37,12 +39,10 @@ public class DamagedPartsController {
 	@Autowired
 	private DamagedPartsService damagedPartsService;
 	
-	@Autowired
-	private CurrentUserService currentUSerservice;
 
 	@RequestMapping(value = "/listDamagedParts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "损坏件入库单列表", notes = "")
-	public PageResultEntity getDamagedPartsList(@RequestParam(required = false) Integer pageNum,
+	public NewPageResult<DamagedParts> getDamagedPartsList(@RequestParam(required = false) Integer pageNum,
 			@RequestParam(required = false) Integer pageSize,
 			@RequestParam(required = false) @ApiParam(name = "damagedPartsDescribe", value = "损坏件入库描述", required = false) String damagedPartsDescribe,
 			@RequestParam(required = false) @ApiParam(name = "stockAddId", value = "库存地点id", required = false) String stockAddId,
@@ -66,7 +66,7 @@ public class DamagedPartsController {
 
 	@RequestMapping(value = "/detailDamagedParts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "损坏件入库单详情", notes = "")
-	public ResultEntity getDamagedPartsDetails(@RequestParam String damagedPartsId){		
+	public ResultEntityDetail<DamagedParts> getDamagedPartsDetails(@RequestParam String damagedPartsId){		
 		return damagedPartsService.getDamagedPartsDetails(damagedPartsId);
 	}
 
@@ -74,13 +74,11 @@ public class DamagedPartsController {
 	@ApiOperation(value = "新增损坏件入库单", notes = "")
 	public ResultEntity addDamagedParts(@RequestBody DamagedParts damagedParts) throws ParseException{
 		ResultEntity resultEntity = new ResultEntity();
-		if(damagedParts.getDamagedPartsDetails().size() ==0||damagedParts.getDamagedPartsDetails().isEmpty()){
+		if(damagedParts.getDamagedPartsDetails()==null||damagedParts.getDamagedPartsDetails().isEmpty()){
 			resultEntity.setCode(ErrorCode.ERROR);
 			resultEntity.setMsg("缺少物资明细");
 			return resultEntity;
 		}
-		UserInfo userInfo = currentUSerservice.getUserInfo();
-		damagedParts.setCreater(userInfo.getUserId());
 	    return damagedPartsService.addDamagedParts(damagedParts);	
 	}
 	

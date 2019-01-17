@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.common.dao.ProcessDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.common.entity.ProcessDetail" >
+    <id column="process_detail_id" property="processDetailId" jdbcType="VARCHAR" />
+    <result column="process_id" property="processId" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    process_detail_id, process_id, sort, name, status
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from process_detail
+    where process_detail_id = #{processDetailId,jdbcType=VARCHAR}
+  </select>
+  <select id="getProcessDetailByProcessIdAndsort" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from process_detail
+    where process_id = #{processId,jdbcType=VARCHAR} and sort = #{sort,jdbcType=VARCHAR}
+  </select>
+  <select id="getProcessDetailByProcessId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from process_detail
+    where process_id = #{processId,jdbcType=VARCHAR}
+    order by sort asc
+  </select>
+  <select id="getTotalSort" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select
+    count(*)
+    from process_detail
+    where process_id = #{processId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from process_detail
+    where process_detail_id = #{processDetailId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.qz.zframe.common.entity.ProcessDetail" >
+    insert into process_detail (process_detail_id, process_id, sort, name,
+      status)
+    values (#{processDetailId,jdbcType=VARCHAR}, #{processId,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
+    #{name,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.common.entity.ProcessDetail" >
+    insert into process_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="processDetailId != null" >
+        process_detail_id,
+      </if>
+      <if test="processId != null" >
+        process_id,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="processDetailId != null" >
+        #{processDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="processId != null" >
+        #{processId,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertList" parameterType="com.qz.zframe.common.entity.ProcessDetail" >
+    insert into process_detail (process_detail_id, process_id, sort,name,
+      status)
+    values
+    <foreach collection ="list" item="item" separator="," >
+      (#{item.processDetailId,jdbcType=VARCHAR}, #{item.processId,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER},
+      #{item.name,jdbcType=VARCHAR},#{item.status,jdbcType=VARCHAR})
+    </foreach >
+  </insert>
+
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.common.entity.ProcessDetail" >
+    update process_detail
+    <set >
+      <if test="processId != null" >
+        process_id = #{processId,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where process_detail_id = #{processDetailId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.common.entity.ProcessDetail" >
+    update process_detail
+    set process_id = #{processId,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where process_detail_id = #{processDetailId,jdbcType=VARCHAR}
+  </update>
+</mapper>

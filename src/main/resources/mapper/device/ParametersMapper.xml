@@ -11,7 +11,17 @@
     <result column="company" property="company" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="status_name" property="statusName" jdbcType="VARCHAR" />
+    <result column="output_is" property="outputIs" jdbcType="VARCHAR" />
+    <result column="run_is" property="runIs" jdbcType="VARCHAR" />
+     <result column="create_time" jdbcType="DATE" property="createTime" />
   </resultMap>
+  
+    <sql id="Pagination_Sql">
+		<if test="isPage == 1">
+			limit #{pageIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+		</sql>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -71,33 +81,81 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    parameter_id, output, run, parameter_code, parameter_name, type, company, status, status_name
+    parameter_id, output, run, parameter_code, parameter_name, type, company, status, status_name,run_is,output_is,create_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.ParametersExample" >
- 
-    select *,a.title as status_name
+    select  <include refid="Base_Column_List" />  from
+   (select p.*,a.title as status_name
     <if test="distinct" >
       distinct
     </if>
     from parameters p
     left join sp_code a on  p.status=a.name
-	left  join  sp_code_type  b on  a.code_type_id=b.id where  b.name='PARAMETER_ STATUS '
+	left  join  sp_code_type  b on  a.code_type_id=b.id where  b.name='PARAMETER_ STATUS  ') p
    <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
+    <include refid="Pagination_Sql" />
   </select>
+  
+    <select id="selectByExample2" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.ParametersExample" >
+    select  <include refid="Base_Column_List" />  from
+   (select p.*,a.title as status_name
+    <if test="distinct" >
+      distinct
+    </if>
+    from parameters p
+    left join sp_code a on  p.status=a.name
+	left  join  sp_code_type  b on  a.code_type_id=b.id where  b.name='PARAMETER_ STATUS'   and p.output='01'  and p.status='01') p
+   <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+       
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="Pagination_Sql" />
+  </select>
+  
+   <select id="selectByExample3" resultMap="BaseResultMap" parameterType="com.qz.zframe.device.entity.ParametersExample" >
+    select  <include refid="Base_Column_List" />  from
+   (select p.*,a.title as status_name
+    <if test="distinct" >
+      distinct
+    </if>
+    from parameters p
+    left join sp_code a on  p.status=a.name
+	left  join  sp_code_type  b on  a.code_type_id=b.id where  b.name='PARAMETER_ STATUS'   and p.run='01' and p.status='01') p
+   <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="Pagination_Sql" />
+  </select>
+  
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select *, a.title as status_name
+    select p.*, a.title as status_name
     <!-- <include refid="Base_Column_List" /> -->
     from parameters p
     left join sp_code a on  p.status=a.name
 	left  join  sp_code_type  b on  a.code_type_id=b.id
-    where  b.name='PARAMETER_ STATUS '
+    where  b.name='PARAMETER_ STATUS'
     and  parameter_id = #{parameterId,jdbcType=VARCHAR}
   </select>
+  
+   <select id="selectByParameterCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select p.*
+    from parameters p  where p.parameter_code=#{parameterCode,jdbcType=VARCHAR}
+   
+  </select>
+  
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from parameters
     where parameter_id = #{parameterId,jdbcType=VARCHAR}
@@ -121,10 +179,10 @@
   <insert id="insert" parameterType="com.qz.zframe.device.entity.Parameters" >
     insert into parameters (parameter_id, output, run, 
       parameter_code, parameter_name, type, 
-      company, status)
+      company, status,output_is,run_is,create_time)
     values (#{parameterId,jdbcType=VARCHAR}, #{output,jdbcType=VARCHAR}, #{run,jdbcType=VARCHAR}, 
       #{parameterCode,jdbcType=VARCHAR}, #{parameterName,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
-      #{company,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
+      #{company,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},#{outputIs,jdbcType=VARCHAR}, #{runIs,jdbcType=VARCHAR},#{createTime,jdbcType=DATE})
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.device.entity.Parameters" >
     insert into parameters
@@ -182,7 +240,38 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qz.zframe.device.entity.ParametersExample" resultType="java.lang.Integer" >
-    select count(*) from parameters p 
+    select count(*) from  (select p.*,a.title as status_name
+    <if test="distinct" >
+      distinct
+    </if>
+    from parameters p
+    left join sp_code a on  p.status=a.name
+	left  join  sp_code_type  b on  a.code_type_id=b.id where  b.name='PARAMETER_ STATUS  ') p
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+   <select id="countByExample2" parameterType="com.qz.zframe.device.entity.ParametersExample" resultType="java.lang.Integer" >
+    select count(*) from  (select p.*,a.title as status_name
+    <if test="distinct" >
+      distinct
+    </if>
+    from parameters p
+    left join sp_code a on  p.status=a.name
+	left  join  sp_code_type  b on  a.code_type_id=b.id where  b.name='PARAMETER_ STATUS ' and output='01' and status='01') p
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+     
+    </if>
+  </select>
+   <select id="countByExample3" parameterType="com.qz.zframe.device.entity.ParametersExample" resultType="java.lang.Integer" >
+    select count(*) from  (select p.*,a.title as status_name
+    <if test="distinct" >
+      distinct
+    </if>
+    from parameters p
+    left join sp_code a on  p.status=a.name
+	left  join  sp_code_type  b on  a.code_type_id=b.id where  b.name='PARAMETER_ STATUS  '  and run='01' and status='01') p
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -268,7 +357,8 @@
       parameter_name = #{parameterName,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       company = #{company,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR}
+      status = #{status,jdbcType=VARCHAR},
+      create_time=#{createTime,jdbcType=DATE}
     where parameter_id = #{parameterId,jdbcType=VARCHAR}
   </update>
 </mapper>

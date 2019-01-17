@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.run.dao.WorkPerformSearchMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.run.entity.WorkPerformSearch" >
+    <result column="perform_id" property="performId" jdbcType="VARCHAR" />
+    <result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="work_name" property="workName" jdbcType="VARCHAR" />
+    <result column="work_describe" property="workDescribe" jdbcType="VARCHAR" />
+    <result column="depart" property="depart" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="username" jdbcType="VARCHAR" />
+    <result column="deal_people" property="dealPeople" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="complete_time" property="completeTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="complete_status" property="completeStatus" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    perform_id, serial_num, work_name, work_describe, depart, user_id, username, deal_people, 
+    start_time, complete_time, end_time, complete_status, address, unit, create_user
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.WorkPerformSearchExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from work_perform_search
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.run.entity.WorkPerformSearchExample" >
+    delete from work_perform_search
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.run.entity.WorkPerformSearch" >
+    insert into work_perform_search (perform_id, serial_num, work_name, 
+      work_describe, depart, user_id, 
+      username, deal_people, start_time, 
+      complete_time, end_time, complete_status, 
+      address, unit, create_user
+      )
+    values (#{performId,jdbcType=VARCHAR}, #{serialNum,jdbcType=VARCHAR}, #{workName,jdbcType=VARCHAR}, 
+      #{workDescribe,jdbcType=VARCHAR}, #{depart,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{dealPeople,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{completeTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{completeStatus,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.run.entity.WorkPerformSearch" >
+    insert into work_perform_search
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="performId != null" >
+        perform_id,
+      </if>
+      <if test="serialNum != null" >
+        serial_num,
+      </if>
+      <if test="workName != null" >
+        work_name,
+      </if>
+      <if test="workDescribe != null" >
+        work_describe,
+      </if>
+      <if test="depart != null" >
+        depart,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="dealPeople != null" >
+        deal_people,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="completeTime != null" >
+        complete_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="completeStatus != null" >
+        complete_status,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="performId != null" >
+        #{performId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="workName != null" >
+        #{workName,jdbcType=VARCHAR},
+      </if>
+      <if test="workDescribe != null" >
+        #{workDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="depart != null" >
+        #{depart,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="dealPeople != null" >
+        #{dealPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completeTime != null" >
+        #{completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="completeStatus != null" >
+        #{completeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.run.entity.WorkPerformSearchExample" resultType="java.lang.Integer" >
+    select count(*) from work_perform_search
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update work_perform_search
+    <set >
+      <if test="record.performId != null" >
+        perform_id = #{record.performId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNum != null" >
+        serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workName != null" >
+        work_name = #{record.workName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workDescribe != null" >
+        work_describe = #{record.workDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.depart != null" >
+        depart = #{record.depart,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.username != null" >
+        username = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dealPeople != null" >
+        deal_people = #{record.dealPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.completeTime != null" >
+        complete_time = #{record.completeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null" >
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.completeStatus != null" >
+        complete_status = #{record.completeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null" >
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUser != null" >
+        create_user = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update work_perform_search
+    set perform_id = #{record.performId,jdbcType=VARCHAR},
+      serial_num = #{record.serialNum,jdbcType=VARCHAR},
+      work_name = #{record.workName,jdbcType=VARCHAR},
+      work_describe = #{record.workDescribe,jdbcType=VARCHAR},
+      depart = #{record.depart,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      username = #{record.username,jdbcType=VARCHAR},
+      deal_people = #{record.dealPeople,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      complete_time = #{record.completeTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      complete_status = #{record.completeStatus,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      create_user = #{record.createUser,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  
+ 
+    <select id="ListworkPerformSearch" resultMap="BaseResultMap" parameterType="com.qz.zframe.run.entity.submit.WorkPerformSearchSubmit">
+  
+  	SELECT
+		work_perform.perform_id,
+		serial_num,
+		work_name,
+		work_describe,
+		depart,
+		work_task.user_id,
+		user_name,
+		deal_people,
+		work_perform.start_time,work_perform.complete_time,work_perform.end_time,work_perform.complete_status,address,unit,create_user
+	FROM
+		`work_perform`,work_task,work_classification,isc_user
+	where
+		work_task.work_task_id = work_perform.work_task_id
+		and work_task.classification_id = work_classification.classification_id
+		and work_task.user_id = isc_user.user_id
+		
+		<!-- 这里开始使用条件查询 -->
+		<if test="startTime !=null and endTime !=null">
+		and  work_perform.start_time >= #{startTime} and  work_perform.start_time &lt;= #{endTime}
+		</if>
+		
+		<if test="searchKey !=null and searchKey != ''">
+		and (work_task.work_name LIKE #{searchKey} or work_task.work_describe LIKE #{searchKey} or work_task.create_user LIKE #{searchKey} or isc_user.user_name LIKE #{searchKey})
+		</if>
+		
+		<if test="windIds != null">
+			and wind_id in 
+			<foreach collection="windIds" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		
+		<if test="unit !=null and unit != ''">
+			and unit = #{unit}
+		</if>
+		
+		<if test="depart != null and depart !=''">
+			and depart = #{depart}
+		</if>
+		
+		<if test="status != null and status !=''">
+			and work_perform.complete_status =  #{status}
+		</if>
+		
+		<if test="classificationName != null and classificationName !=''">
+			and classification_name = #{classificationName}
+		</if>
+  	
+  		<if test="performId != null and performId !=''">
+  			and perform_id = #{performId}
+  		</if>
+  	
+  
+    </select>
+  
+  
+  
+  
+  
+</mapper>

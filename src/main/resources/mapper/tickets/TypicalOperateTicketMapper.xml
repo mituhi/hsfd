@@ -17,6 +17,7 @@
     <result column="equipment_desc" property="equipmentDesc" jdbcType="VARCHAR" />
     <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+     <result column="update_time" property="updateTime" jdbcType="DATE" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -79,20 +80,20 @@
   <sql id="Base_Column_List" >
     typical_ticket_id, serial_number, typical_ticket_name, oper_ticket_type_id, maintainer,
     maintain_date, status, wind_id, work_team, position_id, position_desc, equipment_id,
-    equipment_desc, operate_content, remark
+    equipment_desc, operate_content, remark,update_time
   </sql>
 
 
 
 
-  <update id="batchDelete" parameterType="java.lang.String">
-    update typical_operate_ticket set status = '0'
+  <delete id="batchDelete" parameterType="java.lang.String">
+    delete from typical_operate_ticket
     where typical_ticket_id in
     <foreach collection="array" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
-  </update>
+  </delete>
   <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.TypicalOperateTicketVo" >
     <id column="typical_ticket_id" property="typicalTicketId" jdbcType="VARCHAR" />
     <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
@@ -110,67 +111,86 @@
     <result column="operate_content" property="operateContent" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="work_team_name" property="workTeamName" jdbcType="VARCHAR" />
     <result column="position_name" property="positionName" jdbcType="VARCHAR" />
     <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
     <result column="ticket_type_name" property="ticketTypeName" jdbcType="VARCHAR" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Get_Column_List" >
     a.typical_ticket_id as typical_ticket_id, a.serial_number as serial_number, a.typical_ticket_name as typical_ticket_name,
     a.oper_ticket_type_id as oper_ticket_type_id, a.maintainer as maintainer, a.maintain_date as maintain_date, a.status as status,
     a.wind_id as wind_id, a.work_team as work_team, a.position_id as position_id, a.position_desc as position_desc, a.equipment_id as equipment_id,
-    a.equipment_desc as equipment_desc, a.operate_content as operate_content, a.remark as remark,
-    b.architecture_name as wind_name,e.position_name as position_name,f.equipment_name as equipment_name,g.ticket_type_name as ticket_type_name
+    a.equipment_desc as equipment_desc, a.operate_content as operate_content, a.remark as remark, a.update_time as updateTime,
+    b.architecture_name as wind_name,d.architecture_name as work_team_name,e.position_name as position_name,f.equipment_name as equipment_name,
+    g.ticket_type_name as ticket_type_name,h.user_name as maintainer_name
   </sql>
   <select id="getTypicalOperateTicketDetail" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from typical_operate_ticket a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join org_architecture d on a.work_team = d.architecture_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+    left join isc_user h on a.maintainer = h.user_id
     where a.status != '0' and a.typical_ticket_id = #{typicalTicketId}
   </select>
   <select id="getTypicalOperateTicketList" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from typical_operate_ticket a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join org_architecture d on a.work_team = d.architecture_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+    left join isc_user h on a.maintainer = h.user_id
     where a.status != '0'
-    <if test="map.operTicketTypeId != null">
+    <if test="map.operTicketTypeId != null and map.operTicketTypeId != ''">
       and a.oper_ticket_type_id = #{map.operTicketTypeId}
     </if>
-    <if test="map.windId != null">
-      and a.wind_id = #{map.windId}
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.startWindId}
     </if>
-    <if test="map.status != null">
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
+    </if>
+    <if test="map.status != null and map.status != ''">
       and a.status = #{map.status}
     </if>
-    <if test="map.operateContent != null">
+    <if test="map.operateContent != null and map.operateContent != ''">
       and a.operate_content like '%${map.operateContent}%'
     </if>
-    order by a.serial_number desc
+    order by a.serial_number is null desc,a.serial_number desc
     limit ${map.start},${map.pageSize};
   </select>
   <select id="getTotal" resultType="java.lang.Integer">
     select
     count(*)
-    from typical_operate_ticket
-    where status != '0'
-    <if test="map.operTicketTypeId != null">
-      and oper_ticket_type_id = #{map.operTicketTypeId}
+    from typical_operate_ticket a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join org_architecture d on a.work_team = d.architecture_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join operate_ticket_type g on a.oper_ticket_type_id = g.oper_ticket_type_id
+    left join isc_user h on a.maintainer = h.user_id
+    where a.status != '0'
+    <if test="map.operTicketTypeId != null and map.operTicketTypeId != ''">
+      and a.oper_ticket_type_id = #{map.operTicketTypeId}
     </if>
-    <if test="map.windId != null">
-      and wind_id = #{map.windId}
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.startWindId}
     </if>
-    <if test="map.status != null">
-      and status = #{map.status}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
     </if>
-    <if test="map.operateContent != null">
-      and operate_content like '%${map.operateContent}%'
+    <if test="map.status != null and map.status != ''">
+      and a.status = #{map.status}
+    </if>
+    <if test="map.operateContent != null and map.operateContent != ''">
+      and a.operate_content like '%${map.operateContent}%'
     </if>
   </select>
 
@@ -215,13 +235,13 @@
       oper_ticket_type_id, maintainer, maintain_date, 
       status, wind_id, work_team, 
       position_id, position_desc, equipment_id,
-      equipment_desc, operate_content, remark
+      equipment_desc, operate_content, remark,update_time
       )
     values (#{typicalTicketId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{typicalTicketName,jdbcType=VARCHAR}, 
       #{operTicketTypeId,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, 
       #{status,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, #{workTeam,jdbcType=VARCHAR}, 
       #{positionId,jdbcType=VARCHAR}, #{positionDesc,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR},
-      #{equipmentDesc,jdbcType=VARCHAR}, #{operateContent,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      #{equipmentDesc,jdbcType=VARCHAR}, #{operateContent,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},#{updateTime,jdbcType=DATE}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.tickets.entity.TypicalOperateTicket" >
@@ -464,7 +484,8 @@
       equipment_id = #{equipmentId,jdbcType=VARCHAR},
       equipment_desc = #{equipmentDesc,jdbcType=VARCHAR},
       operate_content = #{operateContent,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      update_time=#{updateTime,jdbcType=DATE}
     where typical_ticket_id = #{typicalTicketId,jdbcType=VARCHAR}
   </update>
 </mapper>

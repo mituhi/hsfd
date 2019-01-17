@@ -3,7 +3,9 @@ package com.qz.zframe.material.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DamagedPartsDetailExample {
+import com.qz.zframe.common.util.PageExample;
+
+public class DamagedPartsDetailExample extends PageExample{
     protected String orderByClause;
 
     protected boolean distinct;

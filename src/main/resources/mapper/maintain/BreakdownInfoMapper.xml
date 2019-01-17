@@ -9,6 +9,7 @@
     <result column="maintainer" property="maintainer" jdbcType="VARCHAR" />
     <result column="maintain_date" property="maintainDate" jdbcType="DATE" />
     <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="breakdown_source" property="breakdownSource" jdbcType="VARCHAR" />
     <result column="dealwith_mode" property="dealwithMode" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
     <result column="company" property="company" jdbcType="VARCHAR" />
@@ -105,29 +106,49 @@
   </sql>
   <sql id="Base_Column_List" >
     breakdown_id, serial_number, breakdown_code, breakdown_desc, maintainer, maintain_date, 
-    status, dealwith_mode, wind_id, company, dealwith_team, dealwith_person, fill_person, 
-    position_id, position_desc, crew_id, equipment_id, equipment_desc, vane_speed, blade_torque_1, 
-    blade_torque_2, blade_torque_3, active_time, recover_time, downtime_windspeed, recover_windspeed, 
-    interrupt_time, electricity_loss, grid_connected_recover_time, breakdown_location, 
-    breakdown_attribute, maximum_load, system_busbar_110, system_busbar_35, system_busbar_400, 
-    workorder_number, workorder_desc, workorder_type, workorder_status, picture, phenomenon, 
-    remark
+    status, breakdown_source, dealwith_mode, wind_id, company, dealwith_team, dealwith_person, 
+    fill_person, position_id, position_desc, crew_id, equipment_id, equipment_desc, vane_speed, 
+    blade_torque_1, blade_torque_2, blade_torque_3, active_time, recover_time, downtime_windspeed, 
+    recover_windspeed, interrupt_time, electricity_loss, grid_connected_recover_time, 
+    breakdown_location, breakdown_attribute, maximum_load, system_busbar_110, system_busbar_35, 
+    system_busbar_400, workorder_number, workorder_desc, workorder_type, workorder_status, 
+    picture, phenomenon, remark
   </sql>
 
 
 
 
 
-  <update id="batchDelete" parameterType="java.lang.String">
-    update breakdown_info set status = "0"
+
+
+
+
+  <delete id="batchDelete" parameterType="java.lang.String">
+    delete from breakdown_info
     where breakdown_id in
     <foreach collection="array" index="index" item="item"
              open="(" separator="," close=")">
       #{item}
     </foreach>
+  </delete>
+  <update id="chooseDealMode" parameterType="java.lang.String">
+    update breakdown_info set dealwith_mode = #{dealwithMode},status = '02'
+    where breakdown_id in
+      <foreach collection="array" index="index" item="item"
+               open="(" separator="," close=")">
+        #{item}
+      </foreach>
   </update>
-
-  <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.BreakdownRes" >
+  <update id="batchUpdate" parameterType="java.lang.String">
+    update breakdown_info set status = '01', dealwith_mode = null,
+    workorder_number = null,workorder_desc = null,workorder_type = null,workorder_status = null
+    where breakdown_id in
+      <foreach collection="list" index="index" item="item"
+               open="(" separator="," close=")">
+        #{item}
+      </foreach>
+  </update>
+  <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.BreakdownVo" >
     <id column="breakdown_id" property="breakdownId" jdbcType="VARCHAR" />
     <result column="serial_number" property="serialNumber" jdbcType="VARCHAR" />
     <result column="breakdown_code" property="breakdownCode" jdbcType="VARCHAR" />
@@ -176,7 +197,12 @@
     <result column="equipment_name" property="equipmentName" jdbcType="VARCHAR" />
     <result column="breakdown_location_title" property="breakdownLocationTitle" jdbcType="VARCHAR" />
     <result column="breakdown_attribute_title" property="breakdownAttributeTitle" jdbcType="VARCHAR" />
-    <result column="dealwith_mode_title" property="dealwithModeTitle" jdbcType="VARCHAR" />
+    <result column="breakdown_source_title" property="breakdownSourceTitle" jdbcType="VARCHAR" />
+    <result column="deal_team_name" property="dealTeamName" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="maintainer_name" property="maintainerName" jdbcType="VARCHAR" />
+    <result column="dealwith_person_name" property="dealwithPersonName" jdbcType="VARCHAR" />
+    <result column="fill_person_name" property="fillPersonName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Get_Column_List" >
     a.breakdown_id as breakdown_id,a.serial_number as serial_number,a.breakdown_code as breakdown_code,a.breakdown_desc as breakdown_desc,
@@ -192,96 +218,139 @@
     a.workorder_desc as workorder_desc,a.workorder_type as workorder_type,a.workorder_status as workorder_status,a.picture as picture,
     a.phenomenon as phenomenon,
     b.architecture_name as wind_name,d.crew_name as crew_name,e.position_name as position_name,f.equipment_name as equipment_name,
-    g.title as breakdown_location_title,h.title as breakdown_attribute_title,i.title as dealwith_mode_title
+    g.title as breakdown_location_title,h.title as breakdown_attribute_title,i.title as breakdown_source_title,j.architecture_name as deal_team_name,
+    k.architecture_name as company_name,l.user_name as maintainer_name,m.user_name as duty_person_name,n.user_name as fill_person_name
   </sql>
   <select id="getBreakdownDetail" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from breakdown_info a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
     left join crew_information d on a.crew_id = d.crew_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join sp_code g on a.breakdown_location =g.id
     left join sp_code h on a.breakdown_attribute =h.id
-    left join sp_code i on a.dealwith_mode =i.id
+    left join sp_code i on a.breakdown_source =i.id
+    left join org_architecture j on a.dealwith_team = j.architecture_id
+    left join org_architecture k on a.company = k.architecture_id
+    left join isc_user l on a.maintainer = l.user_id
+    left join isc_user m on a.dealwith_person = m.user_id
+    left join isc_user n on a.fill_person = n.user_id
     where a.status != '0' and a.breakdown_id = #{breakdownId}
   </select>
-  <select id="getBreakdownListByPageAndCondition" resultMap="GetResultMap">
+  <select id="getBreakdownList" resultMap="GetResultMap">
     select
     <include refid="Get_Column_List" />
     from breakdown_info a
-    left join org_architecture b on a.wind_id = b.architecture_id and architecture_type = '02'
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
     left join crew_information d on a.crew_id = d.crew_id
     left join position_encode e on a.position_id = e.position_id
-    left join equipment_asset_ledger f on a.equipment_id = f.equipment_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
     left join sp_code g on a.breakdown_location =g.id
     left join sp_code h on a.breakdown_attribute =h.id
     left join sp_code i on a.dealwith_mode =i.id
-    where a.status <![CDATA[ <> ]]> '0'
-    <if test="map.windId != null" >
+    left join org_architecture j on a.dealwith_team = j.architecture_id
+    left join org_architecture k on a.company = k.architecture_id
+    left join isc_user l on a.maintainer = l.user_id
+    left join isc_user m on a.dealwith_person = m.user_id
+    left join isc_user n on a.fill_person = n.user_id
+    where a.status != '0'
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
       and a.wind_id = #{map.windId}
     </if>
-    <if test="map.crewId != null" >
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
+    </if>
+    <if test="map.crewId != null and map.crewId != ''" >
       and a.crew_id = #{map.crewId}
     </if>
-    <if test="map.breakdownDesc != null" >
+    <if test="map.breakdownDesc != null and map.breakdownDesc != ''" >
       and a.breakdown_desc like '%${map.breakdownDesc}%'
     </if>
-    <if test="map.breakdownCode != null" >
+    <if test="map.breakdownCode != null and map.breakdownCode != ''" >
       and a.breakdown_code = #{map.breakdownCode}
     </if>
-    <if test="map.dealwithMode != null" >
+    <if test="map.dealwithMode != null and map.dealwithMode != ''" >
       and a.dealwith_mode = #{map.dealwithMode}
     </if>
-    <if test="map.locationId != null" >
+    <if test="map.breakdownSource != null and map.breakdownSource != ''" >
+      and a.breakdown_source = #{map.breakdownSource}
+    </if>
+    <if test="map.locationId != null and map.locationId != ''" >
       and a.dealwith_location = #{map.dealwithLocation}
     </if>
-    <if test="map.attributeId != null" >
+    <if test="map.attributeId != null and map.attributeId != ''" >
       and a.dealwith_attribute = #{map.dealwithAttribute}
     </if>
-    <if test="map.startTime != null">
-      and a.active_time &gt;= #{map.startTime}
+    <if test="map.startTime != null and map.startTime != '' and (map.endtime == null or map.endtime == '')">
+      and a.active_time = #{map.startTime}
     </if>
-    <if test="map.endtime != null">
-      and a.active_time &lt;= #{map.endtime}
+    <if test="map.startTime != null and map.startTime != '' and map.endtime != null and map.endtime != ''">
+      and (a.active_time between #{map.startTime} and #{map.endTime})
     </if>
-    order by a.active_time asc
+    order by a.active_time desc
     limit ${map.start},${map.pageSize}
   </select>
   <select id="getTotal" resultType="java.lang.Integer">
     select
     count(*)
-    from breakdown_info
-    where status <![CDATA[ <> ]]> '0'
-    <if test="map.windId != null" >
-      and wind_id = #{map.windId}
+    from breakdown_info a
+    left join org_architecture b on a.wind_id = b.architecture_code and b.architecture_type = '02'
+    left join crew_information d on a.crew_id = d.crew_id
+    left join position_encode e on a.position_id = e.position_id
+    left join equipment_asset_ledger f on a.equipment_id = f.equipment_asset_id
+    left join sp_code g on a.breakdown_location =g.id
+    left join sp_code h on a.breakdown_attribute =h.id
+    left join sp_code i on a.dealwith_mode =i.id
+    left join org_architecture j on a.dealwith_team = j.architecture_id
+    left join org_architecture k on a.company = k.architecture_id
+    left join isc_user l on a.maintainer = l.user_id
+    left join isc_user m on a.dealwith_person = m.user_id
+    left join isc_user n on a.fill_person = n.user_id
+    where a.status != '0'
+    <if test="map.startWindId != null and map.startWindId != '' and (map.endWindId == null or map.endWindId == '')" >
+      and a.wind_id = #{map.windId}
     </if>
-    <if test="map.crewId != null" >
-      and crew_id = #{map.crewId}
+    <if test="map.startWindId != null and map.startWindId != '' and map.endWindId != null and map.endWindId != ''" >
+      and (a.wind_id between #{map.startWindId} and #{map.endWindId})
     </if>
-    <if test="map.breakdownDesc != null" >
-      and breakdown_desc like '%${map.breakdownDesc}%'
+    <if test="map.crewId != null and map.crewId != ''" >
+      and a.crew_id = #{map.crewId}
     </if>
-    <if test="map.breakdownCode != null" >
-      and breakdown_code = #{map.breakdownCode}
+    <if test="map.breakdownDesc != null and map.breakdownDesc != ''" >
+      and a.breakdown_desc like '%${map.breakdownDesc}%'
     </if>
-    <if test="map.dealwithMode != null" >
-      and dealwith_mode = #{map.dealwithMode}
+    <if test="map.breakdownCode != null and map.breakdownCode != ''" >
+      and a.breakdown_code = #{map.breakdownCode}
     </if>
-    <if test="map.dealwithLocation != null" >
-      and dealwith_location = #{map.dealwithLocation}
+    <if test="map.dealwithMode != null and map.dealwithMode != ''" >
+      and a.dealwith_mode = #{map.dealwithMode}
     </if>
-    <if test="map.dealwithAttribute != null" >
-      and dealwith_attribute = #{map.dealwithAttribute}
+    <if test="map.breakdownSource != null and map.breakdownSource != ''" >
+      and a.breakdown_source = #{map.breakdownSource}
     </if>
-    <if test="map.applyStartTime != null">
-      and active_time &gt;= #{map.startTime}
+    <if test="map.locationId != null and map.locationId != ''" >
+      and a.dealwith_location = #{map.dealwithLocation}
     </if>
-    <if test="map.applyEndTime != null">
-      and active_time &lt;= #{map.endtime}
+    <if test="map.attributeId != null and map.attributeId != ''" >
+      and a.dealwith_attribute = #{map.dealwithAttribute}
+    </if>
+    <if test="map.startTime != null and map.startTime != '' and (map.endtime == null or map.endtime == '')">
+      and a.active_time = #{map.startTime}
+    </if>
+    <if test="map.startTime != null and map.startTime != '' and map.endtime != null and map.endtime != ''">
+      and (a.active_time between #{map.startTime} and #{map.endTime})
     </if>
   </select>
+
+
+
+
+
+
+
+
 
 
 
@@ -320,14 +389,14 @@
   <insert id="insert" parameterType="com.qz.zframe.maintain.entity.BreakdownInfo" >
     insert into breakdown_info (breakdown_id, serial_number, breakdown_code, 
       breakdown_desc, maintainer, maintain_date, 
-      status, dealwith_mode, wind_id, 
-      company, dealwith_team, dealwith_person, 
-      fill_person, position_id, position_desc, 
-      crew_id, equipment_id, equipment_desc, 
-      vane_speed, blade_torque_1, blade_torque_2, 
-      blade_torque_3, active_time, recover_time, 
-      downtime_windspeed, recover_windspeed, interrupt_time, 
-      electricity_loss, grid_connected_recover_time, 
+      status, breakdown_source, dealwith_mode, 
+      wind_id, company, dealwith_team, 
+      dealwith_person, fill_person, position_id, 
+      position_desc, crew_id, equipment_id, 
+      equipment_desc, vane_speed, blade_torque_1, 
+      blade_torque_2, blade_torque_3, active_time, 
+      recover_time, downtime_windspeed, recover_windspeed, 
+      interrupt_time, electricity_loss, grid_connected_recover_time, 
       breakdown_location, breakdown_attribute, 
       maximum_load, system_busbar_110, system_busbar_35, 
       system_busbar_400, workorder_number, workorder_desc, 
@@ -335,19 +404,54 @@
       phenomenon, remark)
     values (#{breakdownId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{breakdownCode,jdbcType=VARCHAR}, 
       #{breakdownDesc,jdbcType=VARCHAR}, #{maintainer,jdbcType=VARCHAR}, #{maintainDate,jdbcType=DATE}, 
-      #{status,jdbcType=VARCHAR}, #{dealwithMode,jdbcType=VARCHAR}, #{windId,jdbcType=VARCHAR}, 
-      #{company,jdbcType=VARCHAR}, #{dealwithTeam,jdbcType=VARCHAR}, #{dealwithPerson,jdbcType=VARCHAR}, 
-      #{fillPerson,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}, #{positionDesc,jdbcType=VARCHAR}, 
-      #{crewId,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR}, #{equipmentDesc,jdbcType=VARCHAR}, 
-      #{vaneSpeed,jdbcType=VARCHAR}, #{bladeTorque1,jdbcType=VARCHAR}, #{bladeTorque2,jdbcType=VARCHAR}, 
-      #{bladeTorque3,jdbcType=VARCHAR}, #{activeTime,jdbcType=TIMESTAMP}, #{recoverTime,jdbcType=TIMESTAMP}, 
-      #{downtimeWindspeed,jdbcType=VARCHAR}, #{recoverWindspeed,jdbcType=VARCHAR}, #{interruptTime,jdbcType=VARCHAR}, 
-      #{electricityLoss,jdbcType=VARCHAR}, #{gridConnectedRecoverTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR}, #{breakdownSource,jdbcType=VARCHAR}, #{dealwithMode,jdbcType=VARCHAR}, 
+      #{windId,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{dealwithTeam,jdbcType=VARCHAR}, 
+      #{dealwithPerson,jdbcType=VARCHAR}, #{fillPerson,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR}, 
+      #{positionDesc,jdbcType=VARCHAR}, #{crewId,jdbcType=VARCHAR}, #{equipmentId,jdbcType=VARCHAR}, 
+      #{equipmentDesc,jdbcType=VARCHAR}, #{vaneSpeed,jdbcType=VARCHAR}, #{bladeTorque1,jdbcType=VARCHAR}, 
+      #{bladeTorque2,jdbcType=VARCHAR}, #{bladeTorque3,jdbcType=VARCHAR}, #{activeTime,jdbcType=TIMESTAMP}, 
+      #{recoverTime,jdbcType=TIMESTAMP}, #{downtimeWindspeed,jdbcType=VARCHAR}, #{recoverWindspeed,jdbcType=VARCHAR}, 
+      #{interruptTime,jdbcType=VARCHAR}, #{electricityLoss,jdbcType=VARCHAR}, #{gridConnectedRecoverTime,jdbcType=TIMESTAMP}, 
       #{breakdownLocation,jdbcType=VARCHAR}, #{breakdownAttribute,jdbcType=VARCHAR}, 
       #{maximumLoad,jdbcType=VARCHAR}, #{systemBusbar110,jdbcType=VARCHAR}, #{systemBusbar35,jdbcType=VARCHAR}, 
       #{systemBusbar400,jdbcType=VARCHAR}, #{workorderNumber,jdbcType=VARCHAR}, #{workorderDesc,jdbcType=VARCHAR}, 
       #{workorderType,jdbcType=VARCHAR}, #{workorderStatus,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, 
       #{phenomenon,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertList" parameterType="com.qz.zframe.maintain.entity.BreakdownInfo" >
+    insert into breakdown_info (breakdown_id, serial_number, breakdown_code,
+      breakdown_desc, maintainer, maintain_date,
+      status, breakdown_source, dealwith_mode,
+      wind_id, company, dealwith_team,
+      dealwith_person, fill_person, position_id,
+      position_desc, crew_id, equipment_id,
+      equipment_desc, vane_speed, blade_torque_1,
+      blade_torque_2, blade_torque_3, active_time,
+      recover_time, downtime_windspeed, recover_windspeed,
+      interrupt_time, electricity_loss, grid_connected_recover_time,
+      breakdown_location, breakdown_attribute,
+      maximum_load, system_busbar_110, system_busbar_35,
+      system_busbar_400, workorder_number, workorder_desc,
+      workorder_type, workorder_status, picture,
+      phenomenon, remark)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.breakdownId,jdbcType=VARCHAR}, #{item.serialNumber,jdbcType=VARCHAR}, #{item.breakdownCode,jdbcType=VARCHAR},
+      #{item.breakdownDesc,jdbcType=VARCHAR}, #{item.maintainer,jdbcType=VARCHAR}, #{item.maintainDate,jdbcType=DATE},
+      #{item.status,jdbcType=VARCHAR}, #{item.breakdownSource,jdbcType=VARCHAR}, #{item.dealwithMode,jdbcType=VARCHAR},
+      #{item.windId,jdbcType=VARCHAR}, #{item.company,jdbcType=VARCHAR}, #{item.dealwithTeam,jdbcType=VARCHAR},
+      #{item.dealwithPerson,jdbcType=VARCHAR}, #{item.fillPerson,jdbcType=VARCHAR}, #{item.positionId,jdbcType=VARCHAR},
+      #{item.positionDesc,jdbcType=VARCHAR}, #{item.crewId,jdbcType=VARCHAR}, #{item.equipmentId,jdbcType=VARCHAR},
+      #{item.equipmentDesc,jdbcType=VARCHAR}, #{item.vaneSpeed,jdbcType=VARCHAR}, #{item.bladeTorque1,jdbcType=VARCHAR},
+      #{item.bladeTorque2,jdbcType=VARCHAR}, #{item.bladeTorque3,jdbcType=VARCHAR}, #{item.activeTime,jdbcType=TIMESTAMP},
+      #{item.recoverTime,jdbcType=TIMESTAMP}, #{item.downtimeWindspeed,jdbcType=VARCHAR}, #{item.recoverWindspeed,jdbcType=VARCHAR},
+      #{item.interruptTime,jdbcType=VARCHAR}, #{item.electricityLoss,jdbcType=VARCHAR}, #{item.gridConnectedRecoverTime,jdbcType=TIMESTAMP},
+      #{item.breakdownLocation,jdbcType=VARCHAR}, #{item.breakdownAttribute,jdbcType=VARCHAR},
+      #{item.maximumLoad,jdbcType=VARCHAR}, #{item.systemBusbar110,jdbcType=VARCHAR}, #{item.systemBusbar35,jdbcType=VARCHAR},
+      #{item.systemBusbar400,jdbcType=VARCHAR}, #{item.workorderNumber,jdbcType=VARCHAR}, #{item.workorderDesc,jdbcType=VARCHAR},
+      #{item.workorderType,jdbcType=VARCHAR}, #{item.workorderStatus,jdbcType=VARCHAR}, #{item.picture,jdbcType=VARCHAR},
+      #{item.phenomenon,jdbcType=VARCHAR}, #{item.remark,jdbcType=VARCHAR})
+    </foreach>
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.BreakdownInfo" >
     insert into breakdown_info
@@ -372,6 +476,9 @@
       </if>
       <if test="status != null" >
         status,
+      </if>
+      <if test="breakdownSource != null" >
+        breakdown_source,
       </if>
       <if test="dealwithMode != null" >
         dealwith_mode,
@@ -500,6 +607,9 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownSource != null" >
+        #{breakdownSource,jdbcType=VARCHAR},
       </if>
       <if test="dealwithMode != null" >
         #{dealwithMode,jdbcType=VARCHAR},
@@ -638,6 +748,9 @@
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
       </if>
+      <if test="record.breakdownSource != null" >
+        breakdown_source = #{record.breakdownSource,jdbcType=VARCHAR},
+      </if>
       <if test="record.dealwithMode != null" >
         dealwith_mode = #{record.dealwithMode,jdbcType=VARCHAR},
       </if>
@@ -757,6 +870,7 @@
       maintainer = #{record.maintainer,jdbcType=VARCHAR},
       maintain_date = #{record.maintainDate,jdbcType=DATE},
       status = #{record.status,jdbcType=VARCHAR},
+      breakdown_source = #{record.breakdownSource,jdbcType=VARCHAR},
       dealwith_mode = #{record.dealwithMode,jdbcType=VARCHAR},
       wind_id = #{record.windId,jdbcType=VARCHAR},
       company = #{record.company,jdbcType=VARCHAR},
@@ -816,6 +930,9 @@
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="breakdownSource != null" >
+        breakdown_source = #{breakdownSource,jdbcType=VARCHAR},
       </if>
       <if test="dealwithMode != null" >
         dealwith_mode = #{dealwithMode,jdbcType=VARCHAR},
@@ -933,6 +1050,7 @@
       maintainer = #{maintainer,jdbcType=VARCHAR},
       maintain_date = #{maintainDate,jdbcType=DATE},
       status = #{status,jdbcType=VARCHAR},
+      breakdown_source = #{breakdownSource,jdbcType=VARCHAR},
       dealwith_mode = #{dealwithMode,jdbcType=VARCHAR},
       wind_id = #{windId,jdbcType=VARCHAR},
       company = #{company,jdbcType=VARCHAR},
@@ -970,186 +1088,341 @@
       remark = #{remark,jdbcType=VARCHAR}
     where breakdown_id = #{breakdownId,jdbcType=VARCHAR}
   </update>
-  
+
   <resultMap id="getResultMaps" type="com.qz.zframe.device.entity.vo.Breakdown" >
     <id column="breakdown_id" property="breakdownId" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
-    <result column="location_id" property="locationId" jdbcType="VARCHAR" />
-    <result column="location_name" property="locationName" jdbcType="VARCHAR" />
-    <result column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
-    <result column="attribute_id" property="attributeName" jdbcType="VARCHAR" />
     <result column="wind_name" property="windName" jdbcType="VARCHAR" />
   </resultMap>
   <select id="countNumber" parameterType="com.qz.zframe.maintain.entity.BreakdownInfoExample" resultType="java.lang.Integer" >
-    select count(*)  from  breakdown_info i 
-	LEFT JOIN breakdown_location l ON i.breakdown_location = l.location_id  
-	<where>
-	<if test="activeTime != null  and  activeTime2 != null" >
-          and i.active_time between  #{activeTime} and  #{activeTime2}
+   SELECT
+	count(* ) 
+FROM
+	(
+	select  h.*,f.architecture_name as wind_name from (
+	SELECT 
+    i.wind_id,
+    count( CASE WHEN i.breakdown_location =01  THEN breakdown_location END ) as masterControlSystem,
+    count( CASE WHEN i.breakdown_location =02 THEN breakdown_location END ) as frequencyConverterSystem,
+    count( CASE WHEN i.breakdown_location =03 THEN breakdown_location END ) as cabin,
+    count( CASE WHEN i.breakdown_location =04 THEN breakdown_location END ) as outsideTheCabin,
+    count( CASE WHEN i.breakdown_location =05 THEN breakdown_location END ) as yawSystem,
+    count( CASE WHEN i.breakdown_location =06  THEN breakdown_location END ) as paddleSystem,
+    count( CASE WHEN i.breakdown_location =07 THEN breakdown_location END ) as otherEquipment
+    FROM
+    breakdown_info i
+    left join sp_code  s  on  i.breakdown_location  =s.name
+    left join sp_code_type t  on s.code_type_id=t.id
+    where t.name='BREAK_LOCATION' 
+    <if test="activeTime != null  and  activeTime2 = null">
+      and  i.active_time like  '%#{activeTime}%' <!-- CONCAT('%', #{activeTime}, '%')  -->
+    </if>
+    <if test="activeTime = null or  activeTime2 != null">
+      and i.active_time <![CDATA[ <= ]]>  like  '%#{activeTime}%' 
+    </if>
+      <if test="activeTime != null  and  activeTime2 != null" >
+        and i.active_time between  #{activeTime} and  #{activeTime2}
       </if>
-      </where>
+      group by  i.wind_id) h
+    left join (select * from org_architecture where architecture_type='02') f ON f.architecture_code = h.wind_id
+    GROUP  by h.wind_id )s
   </select>
   <select id="numberTroubleSite" resultMap="getResultMaps">
-  	SELECT 
-	CASE WHEN h.wind_id  IS NOT NULL then  h.wind_id else "合计" end  wind_id, 
-    SUM(A) A, SUM(B) B, SUM(C) C, SUM(D) D, SUM(E) E,SUM(F) F,SUM(G) G,f.wind_name
-	from 
-	(SELECT
-    i.wind_id,
-	count( CASE WHEN i.breakdown_code =1001 THEN breakdown_code END ) as A,
-	count( CASE WHEN i.breakdown_code =1002 THEN breakdown_code END ) as B,
-	count( CASE WHEN i.breakdown_code =1003 THEN breakdown_code END ) as C,
-	count( CASE WHEN i.breakdown_code =1004 THEN breakdown_code END ) as D,
-	count( CASE WHEN i.breakdown_code =1005 THEN breakdown_code END ) as E,
-	count( CASE WHEN i.breakdown_code =1006 THEN breakdown_code END ) as F,
-	count( CASE WHEN i.breakdown_code =1007 THEN breakdown_code END ) as G
-FROM
-	breakdown_info i 
-	LEFT JOIN breakdown_location l ON i.breakdown_location = l.location_id  
-	<where>
-	<if test="activeTime != null  and  activeTime2 != null" >
-          and i.active_time between  #{activeTime} and  #{activeTime2}
-      </if>
-      </where>
-	group by  i.wind_id) h 
-	LEFT JOIN wind_field f ON f.wind_id = h.wind_id 
-	 GROUP  by h.wind_id    with  rollup
-  </select>
-  <select id="countNumbers" parameterType="com.qz.zframe.maintain.entity.BreakdownInfoExample" resultType="java.lang.Integer" >
-    select count(*)  from  breakdown_info i 
-	LEFT JOIN breakdown_attribute a ON i.breakdown_attribute = a.attribute_id   
-	<where>
-	<if test="activeTime != null  and  activeTime2 != null" >
-          and i.active_time between  #{activeTime} and  #{activeTime2}
-      </if>
-      </where>
-  </select>
-  <select id="numberTrouble" resultMap="getResultMaps">
-    SELECT 
-	CASE WHEN h.wind_id  IS NOT NULL then  h.wind_id else "合计" end  wind_id, 
-    SUM(A) A, SUM(B) B, SUM(C) C, SUM(D) D, SUM(E) E,	SUM(F) F,f.wind_name
-	from 
-	(SELECT
-    i.wind_id,
-	count( CASE WHEN i.breakdown_code =1001 THEN breakdown_code END ) as A,
-	count( CASE WHEN i.breakdown_code =1002 THEN breakdown_code END ) as B,
-	count( CASE WHEN i.breakdown_code =1003 THEN breakdown_code END ) as C,
-	count( CASE WHEN i.breakdown_code =1004 THEN breakdown_code END ) as D,
-	count( CASE WHEN i.breakdown_code =1005 THEN breakdown_code END ) as E,
-	count( CASE WHEN i.breakdown_code =1006 THEN breakdown_code END ) as F
-FROM
-	breakdown_info i 
-	LEFT JOIN breakdown_attribute a ON i.breakdown_attribute = a.attribute_id  
-	<where>
-	<if test="activeTime != null and  activeTime2!=null" >
-        and i.active_time between  #{activeTime} and  #{activeTime2}
-      </if>
-     <!-- <if test="windId != 0" >
-       and i.wind_id=#{windId}
-      </if> -->
-    </where>
-	 group by  i.wind_id) h  
-	 
-	 LEFT JOIN wind_field f ON f.wind_id = h.wind_id 
-	 
-	 GROUP  by  h.wind_id    with  rollup
-  </select>
-  <select id="completeTrouble" resultMap="getResultMaps">
-  SELECT 
-	CASE WHEN a.wind_id  IS NOT NULL then  a.wind_id  else "合计" end  wind_id, 
-    SUM(A) A, SUM(B) B, SUM(C) C ,concat (left (  sum(a.B)/ sum(a.A)  *100,5),'%')as D from 
-	(SELECT
-	h.*,
-	( Sum( h.A ) - Sum( h.B ) ) AS C ,concat (left (  SUM(h.B)/ sum(h.A) *100,5),'%')as D
-    FROM
-	(
     SELECT
-	i.wind_id,
-	count( CASE WHEN i.active_time IS NOT NULL THEN active_time END ) AS A,
-	count( CASE WHEN i.recover_time IS NOT NULL THEN recover_time END ) AS B 
+    CASE WHEN h.wind_id  IS NOT NULL then  h.wind_id else "合计" end  wind_id,
+    SUM(masterControlSystem) masterControlSystem, SUM(frequencyConverterSystem) frequencyConverterSystem, SUM(cabin) cabin,
+    SUM(outsideTheCabin) outsideTheCabin, SUM(yawSystem) yawSystem,SUM(paddleSystem) paddleSystem,SUM(otherEquipment) otherEquipment,f.architecture_name
+    from
+    (SELECT
+    i.wind_id,
+    count( CASE WHEN i.breakdown_location =01  THEN breakdown_location END ) as masterControlSystem,
+    count( CASE WHEN i.breakdown_location =02 THEN breakdown_location END ) as frequencyConverterSystem,
+    count( CASE WHEN i.breakdown_location =03 THEN breakdown_location END ) as cabin,
+    count( CASE WHEN i.breakdown_location =04 THEN breakdown_location END ) as outsideTheCabin,
+    count( CASE WHEN i.breakdown_location =05 THEN breakdown_location END ) as yawSystem,
+    count( CASE WHEN i.breakdown_location =06  THEN breakdown_location END ) as paddleSystem,
+    count( CASE WHEN i.breakdown_location =07 THEN breakdown_location END ) as otherEquipment
     FROM
-	breakdown_info i
-	<where>
-	<if test="activeTime != null and  activeTime2!=null" >
+    breakdown_info i
+    left join sp_code  s  on  i.breakdown_location  =s.name
+    left join sp_code_type t  on s.code_type_id=t.id
+    where t.name='BREAK_LOCATION'
+    <if test="activeTime != null or  activeTime2 = null">
+       and  i.active_time like  '%#{activeTime}%' <!-- CONCAT('%', #{activeTime}, '%')  -->
+    </if>
+    <if test="activeTime = null and  activeTime2 != null">
+      and i.active_time  <![CDATA[ <= ]]> like  '%#{activeTime}%'
+    </if>
+      <if test="activeTime != null  and  activeTime2 != null" >
         and i.active_time between  #{activeTime} and  #{activeTime2}
       </if>
-     <!-- <if test="windId!= 0" >
-       and i.wind_id=#{windId}
-      </if> -->
+    group by  i.wind_id) h
+     left join (select * from org_architecture where architecture_type='02') f ON f.architecture_code = h.wind_id
+    GROUP  by h.wind_id    with  rollup
+  </select>
+  <resultMap id="getResultMapss" type="com.qz.zframe.device.entity.vo.Breakdowns" >
+    <id column="breakdown_id" property="breakdownId" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="countNumbers" parameterType="com.qz.zframe.maintain.entity.BreakdownInfoExample" resultType="java.lang.Integer" >
+    select count(*)  from  ((
+	select  h.*,f.architecture_name as wind_name from (SELECT
+    i.wind_id,
+    count( CASE WHEN i.breakdown_attribute =01 THEN breakdown_attribute END ) as mechanicalClass ,
+    count( CASE WHEN i.breakdown_attribute =02 THEN breakdown_attribute END ) as electricClass,
+    count( CASE WHEN i.breakdown_attribute =03 THEN breakdown_attribute END ) as autoControlClass,
+    count( CASE WHEN i.breakdown_attribute =04 THEN breakdown_attribute END ) as communicationClass,
+    count( CASE WHEN i.breakdown_attribute =05 THEN breakdown_attribute END ) as supertemperatureClass,
+    count( CASE WHEN i.breakdown_attribute =06 THEN breakdown_attribute END ) as hydraulicType
+    FROM
+    breakdown_info i
+    left join sp_code  s  on  i.breakdown_attribute  =s.name
+    left join sp_code_type t  on s.code_type_id=t.id
+    where t.name='BREAK_ATTRIBUTE'
+   <!--  <if test="activeTime != null  and  activeTime2 = null ' ">
+      and  date(i.active_time) = date(#{activeTime})
+    </if> -->
+    <if test="activeTime != null">
+      <if test=" activeTime2 = null ' ">
+      and  i.active_time like  '%#{activeTime}%' 
+    </if>
+     
+    </if>
+    <if test="activeTime = null and  activeTime2 != null">
+      and i.active_time  <![CDATA[ <= ]]> like  '%#{activeTime2}%'
+    </if>
+      <if test="activeTime != null  and  activeTime2 != null" >
+        and i.active_time between  #{activeTime} and  #{activeTime2}
+      </if>
+     group by  i.wind_id) h
+
+    left join (select * from org_architecture where architecture_type='02') f ON f.wind_id = h.wind_id
+
+    GROUP  by  h.wind_id )s   
+  </select>
+  <select id="numberTrouble" resultMap="getResultMapss">
+    SELECT
+    CASE WHEN h.wind_id  IS NOT NULL then  h.wind_id else "合计" end  wind_id,
+    SUM(mechanicalClass ) mechanicalClass , SUM(electricClass) electricClass, SUM(autoControlClass) autoControlClass,
+    SUM(communicationClass) communicationClass, SUM(supertemperatureClass) supertemperatureClass,	SUM(hydraulicType) hydraulicType,f.architecture_name
+    from
+    (SELECT
+    i.wind_id,
+    count( CASE WHEN i.breakdown_attribute =01 THEN breakdown_attribute END ) as mechanicalClass ,
+    count( CASE WHEN i.breakdown_attribute =02 THEN breakdown_attribute END ) as electricClass,
+    count( CASE WHEN i.breakdown_attribute =03 THEN breakdown_attribute END ) as autoControlClass,
+    count( CASE WHEN i.breakdown_attribute =04 THEN breakdown_attribute END ) as communicationClass,
+    count( CASE WHEN i.breakdown_attribute =05 THEN breakdown_attribute END ) as supertemperatureClass,
+    count( CASE WHEN i.breakdown_attribute =06 THEN breakdown_attribute END ) as hydraulicType
+    FROM
+    breakdown_info i
+    left join sp_code  s  on  i.breakdown_attribute  =s.name
+    left join sp_code_type t  on s.code_type_id=t.id
+    where t.name='BREAK_ATTRIBUTE'
+    <if test="activeTime != null and  activeTime2 = null">
+      and i.active_time like  '%#{activeTime}%'
+    </if>
+    <if test="activeTime = null and  activeTime2 != null">
+      and i.active_time  <![CDATA[ <= ]]>  like  '%#{activeTime2}%'
+    </if>
+      <if test="activeTime != null and  activeTime2!=null" >
+        and i.active_time between  #{activeTime} and  #{activeTime2}
+      </if>
+    group by  i.wind_id) h
+
+    left join (select * from org_architecture where architecture_type='02') f ON f.architecture_code = h.wind_id
+
+    GROUP  by  h.wind_id    with  rollup
+  </select>
+
+
+  <resultMap id="getResultMapsss" type="com.qz.zframe.device.entity.vo.Breakdownss" >
+    <id column="breakdown_id" property="breakdownId" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="countNumberlist" parameterType="com.qz.zframe.maintain.entity.BreakdownInfoExample" resultType="java.lang.Integer" >
+    select count(*) from 
+    (
+	select  h.* from (SELECT
+    h.*,f.architecture_name as wind_name,
+    ( Sum( h.numberFailuresActivated ) - Sum( h.numberFailureRecovery) ) AS failureToRecoverQuantity ,concat (left (  SUM(h.numberFailureRecovery)/ sum(h.numberFailuresActivated) *100,5),'%')as completionRate
+    FROM
+    (
+    SELECT
+    i.wind_id,
+    count( CASE WHEN i.active_time IS NOT NULL THEN active_time END ) AS numberFailuresActivated,
+    count( CASE WHEN i.recover_time IS NOT NULL THEN recover_time END ) AS numberFailureRecovery
+    FROM
+    breakdown_info i
+    <where>
+    <if test="activeTime != null and  activeTime2 = null">
+      and i.active_time like  '%#{activeTime}%'
+    </if>
+    <if test="activeTime = null and  activeTime2 != null">
+      and i.active_time  <![CDATA[ <= ]]> like  '%#{activeTime}%'
+    </if>
+      <if test="activeTime != null and  activeTime2!=null" >
+        and i.active_time between  #{activeTime} and  #{activeTime2}
+      </if>
+      <!-- <if test="windId!= 0" >
+        and i.wind_id=#{windId}
+       </if> -->
     </where>
     GROUP BY
-	i.wind_id 
-	) h  group by h.wind_id ) a GROUP BY  a.wind_id  with  rollup
+    i.wind_id
+    ) h 
+    left join (select * from org_architecture where architecture_type='02') f  on f.architecture_code=h.wind_id
+     group by h.wind_id ) a GROUP BY  a.wind_id  )s
+  </select>
   
+  
+  <select id="completeTrouble" resultMap="getResultMaps">
+    SELECT
+    CASE WHEN a.wind_id  IS NOT NULL then  a.wind_id  else "合计" end  wind_id,
+    SUM(numberFailuresActivated) numberFailuresActivated, SUM(numberFailureRecovery) numberFailureRecovery, SUM(failureToRecoverQuantity) failureToRecoverQuantity ,concat (left (  sum(a.numberFailureRecovery)/ sum(a.numberFailuresActivated)  *100,5),'%')as completionRate from
+    (SELECT
+    h.*,f.architecture_name as wind_name,
+    ( Sum( h.numberFailuresActivated ) - Sum( h.numberFailureRecovery) ) AS failureToRecoverQuantity ,concat (left (  SUM(h.numberFailureRecovery)/ sum(h.numberFailuresActivated) *100,5),'%')as completionRate
+    FROM
+    (
+    SELECT
+    i.wind_id,
+    count( CASE WHEN i.active_time IS NOT NULL THEN active_time END ) AS numberFailuresActivated,
+    count( CASE WHEN i.recover_time IS NOT NULL THEN recover_time END ) AS numberFailureRecovery
+    FROM
+    breakdown_info i
+    <where>
+    <if test="activeTime != null and  activeTime2 = null">
+      and  i.active_time like  '%#{activeTime}%'
+    </if>
+    <if test="activeTime = null and  activeTime2 != null">
+      and  i.active_time  <![CDATA[ <= ]]> like  '%#{activeTime2}%'
+    </if>
+      <if test="activeTime != null and  activeTime2!=null" >
+      and  i.active_time between  #{activeTime} and  #{activeTime2}
+      </if>
+      <!-- <if test="windId!= 0" >
+        and i.wind_id=#{windId}
+       </if> -->
+    </where>
+    GROUP BY
+    i.wind_id
+    ) h  
+     left join (select * from org_architecture where architecture_type='02') f  on f.architecture_code=h.wind_id
+     group by h.wind_id ) a GROUP BY  a.wind_id  with  rollup
+
   </select>
   <resultMap id="getResultMapDetail" type="com.qz.zframe.device.entity.vo.BreakdownDetail" >
     <id column="breakdown_id" property="breakdownId" jdbcType="VARCHAR" />
     <result column="wind_id" property="windId" jdbcType="VARCHAR" />
-    <result column="location_id" property="locationId" jdbcType="VARCHAR" />
-    <result column="location_name" property="locationName" jdbcType="VARCHAR" />
-    <result column="attribute_id" property="attributeId" jdbcType="VARCHAR" />
-    <result column="attribute_name" property="attributeName" jdbcType="VARCHAR" />
     <result column="wind_name" property="windName" jdbcType="VARCHAR" />
   </resultMap>
-  
-  
-  <select id="numberTroubleDetail" resultMap="getResultMapDetail" >
-  SELECT
-  CASE
-  WHEN
-	h.wind_id IS NOT NULL THEN
-	h.wind_id ELSE "合计" 
-  END wind_id,
-	SUM( A ) A,
-	SUM( B ) B,
-	SUM( C ) C,
-	SUM( D ) D,
-	SUM( E ) E,
-	SUM( F ) F,
-	SUM( G ) G,
-	SUM( H ) H,
-	SUM( I ) I,
-	SUM( J ) J,
-	SUM( K ) K,
-	SUM( L ) L,
-	SUM( M ) M,
-	f.wind_name
+
+  <!-- <select id="countNumberss" parameterType="com.qz.zframe.maintain.entity.BreakdownInfoExample" resultType="java.lang.Integer" >
+    select count(*) from
+    breakdown_info i
+    left join sp_code s on i.breakdown_attribute =s.name
+    left join sp_code_type t on s.code_type_id=t.id
+    left join sp_code sc on i.breakdown_attribute =sc.name
+    left join sp_code_type st on sc.code_type_id=st.id
+    where t.name='BREAK_LOCATION'
+    and st.name='BREAK_ATTRIBUTE'
+    <if test="activeTime != null and  activeTime2 = null">
+      and i.active_time = #{activeTime}
+    </if>
+    <if test="activeTime = null and  activeTime2 != null">
+      and i.active_time  <![CDATA[ <= ]]>  #{activeTime2}
+    </if>
+    <if test="activeTime != null  and  activeTime2 != null" >
+      and i.active_time between  #{activeTime} and  #{activeTime2}
+    </if>
+    <if test="windId != null">
+      and i.wind_id=#{windId}
+    </if>
+  </select> -->
+
+  <select id="numberTroubleDetail" resultMap="getResultMapDetail">
+    SELECT
+    CASE
+    WHEN
+    h.wind_id IS NOT NULL THEN
+    h.wind_id ELSE "合计"
+    END wind_id,
+    SUM(masterControlSystem) masterControlSystem,
+    SUM(frequencyConverterSystem) frequencyConverterSystem,
+    SUM(cabin) cabin,
+    SUM(outsideTheCabin) outsideTheCabin,
+    SUM(yawSystem) yawSystem,
+    SUM(paddleSystem) paddleSystem,
+    SUM(otherEquipment) otherEquipment,
+    SUM(mechanicalClass ) mechanicalClass ,
+    SUM(electricClass) electricClass,
+    SUM(autoControlClass) autoControlClass,
+    SUM(communicationClass) communicationClass,
+    SUM(supertemperatureClass) supertemperatureClass,
+    SUM(hydraulicType) hydraulicType,
+    f.architecture_name
     FROM
-	(
-	SELECT
-		i.wind_id,
-		count( CASE WHEN i.breakdown_location = 1001 THEN breakdown_location END ) AS A,
-		count( CASE WHEN i.breakdown_location = 1002 THEN breakdown_location END ) AS B,
-		count( CASE WHEN i.breakdown_location = 1003 THEN breakdown_location END ) AS C,
-		count( CASE WHEN i.breakdown_location = 1004 THEN breakdown_location END ) AS D,
-		count( CASE WHEN i.breakdown_location = 1005 THEN breakdown_location END ) AS E,
-		count( CASE WHEN i.breakdown_location = 1006 THEN breakdown_location END ) AS F,
-		count( CASE WHEN i.breakdown_location = 1007 THEN breakdown_location END ) AS G,
-		count( CASE WHEN i.breakdown_attribute = 1001 THEN breakdown_attribute END ) AS H,
-		count( CASE WHEN i.breakdown_attribute = 1002 THEN breakdown_attribute END ) AS I,
-		count( CASE WHEN i.breakdown_attribute = 1003 THEN breakdown_attribute END ) AS J,
-		count( CASE WHEN i.breakdown_attribute = 1004 THEN breakdown_attribute END ) AS K,
-		count( CASE WHEN i.breakdown_attribute = 1005 THEN breakdown_attribute END ) AS L,
-		count( CASE WHEN i.breakdown_attribute = 1006 THEN breakdown_attribute END ) AS M
-	FROM
-		breakdown_info i
-		LEFT JOIN breakdown_location l ON i.breakdown_location = l.location_id 
-		LEFT  JOIN breakdown_attribute a on i.breakdown_attribute=a.attribute_id
-			<where>
-	<if test="activeTime != null and  activeTime2!=null" >
-        and i.active_time between  #{activeTime} and  #{activeTime2}
-      </if>
-      <if test="windId != null" >
-       and i.wind_id=#{windId}
-      </if> 
-    </where>
-		
-		
-	GROUP BY
-		i.wind_id 
-	) h
-	LEFT JOIN wind_field f ON f.wind_id = h.wind_id 
+    (
+    SELECT
+    i.wind_id,
+    count( CASE WHEN i.breakdown_location =01 THEN breakdown_location END ) as
+    masterControlSystem,
+    count( CASE WHEN i.breakdown_location =02 THEN breakdown_location END ) as
+    frequencyConverterSystem,
+    count( CASE WHEN i.breakdown_location =03 THEN breakdown_location END ) as
+    cabin,
+    count( CASE WHEN i.breakdown_location =04 THEN breakdown_location END ) as
+    outsideTheCabin,
+    count( CASE WHEN i.breakdown_location =05 THEN breakdown_location END ) as
+    yawSystem,
+    count( CASE WHEN i.breakdown_location =06 THEN breakdown_location END ) as
+    paddleSystem,
+    count( CASE WHEN i.breakdown_location =07 THEN breakdown_location END ) as
+    otherEquipment,
+    count( CASE WHEN i.breakdown_attribute =01 THEN breakdown_attribute END ) as
+    mechanicalClass ,
+    count( CASE WHEN i.breakdown_attribute =02 THEN breakdown_attribute END ) as
+    electricClass,
+    count( CASE WHEN i.breakdown_attribute =03 THEN breakdown_attribute END ) as
+    autoControlClass,
+    count( CASE WHEN i.breakdown_attribute =04 THEN breakdown_attribute END ) as
+    communicationClass,
+    count( CASE WHEN i.breakdown_attribute =05 THEN breakdown_attribute END ) as
+    supertemperatureClass,
+    count( CASE WHEN i.breakdown_attribute =06 THEN breakdown_attribute END ) as
+    hydraulicType
+    FROM
+    breakdown_info i
+    left join sp_code s on i.breakdown_attribute =s.name
+    left join sp_code_type t on s.code_type_id=t.id
+    left join sp_code sc on i.breakdown_attribute =sc.name
+    left join sp_code_type st on sc.code_type_id=st.id
+    where t.name='BREAK_LOCATION'
+    and st.name='BREAK_ATTRIBUTE'
+    <if test="activeTime != null and  activeTime2 = null">
+      and i.active_time like  '%#{activeTime}%'
+    </if>
+    <if test="activeTime = null and  activeTime2 != null">
+      and i.active_time  <![CDATA[ <= ]]>  like '%#{activeTime}%'
+    </if>
+    <if test="activeTime != null and  activeTime2!=null">
+      and i.active_time between #{activeTime} and #{activeTime2}
+    </if>
+    <if test="windId != null">
+      and  i.wind_id=#{windId}
+    </if>
     GROUP BY
-    h.wind_id WITH ROLLUP
+    i.wind_id
+    )  h
+    left join (select * from org_architecture where architecture_type='02') f  on  f.wind_id = h.wind_id
+    GROUP BY
+    h.wind_id  WITH ROLLUP
   </select>
+
+
 </mapper>

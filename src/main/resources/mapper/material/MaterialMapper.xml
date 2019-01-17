@@ -18,8 +18,8 @@
     <result column="measuring_unit" property="measuringUnit" jdbcType="VARCHAR" />
     <result column="supplier_id" property="supplierId" jdbcType="VARCHAR" />
     <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
-    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
-    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="architecture_id" property="architectureCode" jdbcType="VARCHAR" />
+    <result column="architecture_name" property="architectureName" jdbcType="VARCHAR" />
     <result column="is_guarantee" property="isGuarantee" jdbcType="VARCHAR" />
     <result column="guarantee_days" property="guaranteeDays" jdbcType="INTEGER" />
     <result column="is_con_stock" property="isConStock" jdbcType="VARCHAR" />
@@ -36,6 +36,8 @@
     <result column="extend2" property="extend2" jdbcType="VARCHAR" />
     <result column="extend3" property="extend3" jdbcType="VARCHAR" />
     <result column="extend4" property="extend4" jdbcType="VARCHAR" />
+    <result column="measuring_unit_name" property="measuringUnitName" jdbcType="VARCHAR" />
+    <result column="classify_describe" property="materialClassifyDescribe" jdbcType="VARCHAR" />  
   </resultMap>
   
   <sql id="Pagination_Sql">
@@ -109,22 +111,25 @@
     extend1, extend2, extend3, extend4
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.MaterialExample" >
-    select a.material_id,a.material_code,a.material_name,a.specifications,a.material_describe,a.measuring_unit,c.classify_name
+    select a.*,c.classify_name,c.classify_describe,e.architecture_name,f.measuring_unit_name
     from material a left join material_group b on a.material_group_id=b.material_group_id left join material_classify c on a.material_classify_id = c.material_classify_id
-    left join supplier d on a.supplier_id = d.supplier_id left join wind_field e on a.wind_id = e.wind_id 
+    left join supplier d on a.supplier_id = d.supplier_id left join org_architecture e on a.architecture_id = e.architecture_code 
+    left join material_unit f on a.measuring_unit=f.measuring_unit_id
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+    and e.architecture_type='02' and a.is_delete='01'
     <if test="orderByClause != null" >
       order by ${orderByClause}
     </if>
     <include refid="Pagination_Sql" />
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select a.*,b.group_name,c.classify_name,d.supplier_name,e.wind_name
+    select a.*,b.group_name,c.classify_name,d.supplier_name,e.architecture_name,c.classify_describe,f.measuring_unit_name
     from material a left join material_group b on a.material_group_id=b.material_group_id left join material_classify c on a.material_classify_id = c.material_classify_id
-    left join supplier d on a.supplier_id = d.supplier_id left join wind_field e on a.wind_id = e.wind_id 
-    where  a.material_id = #{materialId,jdbcType=VARCHAR}
+    left join supplier d on a.supplier_id = d.supplier_id left join org_architecture e on a.architecture_id = e.architecture_code
+    left join material_unit f on a.measuring_unit=f.measuring_unit_id
+    where   e.architecture_type='02' and  a.material_id = #{materialId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from material
@@ -202,8 +207,8 @@
       <if test="supplierId != null" >
         supplier_id,
       </if>
-      <if test="windId != null" >
-        wind_id,
+      <if test="architectureCode != null" >
+        architecture_id,
       </if>
       <if test="isGuarantee != null" >
         is_guarantee,
@@ -292,8 +297,8 @@
       <if test="supplierId != null" >
         #{supplierId,jdbcType=VARCHAR},
       </if>
-      <if test="windId != null" >
-        #{windId,jdbcType=VARCHAR},
+      <if test="architectureCode != null" >
+        #{architectureCode,jdbcType=VARCHAR},
       </if>
       <if test="isGuarantee != null" >
         #{isGuarantee,jdbcType=VARCHAR},
@@ -345,10 +350,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.qz.zframe.material.entity.MaterialExample" resultType="java.lang.Integer" >
-    select count(*) from material a
+    select count(*) from material a left join material_group b on a.material_group_id=b.material_group_id left join material_classify c on a.material_classify_id = c.material_classify_id
+    left join supplier d on a.supplier_id = d.supplier_id left join org_architecture e on a.architecture_id = e.architecture_code 
+    left join material_unit f on a.measuring_unit=f.measuring_unit_id
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
+     and e.architecture_type='02' and a.is_delete='01'
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
     update material
@@ -392,8 +400,8 @@
       <if test="record.supplierId != null" >
         supplier_id = #{record.supplierId,jdbcType=VARCHAR},
       </if>
-      <if test="record.windId != null" >
-        wind_id = #{record.windId,jdbcType=VARCHAR},
+      <if test="record.architectureCode != null" >
+        architecture_id = #{record.architectureCode,jdbcType=VARCHAR},
       </if>
       <if test="record.isGuarantee != null" >
         is_guarantee = #{record.isGuarantee,jdbcType=VARCHAR},
@@ -523,8 +531,8 @@
       <if test="supplierId != null" >
         supplier_id = #{supplierId,jdbcType=VARCHAR},
       </if>
-      <if test="windId != null" >
-        wind_id = #{windId,jdbcType=VARCHAR},
+      <if test="architectureCode != null" >
+        architecture_id = #{architectureCode,jdbcType=VARCHAR},
       </if>
       <if test="isGuarantee != null" >
         is_guarantee = #{isGuarantee,jdbcType=VARCHAR},
@@ -591,7 +599,7 @@
       material_texture = #{materialTexture,jdbcType=VARCHAR},
       measuring_unit = #{measuringUnit,jdbcType=VARCHAR},
       supplier_id = #{supplierId,jdbcType=VARCHAR},
-      wind_id = #{windId,jdbcType=VARCHAR},
+      architecture_id = #{architectureCode,jdbcType=VARCHAR},
       is_guarantee = #{isGuarantee,jdbcType=VARCHAR},
       guarantee_days = #{guaranteeDays,jdbcType=INTEGER},
       is_con_stock = #{isConStock,jdbcType=VARCHAR},
@@ -617,5 +625,9 @@
             #{materialIds}
         </foreach>
     </update>
+  
+  <select id="selectMaxMaterialCode" resultType="java.lang.String"  >
+   select max(material_code) from material
+  </select>
   
 </mapper>

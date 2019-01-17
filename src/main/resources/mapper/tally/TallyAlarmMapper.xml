@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.tally.dao.TallyAlarmDao" >
+    <resultMap id="BaseResultMap" type="com.qz.zframe.tally.entity.TallyAlarm" >
+        <id column="alarm_id" property="alarmId" />
+        <result column="wind_id" property="windId" />
+        <result column="route_name" property="routeName"/>
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime"/>
+        <result column="equipment_belonging" property="equipmentBelonging" />
+        <result column="check_content" property="checkContent"/>
+        <result column="treatment_standard" property="treatmentStandard"/>
+        <result column="result" property="result"/>
+        <result column="processing_status" property="processingStatus"/>
+        <result column="equipment_name" property="equipmentName"/>
+        <result column="standard_type" property="standardType"/>
+        <result column="processing_scheme" property="processingScheme"/>
+        <result column="standard_judgment" property="standardJudgment"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="com.qz.zframe.tally.vo.TallyAlarmVO">
+        <id column="alarm_id" property="alarmId" />
+        <result column="route_id" property="routeId" />
+        <result column="wind_id" property="windId" />
+        <result column="route_name" property="routeName"/>
+        <result column="benchmark_date" property="benchmarkDate" />
+        <result column="end_time" property="finishTime"/>
+        <result column="cycle" property="cycle"/>
+        <result column="cycle_unit" property="cycleUnit"/>
+        <result column="equipment_belonging" property="equipmentBelonging" />
+        <result column="check_content" property="checkContent"/>
+        <result column="standard_judgment" property="standardJudgment" />
+        <result column="practitioner_name" property="practitionerName"/>
+        <result column="result" property="result"/>
+        <result column="processing_notes" property="processingNotes"/>
+        <result column="processing_person" property="processingPerson"/>
+        <result column="processing_scheme" property="processingScheme"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List" >
+        alarm_id,wind_id,route_name,start_time,end_time,equipment_belonging,check_content,check_standard,treatment_standard,result
+    </sql>
+
+
+    <select id="findAllTallyAlarm" resultMap="BaseResultMap">
+        SELECT
+         alarm_id,wind_id,route_name,start_time,end_time,equipment_belonging,check_content,check_standard,treatment_standard,result
+         FROM tally_alarm
+        WHERE  1=1
+        <if test="windId !=null">
+            and wind_id=#{windId}
+        </if>
+        <if test="routeName !=null">
+            and route_name=#{routeName}
+        </if>
+        <if test="treatmentStandard !=null">
+            and treatment_standard =#{treatmentStandard}
+        </if>
+        <if test="startTime !=null">
+            and start_time =#{startTime}
+        </if>
+        <if test="endTime !=null">
+            and end_time =#{endTime}
+        </if>
+    </select>
+
+    <select id="findAllTallyAlarmVO" resultMap="BaseResultMap2">
+          SELECT
+          tally_route.wind_id,tally_route.route_name,cycle.benchmark_date,cycle.cycle,cycle.cycle_unit,
+          tally_standard.equipment_belonging,tally_standard.check_content,tally_standard.standard_judgment,
+          tally_alarm.result,tally_alarm.processing_notes,
+          tally_record.practitioner_name,
+          tally_alarm.processing_person,tally_alarm.processing_scheme
+          FROM tally_route,cycle,tally_standard,tally_alarm,tally_record
+          WHERE tally_route.route_id=cycle.route_id
+          AND tally_route.route_id=tally_standard.route_id
+          AND tally_route.route_id=tally_alarm.route_id
+          AND tally_route.route_id=tally_record.route_id
+    </select>
+
+    <delete id="deleteTallyAlarmByRouteName">
+        DELETE tally_alarm.*
+        FROM tally_alarm,tally_route
+        WHERE tally_route.route_name IN
+        <foreach collection="routeName" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and tally_route.route_id=tally_alarm.route_id
+    </delete>
+
+    <!-- 根据条件查询巡检告警记录 -->
+    <select id="findTallyAlarm" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+            a.alarm_id,
+            o.architecture_name windName,
+            t.route_name,
+            a.start_time,
+            a.end_time,
+            l.equipment_name,
+            s.check_content,
+            s.standard_type,
+            a.result,
+            ia.user_name tallyPersonName,
+            ib.user_name processingPersonName,
+            a.processing_scheme,
+            a.processing_status
+        FROM
+            tally_standard s,
+            tally_route t,
+            equipment_asset_ledger l,
+            org_architecture o,
+            tally_alarm a
+            LEFT JOIN isc_user ia ON a.tally_person = ia.user_id
+            LEFT JOIN isc_user ib ON a.processing_person = ib.user_id
+        WHERE
+            a.standard_id = s.standard_id
+            AND s.route_id = t.route_id
+            AND s.equipment_id = l.equipment_asset_id
+            AND t.wind_id = o.architecture_code
+            AND o.architecture_type = "02"
+        <if test="companyId != null and companyId !=''">
+            and o.super_competent_department = #{companyId}
+        </if>
+        <if test="startArchitectureCode != null and endArchitectureCode !=null and startArchitectureCode != '' and endArchitectureCode !=''">
+            and t.wind_id between #{startArchitectureCode} and #{endArchitectureCode}
+        </if>
+        <if test="startArchitectureCode != null and startArchitectureCode != ''">
+            and t.wind_id = #{startArchitectureCode}
+        </if>
+        <if test="start != null and end != null">
+            and a.create_time between #{start} and #{end}
+        </if>
+        <if test="start != null and end == null">
+            and a.create_time >= #{start}
+        </if>
+        <if test="end != null and start == null">
+            and a.create_time <![CDATA[ <= ]]> #{end}
+        </if>
+        <if test="processingStatus!=null and processingStatus !=''">
+            and a.processing_status = #{processingStatus}
+        </if>
+        order by a.create_time, a.processing_status
+        limit #{firstIndex}, #{lastIndex}
+    </select>
+
+    <!-- 根据条件查询巡检告警记录数量 -->
+    <select id="findTallyAlarmCount" parameterType="string" resultType="int">
+        SELECT
+          count(a.alarm_id)
+        FROM
+            tally_standard s,
+            tally_route t,
+            equipment_asset_ledger l,
+            org_architecture o,
+            tally_alarm a
+            LEFT JOIN isc_user ia ON a.tally_person = ia.user_id
+            LEFT JOIN isc_user ib ON a.processing_person = ib.user_id
+        WHERE
+            a.standard_id = s.standard_id
+            AND s.route_id = t.route_id
+            AND s.equipment_id = l.equipment_asset_id
+            AND t.wind_id = o.architecture_code
+            AND o.architecture_type = "02"
+            <if test="companyId!=null and companyId !=''">
+                and o.super_competent_department = #{companyId}
+            </if>
+            <if test="startArchitectureCode != null and endArchitectureCode !=null and startArchitectureCode != '' and endArchitectureCode !=''">
+                and t.wind_id between #{startArchitectureCode} and #{endArchitectureCode}
+            </if>
+            <if test="startArchitectureCode != null and startArchitectureCode != ''">
+                and t.wind_id = #{startArchitectureCode}
+            </if>
+            <if test="start != null and end != null">
+                and a.create_time between #{start} and #{end}
+            </if>
+            <if test="start != null and end == null">
+                and a.create_time >= #{start}
+            </if>
+            <if test="end != null and start == null">
+                and a.create_time <![CDATA[ <= ]]> #{end}
+            </if>
+            <if test="processingStatus != null and processingStatus !=''">
+                and a.processing_status = #{processingStatus}
+            </if>
+    </select>
+
+    <!-- 处理告警 -->
+    <update id="updateTallyAlarm" parameterType="map">
+        update tally_alarm set processing_person = #{map.userId}, processing_status ="02" ,processing_scheme = #{map.msg}
+        where processing_status = '01' and alarm_id in
+        <foreach item="item" index="index" collection="map.alarmIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 新增巡检告警信息 -->
+    <insert id="addTallyAlarm" parameterType="com.qz.zframe.tally.entity.TallyAlarm">
+        insert into tally_alarm(alarm_id,standard_id,tally_person,result,processing_person,processing_scheme,processing_status,start_time,end_time,create_time)
+        values (#{alarmId},#{standardId},#{tallyPerson},#{result},#{processingPerson},{processingScheme},#{processingStatus},#{startTime},#{endTime},#{createTime})
+    </insert>
+
+    <!-- 批量新增巡检告警信息 -->
+    <insert id="addTallyAlarmBatch" parameterType="com.qz.zframe.tally.entity.TallyAlarm">
+        insert into tally_alarm(alarm_id,standard_id,tally_person,result,processing_person,processing_scheme,processing_status,start_time,end_time,create_time)
+        values
+        <foreach collection ="list" item="tallyAlarms" open="(" separator="," close=")">
+            #{alarmId},#{standardId},#{tallyPerson},#{result},#{processingPerson},{processingScheme},#{processingStatus},#{startTime},#{endTime},#{createTime}
+        </foreach >
+    </insert>
+
+    <!-- 根据巡检告警id查询巡检告警记录 -->
+    <select id="findTallyAlarmByAlarmId" parameterType="string" resultMap="BaseResultMap">
+        SELECT
+            a.alarm_id,
+            s.equipment_id,
+            t.wind_id,
+            l.position_id,
+            a.start_time,
+            a.end_time,
+            s.standard_judgment,
+            a.result,
+            a.tally_person,
+            l.crew,
+            s.check_content
+        FROM
+            tally_alarm a,
+            tally_standard s,
+            tally_route t,
+            equipment_asset_ledger l,
+            org_architecture o
+        WHERE
+            a.standard_id = s.standard_id
+            AND s.route_id = t.route_id
+            AND s.equipment_id = l.equipment_asset_id
+            AND t.wind_id = o.architecture_code
+            AND o.architecture_type = "02"
+            AND a.alarm_id = #{alarmId}
+    </select>
+</mapper>

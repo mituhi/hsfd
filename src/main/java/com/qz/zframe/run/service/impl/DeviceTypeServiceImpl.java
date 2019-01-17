@@ -20,7 +20,7 @@ import com.qz.zframe.run.service.DeviceTypeService;
 /**
  * <p>Title: DeviceTypeServiceImpl</p>
  * <p>@Description: 设备类型状态表接口实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月6日 下午4:30:26
  * @version:V1.0
  */
@@ -45,10 +45,10 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
 								.andDeviceStatusEqualTo(deviceType.getDeviceStatus());
 		List<DeviceType> list = deviceTypeMapper.selectByExample(example);
 		
-		if(list!=null && list.size()>=0){
+		if(list!=null && list.size()>0){
 			//如果在表中存在有改   类型和状态   返回错误
 			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("存在改类型和状态，不允许插入");
+			resultEntity.setMsg("该设备类型已存在，请重新添加");
 			return resultEntity;
 		}
 		
@@ -59,9 +59,9 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
 		//添加时间字段
 		deviceType.setUpdateTime(new Date());
 		//执行插入操作
-		deviceTypeMapper.insert(deviceType);
+		deviceTypeMapper.insertSelective(deviceType);
 		resultEntity.setCode(ErrorCode.SUCCESS);
-		resultEntity.setMsg("执行成功");
+		resultEntity.setMsg("信息已保存");
 		return resultEntity;
 		
 	}
@@ -88,8 +88,10 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
 	 * 根据主键删除
 	 */
 	@Override
-	public void removeDeviceTypeById(String typeId) {
-		deviceTypeMapper.deleteByPrimaryKey(typeId);
+	public void removeDeviceTypeById(List<String> typeIds) {
+		DeviceTypeExample deviceTypeExample = new DeviceTypeExample();
+		deviceTypeExample.createCriteria().andTypeIdIn(typeIds);
+		deviceTypeMapper.deleteByExample(deviceTypeExample);
 	}
 
 
@@ -111,8 +113,14 @@ public class DeviceTypeServiceImpl implements DeviceTypeService {
 		return deviceTypes;
 	}
 
+	@Override
+	public List<DeviceType> distinctListDeviceType() {
 
-	
+		List<DeviceType> deviceTypes = deviceTypeMapper.getDistinctDeviceTypeList();
+
+		return deviceTypes;
+	}
+
 	/**
 	 * 根据主键进行修改
 	 */

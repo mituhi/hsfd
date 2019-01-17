@@ -612,6 +612,76 @@ public class BreakdownInfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andBreakdownSourceIsNull() {
+            addCriterion("breakdown_source is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceIsNotNull() {
+            addCriterion("breakdown_source is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceEqualTo(String value) {
+            addCriterion("breakdown_source =", value, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceNotEqualTo(String value) {
+            addCriterion("breakdown_source <>", value, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceGreaterThan(String value) {
+            addCriterion("breakdown_source >", value, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceGreaterThanOrEqualTo(String value) {
+            addCriterion("breakdown_source >=", value, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceLessThan(String value) {
+            addCriterion("breakdown_source <", value, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceLessThanOrEqualTo(String value) {
+            addCriterion("breakdown_source <=", value, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceLike(String value) {
+            addCriterion("breakdown_source like", value, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceNotLike(String value) {
+            addCriterion("breakdown_source not like", value, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceIn(List<String> values) {
+            addCriterion("breakdown_source in", values, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceNotIn(List<String> values) {
+            addCriterion("breakdown_source not in", values, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceBetween(String value1, String value2) {
+            addCriterion("breakdown_source between", value1, value2, "breakdownSource");
+            return (Criteria) this;
+        }
+
+        public Criteria andBreakdownSourceNotBetween(String value1, String value2) {
+            addCriterion("breakdown_source not between", value1, value2, "breakdownSource");
+            return (Criteria) this;
+        }
+
         public Criteria andDealwithModeIsNull() {
             addCriterion("dealwith_mode is null");
             return (Criteria) this;
@@ -2543,7 +2613,7 @@ public class BreakdownInfoExample {
         }
 
         public Criteria andWorkorderNumberIsNull() {
-            addCriterion("workorder_code is null");
+            addCriterion("workorder_number is null");
             return (Criteria) this;
         }
 

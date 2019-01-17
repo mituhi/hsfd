@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.material.dao.DamagedAuditDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.material.entity.DamagedAuditDetail" >
+    <id column="damaged_audit_detail_id" property="damagedAuditDetailId" jdbcType="VARCHAR" />
+    <result column="damaged_audit_id" property="damagedAuditId" jdbcType="VARCHAR" />
+    <result column="damaged_parts_detail_id" property="damagedPartsDetailId" jdbcType="VARCHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="VARCHAR" />
+    <result column="audit_num" property="auditNum" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <!-- 物资相关 -->
+    <result column="material_code" property="materialCode" jdbcType="VARCHAR" />
+    <result column="material_id" property="materialId" jdbcType="VARCHAR" />
+    <result column="title" property="measuringUnitName" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="material_name" property="materialName" jdbcType="VARCHAR" />
+    <result column="material_code" property="materialCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="storage_num" property="storageNum" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    damaged_audit_detail_id, damaged_audit_id, damaged_parts_detail_id, audit_status, 
+    audit_num, remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.material.entity.DamagedAuditDetailExample" >
+    select a.*,b.storage_num,b.status,b.material_id,c.material_code,c.material_name,c.specifications,d.title
+    from damaged_audit_detail a left join damaged_parts_detail  b on a.damaged_parts_detail_id = b.damaged_parts_detail_id
+    left join material c on b.material_id=c.material_id left join sp_code d on c.measuring_unit = d.id
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select a.*,b.storage_num,b.status,b.material_id,c.material_code,c.material_name,c.specifications,d.title
+    from damaged_audit_detail a left join damaged_parts_detail  b on a.damaged_parts_detail_id = b.damaged_parts_detail_id
+    left join material c on b.material_id=c.material_id left join sp_code d on c.measuring_unit = d.id
+    where a.damaged_audit_detail_id = #{damagedAuditDetailId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from damaged_audit_detail
+    where damaged_audit_detail_id = #{damagedAuditDetailId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.qz.zframe.material.entity.DamagedAuditDetailExample" >
+    delete from damaged_audit_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.qz.zframe.material.entity.DamagedAuditDetail" >
+    insert into damaged_audit_detail (damaged_audit_detail_id, damaged_audit_id, 
+      damaged_parts_detail_id, audit_status, audit_num, 
+      remark)
+    values (#{damagedAuditDetailId,jdbcType=VARCHAR}, #{damagedAuditId,jdbcType=VARCHAR}, 
+      #{damagedPartsDetailId,jdbcType=VARCHAR}, #{auditStatus,jdbcType=VARCHAR}, #{auditNum,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qz.zframe.material.entity.DamagedAuditDetail" >
+    insert into damaged_audit_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="damagedAuditDetailId != null" >
+        damaged_audit_detail_id,
+      </if>
+      <if test="damagedAuditId != null" >
+        damaged_audit_id,
+      </if>
+      <if test="damagedPartsDetailId != null" >
+        damaged_parts_detail_id,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="auditNum != null" >
+        audit_num,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="damagedAuditDetailId != null" >
+        #{damagedAuditDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="damagedAuditId != null" >
+        #{damagedAuditId,jdbcType=VARCHAR},
+      </if>
+      <if test="damagedPartsDetailId != null" >
+        #{damagedPartsDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditNum != null" >
+        #{auditNum,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.qz.zframe.material.entity.DamagedAuditDetailExample" resultType="java.lang.Integer" >
+    select count(*) from damaged_audit_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update damaged_audit_detail
+    <set >
+      <if test="record.damagedAuditDetailId != null" >
+        damaged_audit_detail_id = #{record.damagedAuditDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.damagedAuditId != null" >
+        damaged_audit_id = #{record.damagedAuditId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.damagedPartsDetailId != null" >
+        damaged_parts_detail_id = #{record.damagedPartsDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.auditStatus != null" >
+        audit_status = #{record.auditStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.auditNum != null" >
+        audit_num = #{record.auditNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update damaged_audit_detail
+    set damaged_audit_detail_id = #{record.damagedAuditDetailId,jdbcType=VARCHAR},
+      damaged_audit_id = #{record.damagedAuditId,jdbcType=VARCHAR},
+      damaged_parts_detail_id = #{record.damagedPartsDetailId,jdbcType=VARCHAR},
+      audit_status = #{record.auditStatus,jdbcType=VARCHAR},
+      audit_num = #{record.auditNum,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qz.zframe.material.entity.DamagedAuditDetail" >
+    update damaged_audit_detail
+    <set >
+      <if test="damagedAuditId != null" >
+        damaged_audit_id = #{damagedAuditId,jdbcType=VARCHAR},
+      </if>
+      <if test="damagedPartsDetailId != null" >
+        damaged_parts_detail_id = #{damagedPartsDetailId,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="auditNum != null" >
+        audit_num = #{auditNum,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where damaged_audit_detail_id = #{damagedAuditDetailId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qz.zframe.material.entity.DamagedAuditDetail" >
+    update damaged_audit_detail
+    set damaged_audit_id = #{damagedAuditId,jdbcType=VARCHAR},
+      damaged_parts_detail_id = #{damagedPartsDetailId,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=VARCHAR},
+      audit_num = #{auditNum,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR}
+    where damaged_audit_detail_id = #{damagedAuditDetailId,jdbcType=VARCHAR}
+  </update>
+  
+   <delete id="delByDamagedId"  parameterType="java.lang.String" >
+   delete from damaged_audit_detail  where damaged_audit_id = #{damagedAuditId}
+  </delete>
+  
+  <delete id="delByDamagedIds" parameterType="java.util.List">
+         delete from damaged_audit_detail where damaged_audit_id in
+         <foreach item="damagedAuditIds" collection="list" open="(" close=")" separator=",">
+             #{damagedAuditIds}
+         </foreach>
+ </delete>
+  
+</mapper>

@@ -218,7 +218,7 @@ public class StockAddressExample extends PageExample{
         }
 
         public Criteria andStockAddCodeLike(String value) {
-            addCriterion("stock_add_code like", value, "stockAddCode");
+            addCriterion("a.stock_add_code like","%" +value+"%", "stockAddCode");
             return (Criteria) this;
         }
 
@@ -397,8 +397,8 @@ public class StockAddressExample extends PageExample{
             return (Criteria) this;
         }
 
-        public Criteria andWindIdEqualTo(String value) {
-            addCriterion("wind_id =", value, "windId");
+        public Criteria andArchitectureCode(String value) {
+            addCriterion("b.architecture_code =", value, "architectureCode");
             return (Criteria) this;
         }
 
@@ -407,8 +407,8 @@ public class StockAddressExample extends PageExample{
             return (Criteria) this;
         }
 
-        public Criteria andWindIdGreaterThan(String value) {
-            addCriterion("wind_id >", value, "windId");
+        public Criteria andArchitectureIdTo(String value) {
+            addCriterion("a.architecture_id =", value, "windId");
             return (Criteria) this;
         }
 
@@ -438,7 +438,7 @@ public class StockAddressExample extends PageExample{
         }
 
         public Criteria andWindIdIn(List<String> values) {
-            addCriterion("wind_id in", values, "windId");
+            addCriterion("a.architecture_id in", values, "windId");
             return (Criteria) this;
         }
 
@@ -447,8 +447,8 @@ public class StockAddressExample extends PageExample{
             return (Criteria) this;
         }
 
-        public Criteria andWindIdBetween(String value1, String value2) {
-            addCriterion("wind_id between", value1, value2, "windId");
+        public Criteria andarchitectureCodeBetween(String value1, String value2) {
+            addCriterion("b.architecture_code between", value1, value2, "architectureCode");
             return (Criteria) this;
         }
 

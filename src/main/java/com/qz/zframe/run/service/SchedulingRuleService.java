@@ -1,15 +1,18 @@
 package com.qz.zframe.run.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.run.entity.Example;
 import com.qz.zframe.run.entity.SchedulingRule;
 import com.qz.zframe.run.entity.SchedulingRuleExample;
+import com.qz.zframe.run.entity.Shift;
 
 /**
  * <p>Title: SchedulingRuleService</p>
  * <p>@Description: 接口声明 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月1日 下午12:27:58
  * @version:V1.0
  */
@@ -22,7 +25,7 @@ public interface SchedulingRuleService {
 	 * @param: @return   
 	 * @return: List<SchedulingRule>
 	 */
-	List<SchedulingRule> listSchedulingRule(SchedulingRuleExample example , int pageNo,int pageSize);
+	List<SchedulingRule> listSchedulingRule(String windCode , int pageNo,int pageSize);
 
 	/**
 	 * @Description:添加排班规则
@@ -91,6 +94,25 @@ public interface SchedulingRuleService {
 	 * @return: SchedulingRule
 	 */
 	SchedulingRule getSchedulingRuleBySchedulingRuleName(String schedulingRulename);
-	
-	
+
+
+    List<Shift> getShifts(String schedulingRuleId);
+
+    int findSchedulingRuleCode(String schedulingRuleCode);
+
+	String count();
+
+	int countBySchedulingRuleId(String schedulingRuleId);
+
+	int countBySchedulingRuleCode(String schedulingRuleCode);
+
+	String findSchedulingRuleCodeById(String schedulingRuleId);
+
+    ResultEntity findShiftValueUsers(Example example);
+
+	ResultEntity findShiftValueUsers(String schedulingRuleId, String startTime, String currentTime) throws ParseException;
+
+    List<String> findValueIdsBySchedulingRuleById(String schedulingRuleId);
+
+	List<String> findShiftIdsBySchedulingRuleById(String schedulingRuleId);
 }

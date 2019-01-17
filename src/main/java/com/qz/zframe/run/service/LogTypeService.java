@@ -9,7 +9,7 @@ import com.qz.zframe.run.entity.LogTypeExample;
 /**
  * <p>Title: LogTypeService</p>
  * <p>@Description:日志类型接口声明  </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月7日 下午3:54:13
  * @version:V1.0
  */

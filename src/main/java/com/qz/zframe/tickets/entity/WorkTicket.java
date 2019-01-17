@@ -1,200 +1,203 @@
 package com.qz.zframe.tickets.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class WorkTicket {
 
-    @ApiParam(name="ticketId",value="工作票id",required=false)
+    @ApiModelProperty(name="ticketId",value="工作票id",required=false)
     private String ticketId;
 
-    @ApiParam(name="serialNumber",value="工作票号(流水号)",required=false)
+    @ApiModelProperty(name="serialNumber",value="工作票号(流水号)",required=false)
     private String serialNumber;
 
-    @ApiParam(name="workTicketTypeId",value="工作票类型id",required=true)
+    @ApiModelProperty(name="workTicketTypeId",value="工作票类型id",required=true)
     private String workTicketTypeId;
 
-    @ApiParam(name="standardTicketId",value="标准工作票id",required=false)
+    @ApiModelProperty(name="standardTicketId",value="标准工作票id",required=false)
     private String standardTicketId;
 
-    @ApiParam(name="workorderId",value="缺陷工单id",required=false)
+    @ApiModelProperty(name="workorderId",value="缺陷工单id",required=false)
     private String workorderId;
 
-    @ApiParam(name="orderId",value="工单id",required=false)
+    @ApiModelProperty(name="orderId",value="工单id",required=false)
     private String orderId;
 
-    @ApiParam(name="maintainer",value="维护人",required=false)
+    @ApiModelProperty(name="maintainer",value="维护人id",required=false)
     private String maintainer;
 
-    @ApiParam(name="maintainDate",value="维护日期",required=false)
+    @ApiModelProperty(name="maintainDate",value="维护日期",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+08:00")
     private Date maintainDate;
 
-    @ApiParam(name="status",value="状态",required=false)
+    @ApiModelProperty(name="status",value="状态",required=false)
     private String status;
 
-    @ApiParam(name="flowStatus",value="流程节点",required=false)
+    @ApiModelProperty(name="flowStatus",value="流程节点id",required=false)
     private String flowStatus;
 
-    @ApiParam(name="windId",value="风电场id",required=true)
+    @ApiModelProperty(name="workPosition",value="流程节点id",required=false)
+    private String workPosition;
+
+    @ApiModelProperty(name="windId",value="风电场id",required=true)
     private String windId;
 
-    @ApiParam(name="crewId",value="机组id",required=true)
+    @ApiModelProperty(name="crewId",value="机组id",required=true)
     private String crewId;
 
-    @ApiParam(name="applicant",value="申请人",required=false)
+    @ApiModelProperty(name="applicant",value="申请人id",required=false)
     private String applicant;
 
-    @ApiParam(name="applyTime",value="申请时间",required=true)
+    @ApiModelProperty(name="applyTime",value="申请时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date applyTime;
 
-    @ApiParam(name="workTeam",value="工作班组",required=true)
+    @ApiModelProperty(name="workTeam",value="工作班组id",required=true)
     private String workTeam;
 
-    @ApiParam(name="workHead",value="工作负责人",required=true)
+    @ApiModelProperty(name="workHead",value="工作负责人id",required=true)
     private String workHead;
 
-    @ApiParam(name="positionId",value="位置id",required=false)
+    @ApiModelProperty(name="positionId",value="位置id",required=false)
     private String positionId;
 
-    @ApiParam(name="positionDesc",value="位置描述",required=false)
+    @ApiModelProperty(name="positionDesc",value="位置描述",required=false)
     private String positionDesc;
 
-    @ApiParam(name="equipmentId",value="设备id",required=false)
+    @ApiModelProperty(name="equipmentId",value="设备id",required=false)
     private String equipmentId;
 
-    @ApiParam(name="equipmentDesc",value="设备描述",required=false)
+    @ApiModelProperty(name="equipmentDesc",value="设备描述",required=false)
     private String equipmentDesc;
 
-    @ApiParam(name="workMember",value="工作成员",required=false)
+    @ApiModelProperty(name="workMember",value="工作成员ids",required=false)
     private String workMember;
 
-    @ApiParam(name="memberNum",value="共几人",required=false)
+    @ApiModelProperty(name="memberNum",value="共几人",required=false)
     private Integer memberNum;
 
-    @ApiParam(name="planStartTime",value="计划开始时间",required=true)
+    @ApiModelProperty(name="planStartTime",value="计划开始时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date planStartTime;
 
-    @ApiParam(name="planEndTime",value="计划结束时间",required=true)
+    @ApiModelProperty(name="planEndTime",value="计划结束时间",required=true)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date planEndTime;
 
-    @ApiParam(name="doubleNaem",value="工作的风电场、升压站名称及设备双重名称",required=true)
+    @ApiModelProperty(name="doubleNaem",value="工作的风电场、升压站名称及设备双重名称",required=true)
     private String doubleNaem;
 
-    @ApiParam(name="workPlace",value="工作地点或地段",required=true)
+    @ApiModelProperty(name="workPlace",value="工作地点或地段",required=true)
     private String workPlace;
 
-    @ApiParam(name="workContent",value="工作内容",required=true)
+    @ApiModelProperty(name="workContent",value="工作内容",required=true)
     private String workContent;
 
-    @ApiParam(name="workCondition",value="工作条件",required=false)
+    @ApiModelProperty(name="workCondition",value="工作条件",required=false)
     private String workCondition;
 
-    @ApiParam(name="signer",value="签发人",required=false)
+    @ApiModelProperty(name="signer",value="签发人id",required=false)
     private String signer;
 
-    @ApiParam(name="signTime",value="签发时间",required=false)
+    @ApiModelProperty(name="signTime",value="签发时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date signTime;
 
-    @ApiParam(name="runMainPerson",value="运维人员",required=false)
+    @ApiModelProperty(name="runMainPerson",value="运维人员id",required=false)
     private String runMainPerson;
 
-    @ApiParam(name="receiveHead",value="收到工作票工作负责人",required=false)
+    @ApiModelProperty(name="receiveHead",value="收到工作票工作负责人",required=false)
     private String receiveHead;
 
-    @ApiParam(name="receiveTime",value="收到工作票时间",required=false)
+    @ApiModelProperty(name="receiveTime",value="收到工作票时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date receiveTime;
 
-    @ApiParam(name="sceneLicensor",value="现场许可人",required=false)
+    @ApiModelProperty(name="sceneLicensor",value="现场许可人id",required=false)
     private String sceneLicensor;
 
-    @ApiParam(name="runLicensor",value="运行值班许可人",required=false)
+    @ApiModelProperty(name="runLicensor",value="运行值班许可人id",required=false)
     private String runLicensor;
 
-    @ApiParam(name="licenseStartTime",value="许可开始时间",required=false)
+    @ApiModelProperty(name="licenseStartTime",value="许可开始时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date licenseStartTime;
 
-    @ApiParam(name="workTeamOpinion",value="工作班组人员确认工作任务和安全措施",required=false)
+    @ApiModelProperty(name="workTeamOpinion",value="工作班组人员确认工作任务和安全措施",required=false)
     private String workTeamOpinion;
 
-    @ApiParam(name="headChangeTo",value="负责人变更为",required=false)
+    @ApiModelProperty(name="headChangeTo",value="负责人变更为id",required=false)
     private String headChangeTo;
 
-    @ApiParam(name="headChangeSigner",value="变更签发人",required=false)
+    @ApiModelProperty(name="headChangeSigner",value="变更签发人id",required=false)
     private String headChangeSigner;
 
-    @ApiParam(name="headChanegTime",value="变更签发时间",required=false)
+    @ApiModelProperty(name="headChanegTime",value="变更签发时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date headChanegTime;
 
-    @ApiParam(name="delayTime",value="有效期延期至",required=false)
+    @ApiModelProperty(name="delayTime",value="有效期延期至",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date delayTime;
 
-    @ApiParam(name="delayHead",value="延期工作负责人",required=false)
+    @ApiModelProperty(name="delayHead",value="延期工作负责人id",required=false)
     private String delayHead;
 
-    @ApiParam(name="delayHeadSignTime",value="延期工作负责人签名时间",required=false)
+    @ApiModelProperty(name="delayHeadSignTime",value="延期工作负责人签名时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date delayHeadSignTime;
 
-    @ApiParam(name="delayLicensor",value="延期许可人",required=false)
+    @ApiModelProperty(name="delayLicensor",value="延期许可人id",required=false)
     private String delayLicensor;
 
-    @ApiParam(name="delayLicensorSignTime",value="许可人签名时间",required=false)
+    @ApiModelProperty(name="delayLicensorSignTime",value="许可人签名时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date delayLicensorSignTime;
 
-    @ApiParam(name="workEndHead",value="工作结束工作负责人",required=false)
+    @ApiModelProperty(name="workEndHead",value="工作结束工作负责人id",required=false)
     private String workEndHead;
 
-    @ApiParam(name="workEndLicensor",value="工作结束许可人",required=false)
+    @ApiModelProperty(name="workEndLicensor",value="工作结束许可人id",required=false)
     private String workEndLicensor;
 
-    @ApiParam(name="workEndTime",value="工作结束时间",required=false)
+    @ApiModelProperty(name="workEndTime",value="工作结束时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date workEndTime;
 
-    @ApiParam(name="ticketEndLicensor",value="工作票终结许可人",required=false)
+    @ApiModelProperty(name="ticketEndLicensor",value="工作票终结许可人id",required=false)
     private String ticketEndLicensor;
 
-    @ApiParam(name="ticketEndTime",value="工作票终结时间",required=false)
+    @ApiModelProperty(name="ticketEndTime",value="工作票终结时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date ticketEndTime;
 
-    @ApiParam(name="unuseWireNumber",value="未拆除或未拉开的接地线编号",required=false)
+    @ApiModelProperty(name="unuseWireNumber",value="未拆除或未拉开的接地线编号",required=false)
     private String unuseWireNumber;
 
-    @ApiParam(name="unuseWireNum",value="未拆除或未拉开的接地线共几组",required=false)
+    @ApiModelProperty(name="unuseWireNum",value="未拆除或未拉开的接地线共几组",required=false)
     private Integer unuseWireNum;
 
-    @ApiParam(name="knifeCarNum",value="接地刀闸(小车)共几副(台)",required=false)
+    @ApiModelProperty(name="knifeCarNum",value="接地刀闸(小车)共几副(台)",required=false)
     private Integer knifeCarNum;
 
-    @ApiParam(name="guardian",value="专职监护人",required=false)
+    @ApiModelProperty(name="guardian",value="专职监护人id",required=false)
     private String guardian;
 
-    @ApiParam(name="guardianPlaceAndCont",value="负责监护地点及具体工作",required=false)
+    @ApiModelProperty(name="guardianPlaceAndCont",value="负责监护地点及具体工作",required=false)
     private String guardianPlaceAndCont;
 
-    @ApiParam(name="guardianOtherThing",value="负责监护其他事项",required=false)
+    @ApiModelProperty(name="guardianOtherThing",value="负责监护其他事项",required=false)
     private String guardianOtherThing;
 
-    @ApiParam(name="evaluation",value="评价人",required=false)
+    @ApiModelProperty(name="evaluation",value="评价人id",required=false)
     private String evaluation;
 
-    @ApiParam(name="evaluationCont",value="评价情况",required=false)
+    @ApiModelProperty(name="evaluationCont",value="评价情况",required=false)
     private String evaluationCont;
 
-    @ApiParam(name="evaluationTime",value="评价时间",required=false)
+    @ApiModelProperty(name="evaluationTime",value="评价时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date evaluationTime;
 
@@ -276,6 +279,14 @@ public class WorkTicket {
 
     public void setFlowStatus(String flowStatus) {
         this.flowStatus = flowStatus == null ? null : flowStatus.trim();
+    }
+
+    public String getWorkPosition() {
+        return workPosition;
+    }
+
+    public void setWorkPosition(String workPosition) {
+        this.workPosition = workPosition;
     }
 
     public String getWindId() {

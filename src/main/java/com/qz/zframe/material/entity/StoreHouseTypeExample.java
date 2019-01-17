@@ -116,14 +116,34 @@ public class StoreHouseTypeExample extends PageExample {
             addCriterion("type_id is not null");
             return (Criteria) this;
         }
+        
+        public Criteria andSuperTypeIdIsNull() {
+            addCriterion("a.super_type_id is  null");
+            return (Criteria) this;
+        }
+        
+        public Criteria andSuperTypeIdIsNotNull() {
+            addCriterion("a.super_type_id is not null");
+            return (Criteria) this;
+        }
 
         public Criteria andTypeIdEqualTo(String value) {
             addCriterion("type_id =", value, "typeId");
             return (Criteria) this;
         }
+        
+        public Criteria andSuperTypeIdEqualTo(String value) {
+            addCriterion("a.super_type_id =", value, "typeId");
+            return (Criteria) this;
+        }
 
         public Criteria andTypeIdNotEqualTo(String value) {
-            addCriterion("type_id <>", value, "typeId");
+            addCriterion("a.type_id <>", value, "typeId");
+            return (Criteria) this;
+        }
+        
+        public Criteria andSuperTypeIdNotEqualTo(String value) {
+            addCriterion("a.super_type_id !=", value, "typeId");
             return (Criteria) this;
         }
 
@@ -188,7 +208,7 @@ public class StoreHouseTypeExample extends PageExample {
         }
 
         public Criteria andTypeCodeEqualTo(String value) {
-            addCriterion("type_code =", value, "typeCode");
+            addCriterion("a.type_code =", value, "typeCode");
             return (Criteria) this;
         }
 
@@ -218,7 +238,17 @@ public class StoreHouseTypeExample extends PageExample {
         }
 
         public Criteria andTypeCodeLike(String value) {
-            addCriterion("type_code like", "%"+value+"%", "typeCode");
+            addCriterion("a.type_code like", "%"+value+"%", "typeCode");
+            return (Criteria) this;
+        }
+        
+        public Criteria andCodeNotLike(String value) {
+            addCriterion("a.type_code not like",value+"%", "typeCode");
+            return (Criteria) this;
+        }
+        
+        public Criteria andPickTypeCodeLike(String value) {
+            addCriterion("a.type_code like", value+"%", "typeCode");
             return (Criteria) this;
         }
 
@@ -258,7 +288,7 @@ public class StoreHouseTypeExample extends PageExample {
         }
 
         public Criteria andTypeNameEqualTo(String value) {
-            addCriterion("type_name =", value, "typeName");
+            addCriterion("a.type_name =", value, "typeName");
             return (Criteria) this;
         }
 
@@ -288,7 +318,7 @@ public class StoreHouseTypeExample extends PageExample {
         }
 
         public Criteria andTypeNameLike(String value) {
-            addCriterion("type_name like", value, "typeName");
+            addCriterion("a.type_name like", "%"+value+"%", "typeName");
             return (Criteria) this;
         }
 
@@ -468,7 +498,7 @@ public class StoreHouseTypeExample extends PageExample {
         }
 
         public Criteria andIsDeleteEqualTo(String value) {
-            addCriterion("is_delete =", value, "isDelete");
+            addCriterion("a.is_delete =", value, "isDelete");
             return (Criteria) this;
         }
 

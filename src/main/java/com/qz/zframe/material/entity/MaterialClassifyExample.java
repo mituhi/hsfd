@@ -218,7 +218,7 @@ public class MaterialClassifyExample extends PageExample{
         }
 
         public Criteria andClassifyNameLike(String value) {
-            addCriterion("classify_name like", value, "classifyName");
+            addCriterion("a.classify_name like","%" +value+"%", "classifyName");
             return (Criteria) this;
         }
 
@@ -288,7 +288,7 @@ public class MaterialClassifyExample extends PageExample{
         }
 
         public Criteria andClassifyDescribeLike(String value) {
-            addCriterion("classify_describe like", value, "classifyDescribe");
+            addCriterion("a.classify_describe like","%"+ value+"%", "classifyDescribe");
             return (Criteria) this;
         }
 
@@ -328,7 +328,7 @@ public class MaterialClassifyExample extends PageExample{
         }
 
         public Criteria andIsTopEqualTo(String value) {
-            addCriterion("is_top =", value, "isTop");
+            addCriterion("a.is_top =", value, "isTop");
             return (Criteria) this;
         }
 
@@ -398,7 +398,7 @@ public class MaterialClassifyExample extends PageExample{
         }
 
         public Criteria andSuperiorClassifyIdEqualTo(String value) {
-            addCriterion("superior_classify_id =", value, "superiorClassifyId");
+            addCriterion("a.superior_classify_id =", value, "superiorClassifyId");
             return (Criteria) this;
         }
 

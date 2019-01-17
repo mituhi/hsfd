@@ -9,7 +9,7 @@ import com.qz.zframe.run.entity.RuleShiftValueExample;
 /**
  * <p>Title: RuleShiftValueService</p>
  * <p>@Description: 排班班次值次关联表接口声明 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月1日 下午3:32:54
  * @version:V1.0
  */
@@ -49,6 +49,7 @@ public interface RuleShiftValueService {
 	 * @return: void
 	 */
 	ResultEntity saveRuleShiftValue(RuleShiftValue ruleShiftValue);
-	
-	
+
+
+	List<RuleShiftValue> getRuleShiftValuesBySchedulingRuleId(String schedulingRuleId);
 }

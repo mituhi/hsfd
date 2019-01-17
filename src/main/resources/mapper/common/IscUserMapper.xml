@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qz.zframe.common.dao.UserDao">
+	
+	<resultMap id="userDto" type="com.qz.zframe.common.entity.UserDto">
+        <id column="user_id" property="userId"/>
+        <result column="user_account" property="userAccount"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="user_name" property="userName"/>
+        <result column="user_sex" property="userSex"/>
+        <result column="mobile" property="mobile"/>
+        <result column="user_status" property="userStatus"/>
+        <result column="pwd_error_count" property="pwdErrorCount"/>
+        <result column="is_admin" property="admin"/>
+        <result column="create_time" property="createTime"/>
+        <result column="lock_time" property="lockTime"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="extend1" property="extend1"/>
+        <result column="extend2" property="extend2"/>
+        <result column="extend3" property="extend3"/>
+        <result column="extend4" property="extend4"/>
+        <result column="architecture_id" property="architectureId"/>
+        <result column="architecture_name" property="architectureName"/>
+        <result column="architecture_code" property="architectureCode"/>
+    </resultMap>
+    
+    <!-- 分页查询用户信息 -->
+    <select id="findUserInfo" parameterType="com.qz.zframe.common.entity.UserDto" resultMap="userDto">
+		SELECT
+			u.user_id,
+			u.user_account,
+			u.user_password,
+			u.user_name,
+			u.user_sex,
+			u.mobile,
+			u.user_status,
+			u.pwd_error_count,
+			u.is_admin,
+			u.create_time,
+			u.lock_time,
+			u.order_no,
+			u.extend1,
+			u.extend2,
+			u.extend3,
+			u.extend4,
+			ir.role_name roleName,
+			o.architecture_name architectureName 
+		FROM
+			isc_user u left join org_architecture_user a on u.user_id = a.user_id 
+			left join isc_role_user_rela r on u.user_id = r.user_id 
+			left join org_architecture o on a.architecture_id = o.architecture_id 
+			left join isc_role ir on r.role_id = ir.role_id 
+		<where>
+            <if test="architectureId != null and architectureId != ''">
+                and a.architecture_id = #{architectureId}
+            </if>
+            <if test="userMsg != null and userMsg != ''">
+                and u.user_account = #{userMsg} or u.user_name like concat('%', #{userMsg}, '%')
+            </if>
+            <if test="roleId != null and roleId != ''">
+                and r.role_id = #{roleId}
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                and ir.role_code = #{roleCode}
+            </if>
+        </where>
+        order by order_no 
+        limit #{firstIndex},#{lastIndex}
+    </select>
+    
+    <!-- 查询用户数量 -->
+    <select id="findUserInfoNum" resultType="Integer">
+        select count(u.user_id)
+        FROM
+        isc_user u left join org_architecture_user a on u.user_id = a.user_id
+        left join isc_role_user_rela r on u.user_id = r.user_id
+        left join org_architecture o on a.architecture_id = o.architecture_id
+        left join isc_role ir on r.role_id = ir.role_id
+        <where>
+            <if test="architectureId != null and architectureId != ''">
+                and a.architecture_id = #{architectureId}
+            </if>
+            <if test="userMsg != null and userMsg != ''">
+                and u.user_account = #{userMsg} or u.user_name like concat('%', #{userMsg}, '%')
+            </if>
+            <if test="roleId != null and roleId != ''">
+                and r.role_id = #{roleId}
+            </if>
+            <if test="roleCode != null and roleCode != ''">
+                and ir.role_code = #{roleCode}
+            </if>
+        </where>
+    </select>
+    
+    <!-- 批量获取用户信息 -->
+    <select id="findUserList" parameterType="com.qz.zframe.common.entity.UserDto" resultMap="userDto">
+        select user_id, user_account, user_password, user_name, user_sex, mobile, user_status, pwd_error_count,
+        is_admin, create_time, lock_time, order_no, extend1, extend2, extend3, extend4
+        from isc_user
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="userAccount != null and userAccount != ''">
+                and user_account = #{userAccount}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="userSex != null and userSex != ''">
+                and user_sex = #{userSex},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile = #{mobile}
+            </if>
+            <if test="userStatus != null and userStatus != ''">
+                and user_status = #{userStatus},
+            </if>
+            <if test="admin != null and admin != ''">
+                and is_admin = #{admin},
+            </if>
+            <if test="extend1 != null and extend1 != ''">
+                and extend1 = #{extend1},
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                and extend2 = #{extend2},
+            </if>
+            <if test="extend3 != null and extend3 != ''">
+                and extend3 = #{extend3},
+            </if>
+            <if test="extend4 != null and extend4 != ''">
+                and extend4 = #{extend4}
+            </if>
+        </where>
+        order by order_no
+    </select>
+    
+    <!-- 新增用户信息 -->
+    <insert id="addUser" parameterType="com.qz.zframe.common.entity.UserDto">
+        insert into isc_user (user_id, user_account, user_password, user_name, user_sex, mobile, user_status,
+                      is_admin, create_time, order_no, extend1, extend2, extend3, extend4)
+        values (#{userId}, #{userAccount}, #{userPassword}, #{userName}, #{userSex}, #{mobile}, #{userStatus},
+                      #{admin}, #{createTime}, #{orderNo}, #{extend1}, #{extend2}, #{extend3}, #{extend4})
+    </insert>
+    
+    <!-- 修改用户信息 -->
+    <update id="updateIscUser" parameterType="com.qz.zframe.common.entity.UserDto">
+        update isc_user
+        <set>
+            <if test="userAccount != null and userAccount != ''">
+                user_account = #{userAccount},
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userSex != null and userSex != ''">
+                user_sex = #{userSex},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile},
+            </if>
+            <if test="userStatus != null and userStatus != ''">
+                user_status = #{userStatus},
+            </if>
+            <if test="pwdErrorCount != null">
+                pwd_error_count = #{pwdErrorCount},
+            </if>
+            <if test="admin != null and admin != ''">
+                is_admin = #{admin},
+            </if>
+            <if test="lockTime != null and lockTime != ''">
+                lock_time = #{lockTime},
+            </if>
+            <if test="orderNo != null">
+                order_no = #{orderNo},
+            </if>
+            <if test="extend1 != null and extend1 != ''">
+                extend1 = #{extend1},
+            </if>
+            <if test="extend2 != null and extend2 != ''">
+                extend2 = #{extend2},
+            </if>
+            <if test="extend3 != null and extend3 != ''">
+                extend3 = #{extend3},
+            </if>
+            <if test="extend4 != null and extend4 != ''">
+                extend4 = #{extend4},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+    
+    <!-- 批量删除用户信息 -->
+    <delete id="deleteIscUsers" parameterType="java.util.List">
+        delete from isc_user where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <!-- 批量删除部门用户关系 -->
+    <delete id="deleteOrgUserRelaInBatch" parameterType="java.util.List">
+        delete from org_architecture_user where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 批量删除角色用户关系 -->
+    <delete id="deleteRoleUserRelaInBatch" parameterType="java.util.List">
+        delete from isc_role_user_rela where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <!-- 批量删除班组用户关系 -->
+    <delete id="deleteTeamUserRelaInBatch" parameterType="java.util.List">
+        delete from org_architecture_team where user_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+    <!-- 批量获取角色下的用户信息 -->
+    <select id="findRoleUserList" parameterType="java.lang.String" resultMap="userDto">
+        select
+          iu.user_id,
+          iu.user_account,
+          iu.user_password,
+          iu.user_name,
+          iu.user_sex,
+          iu.mobile,
+          iu.user_status,
+          iu.pwd_error_count,
+          iu.is_admin,
+          iu.create_time,
+          iu.lock_time,
+          iu.order_no,
+          iu.extend1,
+          iu.extend2,
+          iu.extend3,
+          iu.extend4
+        from isc_user iu, isc_role_user_rela irur
+        where iu.user_id = irur.user_id
+              and irur.role_id = #{roleId}
+    </select>
+    
+    <!-- 新增角色用户关系 -->
+    <insert id="addRoleUserRela" parameterType="java.util.Map">
+        insert into isc_role_user_rela(rela_id, role_id, user_id)
+        values(#{relaId}, #{roleId}, #{userId})
+    </insert>
+    
+    <!-- 删除角色用户关系 -->
+    <delete id="deleteRelaRoleUser" parameterType="java.util.Map">
+        delete from isc_role_user_rela where role_id = #{roleId} and user_id = #{userId}
+    </delete>
+    
+    <!-- 修改密码 -->
+    <update id="updatePassword" parameterType="java.util.Map">
+        update isc_user set user_password = #{userPassword} where user_account = #{userAccount}
+    </update>
+    
+    <!-- 新增部门用户关系 -->
+    <insert id="relaArchitectureUser" parameterType="java.util.Map">
+        insert into org_architecture_user(rela_id, architecture_id, user_id)
+        values(#{relaId}, #{architectureId}, #{userId})
+    </insert>
+    
+    <!-- 取消关联部门用户 -->
+    <delete id="deleteRelaArchitectureUser" parameterType="java.util.Map">
+        delete from org_architecture_user where architecture_id = #{architectureId} and user_id = #{userId}
+    </delete>
+    
+    <!-- 根据角色编码获取用户信息 -->
+    <select id="findUserInfoByRoleCode" parameterType="java.util.List" resultMap="userDto">
+        select
+          iu.user_id,
+          iu.user_account,
+          iu.user_name,
+          iu.user_sex,
+          iu.mobile,
+          iu.user_status,
+          iu.pwd_error_count,
+          iu.is_admin,
+          iu.create_time,
+          iu.lock_time,
+          iu.order_no,
+          iu.extend1,
+          iu.extend2,
+          iu.extend3,
+          iu.extend4
+        from isc_user iu, isc_role_user_rela irur, isc_role ir
+        where iu.user_id = irur.user_id
+        	  and ir.role_id = irur.role_id
+              and ir.role_code in  
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+           #{item}
+        </foreach>
+    </select>
+
+    <!-- 根据部门id获取用户信息 -->
+    <select id="queryUserInfoByDeptId" parameterType="com.qz.zframe.common.entity.UserDto" resultMap="userDto">
+        SELECT
+            i.user_id,
+            i.user_name,
+            o.architecture_id,
+            o.architecture_name,
+            o.architecture_code
+        FROM
+            org_architecture_user a
+            LEFT JOIN isc_user i ON a.user_id = i.user_id
+            LEFT JOIN org_architecture o ON a.architecture_id = o.architecture_id
+        WHERE
+            a.architecture_id = #{deptId}
+    </select>
+</mapper>

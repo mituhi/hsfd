@@ -44,17 +44,24 @@ public class DataDictServiceImpl implements DataDictService {
 	}
 
 	@Override
-	public DataDictType addAndUpdateCodeType(DataDictType dataDictType) throws Exception {
+	public PageResultEntity addAndUpdateCodeType(DataDictType dataDictType) throws Exception {
+		PageResultEntity pageResultEntity = new PageResultEntity();
 		if (dataDictType == null) {
-			throw new Exception("对象为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("对象为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(dataDictType.getName())) {
-			throw new Exception("分类编码为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("分类编码为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(dataDictType.getId())) {
 			DataDictType ddt = codeDao.findCodeTypeByType(dataDictType.getName());
 			if (ddt != null) {
-				throw new Exception("分类编码已存在!");
+				pageResultEntity.setCode(ErrorCode.ERROR);
+				pageResultEntity.setMsg("分类编码已存在!");
+				return pageResultEntity;
 			}
 			String id = codeDao.findMaxCodeTypeId();
 			if (StringUtils.isBlank(id)) {
@@ -65,29 +72,41 @@ public class DataDictServiceImpl implements DataDictService {
 			}
 			dataDictType.setId(id);
 			codeDao.addCodeType(dataDictType);
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			return pageResultEntity;
 		}else {
 			codeDao.updateCodeType(dataDictType);
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			return pageResultEntity;
 		}
-		return dataDictType;
 	}
 
 	@Override
 	@Transactional
-	public Integer deleteCodeType(List<String> ids) throws Exception {
+	public PageResultEntity deleteCodeType(List<String> ids) throws Exception {
+		PageResultEntity pageResultEntity = new PageResultEntity();
 		if (ids == null || ids.isEmpty()) {
-			throw new Exception("请选择删除数据！");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("请选择删除数据！");
+			return pageResultEntity;
 		}
 		codeDao.deleteCodeType(ids);
 		codeDao.deleteCode(ids);
-		return 1;
+		pageResultEntity.setCode(ErrorCode.SUCCESS);
+		return pageResultEntity;
 	}
 	
 	@Override
-	public Integer deleteCode(List<String> ids) throws Exception {
+	public PageResultEntity deleteCode(List<String> ids) throws Exception {
+		PageResultEntity pageResultEntity = new PageResultEntity();
 		if (ids == null || ids.isEmpty()) {
-			throw new Exception("请选择删除数据！");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("请选择删除数据！");
+			return pageResultEntity;
 		}
-		return codeDao.deleteCode(ids);
+		codeDao.deleteCode(ids);
+		pageResultEntity.setCode(ErrorCode.SUCCESS);
+		return pageResultEntity;
 	}
 
 	@Override
@@ -112,20 +131,29 @@ public class DataDictServiceImpl implements DataDictService {
 	}
 
 	@Override
-	public DataDict addAndUpdateCode(DataDict dataDict) throws Exception {
+	public PageResultEntity addAndUpdateCode(DataDict dataDict) throws Exception {
+		PageResultEntity pageResultEntity = new PageResultEntity();
 		if (dataDict == null) {
-			throw new Exception("对象为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("对象为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(dataDict.getName())) {
-			throw new Exception("编码编号为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("编码编号为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(dataDict.getCodeTypeId())) {
-			throw new Exception("编码类型为空!");
+			pageResultEntity.setCode(ErrorCode.ERROR);
+			pageResultEntity.setMsg("编码类型为空!");
+			return pageResultEntity;
 		}
 		if (StringUtils.isBlank(dataDict.getId())) {
 			DataDict dd = codeDao.findCodeByCodeTypeIdAndName(dataDict.getCodeTypeId(),dataDict.getName());
 			if (dd != null) {
-				throw new Exception("编码已存在!");
+				pageResultEntity.setCode(ErrorCode.ERROR);
+				pageResultEntity.setMsg("编码已存在!");
+				return pageResultEntity;
 			}
 			Map<String, Object> idAndSort = codeDao.findMaxCodeIdAndSort(dataDict.getCodeTypeId());
 			String id = "";
@@ -144,10 +172,13 @@ public class DataDictServiceImpl implements DataDictService {
 			dataDict.setId(id);
 			dataDict.setDispOrder(sort);
 			codeDao.addCode(dataDict);
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			return pageResultEntity;
 		}else {
 			codeDao.updateCode(dataDict);
+			pageResultEntity.setCode(ErrorCode.SUCCESS);
+			return pageResultEntity;
 		}
-		return dataDict;
 	}
 
 	@Override
@@ -164,6 +195,30 @@ public class DataDictServiceImpl implements DataDictService {
 			throw new Exception("请选择编码信息!");
 		}
 		return codeDao.queryCodeTypeById(id);
+	}
+
+	@Override
+	public List<DataDict> findDataDictsByCodeType(List<String> codeTypes) throws Exception {
+		if (codeTypes == null || codeTypes.isEmpty()) {
+			throw new Exception("标准代码类型不能为空");
+		}
+		return codeDao.findDataDictsByCodeType(codeTypes);
+	}
+
+	@Override
+	public List<DataDict> queryCodeList(String codeType) {
+		return codeDao.queryCodeList(codeType);
+	}
+
+	@Override
+	public DataDict findDataDictByCodeAndType(String codeType, String name) throws Exception {
+		if (StringUtils.isBlank(codeType)) {
+			throw new Exception("分类编码不能为空");
+		}
+		if (StringUtils.isBlank(name)) {
+			throw new Exception("资源id不能为空");
+		}
+		return codeDao.findDataDictByCodeAndType(codeType, name);
 	}
 
 }

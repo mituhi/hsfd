@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class InInventoryDetailExample {
+import com.qz.zframe.common.util.PageExample;
+
+public class InInventoryDetailExample  extends PageExample{
     protected String orderByClause;
 
     protected boolean distinct;

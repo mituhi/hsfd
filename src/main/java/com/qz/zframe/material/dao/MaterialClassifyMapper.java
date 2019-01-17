@@ -31,5 +31,7 @@ public interface MaterialClassifyMapper extends BaseMapper<MaterialClassify, Mat
 	 * @throws
 	 */
 	public List<String> selectSon(Map<String, Object> params1);
+
+	public void updateByIsTopSelective(MaterialClassify materialClassifyInfo);
     
 }

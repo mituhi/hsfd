@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.device.dao.EquipmentLogMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.device.entity.EquipmentLog" >
+    <id column="log_id" property="logId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="funcation" property="funcation" jdbcType="VARCHAR" />
+     <result column="module_id" property="moduleId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+       select * from equipment_log 
+       <if test="pageNum != null and pageSize!=null" >
+        limit  pageNum=#{pageNum-1},pageSize=#{pageSize}
+      </if> 
+  </select>
+  
+   <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String" >
+       select * from equipment_log  where  module_id=#{moduleId,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insertAdd" parameterType="com.qz.zframe.device.entity.EquipmentLog" >
+    insert  into equipment_log (log_id,user_id, user_name,date,funcation,module_id) 
+    values(#{logId,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+    #{date,jdbcType=DATE},#{funcation,jdbcType=VARCHAR},#{moduleId,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="com.qz.zframe.device.entity.EquipmentLog">
+      update  equipment_log  set
+      user_id=#{userId,jdbcType=VARCHAR},
+      user_name=#{userName,jdbcType=VARCHAR},
+      date= #{date,jdbcType=DATE},
+      funcation=#{funcation,jdbcType=VARCHAR},module_id=#{moduleId,jdbcType=VARCHAR}
+      where  log_id=#{logId,jdbcType=VARCHAR}
+  </update>
+  
+ <delete id="delete" parameterType="java.lang.String" >
+    delete from equipment_log
+   <where>
+    log_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  </mapper>

@@ -80,6 +80,38 @@
     worktype_need_num, worktype_plan_start_time, worktype_plan_end_time, worktype_standard_rate, 
     worktype_plan_use_hour, worktype_plan_fee, worktype_actual_use_hour, worktype_actual_fee
   </sql>
+
+
+
+  <delete id="batchDeleteByWorkOrderIds" parameterType="java.lang.String">
+    delete from workorder_worktype
+    where workorder_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByOrderIds" parameterType="java.lang.String">
+    delete from workorder_worktype
+    where order_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByKnowledgeIds" parameterType="java.lang.String">
+    delete from workorder_worktype
+    where knowledge_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderWorktypeExample" >
     select
     <if test="distinct" >

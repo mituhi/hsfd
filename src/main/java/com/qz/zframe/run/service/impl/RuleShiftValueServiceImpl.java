@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import com.qz.zframe.run.dao.UserValueTimeMapper;
+import com.qz.zframe.run.entity.UserValueTimeExample;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ import com.qz.zframe.run.service.RuleShiftValueService;
 /**
  * <p>Title: RuleShiftValueServiceImpl</p>
  * <p>@Description: 规则班次值次实现 </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月1日 下午4:56:27
  * @version:V1.0
  */
@@ -30,6 +32,8 @@ public class RuleShiftValueServiceImpl implements RuleShiftValueService {
 
 	@Autowired
 	private RuleShiftValueMapper ruleShiftValueMapper;
+	@Autowired
+	private UserValueTimeMapper userValueTimeMapper;
 	
 
 	/**
@@ -80,7 +84,7 @@ public class RuleShiftValueServiceImpl implements RuleShiftValueService {
 	public ResultEntity saveRuleShiftValue(RuleShiftValue ruleShiftValue) {
 		
 		//生成id
-		String id = UUID.randomUUID().toString();
+		String id = (UUID.randomUUID()+"").replaceAll("-","");
 		ruleShiftValue.setId(id);
 		
 		//执行插入操作
@@ -91,7 +95,12 @@ public class RuleShiftValueServiceImpl implements RuleShiftValueService {
 		return resultEntity;
 	}
 
-	
+	@Override
+	public List<RuleShiftValue> getRuleShiftValuesBySchedulingRuleId(String schedulingRuleId) {
+		return ruleShiftValueMapper.getRuleShiftValuesBySchedulingRuleId(schedulingRuleId);
+	}
+
+
 	/**
 	 * 通过排班规则id删除信息
 	 */
@@ -102,6 +111,13 @@ public class RuleShiftValueServiceImpl implements RuleShiftValueService {
 		example.createCriteria().andSchedulingRuleIdEqualTo(schedulingRuleId);
 		
 		ruleShiftValueMapper.deleteByExample(example);
+
+		/*UserValueTimeExample example2 = new UserValueTimeExample();
+		example.createCriteria().andSchedulingRuleIdEqualTo(schedulingRuleId);
+
+		userValueTimeMapper.deleteByExample(example2);*/
+		userValueTimeMapper.deleteBySchedulingRuleId(schedulingRuleId);
+
 		ResultEntity resultEntity = new ResultEntity();
 		resultEntity .setCode(ErrorCode.SUCCESS);
 		resultEntity.setMsg("执行成功");

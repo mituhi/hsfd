@@ -203,72 +203,72 @@ public class WorkTicketTypeExample {
         }
 
         public Criteria andTicketTypeNumberIsNull() {
-            addCriterion("ticketTypeNumber is null");
+            addCriterion("ticket_type_number is null");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberIsNotNull() {
-            addCriterion("ticketTypeNumber is not null");
+            addCriterion("ticket_type_number is not null");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberEqualTo(String value) {
-            addCriterion("ticketTypeNumber =", value, "ticketTypeNumber");
+            addCriterion("ticket_type_number =", value, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberNotEqualTo(String value) {
-            addCriterion("ticketTypeNumber <>", value, "ticketTypeNumber");
+            addCriterion("ticket_type_number <>", value, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberGreaterThan(String value) {
-            addCriterion("ticketTypeNumber >", value, "ticketTypeNumber");
+            addCriterion("ticket_type_number >", value, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberGreaterThanOrEqualTo(String value) {
-            addCriterion("ticketTypeNumber >=", value, "ticketTypeNumber");
+            addCriterion("ticket_type_number >=", value, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberLessThan(String value) {
-            addCriterion("ticketTypeNumber <", value, "ticketTypeNumber");
+            addCriterion("ticket_type_number <", value, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberLessThanOrEqualTo(String value) {
-            addCriterion("ticketTypeNumber <=", value, "ticketTypeNumber");
+            addCriterion("ticket_type_number <=", value, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberLike(String value) {
-            addCriterion("ticketTypeNumber like", value, "ticketTypeNumber");
+            addCriterion("ticket_type_number like", value, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberNotLike(String value) {
-            addCriterion("ticketTypeNumber not like", value, "ticketTypeNumber");
+            addCriterion("ticket_type_number not like", value, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberIn(List<String> values) {
-            addCriterion("ticketTypeNumber in", values, "ticketTypeNumber");
+            addCriterion("ticket_type_number in", values, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberNotIn(List<String> values) {
-            addCriterion("ticketTypeNumber not in", values, "ticketTypeNumber");
+            addCriterion("ticket_type_number not in", values, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberBetween(String value1, String value2) {
-            addCriterion("ticketTypeNumber between", value1, value2, "ticketTypeNumber");
+            addCriterion("ticket_type_number between", value1, value2, "ticketTypeNumber");
             return (Criteria) this;
         }
 
         public Criteria andTicketTypeNumberNotBetween(String value1, String value2) {
-            addCriterion("ticketTypeNumber not between", value1, value2, "ticketTypeNumber");
+            addCriterion("ticket_type_number not between", value1, value2, "ticketTypeNumber");
             return (Criteria) this;
         }
 

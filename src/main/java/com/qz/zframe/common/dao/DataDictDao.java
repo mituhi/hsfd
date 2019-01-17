@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.qz.zframe.common.entity.DataDict;
 import com.qz.zframe.common.entity.DataDictType;
@@ -25,14 +26,15 @@ public interface DataDictDao {
 	 * @param firstIndex 
 	 * @return
 	 */
-	List<DataDict> findCodeByCodeType(String codeType, int firstIndex, int lastIndex);
+	List<DataDict> findCodeByCodeType(@Param("codeType") String codeType, 
+			@Param("firstIndex") int firstIndex, @Param("lastIndex") int lastIndex);
 	
 	/**
 	 * 根据分类编码获取编码类型信息
 	 * @param name
 	 * @return
 	 */
-	DataDictType findCodeTypeByType(String name);
+	DataDictType findCodeTypeByType(@Param("name") String name);
 
 	/**
 	 * 获取编码分类最大id
@@ -72,7 +74,7 @@ public interface DataDictDao {
 	 * @param codeType
 	 * @return
 	 */
-	List<DataDictType> findCodeTypeByCodeType(String codeType, int firstIndex, int lastIndex);
+	List<DataDictType> findCodeTypeByCodeType(@Param("codeType") String codeType, int firstIndex, int lastIndex);
 
 	/**
 	 * 根据上级编码id和编码编号查询编码
@@ -80,13 +82,13 @@ public interface DataDictDao {
 	 * @param name
 	 * @return
 	 */
-	DataDict findCodeByCodeTypeIdAndName(String codeTypeId, String name);
+	DataDict findCodeByCodeTypeIdAndName(@Param("codeTypeId") String codeTypeId, @Param("name") String name);
 
 	/**
 	 * 获取编码最大id
 	 * @return
 	 */
-	Map<String, Object> findMaxCodeIdAndSort(String codeTypeId);
+	Map<String, Object> findMaxCodeIdAndSort(@Param("codeTypeId") String codeTypeId);
 
 	/**
 	 * 新增编码
@@ -100,7 +102,7 @@ public interface DataDictDao {
 	 * @param id
 	 * @return
 	 */
-	DataDict queryCodeById(String id);
+	DataDict queryCodeById(@Param("id") String id);
 
 	/**
 	 * 修改编码
@@ -119,20 +121,42 @@ public interface DataDictDao {
 	 * @param id
 	 * @return
 	 */
-	DataDictType queryCodeTypeById(String id);
+	DataDictType queryCodeTypeById(@Param("id") String id);
 
 	/**
 	 * 根据分类编码查询编码分类数量
 	 * @param codeType
 	 * @return
 	 */
-	Integer findCodeTypeByCodeTypeNum(String codeType);
+	Integer findCodeTypeByCodeTypeNum(@Param("codeType") String codeType);
 
 	/**
 	 * 根据分类编码查询编码数量
 	 * @param codeType
 	 * @return
 	 */
-	Integer findCodeByCodeTypeNum(String codeType);
+	Integer findCodeByCodeTypeNum(@Param("codeType") String codeType);
+
+	/**
+	 * 根据标准代码类型查询标准代码
+	 * @param codeTypes
+	 * @return
+	 */
+	List<DataDict> findDataDictsByCodeType(List<String> codeTypes);
+
+	/**
+	 * 根据类型查询编码列表
+	 * @param codeType
+	 * @return
+	 */
+	List<DataDict> queryCodeList(@Param("codeType") String codeType);
+
+	/**
+	 * 根据分类编码和资源id查询编码
+	 * @param codeType 分类编码
+	 * @param name 资源id
+	 * @return
+	 */
+	DataDict findDataDictByCodeAndType(@Param("codeType") String codeType, @Param("name") String name);
 
 }

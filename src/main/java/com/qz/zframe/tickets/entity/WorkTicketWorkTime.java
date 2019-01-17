@@ -1,39 +1,39 @@
 package com.qz.zframe.tickets.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 public class WorkTicketWorkTime {
 
-    @ApiParam(name="workTimeId",value="开工收工工作时间id",required=false)
+    @ApiModelProperty(name="workTimeId",value="开工收工工作时间id",required=false)
     private String workTimeId;
 
-    @ApiParam(name="ticketId",value="工作票id",required=false)
+    @ApiModelProperty(name="ticketId",value="工作票id",required=false)
     private String ticketId;
 
-    @ApiParam(name="workTimeNumber",value="编号",required=false)
+    @ApiModelProperty(name="workTimeNumber",value="编号",required=false)
     private String workTimeNumber;
 
-    @ApiParam(name="workStartTime",value="工作开始时间",required=false)
+    @ApiModelProperty(name="workStartTime",value="工作开始时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date workStartTime;
 
-    @ApiParam(name="workStartHead",value="工作开始负责人",required=false)
+    @ApiModelProperty(name="workStartHead",value="工作开始负责人id",required=false)
     private String workStartHead;
 
-    @ApiParam(name="workStartLicensor",value="工作开始许可人",required=false)
+    @ApiModelProperty(name="workStartLicensor",value="工作开始许可人id",required=false)
     private String workStartLicensor;
 
-    @ApiParam(name="workEndTime",value="工作结束时间",required=false)
+    @ApiModelProperty(name="workEndTime",value="工作结束时间",required=false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
     private Date workEndTime;
 
-    @ApiParam(name="workEndHead",value="工作结束负责人",required=false)
+    @ApiModelProperty(name="workEndHead",value="工作结束负责人id",required=false)
     private String workEndHead;
 
-    @ApiParam(name="workEndLicensor",value="工作结束许可人",required=false)
+    @ApiModelProperty(name="workEndLicensor",value="工作结束许可人id",required=false)
     private String workEndLicensor;
 
     public String getWorkTimeId() {

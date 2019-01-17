@@ -9,7 +9,7 @@ import com.qz.zframe.run.entity.WorkTaskExample;
 /**
  * <p>Title: WorkTaskService</p>
  * <p>@Description:工作任务表接口声明  </p>
- * @author 陈汇奇
+ * @author 
  * @date 2018年11月12日 下午3:33:48
  * @version:V1.0
  */
@@ -53,5 +53,12 @@ public interface WorkTaskService {
 	
 	
 	
+	/**
+	 * @Description:通过工作任务id获取信息
+	 * @param: @param workTaskId
+	 * @param: @return   
+	 * @return: WorkTask
+	 */
+	WorkTask getWorkTaskById(String workTaskId);
 	
 }

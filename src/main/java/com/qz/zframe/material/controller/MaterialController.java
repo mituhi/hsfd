@@ -1,26 +1,19 @@
 package com.qz.zframe.material.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.qz.zframe.authentication.CurrentUserService;
-import com.qz.zframe.authentication.domain.UserInfo;
-import com.qz.zframe.common.util.ErrorCode;
-import com.qz.zframe.common.util.PageResultEntity;
+import com.qz.zframe.common.util.NewPageResult;
 import com.qz.zframe.common.util.ResultEntity;
-import com.qz.zframe.common.util.UUIdUtil;
+import com.qz.zframe.common.util.ResultEntityDetail;
 import com.qz.zframe.material.entity.Material;
-import com.qz.zframe.material.entity.Material.ListView;
 import com.qz.zframe.material.entity.MaterialExample;
 import com.qz.zframe.material.entity.MaterialExample.Criteria;
 import com.qz.zframe.material.enums.IsDeleteEnum;
 import com.qz.zframe.material.service.MaterialService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
+import io.swagger.annotations.ApiParam;
 import java.util.List;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.procedure.internal.Util.ResultClassesResolutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -35,14 +28,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/support/material")
-@Api(tags = "api-support-material", description = "物资管理")
+@Api(tags = "api-material-material", description = "物资管理")
 public class MaterialController {
 
 	@Autowired
 	private MaterialService materialService;
 
-	@Autowired
-	private CurrentUserService currentUSerservice;
 
 	/**
 	 * 获取物资信息列表
@@ -54,37 +45,103 @@ public class MaterialController {
 	 * @param materialDescribe
 	 * @return
 	 */
-	@JsonView({ ListView.class })
 	@RequestMapping(value = "/listMaterial", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "获取物资列表", notes = "materialCode物资编码，materialDescribe物资描述，windId风电场id")
-	public PageResultEntity getMaterialList(@RequestParam(required = false) Integer pageNum,
-			@RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String windId,
-			@RequestParam(required = false) String materialCode,
-			@RequestParam(required = false) String materialDescribe,
-			@RequestParam(required = false) String searchKey) {
-		PageResultEntity resultEntity = new PageResultEntity();
+	public NewPageResult<Material> getMaterialList(@RequestParam(required = false) Integer pageNum,
+			@RequestParam(required = false) Integer pageSize, @RequestParam(required=false, defaultValue = "1") Integer isPage,
+			@RequestParam(required = false) @ApiParam(name = "materialCode", value = "物资编码", required = false) String materialCode,
+			@RequestParam(required = false) @ApiParam(name = "materialDescribe", value = "物资描述", required = false) String materialDescribe,
+			@RequestParam(required = false) @ApiParam(name = "startArchiteCode", value = "风电场开始编码", required = false) String startArchiteCode,
+			@RequestParam(required = false) @ApiParam(name = "endArchiteCode", value = "风电场结束编码", required = false) String endArchiteCode,
+			@RequestParam(required = false) @ApiParam(name = "architectureId", value = "风电场Id", required = false) String architectureId	,
+			@RequestParam(required = false) @ApiParam(name = "windId", value = "风电场Id", required = false) String windId,	
+			@RequestParam(required = false) @ApiParam(name = "materialName", value = "物资名称模糊查询", required = false) String materialName,
+			@RequestParam(required = false) @ApiParam(name = "status", value = "物资状态，01启用，02停用", required = false) String status	
+			) {
 		MaterialExample materialExample = new MaterialExample();
 		materialExample.setPageSize(pageSize);
 		materialExample.setPageNo(pageNum);
+		materialExample.setIsPage(isPage);
 		materialExample.setOrderByClause("a.create_time desc");
 		Criteria criteria = materialExample.createCriteria().andIsDeleteEqualTo(IsDeleteEnum.DELETE_NO.getCode());
 		if (!StringUtils.isBlank(materialDescribe)) {
-			criteria.andMaterialDescribeEqualTo(materialDescribe);
+			criteria.andMaterialDescribeLike(materialDescribe);
 		}
 		if (!StringUtils.isBlank(materialCode)) {
 			criteria.andMaterialCodeEqualTo(materialCode);
+		}	
+		if(!StringUtils.isBlank(startArchiteCode)){
+			if(!StringUtils.isBlank(endArchiteCode)){
+				criteria.andArchitectuerBetween(startArchiteCode, endArchiteCode);
+			}else{
+				criteria.andArchitectuerEqualTo(startArchiteCode);
+			}
 		}
-		if (!StringUtils.isBlank(windId)) {
+		if(!StringUtils.isBlank(architectureId)){
+			criteria.andWindIdEqualTo(architectureId);
+		}
+		if(!StringUtils.isBlank(windId)){
 			criteria.andWindIdEqualTo(windId);
 		}
-		if (!StringUtils.isBlank(searchKey)) {
-			criteria.andMaterialCodeLike(searchKey);
-			materialExample.or().andMaterialNameLike(searchKey);
-			materialExample.or().andMaterialDescribeLike(searchKey);
-			materialExample.or().andSpecificationsLike(searchKey);
+		if(!StringUtils.isBlank(materialName)){
+			criteria.andMaterialNameLike(materialName);
 		}
-		resultEntity = materialService.getMaterialList(materialExample);
-		return resultEntity;
+		if(!StringUtils.isBlank(status)){
+			criteria.andStatusEqualTo(status);
+		}
+		criteria.andIsDeleteEqualTo("01");
+		return materialService.getMaterialList(materialExample);
+	}
+	
+	@RequestMapping(value = "/listMaterialAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ApiOperation(value = "获取物资全部列表", notes = "")
+	public NewPageResult<Material> getMaterialListAll(
+			@RequestParam(required = false) Integer pageNum,
+			@RequestParam(required = false) Integer pageSize, @RequestParam(required=false, defaultValue = "1") Integer isPage,
+			@RequestParam(required = false) @ApiParam(name = "materialCode", value = "物资编码", required = false) String materialCode,
+			@RequestParam(required = false) @ApiParam(name = "materialDescribe", value = "物资描述", required = false) String materialDescribe,
+			@RequestParam(required = false) @ApiParam(name = "startArchiteCode", value = "风电场开始编码", required = false) String startArchiteCode,
+			@RequestParam(required = false) @ApiParam(name = "endArchiteCode", value = "风电场结束编码", required = false) String endArchiteCode,
+			@RequestParam(required = false) @ApiParam(name = "architectureId", value = "风电场Id", required = false) String architectureId	,
+			@RequestParam(required = false) @ApiParam(name = "windId", value = "风电场Id", required = false) String windId,	
+			@RequestParam(required = false) @ApiParam(name = "materialName", value = "物资名称模糊查询", required = false) String materialName,
+			@RequestParam(required = false) @ApiParam(name = "status", value = "物资状态，01启用，02停用", required = false) String status,	
+			@RequestParam(required = false) @ApiParam(name = "supplierId", value = "供应商id", required = false) String supplierId	
+			) {
+		MaterialExample materialExample = new MaterialExample();
+		materialExample.setPageSize(pageSize);
+		materialExample.setPageNo(pageNum);
+		materialExample.setIsPage(isPage);//
+		materialExample.setOrderByClause("a.create_time desc");
+		Criteria criteria = materialExample.createCriteria().andIsDeleteEqualTo(IsDeleteEnum.DELETE_NO.getCode());
+		if (!StringUtils.isBlank(materialDescribe)) {
+			criteria.andMaterialDescribeLike(materialDescribe);
+		}
+		if (!StringUtils.isBlank(materialCode)) {
+			criteria.andMaterialCodeEqualTo(materialCode);
+		}	
+		if(!StringUtils.isBlank(startArchiteCode)){
+			if(!StringUtils.isBlank(endArchiteCode)){
+				criteria.andArchitectuerBetween(startArchiteCode, endArchiteCode);
+			}else{
+				criteria.andArchitectuerEqualTo(startArchiteCode);
+			}
+		}
+		if(!StringUtils.isBlank(architectureId)){
+			criteria.andWindIdEqualTo(architectureId);
+		}
+		if(!StringUtils.isBlank(windId)){
+			criteria.andWindIdEqualTo(windId);
+		}
+		if(!StringUtils.isBlank(materialName)){
+			criteria.andMaterialNameLike(materialName);
+		}
+		if(!StringUtils.isBlank(supplierId)){
+			criteria.andSupplierIdEqualTo(supplierId);
+		}
+		criteria.andStatusEqualTo("01");
+		criteria.andIsDeleteEqualTo("01");
+		return materialService.getMaterialList(materialExample);
 	}
 
 	/**
@@ -92,26 +149,12 @@ public class MaterialController {
 	 * 
 	 * @param material
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/saveMaterial", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "新增物资", notes = "新增物资信息")
-	public ResultEntity saveUser(@RequestBody Material material) {
-		ResultEntity resultEntity = new ResultEntity();
-		if (StringUtils.isBlank(material.getMaterialCode()) || StringUtils.isBlank(material.getMaterialClassifyId())
-				|| StringUtils.isBlank(material.getMaterialName())
-				|| StringUtils.isBlank(material.getMaterialGroupId())
-				|| StringUtils.isBlank(material.getStatus())
-				|| StringUtils.isBlank(material.getSpecifications())) {
-			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少参数");
-			return resultEntity;
-		}
-		UserInfo userInfo = currentUSerservice.getUserInfo();
-		material.setCreater(userInfo.getUserId());
-		material.setMaterialId(UUIdUtil.getUUID());
-		material.setIsDelete(IsDeleteEnum.DELETE_NO.getCode());
-		resultEntity = materialService.saveMaterial(material);
-		return resultEntity;
+	public ResultEntity saveUser(@RequestBody Material material) throws Exception {		
+		return materialService.saveMaterial(material);
 	}
 
 	/**
@@ -123,14 +166,7 @@ public class MaterialController {
 	@RequestMapping(value = "/updateMaterial", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "编辑物资信息", notes = "materialId物资id必传")
 	public ResultEntity updateMaterial(@RequestBody Material material) {
-		ResultEntity resultEntity = new ResultEntity();
-		if (StringUtils.isBlank(material.getMaterialId())) {
-			resultEntity.setCode(ErrorCode.ERROR);
-			resultEntity.setMsg("缺少参数");
-			return resultEntity;
-		}
-		resultEntity = materialService.updateMaterial(material);
-		return resultEntity;
+		return materialService.updateMaterial(material);
 	}
 
 	/**
@@ -160,6 +196,7 @@ public class MaterialController {
 	 */
 	@RequestMapping(value = "/detailMaterial", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ApiOperation(value = "查看物资详情", notes = "materialId物资id为必传")
+	@ResponseBody
 	public ResultEntity detailMaterial(@RequestParam String materialId){
 		return materialService.detailMaterial(materialId);
 	}

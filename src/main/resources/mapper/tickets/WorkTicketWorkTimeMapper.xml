@@ -74,6 +74,58 @@
     work_time_id, ticket_id, work_time_number, work_start_time, work_start_head, work_start_licensor, 
     work_end_time, work_end_head, work_end_licensor
   </sql>
+
+
+
+
+
+
+  <delete id="batchDeleteByTicketIds" parameterType="java.lang.String">
+    delete from work_ticket_work_time
+    where ticket_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <resultMap id="GetResultMap" type="com.qz.zframe.tickets.vo.WorkTicketWorkTimeVo" >
+    <id column="work_time_id" property="workTimeId" jdbcType="VARCHAR" />
+    <result column="ticket_id" property="ticketId" jdbcType="VARCHAR" />
+    <result column="work_time_number" property="workTimeNumber" jdbcType="VARCHAR" />
+    <result column="work_start_time" property="workStartTime" jdbcType="TIMESTAMP" />
+    <result column="work_start_head" property="workStartHead" jdbcType="VARCHAR" />
+    <result column="work_start_licensor" property="workStartLicensor" jdbcType="VARCHAR" />
+    <result column="work_end_time" property="workEndTime" jdbcType="TIMESTAMP" />
+    <result column="work_end_head" property="workEndHead" jdbcType="VARCHAR" />
+    <result column="work_end_licensor" property="workEndLicensor" jdbcType="VARCHAR" />
+    <result column="work_start_head_name" property="workStartHeadName" jdbcType="VARCHAR" />
+    <result column="work_start_licensor_name" property="workStartLicensorName" jdbcType="VARCHAR" />
+    <result column="work_end_head_name" property="workEndHeadName" jdbcType="VARCHAR" />
+    <result column="work_end_licensor_name" property="workEndLicensorName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get_Column_List" >
+    a.work_time_id as work_time_id, a.ticket_id as ticket_id, a.work_time_number as work_time_number, a.work_start_time as work_start_time,
+    a.work_start_head as work_start_head, a.work_start_licensor as work_start_licensor,
+    a.work_end_time as work_end_time, a.work_end_head as work_end_head, a.work_end_licensor as work_end_licensor,
+    b.user_name as work_start_head_name,d.user_name as work_start_licensor_name, e.user_name as work_end_head_name,
+    f.user_name as work_end_licensor_name
+  </sql>
+  <select id="getWorkTicketWorkTimeList" resultMap="GetResultMap">
+    select
+    <include refid="Get_Column_List" />
+    from work_ticket_work_time a
+    left join isc_user b on a.work_start_head = b.user_id
+    left join isc_user d on a.work_start_licensor = d.user_id
+    left join isc_user e on a.work_end_head = e.user_id
+    left join isc_user f on a.work_end_licensor = f.user_id
+    where a.ticket_id = #{ticketId}
+    order by work_time_number
+  </select>
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.tickets.entity.WorkTicketWorkTimeExample" >
     select
     <if test="distinct" >

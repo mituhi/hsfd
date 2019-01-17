@@ -76,6 +76,41 @@
     service_id, workorder_id, knowledge_id, order_id, service_number, service_desc, service_unit, 
     service_plan_amount, service_cost, service_actual_amount, service_actual_money
   </sql>
+
+
+
+
+
+  <delete id="batchDeleteByWorkOrderIds" parameterType="java.lang.String">
+    delete from workorder_service
+    where workorder_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByOrderIds" parameterType="java.lang.String">
+    delete from workorder_service
+    where order_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByKnowledgeIds" parameterType="java.lang.String">
+    delete from workorder_service
+    where knowledge_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderServiceExample" >
     select
     <if test="distinct" >

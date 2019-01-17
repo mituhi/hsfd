@@ -6,14 +6,11 @@
     <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
     <result column="knowledge_id" property="knowledgeId" jdbcType="VARCHAR" />
     <result column="order_id" property="orderId" jdbcType="VARCHAR" />
-    <result column="material_number" property="materialNumber" jdbcType="VARCHAR" />
-    <result column="material_desc" property="materialDesc" jdbcType="VARCHAR" />
-    <result column="material_unit" property="materialUnit" jdbcType="VARCHAR" />
+    <result column="inventory_id" property="inventoryId" jdbcType="VARCHAR" />
+    <result column="material_id" property="materialId" jdbcType="VARCHAR" />
     <result column="material_plan_amount" property="materialPlanAmount" jdbcType="VARCHAR" />
-    <result column="material_cost" property="materialCost" jdbcType="VARCHAR" />
     <result column="material_actual_amount" property="materialActualAmount" jdbcType="VARCHAR" />
     <result column="material_actual_money" property="materialActualMoney" jdbcType="VARCHAR" />
-    <result column="material_wind_name" property="materialWindName" jdbcType="VARCHAR" />
     <result column="final_receive_material" property="finalReceiveMaterial" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -75,10 +72,111 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    workorder_material_id, workorder_id, knowledge_id, order_id, material_number, material_desc, 
-    material_unit, material_plan_amount, material_cost, material_actual_amount, material_actual_money, 
-    material_wind_name, final_receive_material
+    workorder_material_id, workorder_id, knowledge_id, order_id, inventory_id, material_id, 
+    material_plan_amount, material_actual_amount, material_actual_money, final_receive_material
   </sql>
+
+
+
+
+
+
+
+  <delete id="batchDeleteByWorkOrderIds" parameterType="java.lang.String">
+    delete from workorder_material
+    where workorder_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByOrderIds" parameterType="java.lang.String">
+    delete from workorder_material
+    where order_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="batchDeleteByKnowledgeIds" parameterType="java.lang.String">
+    delete from workorder_material
+    where knowledge_id in
+    <foreach collection="list" index="index" item="item"
+             open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <resultMap id="GetResultMap" type="com.qz.zframe.maintain.vo.WorkorderMaterialVo" >
+    <id column="workorder_material_id" property="workorderMaterialId" jdbcType="VARCHAR" />
+    <result column="workorder_id" property="workorderId" jdbcType="VARCHAR" />
+    <result column="knowledge_id" property="knowledgeId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="inventory_id" property="inventoryId" jdbcType="VARCHAR" />
+    <result column="material_id" property="materialId" jdbcType="VARCHAR" />
+    <result column="material_code" property="materialCode" jdbcType="VARCHAR" />
+    <result column="material_name" property="materialName" jdbcType="VARCHAR" />
+    <result column="material_desc" property="materialDesc" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="cost" property="cost" jdbcType="VARCHAR" />
+    <result column="wind_id" property="windId" jdbcType="VARCHAR" />
+    <result column="wind_name" property="windName" jdbcType="VARCHAR" />
+    <result column="stock_add_id" property="stockAddId" jdbcType="VARCHAR" />
+    <result column="stock_add_name" property="stockAddName" jdbcType="VARCHAR" />
+    <result column="material_plan_amount" property="materialPlanAmount" jdbcType="VARCHAR" />
+    <result column="material_actual_amount" property="materialActualAmount" jdbcType="VARCHAR" />
+    <result column="material_actual_money" property="materialActualMoney" jdbcType="VARCHAR" />
+    <result column="final_receive_material" property="finalReceiveMaterial" jdbcType="VARCHAR" />
+    <result column="unit_name" property="unitName" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="inventory_num" property="inventoryNum" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Get1_Column_List" >
+    a.workorder_material_id as workorder_material_id, a.workorder_id as workorder_id, a.knowledge_id as knowledge_id,
+    a.order_id as order_id, a.inventory_id as inventory_id,a.material_id as material_id ,a.material_plan_amount as material_plan_amount,
+    a.material_actual_amount as material_actual_amount, a.material_actual_money as material_actual_money,
+    a.final_receive_material as final_receive_material,
+    b.material_code as material_code,b.material_name as material_name,b.material_describe as material_desc,b.measuring_unit as unit,
+    b.specifications as specifications,
+    d.wind_id as wind_id, d.stock_add_id as stock_add_id,d.inventory_num as inventory_num,
+    e.architecture_name as wind_name,f.stock_add_name as stock_add_name,g.measuring_unit_name as unit_name
+  </sql>
+  <select id="getWorkorderMaterialVoByworkorderId" resultMap="GetResultMap">
+    select
+    <include refid="Get1_Column_List" />
+    from workorder_material a
+    left join material b on a.material_id = b.material_id
+    left join inventory d on a.inventory_id = d.inventory_id
+    left join org_architecture e on (d.wind_id = e.architecture_code and e.architecture_type = '02')
+    left join stock_address f on d.stock_add_id = f.stock_add_id
+    left join material_unit g on b.measuring_unit = g.measuring_unit_id
+    where a.workorder_id = #{workorderId}
+    <if test="stockAddId != null and stockAddId != ''" >
+      and d.stock_add_id = #{stockAddId}
+    </if>
+  </select>
+  <select id="getWorkorderMaterialVoByorderId" resultMap="GetResultMap">
+   select
+    <include refid="Get1_Column_List" />
+    from workorder_material a
+    left join material b on a.material_id = b.material_id
+    left join inventory d on a.inventory_id = d.inventory_id
+    left join org_architecture e on (d.wind_id = e.architecture_code and e.architecture_type = '02')
+    left join stock_address f on d.stock_add_id = f.stock_add_id
+    left join material_unit g on b.measuring_unit = g.measuring_unit_id
+    where a.order_id = #{orderId}
+    <if test="stockAddId != null and stockAddId != ''" >
+      and d.stock_add_id = #{stockAddId}
+    </if>
+  </select>
+
+
+
+
+
+
+
+
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.qz.zframe.maintain.entity.WorkorderMaterialExample" >
     select
     <if test="distinct" >
@@ -111,15 +209,15 @@
   </delete>
   <insert id="insert" parameterType="com.qz.zframe.maintain.entity.WorkorderMaterial" >
     insert into workorder_material (workorder_material_id, workorder_id, 
-      knowledge_id, order_id, material_number, 
-      material_desc, material_unit, material_plan_amount, 
-      material_cost, material_actual_amount, material_actual_money, 
-      material_wind_name, final_receive_material)
+      knowledge_id, order_id, inventory_id, 
+      material_id, material_plan_amount, material_actual_amount, 
+      material_actual_money, final_receive_material
+      )
     values (#{workorderMaterialId,jdbcType=VARCHAR}, #{workorderId,jdbcType=VARCHAR}, 
-      #{knowledgeId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{materialNumber,jdbcType=VARCHAR}, 
-      #{materialDesc,jdbcType=VARCHAR}, #{materialUnit,jdbcType=VARCHAR}, #{materialPlanAmount,jdbcType=VARCHAR}, 
-      #{materialCost,jdbcType=VARCHAR}, #{materialActualAmount,jdbcType=VARCHAR}, #{materialActualMoney,jdbcType=VARCHAR}, 
-      #{materialWindName,jdbcType=VARCHAR}, #{finalReceiveMaterial,jdbcType=VARCHAR})
+      #{knowledgeId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{inventoryId,jdbcType=VARCHAR}, 
+      #{materialId,jdbcType=VARCHAR}, #{materialPlanAmount,jdbcType=VARCHAR}, #{materialActualAmount,jdbcType=VARCHAR}, 
+      #{materialActualMoney,jdbcType=VARCHAR}, #{finalReceiveMaterial,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.qz.zframe.maintain.entity.WorkorderMaterial" >
     insert into workorder_material
@@ -136,29 +234,20 @@
       <if test="orderId != null" >
         order_id,
       </if>
-      <if test="materialNumber != null" >
-        material_number,
+      <if test="inventoryId != null" >
+        inventory_id,
       </if>
-      <if test="materialDesc != null" >
-        material_desc,
-      </if>
-      <if test="materialUnit != null" >
-        material_unit,
+      <if test="materialId != null" >
+        material_id,
       </if>
       <if test="materialPlanAmount != null" >
         material_plan_amount,
-      </if>
-      <if test="materialCost != null" >
-        material_cost,
       </if>
       <if test="materialActualAmount != null" >
         material_actual_amount,
       </if>
       <if test="materialActualMoney != null" >
         material_actual_money,
-      </if>
-      <if test="materialWindName != null" >
-        material_wind_name,
       </if>
       <if test="finalReceiveMaterial != null" >
         final_receive_material,
@@ -177,29 +266,20 @@
       <if test="orderId != null" >
         #{orderId,jdbcType=VARCHAR},
       </if>
-      <if test="materialNumber != null" >
-        #{materialNumber,jdbcType=VARCHAR},
+      <if test="inventoryId != null" >
+        #{inventoryId,jdbcType=VARCHAR},
       </if>
-      <if test="materialDesc != null" >
-        #{materialDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="materialUnit != null" >
-        #{materialUnit,jdbcType=VARCHAR},
+      <if test="materialId != null" >
+        #{materialId,jdbcType=VARCHAR},
       </if>
       <if test="materialPlanAmount != null" >
         #{materialPlanAmount,jdbcType=VARCHAR},
-      </if>
-      <if test="materialCost != null" >
-        #{materialCost,jdbcType=VARCHAR},
       </if>
       <if test="materialActualAmount != null" >
         #{materialActualAmount,jdbcType=VARCHAR},
       </if>
       <if test="materialActualMoney != null" >
         #{materialActualMoney,jdbcType=VARCHAR},
-      </if>
-      <if test="materialWindName != null" >
-        #{materialWindName,jdbcType=VARCHAR},
       </if>
       <if test="finalReceiveMaterial != null" >
         #{finalReceiveMaterial,jdbcType=VARCHAR},
@@ -227,29 +307,20 @@
       <if test="record.orderId != null" >
         order_id = #{record.orderId,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialNumber != null" >
-        material_number = #{record.materialNumber,jdbcType=VARCHAR},
+      <if test="record.inventoryId != null" >
+        inventory_id = #{record.inventoryId,jdbcType=VARCHAR},
       </if>
-      <if test="record.materialDesc != null" >
-        material_desc = #{record.materialDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="record.materialUnit != null" >
-        material_unit = #{record.materialUnit,jdbcType=VARCHAR},
+      <if test="record.materialId != null" >
+        material_id = #{record.materialId,jdbcType=VARCHAR},
       </if>
       <if test="record.materialPlanAmount != null" >
         material_plan_amount = #{record.materialPlanAmount,jdbcType=VARCHAR},
-      </if>
-      <if test="record.materialCost != null" >
-        material_cost = #{record.materialCost,jdbcType=VARCHAR},
       </if>
       <if test="record.materialActualAmount != null" >
         material_actual_amount = #{record.materialActualAmount,jdbcType=VARCHAR},
       </if>
       <if test="record.materialActualMoney != null" >
         material_actual_money = #{record.materialActualMoney,jdbcType=VARCHAR},
-      </if>
-      <if test="record.materialWindName != null" >
-        material_wind_name = #{record.materialWindName,jdbcType=VARCHAR},
       </if>
       <if test="record.finalReceiveMaterial != null" >
         final_receive_material = #{record.finalReceiveMaterial,jdbcType=VARCHAR},
@@ -265,14 +336,11 @@
       workorder_id = #{record.workorderId,jdbcType=VARCHAR},
       knowledge_id = #{record.knowledgeId,jdbcType=VARCHAR},
       order_id = #{record.orderId,jdbcType=VARCHAR},
-      material_number = #{record.materialNumber,jdbcType=VARCHAR},
-      material_desc = #{record.materialDesc,jdbcType=VARCHAR},
-      material_unit = #{record.materialUnit,jdbcType=VARCHAR},
+      inventory_id = #{record.inventoryId,jdbcType=VARCHAR},
+      material_id = #{record.materialId,jdbcType=VARCHAR},
       material_plan_amount = #{record.materialPlanAmount,jdbcType=VARCHAR},
-      material_cost = #{record.materialCost,jdbcType=VARCHAR},
       material_actual_amount = #{record.materialActualAmount,jdbcType=VARCHAR},
       material_actual_money = #{record.materialActualMoney,jdbcType=VARCHAR},
-      material_wind_name = #{record.materialWindName,jdbcType=VARCHAR},
       final_receive_material = #{record.finalReceiveMaterial,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -290,29 +358,20 @@
       <if test="orderId != null" >
         order_id = #{orderId,jdbcType=VARCHAR},
       </if>
-      <if test="materialNumber != null" >
-        material_number = #{materialNumber,jdbcType=VARCHAR},
+      <if test="inventoryId != null" >
+        inventory_id = #{inventoryId,jdbcType=VARCHAR},
       </if>
-      <if test="materialDesc != null" >
-        material_desc = #{materialDesc,jdbcType=VARCHAR},
-      </if>
-      <if test="materialUnit != null" >
-        material_unit = #{materialUnit,jdbcType=VARCHAR},
+      <if test="materialId != null" >
+        material_id = #{materialId,jdbcType=VARCHAR},
       </if>
       <if test="materialPlanAmount != null" >
         material_plan_amount = #{materialPlanAmount,jdbcType=VARCHAR},
-      </if>
-      <if test="materialCost != null" >
-        material_cost = #{materialCost,jdbcType=VARCHAR},
       </if>
       <if test="materialActualAmount != null" >
         material_actual_amount = #{materialActualAmount,jdbcType=VARCHAR},
       </if>
       <if test="materialActualMoney != null" >
         material_actual_money = #{materialActualMoney,jdbcType=VARCHAR},
-      </if>
-      <if test="materialWindName != null" >
-        material_wind_name = #{materialWindName,jdbcType=VARCHAR},
       </if>
       <if test="finalReceiveMaterial != null" >
         final_receive_material = #{finalReceiveMaterial,jdbcType=VARCHAR},
@@ -325,14 +384,11 @@
     set workorder_id = #{workorderId,jdbcType=VARCHAR},
       knowledge_id = #{knowledgeId,jdbcType=VARCHAR},
       order_id = #{orderId,jdbcType=VARCHAR},
-      material_number = #{materialNumber,jdbcType=VARCHAR},
-      material_desc = #{materialDesc,jdbcType=VARCHAR},
-      material_unit = #{materialUnit,jdbcType=VARCHAR},
+      inventory_id = #{inventoryId,jdbcType=VARCHAR},
+      material_id = #{materialId,jdbcType=VARCHAR},
       material_plan_amount = #{materialPlanAmount,jdbcType=VARCHAR},
-      material_cost = #{materialCost,jdbcType=VARCHAR},
       material_actual_amount = #{materialActualAmount,jdbcType=VARCHAR},
       material_actual_money = #{materialActualMoney,jdbcType=VARCHAR},
-      material_wind_name = #{materialWindName,jdbcType=VARCHAR},
       final_receive_material = #{finalReceiveMaterial,jdbcType=VARCHAR}
     where workorder_material_id = #{workorderMaterialId,jdbcType=VARCHAR}
   </update>

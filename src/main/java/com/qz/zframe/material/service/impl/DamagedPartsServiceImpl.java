@@ -13,9 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.w3c.dom.ls.LSInput;
 
+import com.qz.zframe.authentication.CurrentUserService;
+import com.qz.zframe.authentication.domain.UserInfo;
 import com.qz.zframe.common.util.ErrorCode;
+import com.qz.zframe.common.util.NewPageResult;
 import com.qz.zframe.common.util.PageResultEntity;
 import com.qz.zframe.common.util.ResultEntity;
+import com.qz.zframe.common.util.ResultEntityDetail;
 import com.qz.zframe.common.util.UUIdUtil;
 import com.qz.zframe.material.dao.DamagedPartsDetailMapper;
 import com.qz.zframe.material.dao.DamagedPartsMapper;
@@ -35,10 +39,14 @@ public class DamagedPartsServiceImpl implements DamagedPartsService{
 	
 	@Autowired
 	private DamagedPartsDetailMapper damagedPartsDetailMapper;
+	
+	@Autowired
+	private CurrentUserService currentUSerservice;
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public PageResultEntity getDamagedPartsList(DamagedPartsExample example) {
-		PageResultEntity pageResultEntity = new PageResultEntity();
+	public NewPageResult getDamagedPartsList(DamagedPartsExample example) {
+		NewPageResult pageResultEntity = new NewPageResult();
 		int count = damagedPartsMapper.countByExample(example);
 		pageResultEntity.setTotal(count);
 		List<DamagedParts> list;
@@ -52,9 +60,10 @@ public class DamagedPartsServiceImpl implements DamagedPartsService{
 		return pageResultEntity;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public ResultEntity getDamagedPartsDetails(String damagedPartsId) {
-		ResultEntity resultEntity = new ResultEntity();
+	public ResultEntityDetail getDamagedPartsDetails(String damagedPartsId) {
+		ResultEntityDetail resultEntity = new ResultEntityDetail();
 		DamagedParts damagedPartsInfo = damagedPartsMapper.selectByPrimaryKey(damagedPartsId);
 		if(damagedPartsId==null){
 			resultEntity.setCode(ErrorCode.ERROR);
@@ -77,6 +86,8 @@ public class DamagedPartsServiceImpl implements DamagedPartsService{
 			damagedParts.setStorageTime(format.parse(damagedParts.getStorageDate()));
 		}
 		try {
+			UserInfo userInfo = currentUSerservice.getUserInfo();
+			damagedParts.setCreater(userInfo.getUserId());
 			String damagedPartsId=UUIdUtil.getUUID();
 			damagedParts.setDamagedPartsId(damagedPartsId);
 			damagedPartsMapper.insertSelective(damagedParts);
@@ -103,10 +114,12 @@ public class DamagedPartsServiceImpl implements DamagedPartsService{
 			damagedParts.setStorageTime(format.parse(damagedParts.getStorageDate()));
 		}
 		try {
-			damagedPartsMapper.updateByPrimaryKeySelective(damagedParts);
-			damagedPartsDetailMapper.delDamagedPartsDetail(damagedParts.getDamagedPartsId());
+			damagedPartsMapper.updateByPrimaryKeySelective(damagedParts);	
+			if(damagedParts.getDamagedPartsDetails()!=null&&!damagedParts.getDamagedPartsDetails().isEmpty()){
+				damagedPartsDetailMapper.delDamagedPartsDetail(damagedParts.getDamagedPartsId());
 			for (DamagedPartsDetail damagedPartsDetail : damagedParts.getDamagedPartsDetails()) {
 				damagedPartsDetailMapper.insertSelective(damagedPartsDetail);
+			}
 			}
 			resultEntity.setCode(ErrorCode.SUCCESS);
 		} catch (Exception e) {

@@ -1,0 +1,77 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qz.zframe.device.dao.AssetEquipmentMapper" >
+  <resultMap id="BaseResultMap" type="com.qz.zframe.device.entity.AssetEquipment" >
+    <id column="asset_id" property="assetId" jdbcType="VARCHAR" />
+    <result column="equipment_asset_id" property="equipmentAssetId" jdbcType="VARCHAR" />
+  <!--   <result column="material_id" property="materialId" jdbcType="VARCHAR" /> -->
+    <result column="file_id" property="fileId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  select * from asset_equipment 
+  </select>
+  <insert id="insertList" parameterType="com.qz.zframe.device.entity.AssetEquipment" >
+  insert  into asset_equipment (asset_id,file_id, equipment_asset_id) 
+    values(#{assetId,jdbcType=VARCHAR},#{fileId,jdbcType=VARCHAR}, #{equipmentAssetId,jdbcType=VARCHAR})
+  </insert>
+   <update id="update" parameterType="com.qz.zframe.device.entity.AssetEquipment" >
+  update  asset_equipment  set
+        file_id=#{fileId,jdbcType=VARCHAR}, equipment_asset_id=#{equipmentAssetId,jdbcType=VARCHAR}
+        where asset_id=#{assetId,jdbcType=VARCHAR};
+  
+  </update>
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from asset_equipment
+   <where>
+    equipment_asset_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  
+  
+   <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT 
+    a.*
+    FROM
+	asset_equipment a
+	LEFT JOIN equipment_asset_ledger l ON l.equipment_asset_id = a.equipment_asset_id
+	left  join sp_file_upload   u on  u.file_id=a.file_id
+WHERE
+	 a.equipment_asset_id= #{equipmentAssetId,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="selectByFileId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+   SELECT 
+    a.*
+    FROM
+	asset_equipment a
+	LEFT JOIN equipment_asset_ledger l ON l.equipment_asset_id = a.equipment_asset_id
+	left  join sp_file_upload   u on  u.file_id=a.file_id
+WHERE
+	 a.file_id= #{fileId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKeyList" parameterType="java.lang.String" >
+    delete from asset_equipment
+   <where>
+   asset_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  
+  <delete id="deleteByFileId" parameterType="java.lang.String" >
+    delete from asset_equipment
+   <where>
+     file_id   in 
+     <foreach collection="list" item="items" open="(" separator="," close=")"> 
+           #{items}
+        </foreach>       
+    </where>
+  </delete>
+  
+  </mapper>
